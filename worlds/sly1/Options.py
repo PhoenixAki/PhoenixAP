@@ -71,6 +71,16 @@ class ExcludeMinigames(OptionSet):
         "Swamp Skiff"
     }
 
+class MinigameCaches(Range):
+    """
+    Determines how many checks minigames send when completed. Ignored if the minigame is excluded.
+    Allows a range from 1-10.
+    """
+    display_name = "Minigame Caches"
+    range_start = 1
+    range_end = 10
+    default = 1
+
 class TrapChance(Range):
     """
     Determines the chance for any junk item to become a trap.
@@ -149,6 +159,7 @@ class Sly1Options(PerGameCommonOptions):
     HourglassesRequireRoll:         HourglassesRequireRoll
     AvoidEarlyBK:                   AvoidEarlyBK
     ExcludeMinigames:               ExcludeMinigames
+    MinigameCaches:                 MinigameCaches
     TrapChance:                     TrapChance
     IcePhysicsTrapWeight:           IcePhysicsTrapWeight
     SpeedChangeTrapWeight:          SpeedChangeTrapWeight
@@ -160,7 +171,7 @@ class Sly1Options(PerGameCommonOptions):
 sly1_option_groups: Dict[str, List[Any]] = {
     "General Options": [RequiredBosses, StartingEpisode, IncludeHourglasses, HourglassesRequireRoll],
     "Cluesanity Options": [LocationCluesanityBundleSize, ItemCluesanityBundleSize],
-    "Exclude Minigames": [ExcludeMinigames],
+    "Minigame Options": [ExcludeMinigames, MinigameCaches],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
                      BallTrapWeight]
@@ -173,6 +184,7 @@ slot_data_options: List[str] = {
     "HourglassesRequireRoll",
     "AvoidEarlyBK",
     "ExcludeMinigames",
+    "MinigameCaches",
     "LocationCluesanityBundleSize",
     "ItemCluesanityBundleSize"
 }

@@ -1,10 +1,10 @@
 import random
-
+import logging
 from typing import Dict
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
 from .Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
-from .Locations import get_location_names, get_total_locations, did_avoid_early_bk, generate_bottle_locations
+from .Locations import get_location_names, get_total_locations, did_avoid_early_bk, generate_bottle_locations, generate_minigame_locations
 from .Options import Sly1Options
 from .Regions import create_regions
 from .Types import Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
@@ -62,6 +62,14 @@ class Sly1World(World):
 
         if self.options.LocationCluesanityBundleSize.value > 0:
             generate_bottle_locations(self, self.options.LocationCluesanityBundleSize.value)
+
+        if self.options.LocationCluesanityBundleSize.value == 0 and self.options.ItemCluesanityBundleSize.value > 0:
+            logging.warning(
+                f"{self.player}: Cannot have item bundles without location bundles. Setting location bundle size to item bundle size.")
+            self.options.LocationCluesanityBundleSize.value = self.options.ItemCluesanityBundleSize.value
+            generate_bottle_locations(self, self.options.LocationCluesanityBundleSize.value)
+        
+        generate_minigame_locations(self, self.options.MinigameCaches.value)
 
     def create_items(self):
         self.multiworld.itempool += create_itempool(self)
