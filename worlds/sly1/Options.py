@@ -201,7 +201,10 @@ class Sly1Options(PerGameCommonOptions):
     BallTrapWeight:                 BallTrapWeight
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [UnlockClockwerk, RequiredBosses, MaxPages, RequiredPages, StartingEpisode, IncludeHourglasses, HourglassesRequireRoll],
+    "General Options": [UnlockClockwerk, RequiredBosses,
+                         MaxPages, RequiredPages,
+                         StartingEpisode, IncludeHourglasses,
+                         HourglassesRequireRoll],
     "Minigame Options": [ExcludeMinigames, MinigameCaches],
     "Cluesanity Options": [LocationCluesanityBundleSize, ItemCluesanityBundleSize],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
