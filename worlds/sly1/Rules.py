@@ -64,9 +64,24 @@ def set_rules(world: "Sly1World"):
     add_rule(world.multiworld.get_entrance("Inside the Stronghold - Second Gate -> Flame Fu!", player),
              lambda state: state.has("FitS Key", player, 7))
     
-    set_rule(world.multiworld.get_entrance("Hideout -> Cold Heart of Hate", player),
-             lambda state: sum(state.has(boss, player) for boss in bosses) >= options.RequiredBosses.value)
-    
+    # Cold Heart of Hate Access
+    if options.UnlockClockwerk.value == 1:
+        set_rule(world.multiworld.get_entrance("Hideout -> Cold Heart of Hate", player),
+            lambda state: sum(state.has(boss, player) for boss in bosses) >= options.RequiredBosses.value)
+    elif options.UnlockClockwerk.value == 2:
+        set_rule(world.multiworld.get_entrance("Hideout -> Cold Heart of Hate", player),
+            lambda state: state.has("Thievius Raccoonus Page", player, options.RequiredPages.value))
+        
+    # Cluesanity rules
+    if options.ItemCluesanityBundleSize.value > 0:
+        for name, data in vault_locations.items():
+            level_name = name.rsplit(' ', 1)[0]
+            bundle_amount = get_bundle_amount_for_level(level_name, world.options.ItemCluesanityBundleSize.value)
+            bottle_name = f'{level_name} Bottle(s)'
+            
+            add_rule(world.multiworld.get_location(name, player),
+                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, player, ba))
+
     # Hourglass Rules
     if did_include_hourglasses(world):
         for key, data in hourglass_locations.items():
@@ -96,15 +111,5 @@ def set_rules(world: "Sly1World"):
     for location in world.multiworld.get_locations(player):
         if "Unseen Foe" in location.name and "Bottle" in location.name:
             add_rule(location, lambda state: state.has("Progressive Invisibility", player, 1))
-    
-    # Cluesanity rules
-    if options.ItemCluesanityBundleSize.value > 0:
-        for name, data in vault_locations.items():
-            level_name = name.rsplit(' ', 1)[0]
-            bundle_amount = get_bundle_amount_for_level(level_name, world.options.ItemCluesanityBundleSize.value)
-            bottle_name = f'{level_name} Bottle(s)'
-            
-            set_rule(world.multiworld.get_location(name, player),
-                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, player, ba))
 
     world.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)

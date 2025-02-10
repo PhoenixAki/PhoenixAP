@@ -70,7 +70,6 @@ class AvoidEarlyBK(Toggle):
 class IncludeHourglasses(Toggle):
     """
     If enabled, Hourglasses are included in the locations.
-    If Hourglasses are disabled then there are more items than locations for this game alone.
     """
     display_name = "Include Hourglasses"
 
@@ -183,7 +182,10 @@ class BallTrapWeight(Range):
 
 @dataclass
 class Sly1Options(PerGameCommonOptions):
+    UnlockClockwerk:                UnlockClockwerk
     RequiredBosses:                 RequiredBosses
+    MaxPages:                       MaxPages
+    RequiredPages:                  RequiredPages
     StartingEpisode:                StartingEpisode
     IncludeHourglasses:             IncludeHourglasses
     HourglassesRequireRoll:         HourglassesRequireRoll
@@ -209,9 +211,9 @@ sly1_option_groups: Dict[str, List[Any]] = {
 
 slot_data_options: List[str] = {
     "UnlockClockwerk",
+    "RequiredBosses",
     "MaxPages",
     "RequiredPages",
-    "RequiredBosses",
     "StartingEpisode",
     "IncludeHourglasses",
     "HourglassesRequireRoll",

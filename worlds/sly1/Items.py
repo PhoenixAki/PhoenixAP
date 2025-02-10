@@ -64,6 +64,14 @@ def create_itempool(world: "Sly1World") -> List[Item]:
             bundle_amount = get_bundle_amount_for_level(name.rsplit(' ', 1)[0], item_bundle_size)
             itempool += create_multiple_items(world, name, bundle_amount, data.classification)
 
+    # Create pages for page hunt
+    if world.options.UnlockClockwerk == 2:
+        if world.options.RequiredPages > world.options.MaxPages:
+            logging.warning(f"{world.player_name}: Required pages cannot be greater than max pages. Setting max pages to required pages.")
+            world.options.MaxPages.value = world.options.RequiredPages.value
+        max_page_count = world.options.MaxPages.value
+        itempool += create_multiple_items(world, f"Thievius Raccoonus Page", max_page_count, ItemClassification.progression)
+
     # Add the Victory item to the pool
     victory = create_item(world, "Victory")
     world.multiworld.get_location("Beat Clockwerk", world.player).place_locked_item(victory)
@@ -148,6 +156,9 @@ sly_items = {
     "SSE Key": ItemData(10020016, ItemClassification.progression, 7),
     "VV Key": ItemData(10020017, ItemClassification.progression, 7),
     "FitS Key": ItemData(10020018, ItemClassification.progression, 7),
+
+    # Page Hunt
+    "Thievius Raccoonus Page": ItemData(10020049, ItemClassification.progression, 0),
 
     # Victory
     "Victory": ItemData(10020025, ItemClassification.progression, 0)
