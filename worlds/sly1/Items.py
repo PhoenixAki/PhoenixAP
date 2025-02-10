@@ -15,6 +15,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     # Determine if this player has AvoidEarlyBK enabled
     need_to_modify_item_pool = did_avoid_early_bk(world)
     starting_episode = episode_type_to_name[EpisodeType(world.options.StartingEpisode)]
+    starting_episode_short = episode_type_to_shortened_name[EpisodeType(world.options.StartingEpisode)]
     if starting_episode == "All" and need_to_modify_item_pool:
         starting_episode = world.random_episode
 
@@ -24,7 +25,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
 
     # If AvoidEarlyBK is enabled, adjust the key count for the starting episode
     if need_to_modify_item_pool:
-        starting_key_name = f"{starting_episode} Key"
+        starting_key_name = f"{starting_episode_short} Key"
         if starting_key_name in final_item_table:
             starting_key = final_item_table[starting_key_name]
             final_item_table[starting_key_name] = starting_key._replace(count=starting_key.count - 1)
