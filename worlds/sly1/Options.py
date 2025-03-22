@@ -211,18 +211,3 @@ sly1_option_groups: Dict[str, List[Any]] = {
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
                      BallTrapWeight]
 }
-
-slot_data_options: List[str] = {
-    "UnlockClockwerk",
-    "RequiredBosses",
-    "MaxPages",
-    "RequiredPages",
-    "StartingEpisode",
-    "IncludeHourglasses",
-    "HourglassesRequireRoll",
-    "AvoidEarlyBK",
-    "ExcludeMinigames",
-    "MinigameCaches",
-    "LocationCluesanityBundleSize",
-    "ItemCluesanityBundleSize"
-}
