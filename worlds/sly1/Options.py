@@ -19,6 +19,12 @@ class UnlockClockwerk(Choice):
     option_page_hunt = 2
     default = 1
 
+class FastClockwerk(Toggle):
+    """
+    If enabled, unlocking Cold Heart of Hate will give you access directly to the Clockwerk boss fight skipping all the previous levels.
+    """
+    display_name = "Fast Clockwerk"
+
 class RequiredBosses(Range):
     """
     How many members of the Fiendish Five you need to defeat before Cold Heart of Hate is unlocked.
@@ -183,6 +189,7 @@ class BallTrapWeight(Range):
 @dataclass
 class Sly1Options(PerGameCommonOptions):
     UnlockClockwerk:                UnlockClockwerk
+    FastClockwerk:                  FastClockwerk
     RequiredBosses:                 RequiredBosses
     MaxPages:                       MaxPages
     RequiredPages:                  RequiredPages
@@ -201,10 +208,10 @@ class Sly1Options(PerGameCommonOptions):
     BallTrapWeight:                 BallTrapWeight
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [UnlockClockwerk, RequiredBosses,
-                         MaxPages, RequiredPages,
-                         StartingEpisode, IncludeHourglasses,
-                         HourglassesRequireRoll],
+    "General Options": [UnlockClockwerk, FastClockwerk,
+                         RequiredBosses, MaxPages,
+                         RequiredPages, StartingEpisode,
+                         IncludeHourglasses, HourglassesRequireRoll],
     "Minigame Options": [ExcludeMinigames, MinigameCaches],
     "Cluesanity Options": [LocationCluesanityBundleSize, ItemCluesanityBundleSize],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
