@@ -1,14 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "lmk/zD25lGs=",
+  "dgSpecHash": "K6RZ1Bsx384=",
   "success": true,
   "projectFilePath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.core\\0.3.2\\archipelago.core.0.3.2.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.multiclient.net\\6.5.0\\archipelago.multiclient.net.6.5.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\archipelago.core\\0.3.15\\archipelago.core.0.3.15.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\archipelago.multiclient.net\\6.6.0\\archipelago.multiclient.net.6.6.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.2\\microsoft.win32.systemevents.9.0.2.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\serilog\\4.0.2\\serilog.4.0.2.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\serilog.sinks.console\\6.0.0\\serilog.sinks.console.6.0.0.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\serilog.sinks.file\\6.0.0\\serilog.sinks.file.6.0.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\system.drawing.common\\9.0.2\\system.drawing.common.9.0.2.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\system.io.pipelines\\9.0.0\\system.io.pipelines.9.0.0.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\system.text.encodings.web\\9.0.0\\system.text.encodings.web.9.0.0.nupkg.sha512",
     "C:\\Users\\fello\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512"

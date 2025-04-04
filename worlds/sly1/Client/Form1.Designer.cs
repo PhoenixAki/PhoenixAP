@@ -153,5 +153,7 @@
         private Label label3;
         private System.Windows.Forms.Timer timer1;
         private Button button1;
+        private string port;
+        private string player;
     }
 }

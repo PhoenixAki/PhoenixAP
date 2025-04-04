@@ -2,13 +2,14 @@
   "version": 3,
   "targets": {
     "net8.0-windows7.0": {
-      "Archipelago.Core/0.3.2": {
+      "Archipelago.Core/0.3.15": {
         "type": "package",
         "dependencies": {
-          "Archipelago.MultiClient.Net": "6.5.0",
+          "Archipelago.MultiClient.Net": "6.6.0",
           "Serilog": "4.0.2",
           "Serilog.Sinks.Console": "6.0.0",
           "Serilog.Sinks.File": "6.0.0",
+          "System.Drawing.Common": "9.0.2",
           "System.Text.Json": "9.0.0"
         },
         "compile": {
@@ -18,7 +19,7 @@
           "lib/net8.0/Archipelago.Core.dll": {}
         }
       },
-      "Archipelago.MultiClient.Net/6.5.0": {
+      "Archipelago.MultiClient.Net/6.6.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/Archipelago.MultiClient.Net.dll": {
@@ -31,6 +32,28 @@
             "related": ".pdb;.xml"
           },
           "lib/net6.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Microsoft.Win32.SystemEvents/9.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
         }
       },
       "Serilog/4.0.2": {
@@ -76,6 +99,31 @@
           "lib/net8.0/Serilog.Sinks.File.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "System.Drawing.Common/9.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "9.0.2"
+        },
+        "compile": {
+          "lib/net8.0/System.Drawing.Common.dll": {
+            "related": ".pdb;.xml"
+          },
+          "lib/net8.0/System.Private.Windows.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/System.Drawing.Common.dll": {
+            "related": ".pdb;.xml"
+          },
+          "lib/net8.0/System.Private.Windows.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
         }
       },
       "System.IO.Pipelines/9.0.0": {
@@ -139,27 +187,27 @@
     }
   },
   "libraries": {
-    "Archipelago.Core/0.3.2": {
-      "sha512": "IEbEKrKyuxBHwmaf+msPsVeJs+thGqpdeQU5sbKwvRLnyWV90JnolepJWxXogltc+HHtAxr6wJrSsSVy8v3rww==",
+    "Archipelago.Core/0.3.15": {
+      "sha512": "x6n5iBQD/gIWHlDoPtOu9O5pRo1PMWg5gb0yVM82DH0gtwj247oXpJ9c2nf9TM5gFI+MYjklW4vy3qxmUCsXRg==",
       "type": "package",
-      "path": "archipelago.core/0.3.2",
+      "path": "archipelago.core/0.3.15",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "archipelago.core.0.3.2.nupkg.sha512",
+        "archipelago.core.0.3.15.nupkg.sha512",
         "archipelago.core.nuspec",
         "lib/net8.0/Archipelago.Core.dll"
       ]
     },
-    "Archipelago.MultiClient.Net/6.5.0": {
-      "sha512": "cWz5UDo7/oIA0OVmOPN70UcwzTteQ2V0/v5n2LgMk0AW+HIYFACL7t4OlLBts/lp6LzNHMyOFxc7Fn7C45di4w==",
+    "Archipelago.MultiClient.Net/6.6.0": {
+      "sha512": "ZUNmgZg1zsMwoRaTFz0rqm9UwpUcqCkAsW6GAgLwE749dRmonPLimhYU/AryA4BagTGblL5ce9euwWU4Oj1YSw==",
       "type": "package",
-      "path": "archipelago.multiclient.net/6.5.0",
+      "path": "archipelago.multiclient.net/6.6.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "archipelago.multiclient.net.6.5.0.nupkg.sha512",
+        "archipelago.multiclient.net.6.6.0.nupkg.sha512",
         "archipelago.multiclient.net.nuspec",
         "blue-icon.png",
         "lib/net35/Archipelago.MultiClient.Net.dll",
@@ -184,6 +232,38 @@
         "lib/netstandard2.0/Archipelago.MultiClient.Net.pdb",
         "lib/netstandard2.0/Archipelago.MultiClient.Net.xml",
         "lib/netstandard2.0/Newtonsoft.Json.dll"
+      ]
+    },
+    "Microsoft.Win32.SystemEvents/9.0.2": {
+      "sha512": "5BkGZ6mHp2dHydR29sb0fDfAuqkv30AHtTih8wMzvPZysOmBFvHfnkR2w3tsc0pSiIg8ZoKyefJXWy9r3pBh0w==",
+      "type": "package",
+      "path": "microsoft.win32.systemevents/9.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Win32.SystemEvents.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Win32.SystemEvents.targets",
+        "lib/net462/Microsoft.Win32.SystemEvents.dll",
+        "lib/net462/Microsoft.Win32.SystemEvents.xml",
+        "lib/net8.0/Microsoft.Win32.SystemEvents.dll",
+        "lib/net8.0/Microsoft.Win32.SystemEvents.xml",
+        "lib/net9.0/Microsoft.Win32.SystemEvents.dll",
+        "lib/net9.0/Microsoft.Win32.SystemEvents.xml",
+        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
+        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
+        "microsoft.win32.systemevents.9.0.2.nupkg.sha512",
+        "microsoft.win32.systemevents.nuspec",
+        "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll",
+        "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.xml",
+        "runtimes/win/lib/net9.0/Microsoft.Win32.SystemEvents.dll",
+        "runtimes/win/lib/net9.0/Microsoft.Win32.SystemEvents.xml",
+        "useSharedDesignerContext.txt"
       ]
     },
     "Serilog/4.0.2": {
@@ -253,6 +333,48 @@
         "serilog-sink-nuget.png",
         "serilog.sinks.file.6.0.0.nupkg.sha512",
         "serilog.sinks.file.nuspec"
+      ]
+    },
+    "System.Drawing.Common/9.0.2": {
+      "sha512": "JU947wzf8JbBS16Y5EIZzAlyQU+k68D7LRx6y03s2wlhlvLqkt/8uPBrjv2hJnnaJKbdb0GhQ3JZsfYXhrRjyg==",
+      "type": "package",
+      "path": "system.drawing.common/9.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/System.Drawing.Common.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Drawing.Common.targets",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net462/System.Drawing.Common.dll",
+        "lib/net462/System.Drawing.Common.pdb",
+        "lib/net462/System.Drawing.Common.xml",
+        "lib/net8.0/System.Drawing.Common.dll",
+        "lib/net8.0/System.Drawing.Common.pdb",
+        "lib/net8.0/System.Drawing.Common.xml",
+        "lib/net8.0/System.Private.Windows.Core.dll",
+        "lib/net8.0/System.Private.Windows.Core.xml",
+        "lib/net9.0/System.Drawing.Common.dll",
+        "lib/net9.0/System.Drawing.Common.pdb",
+        "lib/net9.0/System.Drawing.Common.xml",
+        "lib/net9.0/System.Private.Windows.Core.dll",
+        "lib/net9.0/System.Private.Windows.Core.xml",
+        "lib/netstandard2.0/System.Drawing.Common.dll",
+        "lib/netstandard2.0/System.Drawing.Common.pdb",
+        "lib/netstandard2.0/System.Drawing.Common.xml",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "system.drawing.common.9.0.2.nupkg.sha512",
+        "system.drawing.common.nuspec",
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.IO.Pipelines/9.0.0": {
@@ -389,12 +511,13 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Archipelago.Core >= 0.3.2",
-      "Archipelago.MultiClient.Net >= 6.5.0"
+      "Archipelago.Core >= 0.3.15",
+      "Archipelago.MultiClient.Net >= 6.6.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\fello\\.nuget\\packages\\": {}
+    "C:\\Users\\fello\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
@@ -405,8 +528,12 @@
       "packagesPath": "C:\\Users\\fello\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
         "C:\\Users\\fello\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -433,7 +560,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -441,11 +569,11 @@
         "dependencies": {
           "Archipelago.Core": {
             "target": "Package",
-            "version": "[0.3.2, )"
+            "version": "[0.3.15, )"
           },
           "Archipelago.MultiClient.Net": {
             "target": "Package",
-            "version": "[6.5.0, )"
+            "version": "[6.6.0, )"
           }
         },
         "imports": [
@@ -467,7 +595,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

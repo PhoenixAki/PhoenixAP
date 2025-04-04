@@ -25,17 +25,20 @@ namespace Sly1AP
         public static string GameVersion { get; set; } = "0";
         public static bool IsConnected { get; set; } = false;
         public static GameState CurrentGameState = new GameState();
-        public static ArchipelagoClient Client { get; set; }
-        public static Moves slyMoves = new Moves();
+        public static ArchipelagoClient? Client { get; set; }
         public static SlyKeys keys = new SlyKeys();
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
+        public static uint SlyMoves { get; set; } = 0;
         public static int ClueBundles { get; set; } = 0;
         public static int ClueLocations { get; set; } = 0;
         public static int MurrayTextAddress { get; set; } = 0x2024A7B0;
-        public static int RequiredBosses { get; set; } = 0;
+        public static int RequiredBosses { get; set; } = 4;
         public static int NameAddress { get; set; } = 0;
         public static int NameOffset { get; set; } = 2484736;
+        public static bool DidReceive { get; set; } = false;
+        public static bool DidConnect { get; set; } = false;
+        public static List<Item> Items = new List<Item>();
         public Form1()
         {
             InitializeComponent();
@@ -56,7 +59,7 @@ namespace Sly1AP
                 {
                     Clues.BottleSync();
                 }
-                if (ClueLocations > 0)
+                if (ClueLocations > 0 && Client != null)
                 {
                     Helpers.SendBottles(Helpers.Levels, Client);
                 }
@@ -69,7 +72,7 @@ namespace Sly1AP
                         return;
                     }
                 }
-                if (!Client.IsConnected)
+                if (Client == null || !Client.IsConnected)
                 {
                     return;
                 }
@@ -92,51 +95,112 @@ namespace Sly1AP
                 return false;
             }
             WriteLine($"Connected to PCSX2.");
+
             WriteLine($"Connecting to Archipelago.");
             Client = new ArchipelagoClient(client);
             Client.Connected += OnConnected;
             Client.Disconnected += OnDisconnected;
-            Client.ItemReceived += (e, args) =>
+
+            if (Memory.ReadInt(0x2027DBF8) == 0 && Memory.ReadInt(0x2027DBFC) < 2)
             {
-                WriteLine($"Received: {JsonConvert.SerializeObject(args.Item.Name)}");
-                if (args.Item.Id >= 10020001 & args.Item.Id <= 100200014)
+                WriteLine("Waiting for game to load...");
+                while (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) < 2)
                 {
-                    UpdateMoves(args.Item.Id);
+                    await Task.Delay(1);
                 }
-                if (args.Item.Id >= 10020015 & args.Item.Id <= 10020018)
+            }
+
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.LevelType == "Hub" && Memory.ReadInt(Level.Address) == 1)
                 {
-                    UpdateKeys(args.Item.Id);
+                    Memory.Write(Level.Address, 0);
                 }
-                if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
+            }
+
+            await NamePointers();
+            UpdateValues();
+
+            if (DidConnect == false)
+            {
+                Client.ItemReceived += async (e, args) =>
                 {
-                    UpdateLevels(args.Item.Id);
-                }
-                if (args.Item.Id >= 10020019 & args.Item.Id <= 10020020)
-                {
-                    UpdateJunk(args.Item.Id);
-                }
-                if (args.Item.Id >= 10020026 & args.Item.Id <= 10020029)
-                {
-                    UpdateTraps(args.Item.Id);
-                }
-                if (args.Item.Id == 10020025)
-                {
-                    Client.SendGoalCompletion();
-                }
-                if (args.Item.Id >= 10020030 & args.Item.Id <= 10020048)
-                {
-                    Clues.UpdateBottles(args.Item.Id, ClueBundles);
-                }
-            };
+                    Items.Add(args.Item);
+                    WriteLine($"Received: {JsonConvert.SerializeObject(args.Item.Name)}");
+                    if (args.Item.Id >= 10020001 & args.Item.Id <= 100200014)
+                    {
+                        UpdateMoves(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020015 & args.Item.Id <= 10020018)
+                    {
+                        UpdateKeys(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
+                    {
+                        UpdateLevels(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020019 & args.Item.Id <= 10020020)
+                    {
+                        UpdateJunk(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020026 & args.Item.Id <= 10020029)
+                    {
+                        UpdateTraps(args.Item.Id);
+                    }
+                    if (args.Item.Id == 10020025)
+                    {
+                        Client.SendGoalCompletion();
+                    }
+                    if (args.Item.Id >= 10020030 && args.Item.Id <= 10020048)
+                    {
+                        while (ClueBundles == 0)
+                        {
+                            await Task.Delay(100);
+                        }
+                        Clues.UpdateBottles(args.Item.Id, ClueBundles);
+                    }
+                    await Task.Delay(50);
+                };
+            }
+
             await Client.Connect(hostTextbox.Text, "Sly Cooper and the Thievius Raccoonus");
+            if (!Client.IsConnected)
+            {
+                WriteLine("Couldn't connect. Check settings.");
+                return false;
+            }
             await Client.Login(slotTextbox.Text, passwordTextbox.Text);
+            if (!Client.IsLoggedIn)
+            {
+                WriteLine("Couldn't connect. Check settings.");
+                return false;
+            }
+
+            var Host = hostTextbox.Text;
             var PlayerName = slotTextbox.Text;
+
+            await InitialLoad(Client, Items);
+
+            if (DidConnect == false)
+            {
+                Client.MessageReceived += (e, args) =>
+                {
+                    string? ClientMessage = args.Message?.ToString();
+                    if (ClientMessage != null && ClientMessage.Contains(PlayerName))
+                    {
+                        WriteLine($"{args.Message}");
+                    }
+                };
+            }
+
             var locations = Helpers.GetLocations();
-            await Client.PopulateLocations(locations);
+
+            Client.MonitorLocations(locations);
             ConfigureOptions(Client.Options);
+
             if (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
             {
-                WriteLine("Load a save file, start a new game, or finish the prologue.");
+                //WriteLine("Load a save file, start a new game, or finish the prologue.");
                 while (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
                 {
                     CutsceneSkip();
@@ -157,82 +221,19 @@ namespace Sly1AP
                     {
                         Memory.Write(0x2027D7A8, keys.Map);
                     }
-                    await Task.Delay(1000);
+                    await Task.Delay(100);
                 }
             }
-            foreach (var Level in Helpers.Levels)
-            {
-                if (Level.LevelType == "Hub" && Memory.ReadInt(Level.Address) == 1)
-                {
-                    Memory.Write(Level.Address, 0);
-                }
-            }
-            if (Client.GameState != null && Client.GameState.ReceivedItems.Any())
-            {
-                var ItemsReceived = Client.GameState.ReceivedItems;
-                var NewItems = new List<Item>(ItemsReceived);
 
-                foreach (var item in NewItems)
-                {
-                    for (int i = 0; i < item.Quantity; i++)
-                    {
-                        if (item.Id >= 10020001 && item.Id <= 10020014)
-                        {
-                            UpdateMoves(item.Id);
-                        }
-                        if (item.Id >= 10020015 && item.Id <= 10020018)
-                        {
-                            UpdateKeys(item.Id);
-                        }
-                        if (item.Id >= 10020021 && item.Id <= 10020024)
-                        {
-                            UpdateLevels(item.Id);
-                        }
-                        if (item.Id >= 10020030 && item.Id <= 10020048)
-                        {
-                            Clues.UpdateBottles(item.Id, ClueBundles);
-                        }
-                    }
-                }
-            }
-            Client.MessageReceived += (e, args) =>
-            {
-                string ClientMessage = args.Message?.ToString();
-                if (ClientMessage != null & ClientMessage.Contains(PlayerName))
-                {
-                    WriteLine($"{args.Message}");
-                }
-            };
-            foreach (var Level in Helpers.Levels)
-            {
-                if (Level.LevelType == "Hub")
-                {
-                    Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
-                    NameOffset += 50;
-                }
-                if (Level.LevelType == "Hub" && (Memory.ReadInt(Level.Address) == 0))
-                {
-                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
-                    Memory.WriteString(PlaceToWrite, Level.Name + " (Locked)");
-                }
-                else if (Level.LevelType == "Hub")
-                {
-                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
-                    Memory.WriteString(PlaceToWrite, Level.Name);
-                }
-            }
+            DidConnect = true;
+
             await Loop();
-            return true;
-        }
 
-        private void Client_Disconnected(object? sender, ConnectionChangedEventArgs e)
-        {
-            throw new NotImplementedException();
+            return true;
         }
 
         public static void ConfigureOptions(Dictionary<string, object> options)
         {
-            var Options = new ArchipelagoOptions();
             if (options == null)
             {
                 Console.WriteLine("Options dictionary is null.");
@@ -244,15 +245,6 @@ namespace Sly1AP
                 ClueBundles = ClueBundleSizeElement.GetUInt16();
                 if (ClueBundles > 0)
                 {
-                    foreach (var Level in Helpers.Levels)
-                    {
-                        if (Level.NamePointer == 0 || Level.LevelType == "Hub")
-                        {
-                            continue;
-                        }
-                        Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
-                        NameOffset += 50;
-                    }
                     Clues.UpdateBottles(0, 0);
                 }
             }
@@ -266,118 +258,26 @@ namespace Sly1AP
                 var RequiredBossesElement = (JsonElement)options["RequiredBosses"];
                 RequiredBosses = RequiredBossesElement.GetUInt16();
             }
-            //if (options.ContainsKey("StartingEpisode"))
-            //{
-            //    string? StartingEpisode = Convert.ToString(options["StartingEpisode"]);
-            //    if (StartingEpisode == "Tide of Terror" & Memory.ReadInt(0x2027C67C) == 0)
-            //    {
-            //        keys.RaleighStart = 1;
-            //        Memory.Write(0x2027C67C, keys.RaleighStart);
-            //    }
-            //    if (StartingEpisode == "Sunset Snake Eyes" & Memory.ReadInt(0x2027CAC8) == 0)
-            //    {
-            //        keys.MuggshotStart = 1;
-            //        Memory.Write(0x2027CAC8, keys.MuggshotStart);
-            //    }
-            //    if (StartingEpisode == "Vicious Voodoo" & Memory.ReadInt(0x2027CF14) == 0)
-            //    {
-            //        keys.MzRubyStart = 1;
-            //        Memory.Write(0x2027CF14, keys.MzRubyStart);
-            //    }
-            //    if (StartingEpisode == "Fire in the Sky" & Memory.ReadInt(0x2027D360) == 0)
-            //    {
-            //        keys.PandaKingStart = 1;
-            //        Memory.Write(0x2027D360, keys.PandaKingStart);
-            //    }
-            //    if (StartingEpisode == "All" & Memory.ReadInt(0x2027C67C) == 0 & Memory.ReadInt(0x2027CAC8) == 0
-            //        & Memory.ReadInt(0x2027CF14) == 0 & Memory.ReadInt(0x2027D360) == 0)
-            //    {
-            //        keys.RaleighStart = 1;
-            //        keys.MuggshotStart = 1;
-            //        keys.MzRubyStart = 1;
-            //        keys.PandaKingStart = 1;
-            //        Memory.Write(0x2027C67C, keys.RaleighStart);
-            //        Memory.Write(0x2027CAC8, keys.MuggshotStart);
-            //        Memory.Write(0x2027CF14, keys.MzRubyStart);
-            //        Memory.Write(0x2027D360, keys.PandaKingStart);
-            //    }
-            //}
         }
-        //This probably looks like gore to actual programmers, but it works.
         public static void UpdateMoves(long id)
         {
-            //var addresses = new Addresses();
             //Progressive Moves
-            if (id == 10020001)
+            var Move = Moves.ThiefMoves.FirstOrDefault(m => m.Id == id);
+            if (Move != null)
             {
-                slyMoves.SlyMoves += slyMoves.DiveAttack;
-                slyMoves.DiveAttack += 14;
-            }
-            if (id == 10020002)
-            {
-                slyMoves.SlyMoves += slyMoves.Roll;
-                slyMoves.Roll += 1016;
-            }
-            if (id == 10020003)
-            {
-                slyMoves.SlyMoves += slyMoves.Slow;
-                if (slyMoves.Slow == 8)
+                Move.Received += 1;
+                if (Move.Received == 1)
                 {
-                    slyMoves.Slow += 4080;
+                    SlyMoves += Move.FirstValue;
                 }
-                else
+                else if (Move.Received == 2)
                 {
-                    slyMoves.Slow += 28688;
+                    SlyMoves += Move.SecondValue;
                 }
-            }
-            if (id == 10020007)
-            {
-                slyMoves.SlyMoves += slyMoves.Safety;
-                slyMoves.Safety += 16128;
-                slyMoves.SafetyCount += 1;
-            }
-            if (id == 10020010)
-            {
-                slyMoves.SlyMoves += slyMoves.Invisibility;
-                slyMoves.Invisibility = 8192;
-            }
-            //Regular Moves
-            if (id == 10020004)
-            {
-                slyMoves.SlyMoves += slyMoves.CoinMagnet;
-            }
-            if (id == 10020005)
-            {
-                slyMoves.SlyMoves += slyMoves.Mine;
-            }
-            if (id == 10020006)
-            {
-                slyMoves.SlyMoves += slyMoves.Fast;
-            }
-            if (id == 10020008)
-            {
-                slyMoves.SlyMoves += slyMoves.Decoy;
-            }
-            if (id == 10020009)
-            {
-                slyMoves.SlyMoves += slyMoves.Hacking;
-            }
-            //Blueprints
-            if (id == 10020011)
-            {
-                slyMoves.SlyMoves += slyMoves.RaleighBlueprint;
-            }
-            if (id == 10020012)
-            {
-                slyMoves.SlyMoves += slyMoves.MuggshotBlueprint;
-            }
-            if (id == 10020013)
-            {
-                slyMoves.SlyMoves += slyMoves.MzRubyBlueprint;
-            }
-            if (id == 10020014)
-            {
-                slyMoves.SlyMoves += slyMoves.PandaKingBlueprint;
+                else if (Move.Received == 3)
+                {
+                    SlyMoves += Move.ThirdValue;
+                }
             }
             return;
         }
@@ -408,38 +308,50 @@ namespace Sly1AP
         }
         public static void UpdateLevels(long id)
         {
-            //Levels
-            if (id == 10020021 & Memory.ReadInt(0x2027C67C) == 0)
+            // Levels
+            if (id == 10020021 && Memory.ReadInt(0x2027C67C) == 0)
             {
                 keys.RaleighStart = 1;
                 Memory.Write(0x2027C67C, keys.RaleighStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Tide of Terror");
-                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
-                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                if (LevelName != null && LevelName.NamePointer != 0)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
             }
-            if (id == 10020022 & Memory.ReadInt(0x2027CAC8) == 0)
+            if (id == 10020022 && Memory.ReadInt(0x2027CAC8) == 0)
             {
                 keys.MuggshotStart = 1;
                 Memory.Write(0x2027CAC8, keys.MuggshotStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Sunset Snake Eyes");
-                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
-                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                if (LevelName != null && LevelName.NamePointer != 0)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
             }
-            if (id == 10020023 & Memory.ReadInt(0x2027CF14) == 0)
+            if (id == 10020023 && Memory.ReadInt(0x2027CF14) == 0)
             {
                 keys.MzRubyStart = 1;
                 Memory.Write(0x2027CF14, keys.MzRubyStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Vicious Voodoo");
-                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
-                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                if (LevelName != null && LevelName.NamePointer != 0)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
             }
-            if (id == 10020024 & Memory.ReadInt(0x2027D360) == 0)
+            if (id == 10020024 && Memory.ReadInt(0x2027D360) == 0)
             {
                 keys.PandaKingStart = 1;
                 Memory.Write(0x2027D360, keys.PandaKingStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Fire in the Sky");
-                var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
-                Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                if (LevelName != null && LevelName.NamePointer != 0)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
             }
             return;
         }
@@ -480,7 +392,7 @@ namespace Sly1AP
             {
                 while (Memory.ReadByte(SlyControl) != 7)
                 {
-                   await Task.Delay(1000);
+                    await Task.Delay(1000);
                 }
             }
             if (id == 10020026)
@@ -488,7 +400,7 @@ namespace Sly1AP
                 TrapTimer.Start();
                 if (TrapTimer.Interval != 0) // Check if the trap timer is not 0
                 {
-                   Memory.Write(0x20274AD0, 1060655596);
+                    Memory.Write(0x20274AD0, 1060655596);
                 }
                 TrapTimer.Elapsed += (sender, e) =>
                 {
@@ -526,9 +438,9 @@ namespace Sly1AP
                 TrapTimer.Start();
                 uint TrueMoves = 0;
                 int TrueSelect = 0;
-                if (slyMoves.SlyMoves != 4)
+                if (SlyMoves != 4)
                 {
-                    TrueMoves = slyMoves.SlyMoves;
+                    TrueMoves = SlyMoves;
                 }
 
                 //Get the current position of Sly's data in code.
@@ -540,18 +452,18 @@ namespace Sly1AP
                 Memory.Write(BodyPos, 0);
                 Memory.Write(CanePos, 0);
 
-                if (slyMoves.SafetyCount == 1)
-                {
-                    slyMoves.SlyMoves = 260;
-                }
-                if (slyMoves.SafetyCount == 2)
-                {
-                    slyMoves.SlyMoves = 16644;
-                }
-                else
-                {
-                    slyMoves.SlyMoves = 4;
-                }
+                //if (SafetyCount == 1)
+                //{
+                //    slyMoves.SlyMoves = 260;
+                //}
+                //if (slyMoves.SafetyCount == 2)
+                //{
+                //    SlyMoves = 16644;
+                //}
+                //else
+                //{
+                //    SlyMoves = 4;
+                //}
 
                 while (TrapTimer.Enabled == true)
                 {
@@ -570,9 +482,8 @@ namespace Sly1AP
                 };
                 TrapTimer.Stop();
                 TrapTimer.Dispose();
-                slyMoves.SlyMoves = TrueMoves;
+                SlyMoves = TrueMoves;
                 Memory.Write(0x20274F74, TrueSelect);
-                return;
             }
             if (id == 10020029)
             {
@@ -582,10 +493,11 @@ namespace Sly1AP
                 SoundPlayer player = new SoundPlayer(stream);
                 player.Play();
             }
+            return;
         }
         public static void UpdateValues()
         {
-            Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            Memory.Write(0x2027DC10, SlyMoves);
             Memory.Write(0x2027CAB4, keys.RaleighKeys);
             Memory.Write(0x2027CF00, keys.MuggshotKeys);
             Memory.Write(0x2027D34C, keys.MzRubyKeys);
@@ -684,7 +596,7 @@ namespace Sly1AP
                 Memory.Write(0x20269A60, 0);
             }
         }
-        private void UpdateBosses()
+        private static void UpdateBosses()
         {
             int Bosses = 0;
             if (Memory.ReadBit(0x2027DC18, 5))
@@ -720,7 +632,7 @@ namespace Sly1AP
         //Sly 1 has anti-piracy measures that can seriously mess with the randomizer's functionality.
         //We freeze the related flags to stop them from ever being flipped.
         //In case the Into the Machine anticheat activates, we disable the burners.
-        private void StopAnticheat()
+        private static void StopAnticheat()
         {
             Memory.Write(0x20261080, 0);
             Memory.Write(0x20262310, 0);
@@ -730,6 +642,77 @@ namespace Sly1AP
             Memory.Write(0x2027C829, 0);
             Memory.Write(0x2027C82C, 0);
             Memory.Write(0x2027C82D, 0);
+        }
+        private static async Task InitialLoad(ArchipelagoClient Client, List<Item> Items)
+        {
+            if (Client.GameState != null && Client.GameState.ReceivedItems.Count != 0 && DidReceive == false)
+            {
+                var ItemsReceived = Client.GameState.ReceivedItems;
+                var NewItems = new List<Item>(ItemsReceived);
+
+                // Filter out the items that are already in the Items
+                var itemsToProcess = NewItems
+                    .Where(item => !Items.Any(receivedItem => receivedItem.Id == item.Id))
+                    .ToList();
+
+                foreach (var item in itemsToProcess)
+                {
+                    for (int i = 0; i < item.Quantity; i++)
+                    {
+                        if (item.Id >= 10020001 && item.Id <= 10020014)
+                        {
+                            UpdateMoves(item.Id);
+                        }
+                        if (item.Id >= 10020015 && item.Id <= 10020018)
+                        {
+                            UpdateKeys(item.Id);
+                        }
+                        if (item.Id >= 10020021 && item.Id <= 10020024)
+                        {
+                            UpdateLevels(item.Id);
+                        }
+                        if (item.Id >= 10020030 && item.Id <= 10020048)
+                        {
+                            Clues.UpdateBottles(item.Id, ClueBundles);
+                        }
+                    }
+                }
+            }
+            DidReceive = true;
+            await Task.CompletedTask;
+        }
+        private static Task NamePointers()
+        {
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.NamePointer == 0 || Level.LevelType == "Hub")
+                {
+                    continue;
+                }
+                Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
+                NameOffset += 50;
+            }
+            Clues.UpdateBottles(0, 0);
+
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.LevelType == "Hub")
+                {
+                    Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
+                    NameOffset += 50;
+                }
+                if (Level.LevelType == "Hub" && (Memory.ReadInt(Level.Address) == 0))
+                {
+                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(PlaceToWrite, Level.Name + " (Locked)");
+                }
+                else if (Level.LevelType == "Hub")
+                {
+                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(PlaceToWrite, Level.Name);
+                }
+            }
+            return Task.CompletedTask;
         }
     }
 }
