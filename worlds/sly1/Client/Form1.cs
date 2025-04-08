@@ -36,6 +36,13 @@ namespace Sly1AP
         public static int RequiredBosses { get; set; } = 0;
         public static int NameAddress { get; set; } = 0;
         public static int NameOffset { get; set; } = 2484736;
+<<<<<<< Updated upstream
+=======
+        public static bool DidReceive { get; set; } = false;
+        public static bool DidConnect { get; set; } = false;
+        public static bool NamePointersSet { get; set; } = false;
+        public static List<Item> Items = new List<Item>();
+>>>>>>> Stashed changes
         public Form1()
         {
             InitializeComponent();
@@ -96,6 +103,7 @@ namespace Sly1AP
             Client = new ArchipelagoClient(client);
             Client.Connected += OnConnected;
             Client.Disconnected += OnDisconnected;
+<<<<<<< Updated upstream
             Client.ItemReceived += (e, args) =>
             {
                 WriteLine($"Received: {JsonConvert.SerializeObject(args.Item.Name)}");
@@ -104,11 +112,18 @@ namespace Sly1AP
                     UpdateMoves(args.Item.Id);
                 }
                 if (args.Item.Id >= 10020015 & args.Item.Id <= 10020018)
+=======
+
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.LevelType == "Hub" && Memory.ReadInt(Level.Address) == 1)
+>>>>>>> Stashed changes
                 {
                     UpdateKeys(args.Item.Id);
                 }
                 if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
                 {
+<<<<<<< Updated upstream
                     UpdateLevels(args.Item.Id);
                 }
                 if (args.Item.Id >= 10020019 & args.Item.Id <= 10020020)
@@ -128,12 +143,81 @@ namespace Sly1AP
                     Clues.UpdateBottles(args.Item.Id, ClueBundles);
                 }
             };
+=======
+                    Items.Add(args.Item);
+                    WriteLine($"Received: {JsonConvert.SerializeObject(args.Item.Name)}");
+                    if (args.Item.Id >= 10020001 & args.Item.Id <= 100200014)
+                    {
+                        UpdateMoves(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020015 & args.Item.Id <= 10020018)
+                    {
+                        UpdateKeys(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020021 & args.Item.Id <= 10020024)
+                    {
+                        UpdateLevels(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020019 & args.Item.Id <= 10020020)
+                    {
+                        UpdateJunk(args.Item.Id);
+                    }
+                    if (args.Item.Id >= 10020026 & args.Item.Id <= 10020029)
+                    {
+                        UpdateTraps(args.Item.Id);
+                    }
+                    if (args.Item.Id == 10020025)
+                    {
+                        Client.SendGoalCompletion();
+                    }
+                    if (args.Item.Id >= 10020030 && args.Item.Id <= 10020048)
+                    {
+                        // Create a TaskCompletionSource to wait until ClueBundles > 0
+                        var tcs = new TaskCompletionSource<bool>();
+
+                        // A separate task to watch ClueBundles and set the task to complete when ClueBundles > 0
+                        _ = Task.Run(() =>
+                        {
+                            while (ClueBundles == 0)
+                            {
+                                Thread.Sleep(10); // Avoid busy-waiting, use small delay
+                            }
+                            tcs.SetResult(true); // Set result when ClueBundles > 0
+                        });
+
+                        // Await the TaskCompletionSource until ClueBundles > 0
+                        await tcs.Task;
+
+                        Clues.UpdateBottles(args.Item.Id, ClueBundles);
+                    }
+                    await Task.Delay(100);
+                };
+            }
+
+>>>>>>> Stashed changes
             await Client.Connect(hostTextbox.Text, "Sly Cooper and the Thievius Raccoonus");
             await Client.Login(slotTextbox.Text, passwordTextbox.Text);
             var PlayerName = slotTextbox.Text;
+<<<<<<< Updated upstream
+=======
+
+            if (DidConnect == false)
+            {
+                Client.MessageReceived += (e, args) =>
+                {
+                    string? ClientMessage = args.Message?.ToString();
+                    if (ClientMessage != null && ClientMessage.Contains(PlayerName))
+                    {
+                        WriteLine($"{args.Message}");
+                    }
+                };
+            }
+
+>>>>>>> Stashed changes
             var locations = Helpers.GetLocations();
             await Client.PopulateLocations(locations);
             ConfigureOptions(Client.Options);
+<<<<<<< Updated upstream
             if (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
             {
                 WriteLine("Load a save file, start a new game, or finish the prologue.");
@@ -221,6 +305,22 @@ namespace Sly1AP
                     Memory.WriteString(PlaceToWrite, Level.Name);
                 }
             }
+=======
+
+            await InitialLoad(Client, Items);
+
+            DidConnect = true;
+
+            //Just to be sure...
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.LevelType == "Hub" && Client.GameState.ReceivedItems.Any(h => h.Name == Level.Name) && Memory.ReadInt(Level.Address) == 0)
+                {
+                    Memory.Write(Level.Address, 1);
+                }
+            }
+
+>>>>>>> Stashed changes
             await Loop();
             return true;
         }
@@ -242,6 +342,7 @@ namespace Sly1AP
             {
                 var ClueBundleSizeElement = (JsonElement)options["ItemCluesanityBundleSize"];
                 ClueBundles = ClueBundleSizeElement.GetUInt16();
+<<<<<<< Updated upstream
                 if (ClueBundles > 0)
                 {
                     foreach (var Level in Helpers.Levels)
@@ -255,6 +356,8 @@ namespace Sly1AP
                     }
                     Clues.UpdateBottles(0, 0);
                 }
+=======
+>>>>>>> Stashed changes
             }
             if (options.ContainsKey("LocationCluesanityBundleSize"))
             {
@@ -414,32 +517,64 @@ namespace Sly1AP
                 keys.RaleighStart = 1;
                 Memory.Write(0x2027C67C, keys.RaleighStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Tide of Terror");
+<<<<<<< Updated upstream
                 var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
                 Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+=======
+                if (LevelName != null && LevelName.NamePointer != 0 && NamePointersSet)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
+>>>>>>> Stashed changes
             }
             if (id == 10020022 & Memory.ReadInt(0x2027CAC8) == 0)
             {
                 keys.MuggshotStart = 1;
                 Memory.Write(0x2027CAC8, keys.MuggshotStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Sunset Snake Eyes");
+<<<<<<< Updated upstream
                 var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
                 Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+=======
+                if (LevelName != null && LevelName.NamePointer != 0 && NamePointersSet)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
+>>>>>>> Stashed changes
             }
             if (id == 10020023 & Memory.ReadInt(0x2027CF14) == 0)
             {
                 keys.MzRubyStart = 1;
                 Memory.Write(0x2027CF14, keys.MzRubyStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Vicious Voodoo");
+<<<<<<< Updated upstream
                 var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
                 Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+=======
+                if (LevelName != null && LevelName.NamePointer != 0 && NamePointersSet)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
+>>>>>>> Stashed changes
             }
             if (id == 10020024 & Memory.ReadInt(0x2027D360) == 0)
             {
                 keys.PandaKingStart = 1;
                 Memory.Write(0x2027D360, keys.PandaKingStart);
                 var LevelName = Helpers.Levels.FirstOrDefault(l => l.Name == "Fire in the Sky");
+<<<<<<< Updated upstream
                 var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
                 Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+=======
+                if (LevelName != null && LevelName.NamePointer != 0 && NamePointersSet)
+                {
+                    var PlaceToWrite = Memory.ReadUInt(LevelName.NamePointer) + 536870912;
+                    Memory.Write((ulong)(PlaceToWrite + LevelName.Name.Length), 0);
+                }
+>>>>>>> Stashed changes
             }
             return;
         }
@@ -731,5 +866,78 @@ namespace Sly1AP
             Memory.Write(0x2027C82C, 0);
             Memory.Write(0x2027C82D, 0);
         }
+<<<<<<< Updated upstream
+=======
+        private static async Task InitialLoad(ArchipelagoClient Client, List<Item> Items)
+        {
+            if (Client.GameState != null && Client.GameState.ReceivedItems.Count != 0 && DidReceive == false)
+            {
+                var ItemsReceived = Client.GameState.ReceivedItems;
+                var NewItems = new List<Item>(ItemsReceived);
+
+                // Filter out the items that are already in the Items
+                var itemsToProcess = NewItems
+                    .Where(item => !Items.Any(receivedItem => receivedItem.Id == item.Id))
+                    .ToList();
+
+                foreach (var item in itemsToProcess)
+                {
+                    for (int i = 0; i < item.Quantity; i++)
+                    {
+                        if (item.Id >= 10020001 && item.Id <= 10020014)
+                        {
+                            UpdateMoves(item.Id);
+                        }
+                        if (item.Id >= 10020015 && item.Id <= 10020018)
+                        {
+                            UpdateKeys(item.Id);
+                        }
+                        if (item.Id >= 10020021 && item.Id <= 10020024)
+                        {
+                            UpdateLevels(item.Id);
+                        }
+                        if (item.Id >= 10020030 && item.Id <= 10020048)
+                        {
+                            while (ClueBundles == 0)
+                            {
+                                await Task.Delay(10);
+                            }
+                            Clues.UpdateBottles(item.Id, ClueBundles);
+                        }
+                    }
+                }
+            }
+            DidReceive = true;
+            await Task.CompletedTask;
+        }
+        private static Task NamePointers()
+        {
+            foreach (var Level in Helpers.Levels)
+            {
+                if (Level.NamePointer == 0)
+                {
+                    continue;
+                }
+                Memory.Write(Level.NamePointer, (NameAddress + NameOffset));
+                NameOffset += 50;
+
+                if (Level.LevelType == "Hub" && (Memory.ReadInt(Level.Address) == 0))
+                {
+                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(PlaceToWrite, Level.Name + " (Locked)");
+                }
+                else if (Level.LevelType == "Hub")
+                {
+                    var PlaceToWrite = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+                    Memory.WriteString(PlaceToWrite, Level.Name);
+                }
+            }
+            NamePointersSet = true;
+
+            Clues.UpdateBottles(0, 0);
+
+            return Task.CompletedTask;
+        }
+>>>>>>> Stashed changes
     }
 }

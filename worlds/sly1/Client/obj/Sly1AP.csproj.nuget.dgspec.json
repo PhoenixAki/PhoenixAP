@@ -49,7 +49,11 @@
           "dependencies": {
             "Archipelago.Core": {
               "target": "Package",
+<<<<<<< Updated upstream
               "version": "[0.3.2, )"
+=======
+              "version": "[0.3.16, )"
+>>>>>>> Stashed changes
             },
             "Archipelago.MultiClient.Net": {
               "target": "Package",
