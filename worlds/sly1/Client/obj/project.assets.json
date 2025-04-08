@@ -2,21 +2,15 @@
   "version": 3,
   "targets": {
     "net8.0-windows7.0": {
-<<<<<<< Updated upstream
-      "Archipelago.Core/0.3.2": {
-        "type": "package",
-        "dependencies": {
-          "Archipelago.MultiClient.Net": "6.5.0",
-=======
       "Archipelago.Core/0.3.16": {
         "type": "package",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
           "GameOverlay.Net": "4.3.1",
->>>>>>> Stashed changes
           "Serilog": "4.0.2",
           "Serilog.Sinks.Console": "6.0.0",
           "Serilog.Sinks.File": "6.0.0",
+          "System.Drawing.Common": "9.0.2",
           "System.Text.Json": "9.0.0"
         },
         "compile": {
@@ -26,7 +20,7 @@
           "lib/net8.0/Archipelago.Core.dll": {}
         }
       },
-      "Archipelago.MultiClient.Net/6.5.0": {
+      "Archipelago.MultiClient.Net/6.6.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/Archipelago.MultiClient.Net.dll": {
@@ -41,8 +35,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {}
         }
       },
-<<<<<<< Updated upstream
-=======
       "GameOverlay.Net/4.3.1": {
         "type": "package",
         "dependencies": {
@@ -332,7 +324,6 @@
           }
         }
       },
->>>>>>> Stashed changes
       "Serilog/4.0.2": {
         "type": "package",
         "compile": {
@@ -378,8 +369,6 @@
           }
         }
       },
-<<<<<<< Updated upstream
-=======
       "SharpDX/4.2.0": {
         "type": "package",
         "dependencies": {
@@ -753,7 +742,6 @@
           "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
         }
       },
->>>>>>> Stashed changes
       "System.IO.Pipelines/9.0.0": {
         "type": "package",
         "compile": {
@@ -1549,16 +1537,6 @@
     }
   },
   "libraries": {
-<<<<<<< Updated upstream
-    "Archipelago.Core/0.3.2": {
-      "sha512": "IEbEKrKyuxBHwmaf+msPsVeJs+thGqpdeQU5sbKwvRLnyWV90JnolepJWxXogltc+HHtAxr6wJrSsSVy8v3rww==",
-      "type": "package",
-      "path": "archipelago.core/0.3.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "archipelago.core.0.3.2.nupkg.sha512",
-=======
     "Archipelago.Core/0.3.16": {
       "sha512": "mpiCP3p96LoirhJjjj/NOqx8EddQS5mMMNZA2ozmAoT3ZbeJx/Z4G3VDtAttnOU+a6w7b1S+iolY0HkGqL+82A==",
       "type": "package",
@@ -1567,20 +1545,19 @@
         ".nupkg.metadata",
         ".signature.p7s",
         "archipelago.core.0.3.16.nupkg.sha512",
->>>>>>> Stashed changes
         "archipelago.core.nuspec",
         "lib/net8.0/Archipelago.Core.dll"
       ]
     },
-    "Archipelago.MultiClient.Net/6.5.0": {
-      "sha512": "cWz5UDo7/oIA0OVmOPN70UcwzTteQ2V0/v5n2LgMk0AW+HIYFACL7t4OlLBts/lp6LzNHMyOFxc7Fn7C45di4w==",
+    "Archipelago.MultiClient.Net/6.6.0": {
+      "sha512": "ZUNmgZg1zsMwoRaTFz0rqm9UwpUcqCkAsW6GAgLwE749dRmonPLimhYU/AryA4BagTGblL5ce9euwWU4Oj1YSw==",
       "type": "package",
-      "path": "archipelago.multiclient.net/6.5.0",
+      "path": "archipelago.multiclient.net/6.6.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "archipelago.multiclient.net.6.5.0.nupkg.sha512",
+        "archipelago.multiclient.net.6.6.0.nupkg.sha512",
         "archipelago.multiclient.net.nuspec",
         "blue-icon.png",
         "lib/net35/Archipelago.MultiClient.Net.dll",
@@ -1607,8 +1584,6 @@
         "lib/netstandard2.0/Newtonsoft.Json.dll"
       ]
     },
-<<<<<<< Updated upstream
-=======
     "GameOverlay.Net/4.3.1": {
       "sha512": "WturMfkbEcZejB1d3RnNKlFr+MxxSzyWY+CwPaFpozf0HMe9R98anIXmE0Thd6prQIkAgvtrc1g8y61nGJkEww==",
       "type": "package",
@@ -1972,7 +1947,6 @@
         "runtimes/ubuntu.16.10-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
       ]
     },
->>>>>>> Stashed changes
     "Serilog/4.0.2": {
       "sha512": "Vehq4uNYtURe/OnHEpWGvMgrvr5Vou7oZLdn3BuEH5FSCeHXDpNJtpzWoqywXsSvCTuiv0I65mZDRnJSeUvisA==",
       "type": "package",
@@ -2042,8 +2016,6 @@
         "serilog.sinks.file.nuspec"
       ]
     },
-<<<<<<< Updated upstream
-=======
     "SharpDX/4.2.0": {
       "sha512": "3pv0LFMvfK/dv1qISJnn8xBeeT6R/FRvr0EV4KI2DGsL84Qlv6P7isWqxGyU0LCwlSVCJN3jgHJ4Bl0KI2PJww==",
       "type": "package",
@@ -3053,7 +3025,6 @@
         "system.io.filesystem.primitives.nuspec"
       ]
     },
->>>>>>> Stashed changes
     "System.IO.Pipelines/9.0.0": {
       "sha512": "eA3cinogwaNB4jdjQHOP3Z3EuyiDII7MT35jgtnsA4vkn0LUrrSHsU0nzHTzFzmaFYeKV7MYyMxOocFzsBHpTw==",
       "type": "package",
@@ -5257,17 +5228,13 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-<<<<<<< Updated upstream
-      "Archipelago.Core >= 0.3.2",
-      "Archipelago.MultiClient.Net >= 6.5.0"
-=======
       "Archipelago.Core >= 0.3.16",
       "Archipelago.MultiClient.Net >= 6.6.0"
->>>>>>> Stashed changes
     ]
   },
   "packageFolders": {
-    "C:\\Users\\fello\\.nuget\\packages\\": {}
+    "C:\\Users\\fello\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
@@ -5278,8 +5245,12 @@
       "packagesPath": "C:\\Users\\fello\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
         "C:\\Users\\fello\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5306,7 +5277,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -5314,15 +5286,11 @@
         "dependencies": {
           "Archipelago.Core": {
             "target": "Package",
-<<<<<<< Updated upstream
-            "version": "[0.3.2, )"
-=======
             "version": "[0.3.16, )"
->>>>>>> Stashed changes
           },
           "Archipelago.MultiClient.Net": {
             "target": "Package",
-            "version": "[6.5.0, )"
+            "version": "[6.6.0, )"
           }
         },
         "imports": [
@@ -5344,7 +5312,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

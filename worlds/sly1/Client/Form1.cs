@@ -25,9 +25,9 @@ namespace Sly1AP
         public static string GameVersion { get; set; } = "0";
         public static bool IsConnected { get; set; } = false;
         public static GameState CurrentGameState = new GameState();
-        public static ArchipelagoClient Client { get; set; }
-        public static Moves slyMoves = new Moves();
+        public static ArchipelagoClient? Client { get; set; }
         public static SlyKeys keys = new SlyKeys();
+        public static uint SlyMoves { get; set; } = 0;
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
         public static int ClueBundles { get; set; } = 0;
@@ -60,7 +60,7 @@ namespace Sly1AP
                 {
                     Clues.BottleSync();
                 }
-                if (ClueLocations > 0)
+                if (ClueLocations > 0 && Client != null)
                 {
                     Helpers.SendBottles(Helpers.Levels, Client);
                 }
@@ -73,7 +73,7 @@ namespace Sly1AP
                         return;
                     }
                 }
-                if (!Client.IsConnected)
+                if (!IsConnected)
                 {
                     return;
                 }
@@ -145,25 +145,21 @@ namespace Sly1AP
                     }
                     if (args.Item.Id >= 10020030 && args.Item.Id <= 10020048)
                     {
-                        // Create a TaskCompletionSource to wait until ClueBundles > 0
                         var tcs = new TaskCompletionSource<bool>();
 
-                        // A separate task to watch ClueBundles and set the task to complete when ClueBundles > 0
                         _ = Task.Run(() =>
                         {
                             while (ClueBundles == 0)
                             {
-                                Thread.Sleep(10); // Avoid busy-waiting, use small delay
+                                Thread.Sleep(10);
                             }
-                            tcs.SetResult(true); // Set result when ClueBundles > 0
+                            tcs.SetResult(true);
                         });
-
-                        // Await the TaskCompletionSource until ClueBundles > 0
                         await tcs.Task;
 
                         Clues.UpdateBottles(args.Item.Id, ClueBundles);
                     }
-                    await Task.Delay(100);
+                    await Task.Delay(250);
                 };
             }
 
@@ -180,6 +176,8 @@ namespace Sly1AP
                 return false;
             }
 
+            var PlayerName = slotTextbox.Text;
+
             if (DidConnect == false)
             {
                 Client.MessageReceived += (e, args) =>
@@ -193,13 +191,13 @@ namespace Sly1AP
             }
 
             var locations = Helpers.GetLocations();
-            await Client.PopulateLocations(locations);
+            Client.MonitorLocations(locations);
             ConfigureOptions(Client.Options);
 
             Client.MessageReceived += (e, args) =>
             {
-                string ClientMessage = args.Message?.ToString();
-                if (ClientMessage != null & ClientMessage.Contains(PlayerName))
+                string? ClientMessage = args.Message?.ToString();
+                if (!string.IsNullOrEmpty(ClientMessage) && ClientMessage.Contains(PlayerName))
                 {
                     WriteLine($"{args.Message}");
                 }
@@ -272,6 +270,7 @@ namespace Sly1AP
                     SlyMoves += Move.ThirdValue;
                 }
             }
+        }
         public static void UpdateKeys(long id)
         {
             //Keys
@@ -488,7 +487,7 @@ namespace Sly1AP
         }
         public static void UpdateValues()
         {
-            Memory.Write(0x2027DC10, slyMoves.SlyMoves);
+            Memory.Write(0x2027DC10, SlyMoves);
             Memory.Write(0x2027CAB4, keys.RaleighKeys);
             Memory.Write(0x2027CF00, keys.MuggshotKeys);
             Memory.Write(0x2027D34C, keys.MzRubyKeys);

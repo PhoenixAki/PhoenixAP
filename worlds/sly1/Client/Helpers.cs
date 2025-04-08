@@ -77,7 +77,7 @@ namespace Sly1AP
         {
             var json = OpenEmbeddedResource("Sly1AP.Resources.Locations.json");
             var list = JsonConvert.DeserializeObject<List<Location>>(json);
-            return list;
+            return list ?? new List<Location>();
         }
 
         public class Level
@@ -139,11 +139,18 @@ namespace Sly1AP
         public static string OpenEmbeddedResource(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
             {
-                string jsonFile = reader.ReadToEnd();
-                return jsonFile;
+                if (stream == null)
+                {
+                    throw new InvalidOperationException($"Resource '{resourceName}' not found.");
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string jsonFile = reader.ReadToEnd();
+                    return jsonFile;
+                }
             }
         }
 
@@ -156,7 +163,7 @@ namespace Sly1AP
         public static void SendBottles(List<Level> Levels, ArchipelagoClient Client)
         {
             ulong CurrentLevel = Memory.ReadUInt(0x202623C8) + 0x20000000;
-            Level LevelObj = Levels.FirstOrDefault(x => x.Address == CurrentLevel);
+            Level? LevelObj = Levels.FirstOrDefault(x => x.Address == CurrentLevel);
             CurrentLevel += 0x68;
             if ((Memory.ReadByte(0x202623C4) == 0 || Memory.ReadByte(0x26202023C4) == 5) || LevelObj == null)
             {
