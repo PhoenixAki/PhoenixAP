@@ -192,11 +192,8 @@ namespace Sly1AP
                     CurrentLevel++;
                 }
             }
-<<<<<<< Updated upstream
-=======
             Task.Delay(100);
             return;
->>>>>>> Stashed changes
         }
     }
 }
