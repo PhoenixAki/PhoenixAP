@@ -103,6 +103,8 @@ class Sly1World(World):
             "options": {
                 "UnlockClockwerk": self.options.UnlockClockwerk.value,
                 "RequiredBosses": self.options.RequiredBosses.value,
+                "MaxPages": self.options.MaxPages.value,
+                "RequiredPages": self.options.RequiredPages.value,
                 "FastClockwerk": self.options.FastClockwerk.value,
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
                 "IncludeHourglasses": self.options.IncludeHourglasses.value,
