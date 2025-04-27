@@ -28,6 +28,16 @@ class Sly1CommandProcessor(ClientCommandProcessor):
             else:
                 logger.info(f"Can open: {', '.join(self.ctx.openable_vaults)}")
 
+    def _cmd_check_goal(self):
+        """Check your progress towards your goal"""
+        if isinstance(self.ctx, Sly1Context):
+            if self.ctx.slot_data is None:
+                logger.info("Connect to a slot first!")
+            elif self.ctx.slot_data["options"].get("UnlockClockwerk", 1) == 1:
+                logger.info(f"{self.ctx.bosses_beaten} bosses out of {self.ctx.slot_data["options"]["RequiredBosses"]}")
+            else:
+                logger.info(f"{self.ctx.goal_pages} pages out of {self.ctx.slot_data["options"]["RequiredPages"]}")
+
 class Sly1Context(CommonContext):
     command_processor = Sly1CommandProcessor
     game_interface: Sly1Interface
@@ -64,6 +74,13 @@ class Sly1Context(CommonContext):
     ]
     hubs: list[bool] = [False, False, False, False]
     goal_pages: int = 0
+    all_moves = 0
+    for move in MOVES.values():
+        if isinstance(move, list):
+            for level in move:
+                all_moves |= level
+        else:
+            all_moves |= move
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)

@@ -1,9 +1,10 @@
 from enum import  IntEnum
 from typing import Optional, NamedTuple, Tuple, Dict, List
-from math import ceil
 import struct
 from logging import Logger
-from time import sleep
+import asyncio
+import random
+import os
 
 from .pcsx2_interface.pine import Pine
 from .data.Constants import ADDRESSES, LEVELS
@@ -109,7 +110,13 @@ class GameInterface():
         except RuntimeError:
             return False
 
+
+async def delayed_trap(trap_func):
+    await asyncio.sleep(5)
+    await trap_func()
+
 class Sly1Interface(GameInterface):
+    moves_locked = False
     def get_current_episode(self) -> Sly1Episode:
         episode_num = self._read32(self.addresses["world id"])
         return Sly1Episode(episode_num)
@@ -156,3 +163,97 @@ class Sly1Interface(GameInterface):
     def check_paris_files(self) -> bool:
         files = self._read32(0x27C66C)
         return files > 0
+
+    def get_sly_action(self) -> int:
+        sly_struct = self._read32(self.addresses["sly struct pointer"])
+        sly_action = self._read32(sly_struct + self.addresses["sly action offset"])
+        return sly_action
+
+    def get_active_move(self) -> int:
+        active_move = self._read32(self.addresses["active thief move"])
+        return active_move
+
+    def get_paused(self) -> bool:
+        paused = self._read32(self.addresses["game paused"])
+        return paused == 0
+
+    async def activate_trap(self, item_id: int):
+        trap = item_id - 10020025
+        current_episode = self.get_current_episode()
+        traps = {
+            1: self.slide_trap,
+            2: self.time_trap,
+            3: self.ball_trap,
+            4: self.bentley_trap,
+        }
+
+        trap_act = traps.get(trap)
+        if trap_act:
+            if current_episode == 0:
+                asyncio.create_task(delayed_trap(trap_act))
+            else:
+                await trap_act()
+        else:
+            return
+
+    async def slide_trap(self):
+        asyncio.create_task(self.freeze_address(self.addresses["slope control"], 0.65, 1.0))
+
+    async def time_trap(self):
+        number = random.randint(1, 2)
+        if number == 1:
+            asyncio.create_task(self.freeze_address(self.addresses["time control"], 1.5, 1.0))
+        if number == 2:
+            asyncio.create_task(self.freeze_address(self.addresses["time control"], 0.5, 1.0))
+
+    async def ball_trap(self):
+        active_move = self.get_active_move()
+        true_moves = self._read32(self.addresses["thief moves"])
+        sly_action = self.get_sly_action()
+        if sly_action >= 3:
+            await asyncio.sleep(1)
+            await self.ball_trap()
+        self.moves_locked = True
+        asyncio.create_task(self.freeze_multiple_addresses([self.addresses["thief moves"],
+                                                            self.addresses["active thief move"],
+                                                            self.addresses["button pressed"],
+                                                            self.addresses["button held"],
+                                                            self.addresses["button pressed"] + 2],
+                                                           [4, 1, 16, 255, 16],
+                                                           [true_moves, active_move, 0, 0, 0]))
+
+    async def bentley_trap(self):
+        self.logger.info("You got a Bentley Jumpscare Trap... But nothing happened.")
+
+    async def freeze_address(self, address: int, value: float, reset_value: float,
+                             duration: float = 10.0, interval: float = 0.01):
+        #original_value = self._read_float(address)
+        start_time = asyncio.get_event_loop().time()
+        end_time = start_time + duration
+
+        while asyncio.get_event_loop().time() < end_time:
+            self._write_float(address, value)
+            await asyncio.sleep(interval)
+
+        self._write_float(address, reset_value)
+
+    async def freeze_multiple_addresses(self, addresses: list, values: list, reset_values: list,
+                                        duration: float = 10.0, interval: float = 0.01):
+        if len(addresses) != len(values):
+            raise ValueError("The number of addresses must match the number of values.")
+
+        #original_values = [self._read32(address) for address in addresses]
+
+        start_time = asyncio.get_event_loop().time()
+        end_time = start_time + duration
+
+        while asyncio.get_event_loop().time() < end_time:
+            for i, address in enumerate(addresses):
+                self._write32(address, values[i])
+            await asyncio.sleep(interval)
+
+        # Restore the original values after the duration
+        for i, address in enumerate(addresses):
+            self._write32(address, reset_values[i])
+        self.moves_locked = False
+

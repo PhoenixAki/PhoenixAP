@@ -98,6 +98,14 @@ ADDRESSES = {
         "fits progress": 0x27D7A8,
         "lives": 0x27DC00,
         "charms": 0x27DC04,
+        "sly struct pointer": 0x262E10,
+        "sly action offset": 0x2220,
+        "slope control": 0x274AD0,
+        "time control": 0x261850,
+        "active thief move": 0x274F74,
+        "button pressed": 0x262D18, #Which button the player is pressing
+        "button held": 0x262D22, #Whether a button is being held
+        "game paused": 0x261858,
         "levels":
         [
             [  # Tide Of Terror

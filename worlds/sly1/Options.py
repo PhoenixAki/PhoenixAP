@@ -39,6 +39,7 @@ class MaxPages(Range):
     How many pages are available to collect in the multiworld.
     These pages are NOT the same as the normal pages that give you thief moves.
     Only used if page hunt is selected as the Unlock Clockwerk option.
+    Note that this option requires more locations than usual. Cluesanity is recommended.
     """
     range_start = 1
     range_end = 50

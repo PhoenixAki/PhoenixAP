@@ -5,6 +5,7 @@ import json
 import os
 
 from NetUtils import ClientStatus
+from typing import Optional
 
 from .Sly1Interface import Sly1Episode, Sly1Interface
 from .pcsx2_interface.pine import Pine
@@ -68,12 +69,20 @@ def check_maps(ctx: 'Sly1Context') -> None:
 
 def check_keys(ctx: 'Sly1Context') -> None:
     key_addresses = ADDRESSES["SCUS-97198"]["keys"]
+    move_address = ADDRESSES["SCUS-97198"]["thief moves"]
+    moves = ctx.thief_moves
+    all_moves = ctx.all_moves
 
     for i in range(0, 4):
         if  ctx.game_interface._read32(key_addresses[i]) != ctx.inven_keys[i]:
             ctx.game_interface._write32(key_addresses[i], ctx.inven_keys[i])
-    if ctx.game_interface._read32(ADDRESSES["SCUS-97198"]["thief moves"]) != ctx.thief_moves:
-        ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["thief moves"], ctx.thief_moves)
+    #Remove Hacking from player's inventory if they have every move.
+    #Otherwise, vaults will be empty.
+    #This is a temporary workaround.
+    if (moves & all_moves) == all_moves:
+        moves &= ~MOVES["Hacking"]
+    if (ctx.game_interface._read32(move_address) != moves) and (Sly1Interface.moves_locked is False):
+        ctx.game_interface._write32(move_address, moves)
 
 def check_hubs(ctx: 'Sly1Context') -> None:
     if ctx.slot_data is None:
@@ -88,9 +97,14 @@ def check_hubs(ctx: 'Sly1Context') -> None:
             ctx.game_interface._write32(hub_addresses[i], 0)
 
 def check_bottles(ctx: 'Sly1Context') -> None:
-    if ctx.slot_data is None or ctx.slot_data["options"]["ItemCluesanityBundleSize"] == 0:
+    if ctx.slot_data is None:
         return
-    bundle_size = ctx.slot_data["options"]["ItemCluesanityBundleSize"]
+    options = ctx.slot_data.get("options", {})
+    bundle_size = options.get("ItemCluesanityBundleSize")
+    if bundle_size is None:
+        bundle_size = options.get("CluesanityBundleSize")
+    if bundle_size is None or bundle_size == 0:
+        return
     bottle_addresses = ADDRESSES["SCUS-97198"]["bottle addresses"]
 
     for episode_index, episodes in enumerate(bottle_addresses):
@@ -113,10 +127,12 @@ def check_bottles(ctx: 'Sly1Context') -> None:
 def check_bosses(ctx: 'Sly1Context') -> None:
     if ctx.slot_data is None:
         return
-    if ctx.slot_data["options"].get("UnlockClockwerk", 1) == 1:
-        if ctx.bosses_beaten >= ctx.slot_data["options"]["RequiredBosses"]:
+    options = ctx.slot_data.get("options", {})
+    required_bosses = options.get("RequiredBosses", 4)
+    if options.get("UnlockClockwerk", 1) == 1:
+        if ctx.bosses_beaten >= required_bosses:
             ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["fits progress"], 53)
-            if ctx.slot_data["options"].get("FastClockwerk", 0) == 1:
+            if options.get("FastClockwerk", 0) == 1:
                 ctx.game_interface._write32(0x27DB6C, 1)
         elif ctx.game_interface._read32(ADDRESSES["SCUS-97198"]["fits progress"]) > 21:
             ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["fits progress"], 21)
@@ -172,7 +188,10 @@ async def handle_checks(ctx: 'Sly1Context') -> None:
                         ctx.locations_checked.add(location_code)
 
     #Clue Bottles
-    bottle_n = ctx.slot_data["options"]["LocationCluesanityBundleSize"]
+    options = ctx.slot_data.get("options", {})
+    bottle_n = options.get("LocationCluesanityBundleSize", 0)
+    if bottle_n is None:
+        bottle_n = options.get("CluesanityBundleSize", 0)
 
     if bottle_n != 0:
         level_addresses = ADDRESSES["SCUS-97198"]["levels"]
@@ -230,7 +249,7 @@ async def handle_received(ctx: 'Sly1Context') -> None:
         item = from_id(network_item.item)
         player = ctx.player_names[network_item.player]
 
-        if 10020001 <= item.ap_code <= 10020014:
+        if (10020001 <= item.ap_code <= 10020014) and (Sly1Interface.moves_locked is False):
             m = item.ap_code - 10020001
             ctx.inven_moves[m] += 1
 
@@ -262,6 +281,8 @@ async def handle_received(ctx: 'Sly1Context') -> None:
         if 10020021 <= item.ap_code <= 10020024:
             l = item.ap_code - 10020021
             ctx.hubs[l] = True
+        if (10020026 <= item.ap_code <= 10020029) and (state["received_count"] < received_count):
+            await ctx.game_interface.activate_trap(item.ap_code)
         if 10020030 <= item.ap_code <= 10020048:
             for name, data in bottles.items():
                 if data.ap_code == item.ap_code:
@@ -289,3 +310,15 @@ def save_state(seed, new_state):
     all_states[str(seed)] = new_state
     with open(SAVE_FILE, "w") as f:
         json.dump(all_states, f, indent=4)
+
+def get_blueprint(episode: int) -> Optional[str]:
+    blueprint_mapping = {
+        Sly1Episode.Tide_Of_Terror: "ToT Blueprints",
+        Sly1Episode.Sunset_Snake_Eyes: "SSE Blueprints",
+        Sly1Episode.Vicious_Voodoo: "VV Blueprints",
+        Sly1Episode.Fire_In_The_Sky: "FitS Blueprints",
+    }
+    return blueprint_mapping.get(Sly1Episode(episode))
+
+def get_bit_value(move_data):
+    return move_data[0] if isinstance(move_data, list) else move_data
