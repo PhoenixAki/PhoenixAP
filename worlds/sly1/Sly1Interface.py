@@ -189,7 +189,7 @@ class Sly1Interface(GameInterface):
 
         trap_act = traps.get(trap)
         if trap_act:
-            if current_episode == 0:
+            if current_episode == "Paris":
                 asyncio.create_task(delayed_trap(trap_act))
             else:
                 await trap_act()
