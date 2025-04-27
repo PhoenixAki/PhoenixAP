@@ -4,7 +4,7 @@
 
 - A legally obtained NTSC ISO of Sly Cooper and the Thievius Raccoonus
 - [A version of PCSX2 which supports PINE (recommended: 2.2.0)](https://pcsx2.net/downloads)
-- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
+- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases). 0.6.1 or higher required.
 
 ## Configuring your YAML file
 
