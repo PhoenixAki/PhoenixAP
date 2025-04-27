@@ -9,6 +9,22 @@ from .Options import Sly1Options
 from .Regions import create_regions
 from .Types import Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
 from .Rules import set_rules
+from worlds.LauncherComponents import (
+    Component,
+    Type,
+    components,
+    launch_subprocess,
+    icon_paths,
+)
+
+def run_client():
+    from .Sly1Client import launch_client
+    launch_subprocess(launch_client, name="Sly1Client")
+
+icon_paths["sly1_ico"] = f"ap:{__name__}/icon.png"
+components.append(
+    Component("Sly 1 Client", func=run_client, component_type=Type.CLIENT, icon="sly1_ico")
+)
 
 class Sly1Web(WebWorld):
     theme = "ocean"
@@ -85,7 +101,11 @@ class Sly1World(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
             "options": {
+                "UnlockClockwerk": self.options.UnlockClockwerk.value,
                 "RequiredBosses": self.options.RequiredBosses.value,
+                "MaxPages": self.options.MaxPages.value,
+                "RequiredPages": self.options.RequiredPages.value,
+                "FastClockwerk": self.options.FastClockwerk.value,
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
                 "IncludeHourglasses": self.options.IncludeHourglasses.value,
                 "HourglassesRequireRoll": self.options.HourglassesRequireRoll.value,

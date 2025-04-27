@@ -10,13 +10,50 @@ def create_option_groups() -> List[OptionGroup]:
 
     return option_group_list
 
+class UnlockClockwerk(Choice):
+    """
+    What you need to do to unlock Cold Heart of Hate to defeat Clockwerk
+    """
+    display_name = "Unlock Clockwerk"
+    option_boss_victories = 1
+    option_page_hunt = 2
+    default = 1
+
+class FastClockwerk(Toggle):
+    """
+    If enabled, unlocking Cold Heart of Hate will give you access directly to the Clockwerk boss fight skipping all the previous levels.
+    """
+    display_name = "Fast Clockwerk"
+
 class RequiredBosses(Range):
     """
     How many members of the Fiendish Five you need to defeat before Cold Heart of Hate is unlocked.
+    Only used if boss victories is selected as the Unlock Clockwerk option.
     """
     range_start = 1
     range_end = 4
     default = 4
+
+class MaxPages(Range):
+    """
+    How many pages are available to collect in the multiworld.
+    These pages are NOT the same as the normal pages that give you thief moves.
+    Only used if page hunt is selected as the Unlock Clockwerk option.
+    Note that this option requires more locations than usual. Cluesanity is recommended.
+    """
+    range_start = 1
+    range_end = 50
+    default = 25
+
+class RequiredPages(Range):
+    """
+    How many pages of the Thievius Raccoonus you need to collect before Cold Heart of Hate is unlocked.
+    These pages are NOT the same as the normal pages that give you thief moves.
+    Only used if page hunt is selected as the Unlock Clockwerk option.
+    """
+    range_start = 1
+    range_end = 50
+    default = 20
 
 class StartingEpisode(Choice):
     """
@@ -40,7 +77,6 @@ class AvoidEarlyBK(Toggle):
 class IncludeHourglasses(Toggle):
     """
     If enabled, Hourglasses are included in the locations.
-    If Hourglasses are disabled then there are more items than locations for this game alone.
     """
     display_name = "Include Hourglasses"
 
@@ -80,6 +116,26 @@ class MinigameCaches(Range):
     range_start = 1
     range_end = 10
     default = 1
+
+class LocationCluesanityBundleSize(Range):
+    """
+    Determines how many bottles you need to collect for each check.
+    Set to 0 to disable. Allows a range between 0 and 5.
+    """
+    display_name = "Location Cluesanity Bundle Size"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+class ItemCluesanityBundleSize(Range):
+    """
+    Determines how many bottles you will receive for a given level.
+    Set to 0 to disable. Allows a range between 0 and 5.
+    """
+    display_name = "Item Cluesanity Bundle Size"
+    range_start = 0
+    range_end = 5
+    default = 0
 
 class TrapChance(Range):
     """
@@ -131,60 +187,35 @@ class BallTrapWeight(Range):
     range_end = 100
     default = 25
 
-class LocationCluesanityBundleSize(Range):
-    """
-    Determines how many bottles you need to collect for each check.
-    Set to 0 to disable. Allows a range between 0 and 5.
-    """
-    display_name = "Location Cluesanity Bundle Size"
-    range_start = 0
-    range_end = 5
-    default = 0
-
-class ItemCluesanityBundleSize(Range):
-    """
-    Determines how many bottles you will receive for a given level.
-    Set to 0 to disable. Allows a range between 0 and 5.
-    """
-    display_name = "Item Cluesanity Bundle Size"
-    range_start = 0
-    range_end = 5
-    default = 0
-
 @dataclass
 class Sly1Options(PerGameCommonOptions):
+    UnlockClockwerk:                UnlockClockwerk
+    FastClockwerk:                  FastClockwerk
     RequiredBosses:                 RequiredBosses
+    MaxPages:                       MaxPages
+    RequiredPages:                  RequiredPages
     StartingEpisode:                StartingEpisode
     IncludeHourglasses:             IncludeHourglasses
     HourglassesRequireRoll:         HourglassesRequireRoll
     AvoidEarlyBK:                   AvoidEarlyBK
     ExcludeMinigames:               ExcludeMinigames
     MinigameCaches:                 MinigameCaches
+    LocationCluesanityBundleSize:   LocationCluesanityBundleSize
+    ItemCluesanityBundleSize:       ItemCluesanityBundleSize
     TrapChance:                     TrapChance
     IcePhysicsTrapWeight:           IcePhysicsTrapWeight
     SpeedChangeTrapWeight:          SpeedChangeTrapWeight
     BentleyJumpscareTrapWeight:     BentleyJumpscareTrapWeight
     BallTrapWeight:                 BallTrapWeight
-    LocationCluesanityBundleSize:   LocationCluesanityBundleSize
-    ItemCluesanityBundleSize:       ItemCluesanityBundleSize
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [RequiredBosses, StartingEpisode, IncludeHourglasses, HourglassesRequireRoll],
-    "Cluesanity Options": [LocationCluesanityBundleSize, ItemCluesanityBundleSize],
+    "General Options": [UnlockClockwerk, FastClockwerk,
+                         RequiredBosses, MaxPages,
+                         RequiredPages, StartingEpisode,
+                         IncludeHourglasses, HourglassesRequireRoll],
     "Minigame Options": [ExcludeMinigames, MinigameCaches],
+    "Cluesanity Options": [LocationCluesanityBundleSize, ItemCluesanityBundleSize],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
                      BallTrapWeight]
-}
-
-slot_data_options: List[str] = {
-    "RequiredBosses",
-    "StartingEpisode",
-    "IncludeHourglasses",
-    "HourglassesRequireRoll",
-    "AvoidEarlyBK",
-    "ExcludeMinigames",
-    "MinigameCaches",
-    "LocationCluesanityBundleSize",
-    "ItemCluesanityBundleSize"
 }
