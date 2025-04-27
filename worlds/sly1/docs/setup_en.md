@@ -3,10 +3,7 @@
 ## Required Software
 
 - A legally obtained NTSC ISO of Sly Cooper and the Thievius Raccoonus
-- [v1.6.0 of PCSX2](https://pcsx2.net/downloads)
-    - Select show previous versions and choose v1.6.0
-- The Sly 1 AP client (Find the latest [here](https://github.com/hoppel16/ArchipelagoBranchSly1/releases))
-    - You may need to also install .NET 8.0
+- [A version of PCSX2 which supports PINE (recommended: 2.2.0)](https://pcsx2.net/downloads)
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 ## Configuring your YAML file
@@ -22,9 +19,16 @@ an experience customized for their taste, and different players in the same mult
 You can customize your options by visiting
 the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20and%20the%20Thievius%20Raccoonus/player-options).
 
+### Configuring PCSX2
+
+Enable PINE in PCSX2
+
+* In PCSX2, under Tools, check Show Advanced Settings.
+* In PCSX2, System -> Settings -> Advanced -> PINE Settings, check Enable and ensure Slot is set to 28011.
+
 ### Connect to the MultiServer
 
-1. Open PCSX2 v1.6.0 and load Sly 1
+1. Open PCSX2 and load Sly 1
 
 2. Add Cheats (Optional)
     - Find the cheats folder in your PCSX2 directory.
@@ -34,7 +38,5 @@ the [Sly Cooper and the Thievius Raccoonus Options Page](/games/Sly%20Cooper%20a
 3. Create a New Game
 
 4. Set Up the Client
-    - Extract client.zip and find sly1ap.exe in the extracted files
-        - You may need to download .NET 8.0
-    - Run sly1ap.exe
+    - Run Sly 1 Client from the Archipelago Launcher and connect
 
