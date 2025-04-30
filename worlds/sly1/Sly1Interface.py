@@ -8,16 +8,17 @@ import os
 
 from .pcsx2_interface.pine import Pine
 from .data.Constants import ADDRESSES, LEVELS
+from .Locations import bottle_amounts
 
 class Sly1Episode(IntEnum):
     Paris = 0
-    Tide_Of_Terror = 1
+    Tide_of_Terror = 1
     Sunset_Snake_Eyes = 2
     Vicious_Voodoo = 3
-    Fire_In_The_Sky = 4
-    Cold_Heart_Of_Hate = 5
+    Fire_in_the_Sky = 4
+    Cold_Heart_of_Hate = 5
 
-class GameInterface():
+class GameInterface:
     """
     Base class for connecting with a pcsx2 game
     """
@@ -110,11 +111,6 @@ class GameInterface():
         except RuntimeError:
             return False
 
-
-async def delayed_trap(trap_func):
-    await asyncio.sleep(5)
-    await trap_func()
-
 class Sly1Interface(GameInterface):
     moves_locked = False
     def get_current_episode(self) -> Sly1Episode:
@@ -126,6 +122,10 @@ class Sly1Interface(GameInterface):
         sly_control = self._read32(self.addresses["sly control"])
         return cutscene_pointer > 0 and sly_control != 7
 
+    def in_controllable_cutscene(self):
+        cutscene_pointer = self._read32(self.addresses["cutscene pointer"])
+        return cutscene_pointer > 0
+
     def in_call(self) -> bool:
         binocucom = self._read32(self.addresses["binocucom"])
         return binocucom == 2
@@ -133,6 +133,10 @@ class Sly1Interface(GameInterface):
     def in_fmv(self) -> bool:
         fmv = self._read32(self.addresses["FMV"])
         return fmv > 20
+
+    def get_button_press(self) -> int:
+        button = self._read32(self.addresses["button pressed"])
+        return button
 
     def skip_cutscene(self) -> None:
         if self.in_cutscene():
@@ -142,13 +146,16 @@ class Sly1Interface(GameInterface):
             self._write32(self.addresses["binocucom"], 0)
         if self.in_fmv():
             self._write32(self.addresses["FMV skip"], 0)
+        if self.get_button_press() == 2 and self.in_controllable_cutscene():
+            cutscene_pointer = self._read32(self.addresses["cutscene pointer"])
+            self._write32(cutscene_pointer + 744, 0)
 
     def get_current_level_name(self) -> str:
         level_addresses = ADDRESSES["SCUS-97198"]["levels"]
         current_address = self.get_current_address()
         current_episode = self.get_current_episode()
 
-        if current_episode in (Sly1Episode.Paris, Sly1Episode.Cold_Heart_Of_Hate) or current_address == 8:
+        if current_episode in (Sly1Episode.Paris, Sly1Episode.Cold_Heart_of_Hate) or current_address == 8:
             return "N/A"
 
         episode_index = current_episode - 1
@@ -164,6 +171,10 @@ class Sly1Interface(GameInterface):
         files = self._read32(0x27C66C)
         return files > 0
 
+    def get_sly_struct(self) -> int:
+        sly_struct = self._read32(self.addresses["sly struct pointer"])
+        return sly_struct
+
     def get_sly_action(self) -> int:
         sly_struct = self._read32(self.addresses["sly struct pointer"])
         sly_action = self._read32(sly_struct + self.addresses["sly action offset"])
@@ -177,6 +188,65 @@ class Sly1Interface(GameInterface):
         paused = self._read32(self.addresses["game paused"])
         return paused == 0
 
+    async def write_name_pointers(self) -> None:
+        start_value = 0x25EA00
+        increment = 50
+        current_value = start_value
+        name_pointers = self.addresses["name pointers"]
+        hub_name_pointers = self.addresses["hub name pointers"]
+
+        for episode in name_pointers:
+            for address in episode:
+                if address != 0:
+                    self._write32(address, current_value)
+                    current_value += increment
+
+        for address in hub_name_pointers:
+            if address != 0:
+                self._write32(address, current_value)
+                current_value += increment
+
+    def write_names(self, ctx: 'Sly1Context') -> None:
+        addresses = self.addresses["name pointers"]
+        hub_addresses = self.addresses["hub name pointers"]
+        options = ctx.slot_data.get("options", {})
+        clue_bundles = options.get("ItemCluesanityBundleSize", 0)
+
+        if self._read32(0x247B98) != 0x25EA00:
+            return
+
+        for episode_index, (episode_name, level_list) in enumerate(LEVELS.items()):
+            for level_index, level_name in enumerate(level_list):
+                if addresses[episode_index][level_index] == 0:
+                    continue
+                pointer_address = self._read32(addresses[episode_index][level_index])
+                bottle_count = ctx.bottles[episode_index][level_index] * clue_bundles
+                max_bottles = bottle_amounts[level_name].bottle_amount
+                if bottle_count > max_bottles:
+                    bottle_count = max_bottles
+                if clue_bundles > 0:
+                    name = f"{level_name} ({bottle_count}/{max_bottles})"
+                else:
+                    name = f"{level_name}"
+                text = name.encode()+bytes([0])
+                self._write_bytes(pointer_address, text)
+
+        for episode_index, episode_name in enumerate(LEVELS.keys()):
+            pointer_address = self._read32(hub_addresses[episode_index])
+            if ctx.hubs[episode_index] is False:
+                name = f"{episode_name} (Locked)"
+            else:
+                name = f"{episode_name}"
+            text = name.encode()+bytes([0])
+            self._write_bytes(pointer_address, text)
+
+    def write_anticheat(self):
+        addresses = self.addresses["anticheat"]
+        for address in addresses:
+            self._write32(address, 0)
+        self._write32(0x12B760, 0x03E00008)
+        self._write32(0x12B764, 0x00000000)
+
     async def activate_trap(self, item_id: int):
         trap = item_id - 10020025
         current_episode = self.get_current_episode()
@@ -184,20 +254,24 @@ class Sly1Interface(GameInterface):
             1: self.slide_trap,
             2: self.time_trap,
             3: self.ball_trap,
-            4: self.bentley_trap,
+            4: self.invisibility_trap,
         }
 
         trap_act = traps.get(trap)
         if trap_act:
-            if current_episode == "Paris":
-                asyncio.create_task(delayed_trap(trap_act))
+            if current_episode == 0:
+                asyncio.create_task(self.delayed_trap(item_id))
             else:
                 await trap_act()
         else:
             return
 
+    async def delayed_trap(self, trap: int):
+        await asyncio.sleep(5)
+        await self.activate_trap(trap)
+
     async def slide_trap(self):
-        asyncio.create_task(self.freeze_address(self.addresses["slope control"], 0.65, 1.0))
+        asyncio.create_task(self.freeze_address(self.addresses["slope control"], 0.7, 1.0))
 
     async def time_trap(self):
         number = random.randint(1, 2)
@@ -222,8 +296,20 @@ class Sly1Interface(GameInterface):
                                                            [4, 1, 16, 255, 16],
                                                            [true_moves, active_move, 0, 0, 0]))
 
-    async def bentley_trap(self):
-        self.logger.info("You got a Bentley Jumpscare Trap... But nothing happened.")
+    async def invisibility_trap(self):
+        sly_struct = self.get_sly_struct()
+        sly_opacity = sly_struct + self.addresses["sly opacity offset"]
+        cane_opacity = sly_struct + self.addresses["cane offset"]
+        charm_offset = sly_struct + self.addresses["charm offset"]
+        glow_offset = self._read32(charm_offset) + self.addresses["glow offset"]
+        glow_value = self._read32(glow_offset)
+        sly_shadow = self.addresses["sly shadow"]
+        shadow_value = self._read32(sly_shadow)
+
+        asyncio.create_task(self.freeze_address(sly_opacity, -1.0, 1))
+        asyncio.create_task(self.freeze_address(sly_shadow, 0, 1))
+        asyncio.create_task(self.freeze_address(cane_opacity, 0, 1))
+        #asyncio.create_task(self.freeze_address(glow_offset, 0, glow_value))
 
     async def freeze_address(self, address: int, value: float, reset_value: float,
                              duration: float = 10.0, interval: float = 0.01):

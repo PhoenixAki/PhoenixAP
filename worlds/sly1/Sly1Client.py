@@ -153,6 +153,7 @@ async def _handle_game_ready(ctx: Sly1Context) -> None:
         ctx.current_episode = current_episode
         ctx.is_connected_to_server = connected_to_server
         await init(ctx, connected_to_server)
+        await ctx.game_interface.write_name_pointers()
 
     await update(ctx, connected_to_server)
 

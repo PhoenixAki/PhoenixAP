@@ -31,6 +31,8 @@ async def update(ctx: 'Sly1Context', ap_connected: bool) -> None:
         await handle_received(ctx)
         check_hubs(ctx)
         await handle_goal(ctx)
+        ctx.game_interface.write_names(ctx)
+        ctx.game_interface.write_anticheat()
 
 async def init(ctx: 'Sly1Context', ap_connected: bool) -> None:
     """Called when the player connects to the AP server"""
@@ -313,10 +315,10 @@ def save_state(seed, new_state):
 
 def get_blueprint(episode: int) -> Optional[str]:
     blueprint_mapping = {
-        Sly1Episode.Tide_Of_Terror: "ToT Blueprints",
+        Sly1Episode.Tide_of_Terror: "ToT Blueprints",
         Sly1Episode.Sunset_Snake_Eyes: "SSE Blueprints",
         Sly1Episode.Vicious_Voodoo: "VV Blueprints",
-        Sly1Episode.Fire_In_The_Sky: "FitS Blueprints",
+        Sly1Episode.Fire_in_the_Sky: "FitS Blueprints",
     }
     return blueprint_mapping.get(Sly1Episode(episode))
 

@@ -150,7 +150,7 @@ class TrapChance(Range):
 class IcePhysicsTrapWeight(Range):
     """
     The weight of ice physics traps in the trap pool.
-    Ice physics traps turn on the low friction cheat code for x seconds.
+    Ice physics traps turn on the low friction cheat code for 10 seconds.
     """
     display_name = "Ice Physics Trap Weight"
     range_start = 0
@@ -160,19 +160,19 @@ class IcePhysicsTrapWeight(Range):
 class SpeedChangeTrapWeight(Range):
     """
     The weight of speed change traps in the trap pool.
-    Speed change traps change the game speed for x seconds.
+    Speed change traps change the game speed for 10 seconds.
     """
     display_name = "Speed Change Trap Weight"
     range_start = 0
     range_end = 100
     default = 25
 
-class BentleyJumpscareTrapWeight(Range):
+class InvisibilityTrapWeight(Range):
     """
-    The weight of bentley jumpscare traps in the trap pool.
-    :archiPleading:
+    The weight of invisibility traps in the trap pool.
+    Invisibility traps turn Sly completely invisible for 10 seconds.
     """
-    display_name = "Bentley Jumpscare Trap Weight"
+    display_name = "Invisibility Trap Weight"
     range_start = 0
     range_end = 100
     default = 25
@@ -180,7 +180,7 @@ class BentleyJumpscareTrapWeight(Range):
 class BallTrapWeight(Range):
     """
     The weight of ball traps in the trap pool.
-    Ball traps force sly to stay in the roll form for x seconds.
+    Ball traps force Sly to stay in the roll form for 10 seconds.
     """
     display_name = "Ball Trap Weight"
     range_start = 0
@@ -205,7 +205,7 @@ class Sly1Options(PerGameCommonOptions):
     TrapChance:                     TrapChance
     IcePhysicsTrapWeight:           IcePhysicsTrapWeight
     SpeedChangeTrapWeight:          SpeedChangeTrapWeight
-    BentleyJumpscareTrapWeight:     BentleyJumpscareTrapWeight
+    InvisibilityTrapWeight:     InvisibilityTrapWeight
     BallTrapWeight:                 BallTrapWeight
 
 sly1_option_groups: Dict[str, List[Any]] = {
@@ -216,6 +216,6 @@ sly1_option_groups: Dict[str, List[Any]] = {
     "Minigame Options": [ExcludeMinigames, MinigameCaches],
     "Cluesanity Options": [LocationCluesanityBundleSize, ItemCluesanityBundleSize],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
-                     SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
+                     SpeedChangeTrapWeight, InvisibilityTrapWeight,
                      BallTrapWeight]
 }

@@ -1,5 +1,5 @@
 LEVELS = {
-    "Tide Of Terror": [
+    "Tide of Terror": [
         "Stealthy Approach",
         "Prowling the Grounds",
         "Into the Machine",
@@ -29,7 +29,7 @@ LEVELS = {
         "Ghastly Voyage",
         "Down Home Cooking"
     ],
-    "Fire In The Sky": [
+    "Fire in the Sky": [
         "Perilous Ascent",
         "Inside the Stronghold",
         "Unseen Foe",
@@ -106,6 +106,11 @@ ADDRESSES = {
         "button pressed": 0x262D18, #Which button the player is pressing
         "button held": 0x262D22, #Whether a button is being held
         "game paused": 0x261858,
+        "sly opacity offset": 0x2724,
+        "charm offset": 0x584,
+        "glow offset": 0x34,
+        "cane offset": 0x1570,
+        "sly shadow": 0x261F6C,
         "levels":
         [
             [  # Tide Of Terror
@@ -212,6 +217,67 @@ ADDRESSES = {
             0x27CAC8,
             0x27CF14,
             0x27D360
+        ],
+        "name pointers":
+        [
+            [
+                0x247B98, #Stealthy Approach
+                0,        #Prowling the Grounds
+                0x247C1C, #Into the Machine
+                0x247BF0, #High Class Heist
+                0x247C74, #Fire Down Below
+                0x247C48, #Cunning Disguise
+                0x247CCC, #Gunboat Graveyard
+                0         #Treasure in the Depths
+            ],
+            [
+                0x247D24, #Rocky Start
+                0,        #Muggshot's Turf
+                0,        #At the Dog Track
+                0,        #Murray's Big Gamble
+                0x247D7C, #Boneyard Casino
+                0x247E58, #Back Alley Heist
+                0x247E2C, #Straight to the Top
+                0x247E00  #Two to Tango
+            ],
+            [
+                0x247EB0, #Dread Swamp Path
+                0,        #The Swamp's Dark Center
+                0x247F08, #Lair of the Beast
+                0x247F34, #Grave Undertaking
+                0,        #Piranha Lake
+                0x247F8C, #Descent into Danger
+                0,        #Ghastly Voyage
+                0         #Down Home Cooking
+            ],
+            [
+                0x24803C,  # Perilous Ascent
+                0,         # Inside the Stronghold
+                0x2480C0,  # Unseen Foe
+                0x248094,  # Flaming Temple of Flame
+                0,         # King of the Hill
+                0,         # Rapid Fire Assault
+                0,         # Desperate Race
+                0x248144   # Duel by the Dragon
+            ]
+        ],
+        "hub name pointers":
+        [
+            0x274434,
+            0x274438,
+            0x27443C,
+            0x274440
+        ],
+        "anticheat":
+        [
+            0x261080,
+            0x262310,
+            0x269B48,
+            0x275C34,
+            0x27C828,
+            0x27C829,
+            0x27C82C,
+            0x27C82D
         ]
     }
 }

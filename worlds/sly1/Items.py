@@ -205,9 +205,8 @@ junk_items = {
     # Traps
     "Ice Physics Trap": ItemData(10020026, ItemClassification.trap, 0),
     "Speed Change Trap": ItemData(10020027, ItemClassification.trap, 0),
-
     "Ball Trap": ItemData(10020028, ItemClassification.trap, 0),
-    "Bentley Jumpscare Trap": ItemData(10020029, ItemClassification.trap, 0),
+    "Invisibility Trap": ItemData(10020029, ItemClassification.trap, 0),
 }
 
 junk_weights = {
