@@ -236,9 +236,9 @@ ADDRESSES = {
                 0,        #At the Dog Track
                 0,        #Murray's Big Gamble
                 0x247D7C, #Boneyard Casino
-                0x247E58, #Back Alley Heist
                 0x247E2C, #Straight to the Top
-                0x247E00  #Two to Tango
+                0x247E00, #Two to Tango
+                0x247E58  #Back Alley Heist
             ],
             [
                 0x247EB0, #Dread Swamp Path

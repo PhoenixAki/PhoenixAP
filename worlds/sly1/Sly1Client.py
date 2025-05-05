@@ -75,7 +75,9 @@ class Sly1Context(CommonContext):
     hubs: list[bool] = [False, False, False, False]
     goal_pages: int = 0
     all_moves = 0
-    for move in MOVES.values():
+    for name, move in MOVES.items():
+        if "Blueprints" in name:
+            continue
         if isinstance(move, list):
             for level in move:
                 all_moves |= level
