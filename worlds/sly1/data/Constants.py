@@ -2,21 +2,21 @@ LEVELS = {
     "Tide of Terror": [
         "Stealthy Approach",
         "Prowling the Grounds",
-        "Into the Machine",
         "High Class Heist",
-        "Fire Down Below",
+        "Into the Machine",
         "Cunning Disguise",
-        "Gunboat Graveyard",
-        "Treasure in the Depths"
+        "Fire Down Below",
+        "Treasure in the Depths",
+        "Gunboat Graveyard"
     ],
     "Sunset Snake Eyes": [
         "Rocky Start",
         "Muggshot's Turf",
-        "At the Dog Track",
-        "Murray's Big Gamble",
         "Boneyard Casino",
-        "Straight to the Top",
+        "Murray's Big Gamble",
+        "At the Dog Track",
         "Two to Tango",
+        "Straight to the Top",
         "Back Alley Heist"
     ],
     "Vicious Voodoo": [
@@ -32,12 +32,12 @@ LEVELS = {
     "Fire in the Sky": [
         "Perilous Ascent",
         "Inside the Stronghold",
-        "Unseen Foe",
         "Flaming Temple of Flame",
+        "Unseen Foe",
         "King of the Hill",
         "Rapid Fire Assault",
-        "Desperate Race",
-        "Duel by the Dragon"
+        "Duel by the Dragon",
+        "Desperate Race"
     ]
 }
 
