@@ -222,6 +222,7 @@ def launch_client():
 
         logger.info("Connecting to server...")
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
+        ctx.tags.add("Client")
 
         if tracker_loaded:
             ctx.run_generator()
