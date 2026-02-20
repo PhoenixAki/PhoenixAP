@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional
 import asyncio
 import multiprocessing
 import traceback
@@ -13,7 +13,7 @@ import Utils
 
 from worlds.sly1.Sly1Interface import Sly1Interface, Sly1Episode
 from worlds.sly1.Callbacks import init, update
-from worlds.sly1.data.Constants import LEVELS, MOVES
+from worlds.sly1.Constants import LEVELS, MOVES
 
 # Load Universal Tracker
 tracker_loaded: bool = False
