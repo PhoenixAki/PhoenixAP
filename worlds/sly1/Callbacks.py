@@ -6,7 +6,7 @@ from NetUtils import ClientStatus
 from typing import Optional
 
 from worlds.sly1.Sly1Interface import Sly1Episode, Sly1Interface
-from worlds.sly1.Constants import ADDRESSES, LEVELS, BOSSES, MOVES, MOVE_NAMES
+from worlds.sly1.data.Constants import ADDRESSES, LEVELS, BOSSES, MOVES, MOVE_NAMES
 from worlds.sly1.Locations import location_table, minigame_locations, bottle_amounts
 from worlds.sly1.Items import from_id, bottles
 

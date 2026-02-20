@@ -6,8 +6,8 @@ import asyncio
 import random
 
 from worlds.sly1.Locations import bottle_amounts, minigame_locations
-from worlds.sly1.Constants import ADDRESSES, LEVELS
-from worlds.sly1.pine import Pine
+from worlds.sly1.data.Constants import ADDRESSES, LEVELS
+from worlds.sly1.pcsx2_interface.pine import Pine
 
 class Sly1Episode(IntEnum):
     Paris = 0
