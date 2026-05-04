@@ -7,7 +7,7 @@ from typing import Optional
 
 from worlds.sly1.Sly1Interface import Sly1Episode, Sly1Interface
 from worlds.sly1.data.Constants import ADDRESSES, LEVELS, BOSSES, MOVES, MOVE_NAMES
-from worlds.sly1.Locations import location_table, minigame_locations, bottle_amounts
+from worlds.sly1.Locations import location_table, minigame_locations, bottle_amounts, KEY_LOCATION_NAMES, KEY_CACHE_BASE
 from worlds.sly1.Items import from_id, bottles
 
 SAVE_FILE = "sly1_item_progress.json"
@@ -34,6 +34,7 @@ async def init(ctx: 'Sly1Context', ap_connected: bool) -> None:
     """Called when the player connects to the AP server"""
     if ap_connected:
         ctx.in_game = True
+        ctx.game_interface.write_anticheat()
 
 def check_levels(ctx: 'Sly1Context') -> None:
     """Checks for completion of keys, vaults, and hourglasses"""
@@ -79,8 +80,10 @@ def check_keys(ctx: 'Sly1Context') -> None:
     #This is a temporary workaround.
     if (moves & all_moves) == all_moves:
         moves &= ~MOVES["Hacking"]
-    if (ctx.game_interface._read32(move_address) != moves) and (Sly1Interface.moves_locked is False):
+
+    if moves != ctx.last_written_moves and not Sly1Interface.moves_locked:
         ctx.game_interface._write32(move_address, moves)
+        ctx.last_written_moves = moves
 
 def check_hubs(ctx: 'Sly1Context') -> None:
     if ctx.slot_data is None:
@@ -108,7 +111,6 @@ def check_bottles(ctx: 'Sly1Context') -> None:
         for level_index, level_address in enumerate(episodes):
             if level_address == 0:
                 continue
-            bottles_count = ctx.game_interface._read32(level_address)
             level_name = list(LEVELS.values())[episode_index][level_index]
             if level_name not in bottle_amounts:
                 continue
@@ -117,29 +119,27 @@ def check_bottles(ctx: 'Sly1Context') -> None:
                 rec_bottles = bottle_amounts[level_name].bottle_amount
                 if level_name not in ctx.openable_vaults and level_name not in ctx.opened_vaults:
                     ctx.openable_vaults.append(level_name)
+            ctx.game_interface._write32(level_address, rec_bottles)
 
-            if bottles_count != rec_bottles:
-                ctx.game_interface._write32(level_address, rec_bottles)
-
-def check_bosses(ctx: 'Sly1Context') -> None:
+def check_bosses(ctx):
     if ctx.slot_data is None:
         return
     required_bosses = ctx.slot_data.get("RequiredBosses", 4)
-    if ctx.slot_data.get("UnlockClockwerk", 1) == 1:
-        if ctx.bosses_beaten >= required_bosses:
-            ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["fits progress"], 53)
-            if ctx.slot_data.get("FastClockwerk", 0) == 1:
-                ctx.game_interface._write32(0x27DB6C, 1)
-        elif ctx.game_interface._read32(ADDRESSES["SCUS-97198"]["fits progress"]) > 21:
-            ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["fits progress"], 21)
+    fits_address = ADDRESSES["SCUS-97198"]["fits progress"]
 
+    if ctx.slot_data.get("UnlockClockwerk", 1) == 1:
+        goal_met = ctx.bosses_beaten >= required_bosses
     else:
-        if ctx.goal_pages >= ctx.slot_data.get("RequiredPages"):
-            ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["fits progress"], 53)
+        goal_met = ctx.goal_pages >= ctx.slot_data.get("RequiredPages", 0)
+
+    current_fits = ctx.game_interface._read32(fits_address)
+    if goal_met:
+        if current_fits != 53:
+            ctx.game_interface._write32(fits_address, 53)
             if ctx.slot_data.get("FastClockwerk", 0) == 1:
                 ctx.game_interface._write32(0x27DB6C, 1)
-        elif ctx.game_interface._read32(ADDRESSES["SCUS-97198"]["fits progress"]) > 21:
-            ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["fits progress"], 21)
+    elif current_fits > 21:
+        ctx.game_interface._write32(fits_address, 21)
 
 async def handle_checks(ctx: 'Sly1Context') -> None:
     """Send checks to the multiworld"""
@@ -170,6 +170,13 @@ async def handle_checks(ctx: 'Sly1Context') -> None:
                     for i in range(1, 11):
                         location_code = minigame_locations[minigame_name].ap_code + i
                         if location_code not in ctx.locations_checked:
+                            ctx.locations_checked.add(location_code)
+                # Key Caches
+                if level_name + " Key" in KEY_LOCATION_NAMES:
+                    key_index = KEY_LOCATION_NAMES.index(level_name + " Key")
+                    for i in range(10):
+                        location_code = KEY_CACHE_BASE + (key_index * 10) + i
+                        if location_code in ctx.server_locations and location_code not in ctx.locations_checked:
                             ctx.locations_checked.add(location_code)
             if ctx.vaults[episode_index][level_index]:
                 location_name = f"{level_name} Vault"
@@ -269,14 +276,19 @@ async def handle_received(ctx: 'Sly1Context') -> None:
             else:
                 lives = ctx.game_interface._read32(ADDRESSES["SCUS-97198"]["lives"])
                 lives += 1
+                if lives > 99:
+                    lives = 99
                 ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["lives"], lives)
         if item.ap_code == 10020020 and (state["received_count"] < received_count):
             lives = ctx.game_interface._read32(ADDRESSES["SCUS-97198"]["lives"])
             lives += 1
+            if lives > 99:
+                lives = 99
             ctx.game_interface._write32(ADDRESSES["SCUS-97198"]["lives"], lives)
         if 10020021 <= item.ap_code <= 10020024:
             l = item.ap_code - 10020021
             ctx.hubs[l] = True
+            ctx.names_dirty = True
         if (10020026 <= item.ap_code <= 10020029) and (state["received_count"] < received_count):
             await ctx.game_interface.activate_trap(item.ap_code)
         if 10020030 <= item.ap_code <= 10020048:
@@ -288,6 +300,7 @@ async def handle_received(ctx: 'Sly1Context') -> None:
                         if bottle_level in levels:
                             level_index = levels.index(bottle_level)
                             ctx.bottles[episode_index][level_index] += 1
+            ctx.names_dirty = True
         if item.ap_code == 10020049:
             ctx.goal_pages += 1
 

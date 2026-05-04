@@ -64,6 +64,8 @@ class Sly1Context(CommonContext):
     openable_vaults: list[str] = []
     opened_vaults: list[str] = []
     current_scene_key = None
+    last_written_moves: int = -1
+    first_hideout = False
 
     #Game state
     current_episode: Optional[Sly1Episode] = None
@@ -102,6 +104,7 @@ class Sly1Context(CommonContext):
         super().__init__(server_address, password)
         self.version = [0,3,4]
         self.game_interface = Sly1Interface(logger)
+        self.names_dirty = True
 
     def run_generator(self):
         if tracker_loaded:

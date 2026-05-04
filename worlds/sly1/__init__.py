@@ -1,10 +1,12 @@
 import random
 import logging
-from typing import Dict, Any, Mapping
+from typing import Dict, Union, ClassVar, Any, Mapping
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
 from worlds.sly1.Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
-from worlds.sly1.Locations import get_location_names, get_total_locations, did_avoid_early_bk, generate_bottle_locations, generate_minigame_locations
+from worlds.sly1.Locations import (get_location_names, get_total_locations,
+                                   did_avoid_early_bk, generate_bottle_locations,
+                                   generate_minigame_locations, generate_key_caches)
 from worlds.sly1.Options import Sly1Options
 from worlds.sly1.Regions import create_regions
 from worlds.sly1.Types import Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
@@ -17,6 +19,7 @@ from worlds.LauncherComponents import (
     icon_paths,
 )
 from Options import OptionError
+import settings
 
 def run_client():
     from worlds.sly1.Sly1Client import launch_client
@@ -39,6 +42,14 @@ class Sly1Web(WebWorld):
         ["Nep"]
     )]
 
+class Sly1Settings(settings.Group):
+    class AutoFillLocations(settings.Bool):
+        """Adds "Key Cache" locations if items outnumber locations, preventing errors.
+        It is strongly recommended you keep this enabled unless you know what you're doing!"""
+        description = "Sly 1 Auto Fill Locations"
+
+    auto_fill_locations: Union[AutoFillLocations, bool] = True
+
 class Sly1World(World):
     """
     Sly Cooper and the Thievius Raccoonus is a action-stealth game set in a cartoony cel-shaded world.
@@ -51,6 +62,7 @@ class Sly1World(World):
     options_dataclass = Sly1Options
     options = Sly1Options
     web = Sly1Web()
+    settings: ClassVar[Sly1Settings]
 
     # this is how we tell the Universal Tracker we want to use re_gen_passthrough
     @staticmethod
@@ -62,6 +74,7 @@ class Sly1World(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
+        self.generated_key_caches = 0
 
     def generate_early(self) -> None:
         # implement .yaml-less Universal Tracker support
@@ -128,13 +141,23 @@ class Sly1World(World):
     def create_items(self):
         itempool = create_itempool(self)
         self.multiworld.itempool.extend(itempool)
-        location_count = len(self.multiworld.get_unfilled_locations(self.player))
-        item_count = len(itempool)
+
         for event, item in event_item_pairs.items():
             event_item = Sly1Item(item, ItemClassification.progression_skip_balancing, None, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
-        if location_count - item_count < 0:
-            self.handle_not_enough_locations(item_count - location_count)
+
+        if Sly1World.settings.auto_fill_locations:
+            total_locations = get_total_locations(self)
+            total_items = sum(1 for item in self.multiworld.itempool if item.player == self.player) + len(
+                event_item_pairs) + 1
+            deficit = total_items - total_locations
+            generate_key_caches(self, deficit)
+            self.generated_key_caches = max(0, deficit)
+        else:
+            location_count = len(self.multiworld.get_unfilled_locations(self.player))
+            item_count = len(itempool)
+            if location_count - item_count < 0:
+                self.handle_not_enough_locations(item_count - location_count)
 
     def handle_not_enough_locations(self, count):
         """Check the available location and items counts, raise OptionErrors to warn the player of too few locations"""
@@ -177,9 +200,28 @@ class Sly1World(World):
         )
 
     def fill_slot_data(self) ->Mapping[str, object]:
-        slot_data = self.get_options_as_dict()
-
-        return slot_data
+        return {
+            "UnlockClockwerk": self.options.UnlockClockwerk.value,
+            "RequiredBosses": self.options.RequiredBosses.value,
+            "MaxPages": self.options.MaxPages.value,
+            "RequiredPages": self.options.RequiredPages.value,
+            "FastClockwerk": self.options.FastClockwerk.value,
+            "StartingEpisode": self.options.StartingEpisode.value,
+            "IncludeHourglasses": self.options.IncludeHourglasses.value,
+            "HourglassesRequireRoll": self.options.HourglassesRequireRoll.value,
+            "AvoidEarlyBK": self.options.AvoidEarlyBK.value,
+            "LocationCluesanityBundleSize": self.options.LocationCluesanityBundleSize.value,
+            "ItemCluesanityBundleSize": self.options.ItemCluesanityBundleSize.value,
+            "CutsceneSkip": self.options.CutsceneSkip.value,
+            "ExcludeMinigames": self.options.ExcludeMinigames.value,
+            "MinigameCaches": self.options.MinigameCaches.value,
+            "TrapChance": self.options.TrapChance.value,
+            "IcePhysicsTrapWeight": self.options.IcePhysicsTrapWeight.value,
+            "SpeedChangeTrapWeight": self.options.SpeedChangeTrapWeight.value,
+            "InvisibilityTrapWeight": self.options.InvisibilityTrapWeight.value,
+            "BallTrapWeight": self.options.BallTrapWeight.value,
+            "Seed": self.multiworld.seed_name,
+        }
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         return super().collect(state, item)

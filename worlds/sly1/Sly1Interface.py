@@ -140,6 +140,7 @@ class Sly1Interface(GameInterface):
     def skip_cutscene(self, ctx: 'Sly1Context') -> None:
         if ctx.slot_data is None:
             return
+
         if self.in_cutscene() and ctx.slot_data.get("CutsceneSkip", 1) == 1:
             cutscene_pointer = self._read32(self.addresses["cutscene pointer"])
             self._write32(cutscene_pointer + 744, 0)
@@ -214,7 +215,13 @@ class Sly1Interface(GameInterface):
         hub_addresses = self.addresses["hub name pointers"]
         clue_bundles = ctx.slot_data.get("ItemCluesanityBundleSize", 0)
 
+        if self.get_current_address() == 4 and self.get_current_episode() == 0 and ctx.first_hideout is False:
+            ctx.names_dirty = False
+            ctx.first_hideout = True
+
         if self._read32(0x247B98) != 0x25EA00:
+            return
+        if not ctx.names_dirty:
             return
 
         for episode_index, (episode_name, level_list) in enumerate(LEVELS.items()):
@@ -242,12 +249,17 @@ class Sly1Interface(GameInterface):
             text = name.encode()+bytes([0])
             self._write_bytes(pointer_address, text)
 
+        ctx.names_dirty = False
+
     def write_anticheat(self):
         addresses = self.addresses["anticheat"]
         for address in addresses:
-            self._write32(address, 0)
-        self._write32(0x12B760, 0x03E00008)
-        self._write32(0x12B764, 0x00000000)
+            if self._read32(address) != 0:
+                self._write32(address, 0)
+        if self._read32(0x12B760) != 0x03E00008:
+            self._write32(0x12B760, 0x03E00008)
+        if self._read32(0x12B764) != 0x00000000:
+            self._write32(0x12B764, 0x00000000)
 
     async def activate_trap(self, item_id: int):
         level_name = self.get_current_level_name()
