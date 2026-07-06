@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
+    all_worlds = False
 
     # Determine if this player has AvoidEarlyBK enabled
     need_to_modify_item_pool = did_avoid_early_bk(world)
@@ -19,6 +20,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
 
     if starting_episode_name == "All" and need_to_modify_item_pool:
         starting_episode_name = world.random_episode
+        all_worlds = True
 
     # Create a local copy of item_table to modify only for the current player
     # We won't modify the global item_table directly
@@ -38,7 +40,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
                 final_item_table[key] = item._replace(classification=ItemClassification.progression)
 
     # Create episodes except for the starting episode as items
-    if not starting_episode_name == "All":
+    if not starting_episode_name == "All" or all_worlds is True:
         for episode in sly_episodes.keys():
             if starting_episode_unlock == episode:
                 continue
