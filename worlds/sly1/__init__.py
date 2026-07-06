@@ -154,9 +154,8 @@ class Sly1World(World):
 
     def generate_early(self) -> None:
         # implement .yaml-less Universal Tracker support
-        if hasattr(self.multiworld, "generation_is_fake"):
+        if getattr(self.multiworld, "generation_is_fake", False):
             if hasattr(self.multiworld, "re_gen_passthrough"):
-                # I'm doing getattr purely so pylance stops being mad at me
                 re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough")
 
                 if "Sly Cooper and the Thievius Raccoonus" in re_gen_passthrough:
@@ -181,6 +180,16 @@ class Sly1World(World):
                     self.options.SpeedChangeTrapWeight.value = slot_data["SpeedChangeTrapWeight"]
                     self.options.InvisibilityTrapWeight.value = slot_data["InvisibilityTrapWeight"]
                     self.options.BallTrapWeight.value = slot_data["BallTrapWeight"]
+
+                    starting_episode = EpisodeType(self.options.StartingEpisode)
+                    starting_episode_unlock = episode_type_to_unlock[starting_episode]
+                    starting_episode_name = starting_episode_unlock.replace(": Episode Unlock", "")
+
+                    if did_avoid_early_bk(self):
+                        if starting_episode_name == "All":
+                            starting_episode_name = episode_type_to_unlock[EpisodeType(random.randint(1, 4))].replace(
+                                ": Episode Unlock", "")
+                            self.random_episode = starting_episode_name
             return
 
         starting_episode = EpisodeType(self.options.StartingEpisode)

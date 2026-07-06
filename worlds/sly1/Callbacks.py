@@ -81,9 +81,8 @@ def check_keys(ctx: 'Sly1Context') -> None:
     if (moves & all_moves) == all_moves:
         moves &= ~MOVES["Hacking"]
 
-    if moves != ctx.last_written_moves and not Sly1Interface.moves_locked:
+    if ctx.game_interface._read32(move_address) != moves and not Sly1Interface.moves_locked:
         ctx.game_interface._write32(move_address, moves)
-        ctx.last_written_moves = moves
 
 def check_hubs(ctx: 'Sly1Context') -> None:
     if ctx.slot_data is None:
