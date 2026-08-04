@@ -1,5 +1,7 @@
 .idea
 .vscode
+fuzz.py
+meta.yaml
 
 *_Spoiler.txt
 *.bmbp
