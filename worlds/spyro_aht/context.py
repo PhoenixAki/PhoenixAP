@@ -38,6 +38,10 @@ class SpyroAHTCommands(ClientCommandProcessor):
         Currently supported items: "dark_gem", "light_gem", "gems", and "lockpick".
         Please use responsibly - minimal error checking is done. High values risk crashing the game.
         Intended for use in recovering save files, as well as testing and debugging."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
         types = {
             "dark_gem": [self.ctx.emu_client.addresses.DARK_GEM_COUNT, 1],
             "light_gem": [self.ctx.emu_client.addresses.LIGHT_GEM_COUNT, 1],
@@ -62,6 +66,9 @@ class SpyroAHTCommands(ClientCommandProcessor):
         # even if it was reformatted it'd still be the same amount of output and data lookup, it's just code cleanliness
         """Displays seed information, retrieved directly from data sent from Archipelago.
         Some of this info is also viewable on the pause menu."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
         
         self.output("---------------DEATHLINK---------------")
         # death link
@@ -190,7 +197,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         "overview" summarizes status of each enabled goal.
         "goal_name" gives a detailed list of every unchecked location for that goal."""
         if argument == "":
-            self.output("Missing argument for. Run again as /check_goal overview or /check_goal goal_name.")
+            self.output("Missing argument. Run again as /check_goal overview or /check_goal goal_name.")
             return True
     
         if self.ctx.goal_list is None or len(self.ctx.goal_list) == 0:
@@ -252,6 +259,26 @@ class SpyroAHTCommands(ClientCommandProcessor):
             self.output(f"You have completed the {goal} goal!")
         else:
             self.output(f"You have not completed the {goal} goal. The following checks are not done yet: {not_checked[:-2]}.")
+    
+    async def _cmd_costs(self) -> bool:
+        """Displays the cost of each boss lair, light gem door, and gadget.
+        This information is also listed in /list_options.
+        /costs is offered as a convenience in case costs are the only information you want."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        self.output("---------------GATE AND GADGET COSTS---------------")
+        # boss costs
+        data = self.ctx.slot_data["boss_lair_costs"]
+        self.output(f"The boss lair gates require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Dark Gems.")
+        # light gem doors
+        data = self.ctx.slot_data["light_gem_door_costs"]
+        self.output(f"The Light Gem doors require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Light Gems.")
+        # gadget costs
+        data = self.ctx.slot_data["gadget_costs"]
+        self.output(f"Gadget Costs: Ball requires {data[0]} Light Gems, invincibility requires {data[1]} Light Gems, and supercharge requires {data[2]} Light Gems.")
+        return True
         
 
 class SpyroAHTContext(SuperContext):
