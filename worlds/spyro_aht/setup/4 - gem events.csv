@@ -389,7 +389,7 @@ SBEntryLower,80,[enemy] armored middle gnorc,Has('Charge')
 SBEntryLower,60,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 SBEntryLower,1000,armored chests via west cove firework,Has('Fire Breath')
 SBShop,1500,armored chests via firework on ground,Has('Fire Breath')
-SBEntryUpper,1414,on the ground/baskets/dark shards/headbash chests,True_()
+SBEntryUpper,1684,on the ground/baskets/dark shards/headbash chests,True_()
 SBEntryUpper,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 SBEntryUpper,1000,armored chests via firework in cave,Has('Fire Breath')
 SBEntryUpper,40,[enemy] archer gnorcs/unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"

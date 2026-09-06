@@ -683,7 +683,7 @@ class SpyroAHTWorld(World):
             shop_item_count = 18 if self.options.key_rings.value else 56
             blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
             non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
-            other = (105087 - other_exclusions) * self.options.other_gems.value / 100
+            other = (105357 - other_exclusions) * self.options.other_gems.value / 100
             gem_total = blink + non_blink_enemies + other
             base_price = gem_total / (shop_item_count - 1)
             self.log(f"Set up shop prices. shop_item_count = {shop_item_count}. blink = {blink}. non_blink_enemies = {non_blink_enemies}. other = {other}. base_price = {base_price}.","Debug")
