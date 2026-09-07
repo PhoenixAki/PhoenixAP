@@ -3,6 +3,15 @@ from dataclasses import dataclass
 from enum import IntEnum, IntFlag
 from typing import Literal
 
+# compared in world definition against YAML. Messages that are of equal or lower log level are logged
+class LoggingLevel(IntEnum):
+    WARNING = 0  # 0 because warnings are always logged, even if level is set to none
+    NONE = 1
+    LOW = 2
+    MEDIUM = 3
+    HIGH = 4
+    MAXIMUM = 5
+
 MOD_MAJOR = 14
 MOD_MINOR = 0
 MOD_VERSION_STR = f"{MOD_MAJOR}.{MOD_MINOR}"

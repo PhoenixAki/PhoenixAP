@@ -25,18 +25,28 @@ class DeathLinkAmnesty(Range):
     default = 1
 
 ###############GENERATION SETTINGS###############
-class LoggingLevel(OptionSet):
-    """Log messages are generated at various points during generation. This option lets you decide which type of messages
-    should be logged.
+class LoggingLevel(Choice):
+    """This option lets you decide how much Spyro AHT generation information should be logged.
+    The log will contain messages from all levels up to, and including, your choice. For example, "medium" will log low
+    and medium messages, but not high or maximum messages. **Warning messages stemming from YAML issues are always logged.**
     
-    Warning: Used whenever a YAML issue is encountered (at which point, generation proceeds according to auto_corrections).
-      It is advised to keep this option selected, at minimum.
-    Info: Basic generation status information. For example, messages like "Setting up gadget costs." or "Setting up randomized shop costs."
-    Debug: Extra information for basic debugging, such as logging the internal values used when setting up shop prices.
-    Extra: Maximum (hundreds of lines) logging for extreme debugging. Intended for developer use only, but you can enable it if curious :)"""
+    In a worst-case, low and medium each log around 15 messages
+    
+    None: No additional logging beyond warnings.
+    Low: Logs notable generation steps, such as "Checking if any minigames need vanilla rewards forced."
+    Medium: Logs useful debugging information, such as listing your randomized shop prices. This is the default because
+      the information in these messages can be very helpful when making bug reports.
+    High: Logs messages with extra generation logic, such as "Fire Breath has been placed into Starter Checks: Breath."
+    Maximum: Logs with extreme detail, such as noting every single item created. Adds hundreds of lines to the log.
+      Intended for developer use, but you can enable it if you're curious :)
+    """
+    option_none = 1
+    option_low = 2
+    option_medium = 3
+    option_high = 4
+    option_maximum = 5
+    default = 3
     display_name = "Logging Level"
-    valid_keys = ("Warning", "Info", "Debug", "Extra")
-    default = ("Warning",)
     
 
 class AutoCorrections(Choice):

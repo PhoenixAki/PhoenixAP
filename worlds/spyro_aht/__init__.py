@@ -15,7 +15,7 @@ from rule_builder.rules import Has, Rule, True_, And, False_, HasAny, HasAll
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
 from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
-from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS
+from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
 
@@ -163,18 +163,9 @@ class SpyroAHTWorld(World):
     
     ut_can_gen_without_yaml = True
     
-    def log(self, message, level):
-        if level not in self.options.logging_level.value:
-            return
-        
-        if level == "Info":
-            logging.info(f"[Spyro AHT] INFO: {message}")
-        elif level == "Warning":
-            logging.info(f"[Spyro AHT] WARNING: {message}")
-        elif level == "Debug":
-            logging.info(f"[Spyro AHT] DEBUG: {message}")
-        elif level == "Extra":
-            logging.info(f"[Spyro AHT] EXTRA: {message}")
+    def log(self, message, level: LoggingLevel):
+        if self.options.logging_level.value >= level:
+            logging.info(f"[Spyro AHT] LOG-{level.name}: {message}")
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -199,7 +190,7 @@ class SpyroAHTWorld(World):
         Used whenever start_inventory_from_pool is used."""
         items = self.random.choice(list(self.filler_items.values()))
         random_choice = self.random.choice(items)
-        self.log(f"Replacing start_inventory_from_pool item with \"{random_choice}\".", "Info")
+        self.log(f"Replacing a start_inventory_from_pool item with \"{random_choice}\".", LoggingLevel.HIGH)
         return random_choice
             
     def collect(self, state: "CollectionState", item: "Item") -> bool:
@@ -302,50 +293,49 @@ class SpyroAHTWorld(World):
             self._apply_slot_data(passthrough[self.game])
         
         auto_corrections = self.options.auto_corrections.value  # storing locally as micro-optimization compared to checking option
+        self.log("Checking for common YAML issues with starting breaths and realms, filler items, and goals.", LoggingLevel.LOW)
         
-        self.log("Checking for issues with starting breath list.", "Debug")
-        bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value
+        bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value  # "none" alongside breath choices
         if bad_condition and auto_corrections:
-            self.log("Starting breath list contains both \"None\" and at least one breath. Fixing by removing the \"None\".", "Warning")
+            self.log("Starting breath list cannot contain breaths and \"None\". Fixing by removing the \"None\".", LoggingLevel.WARNING)
             self.options.starting_breaths.value.remove("None")
         elif bad_condition:
-            self.log("Starting breath list contains both \"None\" and at least one breath. Halting generation.", "Warning")
-            raise OptionError("Starting breath list cannot contain both \"None\" and breath(s) if auto_corrections is disabled.")
+            raise OptionError("Starting breath list cannot contain breaths and \"None\". Automatic fixing is available via auto_corrections.")
         
         if len(self.options.starting_breaths.value) == 0:
             random_breath = self.random.choice(["Fire", "Electric", "Water", "Ice"])
-            self.log(f"Starting breath list was left empty. {random_breath} Breath was chosen at random.", "Debug")
+            self.log(f"Starting breath list is empty. {random_breath} Breath was chosen at random.", LoggingLevel.MEDIUM)
             self.options.starting_breaths.value.add(random_breath)
         
-        self.log("Checking for under/overfilled filler and goal lists.", "Debug")
-        bad_condition = len(self.options.filler_items.value) == 0
+        if len(self.options.starting_realms.value) == 0:
+            random_realm = self.random.choice(["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"])
+            self.log(f"Starting realm list is empty. {random_realm} was chosen at random.", LoggingLevel.MEDIUM)
+            self.options.starting_realms.value.add(random_realm)
+        
+        bad_condition = len(self.options.filler_items.value) == 0  # empty filler list
         if bad_condition and auto_corrections:
-            self.log("Filler item list is empty. Defaulting to \"Generics\" as the only choice.", "Warning")
+            self.log("Filler item list cannot be empty. Fixing by adding \"Generics\".", LoggingLevel.WARNING)
             self.options.filler_items.value.add("Generics")
         elif bad_condition:
-            self.log("Filler item list is empty. Halting generation.", "Warning")
-            raise OptionError("Filler item list cannot be empty if auto_corrections is disabled.")
+            raise OptionError("Filler item list cannot be empty. Automatic fixing is available via auto_corrections.")
 
-        bad_condition = len(self.options.goal.value) < 1
+        bad_condition = len(self.options.goal.value) < 1  # no goals
         if bad_condition and auto_corrections:
-            self.log("Goal list is empty. Defaulting to a single random choice.", "Warning")
+            self.log("Goal list cannot be empty. Fixing by adding 1 \"Random\" to the list.", LoggingLevel.WARNING)
             self.options.goal.value.append("Random")
         elif bad_condition:
-            self.log("Goal list is empty. Halting generation.", "Warning")
-            raise OptionError("Goal list cannot be empty if auto_corrections is disabled.")
+            raise OptionError("Goal list cannot be empty. Automatic fixing is available via auto_corrections.")
             
-        if len(self.options.goal.value) > len(self.options.goal.valid_keys)-1 and auto_corrections:
+        if len(self.options.goal.value) > len(self.options.goal.valid_keys)-1 and auto_corrections:  # too many goals
             removed = []  # logging
             while len(self.options.goal.value) > len(self.options.goal.valid_keys)-1:
                 to_remove = self.random.choice(self.options.goal.value)
                 removed.append(to_remove)
                 self.options.goal.value.remove(to_remove)
-            self.log(f"Too many entries in goal list. Removed {removed} at random to shrink the list.", "Warning")
+            self.log(f"Goal list can't have more than {len(self.options.goal.valid_keys)-1} entries. Fixed by removing {removed} at random to shrink the list.", LoggingLevel.WARNING)
         elif len(self.options.goal.value) > len(self.options.goal.valid_keys)-1:
-            self.log("Too many entries in goal list. Halting generation.", "Warning")
-            raise OptionError(f"Can't have more than {len(self.options.goal.valid_keys)-1} goals if auto_corrections is disabled.")
+            raise OptionError(f"Goal list can't have more than {len(self.options.goal.valid_keys)-1} entries. Automatic fixing is available via auto_corrections.")
         
-        self.log("Checking for problems with random goal selection.", "Debug")
         # this is disgustingly long, but it grabs all non-random and non-excluded goals which are not already chosen by the player
         random_choices = [goal for goal in self.options.goal.valid_keys if goal != "Random" and goal not in self.options.exclude_from_random_goal.value and goal not in self.options.goal.value]
         random_count = self.options.goal.value.count("Random")
@@ -353,11 +343,10 @@ class SpyroAHTWorld(World):
             # fix (or halt) specifically for if random_choices list is empty
             if len(random_choices) == 0:
                 if auto_corrections:
-                    self.log("No goals available for random selection, due to being picked already or excluded. Fixing by skipping random choices.", "Warning")
+                    self.log("Random goal(s) were requested, but no goals are available for random selection. Fixing by skipping random choices.", LoggingLevel.WARNING)
                     random_count = 0
                 else:
-                    self.log(f"No goals available for random selection, due to being picked already or excluded. Halting generation.", "Warning")
-                    raise OptionError("Must have goals available for random selection if auto_corrections is disabled.")
+                    raise OptionError("Random goal(s) were requested, but no goals are available for random selection. Automatic fixing is available via auto_corrections.")
 
             if random_count > 0 and auto_corrections:
                 removed = []
@@ -365,10 +354,9 @@ class SpyroAHTWorld(World):
                     to_remove = self.random.choice(random_choices)
                     removed.append(to_remove)
                     random_choices.remove(to_remove)
-                self.log(f"Not enough enabled goals to support {random_count} random choice(s). Removed {removed} at random to shrink the list of exclusions.", "Warning")
+                self.log(f"Too many excluded-from-random goals to support {random_count} random choice(s). Fixed by removing {removed} at random from the list of exclusions.", LoggingLevel.WARNING)
             elif random_count > 0 and not self.options.auto_corrections:
-                self.log(f"Not enough enabled goals to support {random_count} random choice(s). Halting generation.", "Warning")
-                raise OptionError(f"Must have at least {random_count} goals available for random selection if auto_corrections is disabled.")
+                raise OptionError(f"Too many excluded-from-random goals to support {random_count} random choice(s). Automatic fixing is available via auto_corrections.")
         
         converted_goal_set = set(self.options.goal.value)
         if "Random" in converted_goal_set:
@@ -379,27 +367,23 @@ class SpyroAHTWorld(World):
             converted_goal_set.add(random_goal)
             random_choices.remove(random_goal)
         
-        self.log("Checking for fireworks and shop randomization being enabled if selected as a goal.", "Debug")
         bad_condition = "Fireworks" in converted_goal_set and not self.options.firework_checks.value
         if bad_condition and auto_corrections:
-            self.log("\"Fireworks\" is a goal but firework_checks is disabled. Fixing by enabling firework_checks.", "Warning")
+            self.log("Fireworks is a goal but firework_checks is disabled. Fixing by enabling firework_checks.", LoggingLevel.WARNING)
             self.options.firework_checks.value = 1
         elif bad_condition:
-            self.log("\"Fireworks\" is a goal but firework_checks is disabled. Halting generation.", "Warning")
-            raise OptionError("firework_checks must be enabled if \"Fireworks\" is a goal and auto_corrections is disabled.")
+            raise OptionError("Fireworks is a goal but firework_checks is disabled. Automatic fixing is available via auto_corrections.")
             
         bad_condition = "Shop Items" in converted_goal_set and not self.options.shop_randomization.value
         if bad_condition and auto_corrections:
-            self.log("\"Shop Items\" is a goal but shop_randomization is disabled. Fixing by enabling shop_randomization.", "Warning")
+            self.log("Shop Items is a goal but shop_randomization is disabled. Fixing by enabling shop_randomization.", LoggingLevel.WARNING)
             self.options.shop_randomization.value = 1
         elif bad_condition:
-            self.log("\"Shop Items\" is a goal but shop_randomization is disabled. Halting generation.", "Warning")
-            raise OptionError("shop_randomization must be enabled is \"Shop Items\" is a goal and auto_corrections is disabled.")
+            raise OptionError("Shop Items is a goal but shop_randomization is disabled. Automatic fixing is available via auto_corrections.")
                 
         self.options.goal.value = converted_goal_set
         
     def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
-        self.log("Universal Tracker is applying slot data.", "Debug")
         self._ut_active = True
         
         self.options.death_link.value = slot_data['death_link']
@@ -434,7 +418,6 @@ class SpyroAHTWorld(World):
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
         self.excluded_goal_ids = slot_data['excluded_goal_ids']
-        self.log("Universal Tracker is done applying slot data.", "Extra")
     
     def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
         level_acronym, rest_of_name = location_label.split(": ")
@@ -459,7 +442,7 @@ class SpyroAHTWorld(World):
         return sorting_key
 
     def handle_goaling(self):
-        self.log("Setting up goals.", "Info")
+        self.log("Processing goal choices.", LoggingLevel.LOW)
         # convert goal names to searchable form for location matching
         # in an ideal world, everything would be named in such a way that this isn't necessary, but...¯\_(ツ)_/¯
             # TODO: do something about it then, boy!
@@ -477,14 +460,14 @@ class SpyroAHTWorld(World):
                 for goal in self.options.goal.value:
                     if convert[goal] in location["name"]:
                         if "Shop Item" in location["name"] and int(location["name"][-2:]) > shop_item_count:
-                            continue  # skip shop items that aren't enabled
+                            continue  # skip shop items 19-56 if key rings are enabled
                         if location['name'] in self.options.exclude_locations.value:
-                            self.log(f"Skipping adding \"{location['name']}\" to goal \"{goal}\" because it is excluded.", "Debug")
+                            self.log(f"{goal} is a goal, but {location['name']} is excluded, so it will not be required for goal.", LoggingLevel.HIGH)
                             self.excluded_goal_ids[goal].append(location['id'])
                             continue
                         self.get_region(reg).add_event(f"{location['name']} Victory{count}", f"VictoryCon{count}", rule=self.rule_from_dict(location['access_rule']))
                         victory_cons.append(f"VictoryCon{count}")
-                        self.log(f"Added VictoryCon{count} event item for {location['name']}.", "Extra")
+                        self.log(f"Added VictoryCon{count} event for {location['name']}.", LoggingLevel.MAXIMUM)
                         count += 1
         
         # handle cases where the player excluded all locations for a given goal
@@ -493,32 +476,31 @@ class SpyroAHTWorld(World):
         to_remove = []
         for goal in self.options.goal.value:
             if len(self.excluded_goal_ids[goal]) == counts[goal]:
-                self.log(f"All locations that belong to the \"{goal}\" goal were excluded by player. \"{goal}\" has been removed from goal list accordingly.", "Warning")
+                self.log(f"All locations that belong to the {goal} goal were excluded. {goal} has been removed from the goal list.", LoggingLevel.WARNING)
                 to_remove.append(goal)
             elif not found_valid_goal:
                 found_valid_goal = True
         self.options.goal.value = [goal for goal in self.options.goal.value if goal not in to_remove]
         
         if not found_valid_goal and self.options.auto_corrections:
-            self.log(f"All locations for all selected goals were excluded, meaning there are no valid goals. Fixing by forcing Mecha-Red as the only goal.", "Warning")
+            self.log(f"All locations for all selected goals were excluded. Fixing by forcing Mecha-Red as the only goal.", LoggingLevel.WARNING)
             loc = self.get_location("RL: Defeat Mecha-Red")
             loc.parent_region.add_event(f"RL: Defeat Mecha-Red Victory1", "VictoryCon1", rule=HasAll('Double Jump', 'Fire Breath', 'Electric Breath'))  # hardcoded because no access to the json here
             victory_cons.append(f"VictoryCon1")
             count += 1
             self.options.goal.value = ["Mecha-Red"]
         elif not found_valid_goal:
-            self.log(f"All locations for all selected goals were excluded, meaning there are no valid goals. Halting generation.", "Warning")
-            raise OptionError("All locations for all selected goals were excluded, resulting in no valid goals. Please add a goal with at least one non-excluded location, or take out some of your exclusions.")
+            raise OptionError("All locations for all selected goals were excluded. Automatic fixing is available via auto_corrections.")
         
-        self.log(f"Set up {count-1} goal events.", "Debug")
-
+        self.log(f"Set up {count-1} VictoryCon events.", LoggingLevel.HIGH)
+        self.log(f"Final goal list: {", ".join(self.options.goal.value)}.", LoggingLevel.MEDIUM)
         self.multiworld.completion_condition[self.player] = lambda state: state.has_all(victory_cons, self.player)
     
     def create_regions(self):
         # TODO: how much of this needs to be here specifically? lot of setup done here and in create_items and probably would be good to review if it could be all in one place
         auto_corrections = self.options.auto_corrections.value  # setting as micro-optimization for checking later
             
-        self.log("Setting up gadget costs.", "Info")
+        self.log("Setting up gadget costs.", LoggingLevel.LOW)
         if self.options.randomize_gadget_costs.value != 0:
             if self.options.randomize_gadget_costs.value == 2:  # shuffled:
                 self.random.shuffle(self._gadget_costs)
@@ -526,16 +508,14 @@ class SpyroAHTWorld(World):
                 lmin, lmax = self.options.gadget_cost_min.value, self.options.gadget_cost_max.value
                 bad_condition = lmin > lmax
                 if bad_condition and auto_corrections:
-                    self.log("gadget_cost_min is greater than gadget_cost_max. Fixing by swapping them.", "Warning")
+                    self.log(f"gadget_cost_min of {lmin} is greater than {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
                     lmin, lmax = lmax, lmin
                 elif bad_condition:
-                    self.log("gadget_cost_min is greater than gadget_cost_max. Halting generation.", "Warning")
-                    raise OptionError("gadget_cost_min must be smaller than gadget_cost_max if auto_corrections is disabled.")
-
+                    raise OptionError(f"gadget_cost_min of {lmin} is greater than {lmax}. Automatic fixing is available via auto_corrections.")
                 self._gadget_costs = [self.random.randint(lmin, lmax) for _ in range(3)]
-        self.log(f"Gadget costs are {self._gadget_costs}.", "Debug")
+        self.log(f"Gadget Costs (in Light Gems): Ball requires {self._gadget_costs[0]}, invincibility requires {self._gadget_costs[1]}, and supercharge requires {self._gadget_costs[2]}.", LoggingLevel.MEDIUM)
         
-        self.log("Setting up boss lair costs.", "Info")
+        self.log("Setting up boss lair costs.", LoggingLevel.LOW)
         if self.options.randomize_boss_lair_door_costs.value != 0:  # if not default
             if self.options.randomize_boss_lair_door_costs.value == 2:  # shuffled:
                 self.random.shuffle(self._boss_lairs)
@@ -543,15 +523,14 @@ class SpyroAHTWorld(World):
                 bmin, bmax = self.options.boss_lair_door_cost_min.value, self.options.boss_lair_door_cost_max.value
                 bad_condition = bmin > bmax
                 if bad_condition and auto_corrections:
-                    self.log("boss_lair_door_cost_min is greater than boss_lair_door_cost_max. Fixing by swapping them.", "Warning")
+                    self.log(f"boss_lair_door_cost_min of {bmin} is greater than {bmax}. Fixing by swapping them.", LoggingLevel.WARNING)
                     bmin, bmax = bmax, bmin
                 elif bad_condition:
-                    self.log("boss_lair_door_cost_min is greater than boss_lair_door_cost_max. Halting generation.", "Warning")
-                    raise OptionError("boss_lair_door_cost_min must be smaller than boss_lair_door_cost_max if auto_corrections is disabled.")
+                    raise OptionError(f"boss_lair_door_cost_min of {bmin} is greater than {bmax}. Automatic fixing is available via auto_corrections.")
 
                 self._boss_lairs = [self.random.randint(bmin, bmax) for _ in range(4)]
         
-        self.log(f"Checking if boss lair costs need forcing. Costs are currently {self._boss_lairs}.", "Info")
+        self.log(f"Checking if boss lair costs need forcing via boss_lair_forcing.", LoggingLevel.LOW)
         lookup = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]
         forcing = self.options.boss_lair_forcing.value
         if forcing != 0:
@@ -560,9 +539,9 @@ class SpyroAHTWorld(World):
             non_goal_boss_indices = [index for index in [0, 1, 2, 3] if index not in goal_boss_indices]
             
             if len(goal_boss_indices) == 4:
-                self.log("boss_lair_forcing was set to automatic, but all 4 bosses are part of goal. Skipping cost swapping.", "Debug")
+                self.log("boss_lair_forcing is set to automatic, but all 4 bosses are part of goal. Skipping cost swapping.", LoggingLevel.HIGH)
             elif len(goal_boss_indices) == 0:
-                self.log("boss_lair_forcing was set to automatic, but you have no goal bosses. Skipping cost swapping.", "Debug")
+                self.log("boss_lair_forcing is set to automatic, but you have no goal bosses. Skipping cost swapping.", LoggingLevel.HIGH)
             else:
                 for goal_boss_index in goal_boss_indices:
                     goal_boss_cost = self._boss_lairs[goal_boss_index]
@@ -576,15 +555,14 @@ class SpyroAHTWorld(World):
                     
                     # swap if needed
                     if self._boss_lairs[goal_boss_index] < highest_non_goal_cost:
-                        self.log(f"Swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is smaller.", "Debug")
+                        self.log(f"Swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is smaller.", LoggingLevel.HIGH)
                         self._boss_lairs[goal_boss_index] = highest_non_goal_cost
                         self._boss_lairs[highest_non_goal_index] = goal_boss_cost
                     else:
-                        self.log(f"Skipping swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is already larger.", "Debug")
-            
-        self.log(f"Final boss lair costs are {self._boss_lairs}.", "Debug")
+                        self.log(f"Skipping swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is already larger.", LoggingLevel.HIGH)
+        self.log(f"Boss Lair Costs (in Dark Gems): Gnasty Gnorc requires {self._boss_lairs[0]}, Ineptune requires {self._boss_lairs[1]}, Red requires {self._boss_lairs[2]}, and Mecha-Red requires {self._boss_lairs[3]}.", LoggingLevel.MEDIUM)
         
-        self.log("Setting up Light Gem door costs.", "Info")
+        self.log("Setting up Light Gem door costs.", LoggingLevel.LOW)
         if self.options.randomize_light_gem_door_costs.value != 0:
             if self.options.randomize_light_gem_door_costs.value == 2:  # shuffled:
                 self.random.shuffle(self._lg_doors)
@@ -592,28 +570,25 @@ class SpyroAHTWorld(World):
                 lmin, lmax = self.options.light_gem_door_cost_min.value, self.options.light_gem_door_cost_max.value
                 bad_condition = lmin > lmax
                 if bad_condition and auto_corrections:
-                    self.log("light_gem_door_cost_min is greater than light_gem_door_cost_max. Fixing by swapping them.", "Warning")
+                    self.log(f"light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
                     lmin, lmax = lmax, lmin
                 elif bad_condition:
-                    self.log("light_gem_door_cost_min is greater than light_gem_door_cost_max. Halting generation.", "Warning")
-                    raise OptionError("light_gem_door_cost_min must be smaller than light_gem_door_cost_max if auto_corrections is disabled.")
-
+                    raise OptionError(f"light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Automatic fixing is available via auto_corrections.")
                 self._lg_doors = [self.random.randint(lmin, lmax) for _ in range(4)]
-        self.log(f"Light Gem door costs are {self._lg_doors}.", "Debug")
+        self.log(f"Light Gem Door costs (in Light Gems): Dragonfly Falls requires {self._lg_doors[0]}, Coastal Remains requires {self._lg_doors[1]}, Frostbite Village requires {self._lg_doors[2]}, and Dark Mine requires {self._lg_doors[3]}.", LoggingLevel.MEDIUM)
 
+        self.log("Setting up regions and locations.", LoggingLevel.LOW)
         data = _load_file("locations.json")
-        
-        self.log("Setting up regions and locations.", "Info")
         self.multiworld.regions.extend(Region(r['name'], self.player, self.multiworld) for r in data.values())
-        self.log("Regions created.", "Debug")
+        self.log("Regions created.", LoggingLevel.HIGH)
         
         for region_name, region_data in data.items():
             for entrance in region_data['entrances']:
                 region_from, region_to = entrance['name'].split(" -> ")
                 rule = self.rule_from_dict(entrance['access_rule'])
                 self.get_region(region_from).connect(self.get_region(region_to), f"{region_from} => {region_to}", rule)
-                self.log(f"Connected {region_from} to {region_to} with rule {rule}.", "Extra")
-        self.log("Regions connected.", "Debug")
+                self.log(f"Connected region {region_from} to region {region_to} with rule {rule}.", LoggingLevel.MAXIMUM)
+        self.log("Regions connected.", LoggingLevel.HIGH)
 
         for region_data in data.values():
             region_object = self.get_region(region_data['name'])
@@ -638,64 +613,60 @@ class SpyroAHTWorld(World):
                 if add:
                     new_locations[location_data['name']] = location_data['id']
                     
-                    self.log(f"Added \"{location_data['name']}\" with id {location_data['id']} to {region_data['name']}.", "Extra")
+                    self.log(f"Added location {location_data['name']} with id {location_data['id']} to region {region_data['name']}.", LoggingLevel.MAXIMUM)
             region_object.add_locations(new_locations)
-        self.log("Locations created.", "Debug")
+        self.log("Locations created.", LoggingLevel.HIGH)
 
         # add gem events, only if shop is randomized with gem logic
+        self.log("Checking if gem logic needs to be set up.", LoggingLevel.LOW)
         blink_exclusions, other_exclusions = 0, 0
-        enemy_count = 0
-        convert = {"1-1": 0, "1-2": 1, "2-1": 2, "2-2": 3, "3-1": 4, "3-2": 5, "4-1": 6, "4-2": 7}
-        if self.options.shop_randomization and self.options.gem_logic:
-            self.log("Setting up gem logic.", "Info")
+        if self.options.shop_randomization.value == 1 and self.options.gem_logic.value == 1:
+            convert = {"1-1": 0, "1-2": 1, "2-1": 2, "2-2": 3, "3-1": 4, "3-2": 5, "4-1": 6, "4-2": 7}
             for reg, region_data in data.items():
                 for gem_event in region_data["gem_events"]:
-                    normal = False
+                    exclusion = False
                     for key in convert.keys():
                         if key in gem_event['name']:
                             if "Byrd minigames" in gem_event['name'] and minigame_locs[convert[key]] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Sgt. Byrd gem event \"{gem_event['name']}\" because its associated location \"{minigame_locs[convert[key]+8]}\" was excluded.", "Debug")
+                                self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]]} was excluded.", LoggingLevel.HIGH)
                                 other_exclusions += int(gem_event['gem_amount'])
-                                self.log(f"other_exclusions is now {other_exclusions}", "Debug")
+                                exclusion = True
                                 break
                             elif "Blink minigames" in gem_event['name'] and minigame_locs[convert[key]+8] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Blink gem event \"{gem_event['name']}\" because its associated location \"{minigame_locs[convert[key]+8]}\" was excluded.", "Debug")
+                                self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]+8]} was excluded.", LoggingLevel.HIGH)
                                 blink_exclusions += int(gem_event['gem_amount'])
-                                self.log(f"blink_exclusions is now {blink_exclusions}", "Debug")
+                                exclusion = True
                                 break
                             elif "Sparx minigames" in gem_event['name'] and minigame_locs[convert[key]+16] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Sparx gem event \"{gem_event['name']}\" because its associated location \"{minigame_locs[convert[key]+16]}\" was excluded.", "Debug")
+                                self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]+16]} was excluded.", LoggingLevel.HIGH)
                                 other_exclusions += int(gem_event['gem_amount'])
-                                self.log(f"other_exclusions is now {other_exclusions}", "Debug")
+                                exclusion = True
                                 break
-                    else:
-                        normal = True  # only becomes True if no exclusions found since that triggers the else. Slightly cleaner than settng it False in each of the 3 exclusion scenarios above
                                 
-                    if normal:
+                    if not exclusion:
                         location_name = f"{reg}: {gem_event['name']}"
-                        if "[enemy]" in gem_event['name']: enemy_count += int(gem_event['gem_amount'])
-                        self.log(f"Created gem event with location_name \"{location_name}\", item name \"{gem_event['name']}\", and access rule {gem_event['access_rule']}.", "Extra")
                         self.get_region(reg).add_event(location_name, gem_event['name'], rule=self.rule_from_dict(gem_event["access_rule"]), show_in_spoiler=False)
+                        self.log(f"Created gem event with location name {location_name}, item name {gem_event['name']}, and rule {gem_event['access_rule']}.", LoggingLevel.MAXIMUM)
                     
         # shop costs determined by multiple options. Doing after gem events in case of exclusions
+        self.log("Checking if shop costs need to be set up.", LoggingLevel.LOW)
         if self.options.shop_randomization.value == 1:
-            self.log("Setting up randomized shop costs.", "Info")
             shop_item_count = 18 if self.options.key_rings.value else 56
             blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
             non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
             other = (105357 - other_exclusions) * self.options.other_gems.value / 100
             gem_total = blink + non_blink_enemies + other
             base_price = gem_total / (shop_item_count - 1)
-            self.log(f"Set up shop prices. shop_item_count = {shop_item_count}. blink = {blink}. non_blink_enemies = {non_blink_enemies}. other = {other}. base_price = {base_price}.","Debug")
+            self.log(f"Shop prices are being initialized. blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
             self.shop_costs.append(0)
 
-            if self.options.gem_logic:  # gem logic
+            if self.options.gem_logic:  # gem logic = incrementing prices
                 for counter in range(shop_item_count - 1):
-                    self.shop_costs.append(int(base_price * (counter + 1)))  # each item has incrementing price
-            else:  # no gem logic
-                for counter in range(shop_item_count - 1):
-                    self.shop_costs.append(int(base_price))  # each item has same price
-            self.log(f"Shop costs are {self.shop_costs}.", "Info")
+                    self.shop_costs.append(int(base_price * (counter + 1)))
+            else:  # no gem logic = items have equal pricing
+                for _ in range(shop_item_count - 1):
+                    self.shop_costs.append(int(base_price))
+            self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
             
         self.handle_goaling()
     
@@ -705,8 +676,6 @@ class SpyroAHTWorld(World):
 
     def setup_filler_list(self, item_data) -> tuple[dict[str, list], list[str]]:
         """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
-        self.log("Setting up filler item information.", "Info")
-        
         all_filler_items = [item for item in item_data if item["group"] == "Filler"]
         enabled_filler_items: dict[str, list[str]] = {}
         generics = []
@@ -714,11 +683,7 @@ class SpyroAHTWorld(World):
         for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics"]:
             if category in self.options.filler_items.value:
                 enabled_filler_items[category] = []
-                self.log(f"Filler category {category} is enabled.", "Debug")
-            else:
-                self.log(f"Filler category {category} is disabled.", "Debug")
-        self.log(f"Enabled filler categories: {list(enabled_filler_items.keys())}.", "Debug")
-                
+        
         for filler_item in all_filler_items:
             if filler_item["name"] == "Gem Pack" and "Gem Packs" in enabled_filler_items.keys():
                 enabled_filler_items["Gem Packs"].append(filler_item["name"])
@@ -736,123 +701,116 @@ class SpyroAHTWorld(World):
         item_data = _load_file("items.json")
         item_pool = []
         
-        self.log("Checking for double gems item status.", "Info")
         skip_double_gems = self.options.shop_randomization.value == 1 and self.options.double_gems.value == 1
         
-        self.log("Checking for vanilla minigame rewards.", "Info")
-        # a bit weird but sets up big list of NPC names to associate to each minigame location
-        npc_names = ["Sgt. Byrd"] * 8 + ["Blink"] * 8 + ["Sparx"] * 8 + ["Turret"] * 8
-        minigames, counter = 0, 0
-        for npc, minigame_loc in zip(npc_names, minigame_locs):
-            if npc in self.options.vanilla_minigame_rewards.value:
-                self.log(f"Giving {npc} minigame vanilla reward.", "Debug")
-                item = "Dragon Egg" if counter % 2 == 0 else "Light Gem"
-                self.get_location(minigame_loc).place_locked_item(self.create_item(item))
-                if item == "Light Gem": minigames += 1
-            counter += 1
+        self.log("Checking if any minigames need vanilla rewards forced.", LoggingLevel.LOW)
+        vanilla = self.options.vanilla_minigame_rewards.value  # just to make rest a  bit more readable
+        skip_light_gems = len(vanilla) * 4  # done here so that it always has a value. 0 if no forcing, multiples of 4 otherwise
+        if len(vanilla) != 0:
+            self.log(f"Minigame types which will have vanilla rewards forced: {", ".join(vanilla)}.", LoggingLevel.MEDIUM)
+            npc_names = ["Sgt. Byrd"] * 8 + ["Blink"] * 8 + ["Sparx"] * 8 + ["Turret"] * 8
+            for npc, minigame_loc in zip(npc_names, minigame_locs):
+                if npc in vanilla:
+                    item = "Dragon Egg" if "Dragon Egg" in minigame_loc else "Light Gem"
+                    self.get_location(minigame_loc).place_locked_item(self.create_item(item))
         
-        self.log("Setting up starting breaths.", "Info")
+        self.log("Setting up starting breath(s).", LoggingLevel.LOW)
         starter_done = False
         if "None" not in self.options.starting_breaths.value:  # if none is there at all, it will be the only thing there, thus nothing should be done
             for breath in self.options.starting_breaths.value:
                 breath_name = f"{breath} Breath"
                 self._starting_breaths.append(breath_name)
                 if starter_done:
-                    self.log(f"Placing {breath_name} into start inventory.", "Debug")
                     self.push_precollected(self.create_item(breath_name))
+                    self.log(f"{breath_name} has been placed into start inventory.", LoggingLevel.HIGH)
                 else:
-                    self.log(f"Placing {breath_name} into Starter Checks: Breath.", "Debug")
                     self.get_location("Starter Checks: Breath").place_locked_item(self.create_item(breath_name))
+                    self.log(f"{breath_name} has been placed into Starter Checks: Breath.", LoggingLevel.HIGH)
                     starter_done = True
-        self.log(f"Starting breath(s) are {self._starting_breaths}.", "Debug")
+            self.log(f"Starting breath(s) are {", ".join(self._starting_breaths)}.", LoggingLevel.MEDIUM)
+        else:
+            self.log(f"Starting with no breaths.", LoggingLevel.MEDIUM)
         
-        self.log("Checking movement randomization choice(s).", "Info")
+        self.log("Setting up base movement abilities (glide, swim, and charge).", LoggingLevel.LOW)
         skip_movements = []
         for movement in ["Glide", "Swim", "Charge"]:
             if movement not in self.options.movement_randomization.value:
-                self.log(f"{movement} will be placed into Starter Checks: {movement}.", "Debug")
                 self.get_location(f"Starter Checks: {movement}").place_locked_item(self.create_item(movement))
+                self.log(f"{movement} has been placed into Starter Checks: {movement}.", LoggingLevel.HIGH)
                 skip_movements.append(movement)
             else:
-                self.log(f"{movement} will be randomized due to being listed in movement_randomization.", "Debug")
+                self.log(f"{movement} will be added to the item pool.", LoggingLevel.HIGH)
+        self.log(f"Starting movement abilities: {", ".join(skip_movements)}.", LoggingLevel.MEDIUM)
             
-        self.log("Setting up starting realm(s).", "Info")
+        self.log("Setting up starting realms, access cards, and starting shop unlocks (if open world mode is enabled).", LoggingLevel.LOW)
         if self.options.open_world_mode.value == 1:  # all 4 if open world is on
-            self.log("open_world_mode is set to full. Overriding starting_realms to start with all 4 realms.", "Info")
             self._starting_realms = ['Dragon Kingdom', 'Lost Cities', 'Icy Wilderness', 'Volcanic Isle']
-        elif len(self.options.starting_realms.value) == 0:
-            random_realm = self.random.choice(["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"])
-            self.log(f"starting_realms list was left empty. {random_realm} was chosen at random.", "Debug")
-            self._starting_realms.append(random_realm)
+            self.log("open_world_mode is set to full. starting_realms list has been overridden to start with all 4 realms.", LoggingLevel.WARNING)
         else:
             self._starting_realms = list(self.options.starting_realms.value)
-        self.log(f"Starting Realms: {self._starting_realms}.", "Debug")
         
         if len(self._starting_realms) == 1 and self._starting_realms[0] == "Icy Wilderness" and self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
             if self.options.auto_corrections:
-                self.log("Generations have a high frequency of failure if starting in Icy Wilderness with shop_randomization disabled and movement_randomization empty. Fixing by changing starting realm to Dragon Kingdom.", "Warning")
+                self.log("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
                 self._starting_realms[0] = "Dragon Kingdom"
             else:
-                self.log("Generations have a high frequency of failure if starting in Icy Wilderness with shop_randomization disabled and movement_randomization empty. Halting generation.", "Warning")
-                raise OptionError("Can't start in Icy Wilderness if shop_randomization is disabled and movement_randomization is empty, if auto_corrections is disabled.", "Warning")
+                raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Automatic fixing is available via auto_corrections.")
             
         # add starting realm choices to start inventory, if not already in start inventory
-        self.log("Adding starting realm access cards and unlocking starting realm shops (if using open_world_mode).", "Info")
-        added_realms = []
-        mode = self.options.open_world_mode.value
-        pause = self.options.pause_menu_patch.value
+        added_realms, subtract_one = [], []
         convert = {"Dragon Kingdom": "Dragon Village - Village Depot Shop Unlock", "Lost Cities": "Coastal Remains - Coastal Depot Shop Unlock", "Icy Wilderness": "Frostbite Village - Frosty Depot Shop Unlock", "Volcanic Isle": "Stormy Beach - Stormy Depot Shop Unlock"}
-        subtract_one = []
         for realm in self._starting_realms:
             new_card = self.create_item(f"{realm} Access Card")
             added_realms.append(f"{realm} Access Card")
             if new_card not in self.multiworld.precollected_items[self.player]:  # don't add the card if the player already put it there
-                self.log(f"Added {new_card.name} to start inventory.", "Debug")
+                self.log(f"Added {new_card.name} to start inventory.", LoggingLevel.HIGH)
                 self.push_precollected(new_card)
             else:
-                self.log(f"Skipped adding {new_card.name} to start inventory because player already put it there.", "Debug")
+                self.log(f"Skipped adding {new_card.name} to start inventory because it's already there.", LoggingLevel.HIGH)
                 
             # also unlock starting realm depot shops if open world is on but not full and pause menu is open shop
+            # this is to prevent softlocks if starting in a realm and teleporting away too early and thus being unable to return to the starting hub area
             # this is done by manually creating and pre-collecting individual depot unlock items regardless of mode
-            # modes 5 and 6 (full levels + realms) doesn't need to have an item subtracted
-            if 2 <= mode <= 4 and pause == 0:
+            # modes 5 and 6 (full levels + realms) doesn't need to have an item subtracted because their shop unlock items always include at least one non-starting hub shop
+            if 2 <= self.options.open_world_mode.value <= 4 and self.options.pause_menu_patch.value == 0:
                 new_shop_unlock = self.create_item(convert[realm])
                 if new_shop_unlock not in self.multiworld.precollected_items[self.player]:
-                    self.log(f"Adding {new_shop_unlock.name} to start inventory.", "Debug")
+                    self.log(f"Adding {new_shop_unlock.name} to start inventory.", LoggingLevel.HIGH)
                     self.push_precollected(new_shop_unlock)
                 else:
-                    self.log(f"Skipping adding {new_shop_unlock.name} to start inventory because player already put it there.", "Debug")
+                    self.log(f"Skipping adding {new_shop_unlock.name} to start inventory because player already put it there.", LoggingLevel.HIGH)
                 
-                if mode == 2:  # randomized
+                if self.options.open_world_mode.value == 2:  # randomized
                     subtract_one.append(convert[realm])
-                elif mode == 3 or mode == 4:  # progressive or rev progressive
+                elif 3 <= self.options.open_world_mode.value <= 4:  # progressive or rev progressive
                     depot_level = REALM_LEVEL_LOOKUP[realm][0]
                     subtract_one.append(f"Progressive {depot_level} - Shop Unlock")
+        self.log(f"Starting realm list: {", ".join(self._starting_realms)}.", LoggingLevel.MEDIUM)
         
-        self.log("Starting main item creation loop.", "Info")
+        self.log("Starting main item creation loop.", LoggingLevel.LOW)
         for item in item_data:
             if item["group"] == "Filler":  # filler handled later
                 continue
             
             if item['name'] == "Double Gems" and skip_double_gems:
-                self.log("Skipping creating item \"Double Gems\" because shop_randomization is enabled but double_gems is disabled.", "Debug")
+                self.log("Skipping creating Double Gems item because shop_randomization is enabled but double_gems is disabled.", LoggingLevel.HIGH)
                 continue
             
             if item['name'] in skip_movements:
-                self.log(f"Skipping creating {item['name']} due to already being placed into Starter Checks: {item['name']}.", "Debug")
+                self.log(f"Skipping creating {item['name']} due to already being placed into Starter Checks: {item['name']}.", LoggingLevel.HIGH)
                 continue
                 
             if item['name'] in self._starting_breaths:
-                self.log(f"Skipping creating {item['name']} due to being selected as a starting breath.", "Debug")
+                self.log(f"Skipping creating {item['name']} due to being a starting breath.", LoggingLevel.HIGH)
                 continue
             
             if self.options.open_world_mode.value != 0 and "Access Card" in item['name']:
-                # open world mode == 1 has access cards, but they're created and pre-collected above
-                # open world mode > 1 has no access cards besides the one(s) the player starts with, created and pre-collected above
-                self.log(f"Skipping creating {item['name']} because access cards are handled already due to open_world_mode.", "Debug")
+                # open world mode == 1 has access cards, but they're created and pre-collected above, thus all should be skipped here
+                # open world mode > 1 has no access cards besides the one(s) the player starts with, created and pre-collected above, thus all should be skipped here
+                self.log(f"Skipping creating {item['name']} because access cards have already been handled.", LoggingLevel.HIGH)
                 continue
             elif item['name'] in added_realms:
-                self.log(f"Skipping creating {item['name']} because it's a starting realm.", "Debug")
+                self.log(f"Skipping creating {item['name']} because it's a starting realm.", LoggingLevel.HIGH)
                 continue  # non-open world has normal access card logic. only skip the ones pre-added, add the rest to the pool
             
             add = True
@@ -875,20 +833,26 @@ class SpyroAHTWorld(World):
 
             if add:
                 count = item.get('count', 1)
-                if item['name'] == 'Light Gem':  # dragon eggs are handled above separately since they are fully filler now
-                    self.log(f"Making {minigames} less Light Gems due to forcing vanilla minigame rewards.", "Debug")
-                    count -= minigames
+                if item['name'] == 'Light Gem':
+                    if skip_light_gems > 0:
+                        self.log(f"Making {skip_light_gems} less Light Gems due to {skip_light_gems} being pre-placed via vanilla_minigame_rewards.", LoggingLevel.HIGH)
+                        count -= skip_light_gems
                 if item['name'] in subtract_one:  # make one less of each corresponding depot shop level unlock if added above already
-                    self.log(f"Making 1 less {item['name']} due to open_world_mode.", "Debug")
+                    if count == 1:
+                        self.log(f"Skipping making {item['name']} because its corresponding realm is a starting realm.", LoggingLevel.HIGH)
+                    else:
+                        self.log(f"Making 1 less {item['name']} because its corresponding realm is a starting realm.", LoggingLevel.HIGH)
                     count -= 1
 
                 for _ in range(count):
                     item_pool.append(self.create_item(item['name']))
-                self.log(f"Created {count} of item \"{item['name']}\".", "Extra")
+                self.log(f"Created {count} of item {item['name']}.", LoggingLevel.MAXIMUM)
                 
         # add filler. Randomly choose a category, randomly choose an item from that category.
         # generics have extra logic to force variety in the choices before duplicating
+        self.log("Setting up and creating filler items.", LoggingLevel.LOW)
         self.filler_items, unchosen_generics = self.setup_filler_list(item_data)
+        self.log(f"Enabled filler categories: {list(self.filler_items.keys())}.", LoggingLevel.MEDIUM)
         reset_generics = copy.copy(unchosen_generics)
         while len(item_pool) < len(self.multiworld.get_unfilled_locations(self.player)):
             category, items = self.random.choice(list(self.filler_items.items()))
@@ -898,12 +862,12 @@ class SpyroAHTWorld(World):
                 while choice not in unchosen_generics:
                     choice = self.random.choice(unchosen_generics)
                 unchosen_generics.remove(choice)
-            self.log(f"Created filler item \"{choice}\".", "Extra")
+            self.log(f"Created filler item {choice}.", LoggingLevel.MAXIMUM)
             item_pool.append(self.create_item(choice))
         self.multiworld.itempool.extend(item_pool)
   
     def set_rules(self) -> None:
-        self.log("Setting up location rules.", "Info")
+        self.log("Setting up location rules.", LoggingLevel.LOW)
         data = _load_file("locations.json")
         for r in data.values():
             for l in r['locations']:
@@ -914,7 +878,7 @@ class SpyroAHTWorld(World):
                 self.set_rule(loc, self.rule_from_dict(l['access_rule']))
     
     def fill_slot_data(self):
-        self.log("Filling slot data.", "Info")
+        self.log("Filling slot data.", LoggingLevel.LOW)
         slot_data: dict[str, Any] = {
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
