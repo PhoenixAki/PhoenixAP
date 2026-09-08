@@ -38,9 +38,8 @@ minigame_locs = [
         "SB: Dragon Egg in upper Stormy Beach from Wally", "SB: Light Gem in upper Stormy Beach from Wally"
 ]
 
-prepositions = ["from", "by", "in", "near", "above", "next to", "across", "inside", "atop", "behind", "after", "via", "at end of", "after first", "after second", "approaching", "opposite"]
+# used for UT custom sorting
 id_lookup = {"Starter Checks": "A", "Moneybags": "B", "DV": "C", "CS": "D", "DF": "E", "CR": "F", "CD": "G", "SR": "H", "FV": "I", "GG": "J", "IC": "K", "SB": "L", "MM": "M", "MFt": "N", "MFb": "O", "DM": "P", "RL": "Q"}
-starts = {"Electric Breath": 0, "Water Breath": 0, "Ice Breath": 0, "Double Jump": 0, "Pole Spin": 0, "Wing Shield": 0, "Wall Kick": 0, "Dragon Egg": 1, "Dark Gem": 1, "Light Gem": 1, "Locked Chest": 1, "Firework": 1, "Defeat": 1}
 
 ###############WORLD CLASS HELPER FUNCTIONS###############
 def _load_file(file: str) -> Any:
@@ -422,24 +421,7 @@ class SpyroAHTWorld(World):
     def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
         level_acronym, rest_of_name = location_label.split(": ")
         level_id = id_lookup[level_acronym]
-        if level_id == "A" or level_id == "B":
-            return f"{level_id}"
-
-        for start in starts.keys():
-            if rest_of_name.startswith(start):
-                name_without_start = rest_of_name.replace(start + " ", "")
-                the_start = start
-                break
-
-        for prep in prepositions:
-            if name_without_start.startswith(prep):
-                name_without_prep = name_without_start.replace(prep + " ", "")
-                break
-        else:
-            name_without_prep = name_without_start
-
-        sorting_key: str | int = f"{level_id} {name_without_prep} {starts[the_start]}"
-        return sorting_key
+        return f"{level_id} {region_label} {rest_of_name}"
 
     def handle_goaling(self):
         self.log("Processing goal choices.", LoggingLevel.LOW)

@@ -1903,7 +1903,7 @@
         ],
         "locations": [
             {
-                "name": "DV: Firework above Sgt. Byrd after timed platforms",
+                "name": "DV: Firework above Sgt. Byrd",
                 "id": 5002,
                 "options": [
                     {
@@ -1922,7 +1922,7 @@
                 }
             },
             {
-                "name": "DV: Light Gem above Sgt. Byrd after timed platforms",
+                "name": "DV: Light Gem above Sgt. Byrd",
                 "id": 10,
                 "options": [],
                 "access_rule": {
@@ -1933,7 +1933,7 @@
                 }
             },
             {
-                "name": "DV: Dark Gem above Sgt. Byrd on ledge",
+                "name": "DV: Dark Gem above Sgt. Byrd",
                 "id": 11,
                 "options": [],
                 "access_rule": {
@@ -1944,7 +1944,7 @@
                 }
             },
             {
-                "name": "DV: Dragon Egg above Sgt. Byrd behind Dark Gem",
+                "name": "DV: Dragon Egg above Sgt. Byrd",
                 "id": 12,
                 "options": [],
                 "access_rule": {
@@ -1990,7 +1990,7 @@
         ],
         "locations": [
             {
-                "name": "DV: Dragon Egg by lab secret entrance in river grating",
+                "name": "DV: Dragon Egg by lab secret entrance",
                 "id": 8,
                 "options": [],
                 "access_rule": {
@@ -2001,7 +2001,7 @@
                 }
             },
             {
-                "name": "DV: Light Gem above lab secret entrance",
+                "name": "DV: Light Gem in lab secret entrance",
                 "id": 9,
                 "options": [],
                 "access_rule": {
@@ -2148,7 +2148,7 @@
         ],
         "locations": [
             {
-                "name": "DV: Dragon Egg in Hunter's glide tutorial",
+                "name": "DV: Dragon Egg in glide tutorial",
                 "id": 4,
                 "options": [],
                 "access_rule": {
@@ -2159,7 +2159,7 @@
                 }
             },
             {
-                "name": "DV: Firework in Hunter's glide tutorial",
+                "name": "DV: Firework at end of glide tutorial",
                 "id": 5000,
                 "options": [
                     {
@@ -2311,7 +2311,7 @@
                 }
             },
             {
-                "name": "DV: Dragon Egg next to Ball Gadget in Locked Chest",
+                "name": "DV: Dragon Egg in Locked Chest next to Ball Gadget",
                 "id": 6,
                 "options": [],
                 "access_rule": {
@@ -2451,7 +2451,7 @@
         ],
         "locations": [
             {
-                "name": "DV: Firework after Crocovile bridge",
+                "name": "DV: Firework across Crocovile bridge",
                 "id": 5003,
                 "options": [
                     {
@@ -2470,7 +2470,7 @@
                 }
             },
             {
-                "name": "DV: Light Gem after Crocovile bridge in Locked Chest",
+                "name": "DV: Light Gem in Locked Chest across Crocovile bridge",
                 "id": 15,
                 "options": [],
                 "access_rule": {
@@ -2564,7 +2564,7 @@
                 }
             },
             {
-                "name": "CS: Light Gem inside Perilous Pyramid behind supercharge door",
+                "name": "CS: Light Gem inside Perilous Pyramid",
                 "id": 21,
                 "options": [],
                 "access_rule": {
@@ -2591,7 +2591,7 @@
                 }
             },
             {
-                "name": "CS: Dragon Egg near tunnel to Forgotten Temple in Locked Chest",
+                "name": "CS: Dragon Egg in Locked Chest after Perilous Pyramid",
                 "id": 23,
                 "options": [],
                 "access_rule": {
@@ -2823,7 +2823,7 @@
         ],
         "locations": [
             {
-                "name": "CS: Light Gem in west area Locked Chest behind chargeable wall",
+                "name": "CS: Light Gem in Locked Chest behind chargeable wall",
                 "id": 19,
                 "options": [],
                 "access_rule": {
@@ -2852,7 +2852,7 @@
                 }
             },
             {
-                "name": "CS: Firework in west area behind cliff",
+                "name": "CS: Firework behind cliff in west area",
                 "id": 5004,
                 "options": [
                     {
@@ -2871,7 +2871,7 @@
                 }
             },
             {
-                "name": "CS: Dragon Egg in west area after platforms",
+                "name": "CS: Dragon Egg across muddy platforms in west area",
                 "id": 20,
                 "options": [],
                 "access_rule": {
@@ -2962,7 +2962,7 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg in Forgotten Temple gated Locked Chest",
+                "name": "CS: Dragon Egg in Locked Chest in Forgotten Temple",
                 "id": 24,
                 "options": [],
                 "access_rule": {
@@ -3094,7 +3094,7 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg from Forgotten Temple electric gate thief",
+                "name": "CS: Dragon Egg from thief in Forgotten Temple",
                 "id": 27,
                 "options": [],
                 "access_rule": {
@@ -3265,7 +3265,7 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg behind pole spin cave chargeable fence in east",
+                "name": "CS: Dragon Egg in pole spin cave",
                 "id": 29,
                 "options": [],
                 "access_rule": {
@@ -3341,7 +3341,7 @@
         ],
         "locations": [
             {
-                "name": "CS: Light Gem after east sinking platforms",
+                "name": "CS: Light Gem across sinking platforms",
                 "id": 28,
                 "options": [],
                 "access_rule": {
@@ -3355,7 +3355,7 @@
                 }
             },
             {
-                "name": "CS: Dragon Egg near Elder's tree from Blink",
+                "name": "CS: Dragon Egg from Blink",
                 "id": 30,
                 "options": [],
                 "access_rule": {
@@ -3366,7 +3366,7 @@
                 }
             },
             {
-                "name": "CS: Light Gem near Elder's tree from Blink",
+                "name": "CS: Light Gem from Blink",
                 "id": 31,
                 "options": [],
                 "access_rule": {
@@ -3377,7 +3377,7 @@
                 }
             },
             {
-                "name": "CS: Dark Gem by Elder's tree",
+                "name": "CS: Dark Gem outside Elder's tree",
                 "id": 32,
                 "options": [],
                 "access_rule": {
@@ -3405,7 +3405,7 @@
                 }
             },
             {
-                "name": "CS: Dark Gem in pole spin cave above Blink",
+                "name": "CS: Dark Gem in cave to Fredneck",
                 "id": 36,
                 "options": [],
                 "access_rule": {
@@ -3697,7 +3697,7 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg in Elder's tree behind chargeable wall",
+                "name": "CS: Dragon Egg in middle of Elder's tree",
                 "id": 34,
                 "options": [],
                 "access_rule": {
@@ -3713,7 +3713,7 @@
                 }
             },
             {
-                "name": "CS: Firework in Elder's tree behind chargeable wall",
+                "name": "CS: Firework in middle of Elder's tree",
                 "id": 5006,
                 "options": [
                     {
@@ -3850,7 +3850,7 @@
                 }
             },
             {
-                "name": "CS: Light Gem next to Fredneck lilypads",
+                "name": "CS: Light Gem next to lilypads",
                 "id": 39,
                 "options": [],
                 "access_rule": {
@@ -3924,7 +3924,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Light Gem in entry area in Locked Chest",
+                "name": "DF: Light Gem in Locked Chest in entry area",
                 "id": 40,
                 "options": [],
                 "access_rule": {
@@ -4049,7 +4049,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Dark Gem in entry area behind chargeable wall",
+                "name": "DF: Dark Gem behind chargeable wall in entry area",
                 "id": 41,
                 "options": [],
                 "access_rule": {
@@ -4065,7 +4065,7 @@
                 }
             },
             {
-                "name": "DF: Dragon Egg in entry area behind chargeable wall",
+                "name": "DF: Dragon Egg behind chargeable wall in entry area",
                 "id": 42,
                 "options": [],
                 "access_rule": {
@@ -4081,7 +4081,7 @@
                 }
             },
             {
-                "name": "DF: Light Gem by canyon behind cannon door",
+                "name": "DF: Light Gem behind cannon door",
                 "id": 43,
                 "options": [],
                 "access_rule": {
@@ -4763,7 +4763,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Light Gem behind Light Gem Door chargeable wall",
+                "name": "DF: Light Gem in Light Gem door area",
                 "id": 56,
                 "options": [],
                 "access_rule": {
@@ -4777,7 +4777,7 @@
                 }
             },
             {
-                "name": "DF: Dragon Egg from Light Gem Door thief",
+                "name": "DF: Dragon Egg from thief in Light Gem door area",
                 "id": 57,
                 "options": [],
                 "access_rule": {
@@ -4898,7 +4898,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Dark Gem near elder statue",
+                "name": "DF: Dark Gem next to Elder statue",
                 "id": 46,
                 "options": [],
                 "access_rule": {
@@ -4909,7 +4909,7 @@
                 }
             },
             {
-                "name": "DF: Light Gem near elder statue behind underwater chargeable wall",
+                "name": "DF: Light Gem behind underwater chargeable wall",
                 "id": 47,
                 "options": [],
                 "access_rule": {
@@ -4925,7 +4925,7 @@
                 }
             },
             {
-                "name": "DF: Dragon Egg near elder statue from Sparx",
+                "name": "DF: Dragon Egg from Sparx",
                 "id": 48,
                 "options": [],
                 "access_rule": {
@@ -4936,7 +4936,7 @@
                 }
             },
             {
-                "name": "DF: Light Gem near elder statue from Sparx",
+                "name": "DF: Light Gem from Sparx",
                 "id": 49,
                 "options": [],
                 "access_rule": {
@@ -5108,7 +5108,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Dragon Egg above wall kick behind chargeable wall",
+                "name": "DF: Dragon Egg behind chargeable wall in cove",
                 "id": 50,
                 "options": [],
                 "access_rule": {
@@ -5220,7 +5220,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Light Gem after cove piranha platforms",
+                "name": "DF: Light Gem across platforms in cove",
                 "id": 51,
                 "options": [],
                 "access_rule": {
@@ -5231,7 +5231,7 @@
                 }
             },
             {
-                "name": "DF: Light Gem next to cove piranha platforms in Locked Chest",
+                "name": "DF: Light Gem in Locked Chest in cove",
                 "id": 52,
                 "options": [],
                 "access_rule": {
@@ -5244,7 +5244,7 @@
                 }
             },
             {
-                "name": "DF: Dark Gem after cove",
+                "name": "DF: Dark Gem at end of cove",
                 "id": 55,
                 "options": [],
                 "access_rule": {
@@ -5258,7 +5258,7 @@
                 }
             },
             {
-                "name": "DF: Light Gem after cove via wall kick",
+                "name": "DF: Light Gem at end of cove",
                 "id": 58,
                 "options": [],
                 "access_rule": {
@@ -5372,7 +5372,7 @@
         ],
         "locations": [
             {
-                "name": "DF: Dragon Egg in Hunter's area vulture nest",
+                "name": "DF: Dragon Egg in Hunter's area",
                 "id": 53,
                 "options": [],
                 "access_rule": {
@@ -5383,7 +5383,7 @@
                 }
             },
             {
-                "name": "DF: Light Gem at end of Hunter's area",
+                "name": "DF: Light Gem in Hunter's area",
                 "id": 54,
                 "options": [],
                 "access_rule": {
@@ -5492,7 +5492,7 @@
         ],
         "locations": [
             {
-                "name": "CR: Dragon Egg from southern beach Turtle Mother",
+                "name": "CR: Dragon Egg from Turtle Mother",
                 "id": 63,
                 "options": [],
                 "access_rule": {
@@ -5506,7 +5506,7 @@
                 }
             },
             {
-                "name": "CR: Light Gem from southern beach Turtle Mother",
+                "name": "CR: Light Gem from Turtle Mother",
                 "id": 64,
                 "options": [],
                 "access_rule": {
@@ -5520,7 +5520,7 @@
                 }
             },
             {
-                "name": "CR: Locked Chest behind Coastal Depot",
+                "name": "CR: Empty Locked Chest behind Coastal Depot",
                 "id": 234,
                 "options": [],
                 "access_rule": {
@@ -5533,7 +5533,7 @@
                 }
             },
             {
-                "name": "CR: Locked Chest in southern beach",
+                "name": "CR: Empty Locked Chest in southern beach",
                 "id": 235,
                 "options": [],
                 "access_rule": {
@@ -5546,7 +5546,7 @@
                 }
             },
             {
-                "name": "CR: Light Gem in southern beach above water mill",
+                "name": "CR: Light Gem above water mill",
                 "id": 69,
                 "options": [],
                 "access_rule": {
@@ -5562,7 +5562,7 @@
                 }
             },
             {
-                "name": "CR: Dragon Egg in southern beach after moving shells",
+                "name": "CR: Dragon Egg across moving shells",
                 "id": 68,
                 "options": [],
                 "access_rule": {
@@ -5963,7 +5963,7 @@
         ],
         "locations": [
             {
-                "name": "CR: Dragon Egg from Light Gem door thief",
+                "name": "CR: Dragon Egg from thief in Light Gem door area",
                 "id": 61,
                 "options": [],
                 "access_rule": {
@@ -5977,7 +5977,7 @@
                 }
             },
             {
-                "name": "CR: Light Gem at end of Light Gem door area",
+                "name": "CR: Light Gem in Light Gem door area",
                 "id": 62,
                 "options": [],
                 "access_rule": {
@@ -6186,7 +6186,7 @@
         ],
         "locations": [
             {
-                "name": "CR: Dark Gem in cannon area",
+                "name": "CR: Dark Gem by cannon",
                 "id": 65,
                 "options": [],
                 "access_rule": {
@@ -6200,7 +6200,7 @@
                 }
             },
             {
-                "name": "CR: Dragon Egg in cannon area",
+                "name": "CR: Dragon Egg by cannon",
                 "id": 66,
                 "options": [],
                 "access_rule": {
@@ -6217,7 +6217,7 @@
                 }
             },
             {
-                "name": "CR: Dark Gem in cannon area behind reinforced door",
+                "name": "CR: Dark Gem behind cannon door",
                 "id": 67,
                 "options": [],
                 "access_rule": {
@@ -6471,7 +6471,7 @@
         ],
         "locations": [
             {
-                "name": "CR: Light Gem after electric platform near Cloudy Domain elevator",
+                "name": "CR: Light Gem via electric platform",
                 "id": 60,
                 "options": [],
                 "access_rule": {
@@ -6630,7 +6630,7 @@
         ],
         "locations": [
             {
-                "name": "CR: Light Gem above Otto pool",
+                "name": "CR: Light Gem above Otto's pool",
                 "id": 70,
                 "options": [],
                 "access_rule": {
@@ -6871,7 +6871,7 @@
         ],
         "locations": [
             {
-                "name": "CR: Dragon Egg in west area from Blink",
+                "name": "CR: Dragon Egg from Blink",
                 "id": 72,
                 "options": [],
                 "access_rule": {
@@ -6882,7 +6882,7 @@
                 }
             },
             {
-                "name": "CR: Light Gem in west area from Blink",
+                "name": "CR: Light Gem from Blink",
                 "id": 73,
                 "options": [],
                 "access_rule": {
@@ -6893,7 +6893,7 @@
                 }
             },
             {
-                "name": "CR: Dark Gem in west area next to Blink",
+                "name": "CR: Dark Gem next to Blink",
                 "id": 74,
                 "options": [],
                 "access_rule": {
@@ -6907,7 +6907,7 @@
                 }
             },
             {
-                "name": "CR: Dragon Egg in west area after Archer Gnorc hallway",
+                "name": "CR: Dragon Egg after Archer Gnorc hallway",
                 "id": 75,
                 "options": [],
                 "access_rule": {
@@ -6923,7 +6923,7 @@
                 }
             },
             {
-                "name": "CR: Dark Gem in west beach",
+                "name": "CR: Dark Gem near Sunken Ruins",
                 "id": 76,
                 "options": [],
                 "access_rule": {
@@ -6937,7 +6937,7 @@
                 }
             },
             {
-                "name": "CR: Light Gem in west beach",
+                "name": "CR: Light Gem near Sunken Ruins",
                 "id": 77,
                 "options": [],
                 "access_rule": {
@@ -7262,7 +7262,7 @@
         ],
         "locations": [
             {
-                "name": "CD: Light Gem near elevator in Locked Chest",
+                "name": "CD: Light Gem in Locked Chest by elevator",
                 "id": 80,
                 "options": [],
                 "access_rule": {
@@ -7275,7 +7275,7 @@
                 }
             },
             {
-                "name": "CD: Locked Chest after Elder Titan in the distance",
+                "name": "CD: Empty Locked Chest after Elder Titan in the distance",
                 "id": 236,
                 "options": [],
                 "access_rule": {
@@ -7433,7 +7433,7 @@
         ],
         "locations": [
             {
-                "name": "CD: Light Gem approaching Elder above thermal",
+                "name": "CD: Light Gem next to Elder's house",
                 "id": 82,
                 "options": [],
                 "access_rule": {
@@ -7444,7 +7444,7 @@
                 }
             },
             {
-                "name": "CD: Dark Gem approaching Elder before thermal",
+                "name": "CD: Dark Gem below thermal",
                 "id": 81,
                 "options": [],
                 "access_rule": {
@@ -7455,7 +7455,7 @@
                 }
             },
             {
-                "name": "CD: Firework approaching Elder next to thermal",
+                "name": "CD: Firework next to thermal",
                 "id": 5012,
                 "options": [
                     {
@@ -7586,7 +7586,7 @@
         ],
         "locations": [
             {
-                "name": "CD: Dragon Egg behind supercharge door in Locked Chest",
+                "name": "CD: Dragon Egg in Locked Chest behind supercharge door",
                 "id": 85,
                 "options": [],
                 "access_rule": {
@@ -7877,7 +7877,7 @@
                 }
             },
             {
-                "name": "CD: Light Gem at end of northwest platforming",
+                "name": "CD: Light Gem in northwest",
                 "id": 88,
                 "options": [],
                 "access_rule": {
@@ -7888,7 +7888,7 @@
                 }
             },
             {
-                "name": "CD: Firework at end of northwest platforming",
+                "name": "CD: Firework in northwest",
                 "id": 5011,
                 "options": [
                     {
@@ -8083,7 +8083,7 @@
         ],
         "locations": [
             {
-                "name": "CD: Dragon Egg below endless orbiting platforms",
+                "name": "CD: Dragon Egg below first orbiting platforms",
                 "id": 90,
                 "options": [],
                 "access_rule": {
@@ -8094,7 +8094,7 @@
                 }
             },
             {
-                "name": "CD: Dragon Egg after first endless orbiting platforms",
+                "name": "CD: Dragon Egg after first orbiting platforms",
                 "id": 91,
                 "options": [],
                 "access_rule": {
@@ -8108,7 +8108,7 @@
                 }
             },
             {
-                "name": "CD: Dark Gem after second endless orbiting platforms",
+                "name": "CD: Dark Gem after second orbiting platforms",
                 "id": 92,
                 "options": [],
                 "access_rule": {
@@ -8232,7 +8232,7 @@
         ],
         "locations": [
             {
-                "name": "CD: Dragon Egg atop tower from Sgt. Byrd",
+                "name": "CD: Dragon Egg from Sgt. Byrd",
                 "id": 93,
                 "options": [],
                 "access_rule": {
@@ -8243,7 +8243,7 @@
                 }
             },
             {
-                "name": "CD: Light Gem atop tower from Sgt. Byrd",
+                "name": "CD: Light Gem from Sgt. Byrd",
                 "id": 94,
                 "options": [],
                 "access_rule": {
@@ -8254,7 +8254,7 @@
                 }
             },
             {
-                "name": "CD: Light Gem atop tower in wall kick building",
+                "name": "CD: Light Gem in wall kick building",
                 "id": 95,
                 "options": [],
                 "access_rule": {
@@ -8498,7 +8498,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Locked Chest in entry area",
+                "name": "SR: Empty Locked Chest in entry area",
                 "id": 237,
                 "options": [],
                 "access_rule": {
@@ -8608,7 +8608,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg after first swim in Locked Chest",
+                "name": "SR: Dragon Egg in Locked Chest after first swim",
                 "id": 99,
                 "options": [],
                 "access_rule": {
@@ -8651,7 +8651,7 @@
                 }
             },
             {
-                "name": "SR: Light Gem atop thermal room in Locked Chest",
+                "name": "SR: Light Gem in Locked Chest atop thermal room",
                 "id": 102,
                 "options": [],
                 "access_rule": {
@@ -8704,7 +8704,7 @@
                 }
             },
             {
-                "name": "SR: Light Gem before second swim in Locked Chest",
+                "name": "SR: Light Gem in Locked Chest by Lily",
                 "id": 103,
                 "options": [],
                 "access_rule": {
@@ -9174,7 +9174,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg in depths from Sparx",
+                "name": "SR: Dragon Egg from Sparx",
                 "id": 105,
                 "options": [],
                 "access_rule": {
@@ -9185,7 +9185,7 @@
                 }
             },
             {
-                "name": "SR: Light Gem in depths from Sparx",
+                "name": "SR: Light Gem from Sparx",
                 "id": 106,
                 "options": [],
                 "access_rule": {
@@ -9330,7 +9330,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg in Depths above heated wall kick",
+                "name": "SR: Dragon Egg above heated wall kick",
                 "id": 107,
                 "options": [],
                 "access_rule": {
@@ -9344,7 +9344,7 @@
                 }
             },
             {
-                "name": "SR: Firework in Depths above heated wall kick",
+                "name": "SR: Firework above heated wall kick",
                 "id": 5008,
                 "options": [
                     {
@@ -9428,7 +9428,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg in fish statues Locked Chest",
+                "name": "SR: Dragon Egg in Locked Chest by fish statues",
                 "id": 108,
                 "options": [],
                 "access_rule": {
@@ -9441,7 +9441,7 @@
                 }
             },
             {
-                "name": "SR: Light Gem after fish statues",
+                "name": "SR: Light Gem by fish statues",
                 "id": 109,
                 "options": [],
                 "access_rule": {
@@ -9630,7 +9630,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Light Gem inside acid swim puzzle acid tunnel",
+                "name": "SR: Light Gem in pole room acid tunnel",
                 "id": 110,
                 "options": [],
                 "access_rule": {
@@ -9675,7 +9675,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Dark Gem atop acid swim puzzle",
+                "name": "SR: Dark Gem atop pole rooms",
                 "id": 111,
                 "options": [],
                 "access_rule": {
@@ -9686,7 +9686,7 @@
                 }
             },
             {
-                "name": "SR: Light Gem atop acid swim puzzle in Locked Chest",
+                "name": "SR: Light Gem in Locked Chest atop pole rooms",
                 "id": 112,
                 "options": [],
                 "access_rule": {
@@ -9699,7 +9699,7 @@
                 }
             },
             {
-                "name": "SR: Firework atop acid swim puzzle",
+                "name": "SR: Firework atop pole rooms",
                 "id": 5009,
                 "options": [
                     {
@@ -9795,7 +9795,7 @@
                 }
             },
             {
-                "name": "SR: Dragon Egg in rising statue room Locked Chest",
+                "name": "SR: Dragon Egg in Locked Chest in rising statue room",
                 "id": 114,
                 "options": [],
                 "access_rule": {
@@ -10008,7 +10008,7 @@
         ],
         "locations": [
             {
-                "name": "SR: Light Gem after rising statue room in Locked Chest",
+                "name": "SR: Light Gem in Locked Chest after rising statue room",
                 "id": 115,
                 "options": [],
                 "access_rule": {
@@ -10202,7 +10202,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem after electric gate via floating platform",
+                "name": "FV: Light Gem via floating platform near Peggy",
                 "id": 116,
                 "options": [],
                 "access_rule": {
@@ -10218,7 +10218,7 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg after electric gate from Peggy",
+                "name": "FV: Dragon Egg from Peggy",
                 "id": 117,
                 "options": [],
                 "access_rule": {
@@ -10229,7 +10229,7 @@
                 }
             },
             {
-                "name": "FV: Light Gem after electric gate from Peggy",
+                "name": "FV: Light Gem from Peggy",
                 "id": 118,
                 "options": [],
                 "access_rule": {
@@ -10240,7 +10240,7 @@
                 }
             },
             {
-                "name": "FV: Dark Gem after electric gate in cave",
+                "name": "FV: Dark Gem in cave near Peggy",
                 "id": 119,
                 "options": [],
                 "access_rule": {
@@ -10254,7 +10254,7 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg after electric gate underground",
+                "name": "FV: Dragon Egg underground near Peggy",
                 "id": 120,
                 "options": [],
                 "access_rule": {
@@ -10268,7 +10268,7 @@
                 }
             },
             {
-                "name": "FV: Locked Chest after electric gate underground",
+                "name": "FV: Empty Locked Chest underground near Peggy",
                 "id": 238,
                 "options": [],
                 "access_rule": {
@@ -10429,7 +10429,7 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg approaching icy camp from Blink",
+                "name": "FV: Dragon Egg from Blink",
                 "id": 124,
                 "options": [],
                 "access_rule": {
@@ -10440,7 +10440,7 @@
                 }
             },
             {
-                "name": "FV: Light Gem approaching icy camp from Blink",
+                "name": "FV: Light Gem from Blink",
                 "id": 125,
                 "options": [],
                 "access_rule": {
@@ -10451,7 +10451,7 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg approaching icy camp from thief",
+                "name": "FV: Dragon Egg from thief after bouncing snowballs",
                 "id": 122,
                 "options": [],
                 "access_rule": {
@@ -10465,7 +10465,7 @@
                 }
             },
             {
-                "name": "FV: Light Gem approaching icy camp after whirlwind cavern",
+                "name": "FV: Light Gem after bouncing snowballs",
                 "id": 123,
                 "options": [],
                 "access_rule": {
@@ -10604,7 +10604,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem after icy camp by Hunter",
+                "name": "FV: Light Gem by Gloomy Glacier entrance",
                 "id": 135,
                 "options": [],
                 "access_rule": {
@@ -10861,7 +10861,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Dragon Egg behind icy camp chargeable wall",
+                "name": "FV: Dragon Egg behind chargeable wall",
                 "id": 130,
                 "options": [],
                 "access_rule": {
@@ -10875,7 +10875,7 @@
                 }
             },
             {
-                "name": "FV: Dark Gem in icy camp orbiting platforms room",
+                "name": "FV: Dark Gem in orbiting platforms room",
                 "id": 131,
                 "options": [],
                 "access_rule": {
@@ -10886,7 +10886,7 @@
                 }
             },
             {
-                "name": "FV: Light Gem in icy camp orbiting platforms room",
+                "name": "FV: Light Gem in orbiting platforms room",
                 "id": 132,
                 "options": [],
                 "access_rule": {
@@ -10973,7 +10973,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem behind supercharge door returning from Ice Citadel",
+                "name": "FV: Light Gem returning from Ice Citadel",
                 "id": 172,
                 "options": [],
                 "access_rule": {
@@ -11351,7 +11351,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Dragon Egg behind Light Gem door in Locked Chest",
+                "name": "FV: Dragon Egg in Locked Chest in Light Gem door area",
                 "id": 133,
                 "options": [],
                 "access_rule": {
@@ -11494,7 +11494,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem at end of Light Gem door area",
+                "name": "FV: Light Gem in Light Gem door area",
                 "id": 134,
                 "options": [],
                 "access_rule": {
@@ -11611,7 +11611,7 @@
         ],
         "locations": [
             {
-                "name": "FV: Dark Gem in falling icicle room",
+                "name": "FV: Dark Gem in icicle room",
                 "id": 127,
                 "options": [],
                 "access_rule": {
@@ -11622,7 +11622,7 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg in falling icicle room in Locked Chest",
+                "name": "FV: Dragon Egg in Locked Chest in icicle room",
                 "id": 128,
                 "options": [],
                 "access_rule": {
@@ -11635,7 +11635,7 @@
                 }
             },
             {
-                "name": "FV: Locked Chest after falling icicles under bridge",
+                "name": "FV: Empty Locked Chest under bridge",
                 "id": 244,
                 "options": [],
                 "access_rule": {
@@ -11648,7 +11648,7 @@
                 }
             },
             {
-                "name": "FV: Light Gem after falling icicles via poles",
+                "name": "FV: Light Gem above poles",
                 "id": 129,
                 "options": [],
                 "access_rule": {
@@ -11829,7 +11829,7 @@
         ],
         "locations": [
             {
-                "name": "GG: Locked Chest in Bentley's house",
+                "name": "GG: Empty Locked Chest in Bentley's house",
                 "id": 239,
                 "options": [],
                 "access_rule": {
@@ -11842,7 +11842,7 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg in Bentley's Locked Chest",
+                "name": "GG: Dragon Egg in Locked Chest in Bentley's house",
                 "id": 137,
                 "options": [],
                 "access_rule": {
@@ -11877,7 +11877,7 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg after skeleton ambush room in Locked Chest",
+                "name": "GG: Dragon Egg in Locked Chest after skeleton ambush room",
                 "id": 140,
                 "options": [],
                 "access_rule": {
@@ -11890,7 +11890,7 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg in swinging axe room behind breakable wall",
+                "name": "GG: Dragon Egg behind breakable wall",
                 "id": 141,
                 "options": [],
                 "access_rule": {
@@ -11901,7 +11901,7 @@
                 }
             },
             {
-                "name": "GG: Light Gem after crumbling platforms by yeti",
+                "name": "GG: Light Gem after crumbling platforms",
                 "id": 142,
                 "options": [],
                 "access_rule": {
@@ -11923,7 +11923,7 @@
                 }
             },
             {
-                "name": "GG: Light Gem near crumbling platforms behind yeti",
+                "name": "GG: Light Gem near crumbling platforms",
                 "id": 144,
                 "options": [],
                 "access_rule": {
@@ -11945,7 +11945,7 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg after spinning bones from Sparx",
+                "name": "GG: Dragon Egg from Sparx",
                 "id": 146,
                 "options": [],
                 "access_rule": {
@@ -11956,7 +11956,7 @@
                 }
             },
             {
-                "name": "GG: Light Gem after spinning bones from Sparx",
+                "name": "GG: Light Gem from Sparx",
                 "id": 147,
                 "options": [],
                 "access_rule": {
@@ -11967,7 +11967,7 @@
                 }
             },
             {
-                "name": "GG: Light Gem in climbing room beyond moving platform",
+                "name": "GG: Light Gem beyond moving platform",
                 "id": 148,
                 "options": [],
                 "access_rule": {
@@ -11978,7 +11978,7 @@
                 }
             },
             {
-                "name": "GG: Light Gem in climbing room behind gate",
+                "name": "GG: Light Gem behind lowering gate",
                 "id": 149,
                 "options": [],
                 "access_rule": {
@@ -11989,7 +11989,7 @@
                 }
             },
             {
-                "name": "GG: Light Gem before Ice Citadel",
+                "name": "GG: Light Gem at end of level",
                 "id": 150,
                 "options": [],
                 "access_rule": {
@@ -12128,7 +12128,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Locked Chest before lower courtyard",
+                "name": "IC: Empty Locked Chest in entryway",
                 "id": 240,
                 "options": [],
                 "access_rule": {
@@ -12141,7 +12141,7 @@
                 }
             },
             {
-                "name": "IC: Light Gem in lower courtyard from lighting boiler",
+                "name": "IC: Light Gem from lighting boiler in courtyard",
                 "id": 151,
                 "options": [],
                 "access_rule": {
@@ -12399,7 +12399,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Light Gem above upper courtyard",
+                "name": "IC: Light Gem atop courtyard",
                 "id": 152,
                 "options": [],
                 "access_rule": {
@@ -12410,7 +12410,7 @@
                 }
             },
             {
-                "name": "IC: Firework in upper courtyard next to water wheel",
+                "name": "IC: Firework atop courtyard",
                 "id": 5014,
                 "options": [
                     {
@@ -12492,7 +12492,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Dragon Egg after upper courtyard in Locked Chest behind chargeable wall",
+                "name": "IC: Dragon Egg in Locked Chest behind chargeable wall",
                 "id": 153,
                 "options": [],
                 "access_rule": {
@@ -12780,7 +12780,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Light Gem after Elder Astor in Locked Chest",
+                "name": "IC: Light Gem in Locked Chest after Elder Astor",
                 "id": 156,
                 "options": [],
                 "access_rule": {
@@ -12793,7 +12793,7 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg opposite drawbridge from Sgt. Byrd",
+                "name": "IC: Dragon Egg from Sgt. Byrd",
                 "id": 160,
                 "options": [],
                 "access_rule": {
@@ -12804,7 +12804,7 @@
                 }
             },
             {
-                "name": "IC: Light Gem opposite drawbridge from Sgt. Byrd",
+                "name": "IC: Light Gem from Sgt. Byrd",
                 "id": 161,
                 "options": [],
                 "access_rule": {
@@ -12815,7 +12815,7 @@
                 }
             },
             {
-                "name": "IC: Light Gem next to drawbridge from lighting boiler",
+                "name": "IC: Light Gem from lighting boiler near drawbridge",
                 "id": 162,
                 "options": [],
                 "access_rule": {
@@ -12831,7 +12831,7 @@
                 }
             },
             {
-                "name": "IC: Locked Chest before drawbridge in tunnel",
+                "name": "IC: Empty Locked Chest in tunnel to drawbridge",
                 "id": 241,
                 "options": [],
                 "access_rule": {
@@ -12844,7 +12844,7 @@
                 }
             },
             {
-                "name": "IC: Locked Chest next to drawbridge supercharge door",
+                "name": "IC: Empty Locked Chest next to drawbridge",
                 "id": 242,
                 "options": [],
                 "access_rule": {
@@ -13087,7 +13087,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Dark Gem in toxic sewer",
+                "name": "IC: Dark Gem in sewer",
                 "id": 157,
                 "options": [],
                 "access_rule": {
@@ -13101,7 +13101,7 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg at end of toxic sewer",
+                "name": "IC: Dragon Egg at end of sewer",
                 "id": 158,
                 "options": [],
                 "access_rule": {
@@ -13115,7 +13115,7 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg behind drawbridge supercharge door",
+                "name": "IC: Dragon Egg behind supercharge door",
                 "id": 159,
                 "options": [],
                 "access_rule": {
@@ -13238,7 +13238,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Dragon Egg from thief by drawbridge shop",
+                "name": "IC: Dragon Egg from thief after drawbridge",
                 "id": 171,
                 "options": [],
                 "access_rule": {
@@ -13323,7 +13323,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Locked Chest in royal chamber",
+                "name": "IC: Empty Locked Chest in royal chamber",
                 "id": 243,
                 "options": [],
                 "access_rule": {
@@ -13352,7 +13352,7 @@
                 }
             },
             {
-                "name": "IC: Light Gem in royal chamber from lighting all boilers",
+                "name": "IC: Light Gem from Ice Princess",
                 "id": 169,
                 "options": [],
                 "access_rule": {
@@ -13590,7 +13590,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Dark Gem behind royal chamber via electric platform",
+                "name": "IC: Dark Gem via electric platform",
                 "id": 165,
                 "options": [],
                 "access_rule": {
@@ -13647,7 +13647,7 @@
         ],
         "locations": [
             {
-                "name": "IC: Dark Gem in cannon area",
+                "name": "IC: Dark Gem by cannon",
                 "id": 163,
                 "options": [],
                 "access_rule": {
@@ -13658,7 +13658,7 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg in cannon area above elevator",
+                "name": "IC: Dragon Egg above elevator by cannon",
                 "id": 166,
                 "options": [],
                 "access_rule": {
@@ -13669,7 +13669,7 @@
                 }
             },
             {
-                "name": "IC: Light Gem in cannon area behind reinforced door",
+                "name": "IC: Light Gem behind cannon door",
                 "id": 167,
                 "options": [],
                 "access_rule": {
@@ -13683,7 +13683,7 @@
                 }
             },
             {
-                "name": "IC: Light Gem after cannon area from lighting boiler",
+                "name": "IC: Light Gem from lighting boiler after cannon area",
                 "id": 168,
                 "options": [],
                 "access_rule": {
@@ -13905,7 +13905,7 @@
                 }
             },
             {
-                "name": "SB: Locked Chest in west cove behind hut",
+                "name": "SB: Empty Locked Chest behind hut in west cove",
                 "id": 245,
                 "options": [],
                 "access_rule": {
@@ -13918,7 +13918,7 @@
                 }
             },
             {
-                "name": "SB: Locked Chest at end of west cove",
+                "name": "SB: Empty Locked Chest at end of west cove",
                 "id": 246,
                 "options": [],
                 "access_rule": {
@@ -13931,7 +13931,7 @@
                 }
             },
             {
-                "name": "SB: Firework at end of west cove",
+                "name": "SB: Firework in west cove",
                 "id": 5016,
                 "options": [
                     {
@@ -13950,7 +13950,7 @@
                 }
             },
             {
-                "name": "SB: Dragon Egg in lower Stormy Beach from thief",
+                "name": "SB: Dragon Egg from thief below shop",
                 "id": 174,
                 "options": [],
                 "access_rule": {
@@ -14236,7 +14236,7 @@
         ],
         "locations": [
             {
-                "name": "SB: Light Gem above west cove in shipwreck",
+                "name": "SB: Light Gem in shipwreck",
                 "id": 173,
                 "options": [],
                 "access_rule": {
@@ -14247,7 +14247,7 @@
                 }
             },
             {
-                "name": "SB: Locked Chest in upper Stormy Beach near Wally",
+                "name": "SB: Empty Locked Chest in upper Stormy Beach near Wally",
                 "id": 247,
                 "options": [],
                 "access_rule": {
@@ -14260,7 +14260,7 @@
                 }
             },
             {
-                "name": "SB: Dragon Egg in upper Stormy Beach from Wally",
+                "name": "SB: Dragon Egg from Wally",
                 "id": 175,
                 "options": [],
                 "access_rule": {
@@ -14271,7 +14271,7 @@
                 }
             },
             {
-                "name": "SB: Light Gem in upper Stormy Beach from Wally",
+                "name": "SB: Light Gem from Wally",
                 "id": 176,
                 "options": [],
                 "access_rule": {
@@ -14282,7 +14282,7 @@
                 }
             },
             {
-                "name": "SB: Locked Chest approaching cave",
+                "name": "SB: Empty Locked Chest in cave entrance",
                 "id": 248,
                 "options": [],
                 "access_rule": {
@@ -14295,7 +14295,7 @@
                 }
             },
             {
-                "name": "SB: Firework in cave next to hut",
+                "name": "SB: Firework in cave",
                 "id": 5017,
                 "options": [
                     {
@@ -14314,7 +14314,7 @@
                 }
             },
             {
-                "name": "SB: Dark Gem in cave entering Molten Mount",
+                "name": "SB: Dark Gem in cave",
                 "id": 177,
                 "options": [],
                 "access_rule": {
@@ -14437,7 +14437,7 @@
         ],
         "locations": [
             {
-                "name": "SB: Locked Chest atop cave via wall kick",
+                "name": "SB: Locked Chest atop cave",
                 "id": 249,
                 "options": [],
                 "access_rule": {
@@ -14513,7 +14513,7 @@
         ],
         "locations": [
             {
-                "name": "MM: Firework in entry area on log",
+                "name": "MM: Firework in entrance",
                 "id": 5018,
                 "options": [
                     {
@@ -14735,7 +14735,7 @@
         ],
         "locations": [
             {
-                "name": "MM: Dark Gem in village near rock monsters",
+                "name": "MM: Dark Gem near rock monsters",
                 "id": 178,
                 "options": [],
                 "access_rule": {
@@ -14749,7 +14749,7 @@
                 }
             },
             {
-                "name": "MM: Dragon Egg in village from Teena for killing rock monsters",
+                "name": "MM: Dragon Egg for avenging Teena",
                 "id": 179,
                 "options": [],
                 "access_rule": {
@@ -14927,7 +14927,7 @@
                 }
             },
             {
-                "name": "MM: Light Gem next to Sgt. Byrd in Locked Chest",
+                "name": "MM: Light Gem in Locked Chest next to Sgt. Byrd",
                 "id": 183,
                 "options": [],
                 "access_rule": {
@@ -15171,7 +15171,7 @@
         ],
         "locations": [
             {
-                "name": "MM: Light Gem after village in pole spin room",
+                "name": "MM: Light Gem in pole spin room",
                 "id": 184,
                 "options": [],
                 "access_rule": {
@@ -15480,7 +15480,7 @@
         ],
         "locations": [
             {
-                "name": "MM: Light Gem opposite collapsed bridge",
+                "name": "MM: Light Gem across collapsed bridge",
                 "id": 185,
                 "options": [],
                 "access_rule": {
@@ -15939,7 +15939,7 @@
         ],
         "locations": [
             {
-                "name": "MM: Dragon Egg behind chargeable wall in Locked Chest",
+                "name": "MM: Dragon Egg in Locked Chest behind chargeable wall",
                 "id": 188,
                 "options": [],
                 "access_rule": {
@@ -15968,7 +15968,7 @@
                 }
             },
             {
-                "name": "MM: Light Gem behind chargeable wall in Locked Chest",
+                "name": "MM: Light Gem in Locked Chest behind chargeable wall",
                 "id": 190,
                 "options": [],
                 "access_rule": {
@@ -15997,7 +15997,7 @@
                 }
             },
             {
-                "name": "MM: Dark Gem approaching Magma Falls",
+                "name": "MM: Dark Gem at end of level",
                 "id": 191,
                 "options": [],
                 "access_rule": {
@@ -16089,7 +16089,7 @@
         ],
         "locations": [
             {
-                "name": "MM: Dragon Egg in thief area from thief",
+                "name": "MM: Dragon Egg from thief in northeast",
                 "id": 189,
                 "options": [],
                 "access_rule": {
@@ -16103,7 +16103,7 @@
                 }
             },
             {
-                "name": "MM: Locked Chest in thief area",
+                "name": "MM: Empty Locked Chest near thief",
                 "id": 250,
                 "options": [],
                 "access_rule": {
@@ -16384,7 +16384,7 @@
         ],
         "locations": [
             {
-                "name": "MFt: Dragon Egg behind shop chargeable wall in Locked Chest",
+                "name": "MFt: Dragon Egg in Locked Chest behind chargeable wall",
                 "id": 193,
                 "options": [],
                 "access_rule": {
@@ -16413,7 +16413,7 @@
                 }
             },
             {
-                "name": "MFt: Locked Chest across shop",
+                "name": "MFt: Empty Locked Chest across shop",
                 "id": 251,
                 "options": [],
                 "access_rule": {
@@ -16582,7 +16582,7 @@
         ],
         "locations": [
             {
-                "name": "MFt: Light Gem atop wall kick room",
+                "name": "MFt: Light Gem in wall kick room",
                 "id": 192,
                 "options": [],
                 "access_rule": {
@@ -16596,7 +16596,7 @@
                 }
             },
             {
-                "name": "MFt: Firework atop wall kick room",
+                "name": "MFt: Firework in wall kick room",
                 "id": 5019,
                 "options": [
                     {
@@ -16855,7 +16855,7 @@
         ],
         "locations": [
             {
-                "name": "MFb: Dark Gem above entry area via wall kick",
+                "name": "MFb: Dark Gem in entry area",
                 "id": 198,
                 "options": [],
                 "access_rule": {
@@ -17159,7 +17159,7 @@
         ],
         "locations": [
             {
-                "name": "MFb: Light Gem before fire imp room in Locked Chest",
+                "name": "MFb: Light Gem in Locked Chest",
                 "id": 199,
                 "options": [],
                 "access_rule": {
@@ -17447,7 +17447,7 @@
         ],
         "locations": [
             {
-                "name": "MFb: Dragon Egg after fire imp room from Sparx",
+                "name": "MFb: Dragon Egg from Sparx",
                 "id": 202,
                 "options": [],
                 "access_rule": {
@@ -17458,7 +17458,7 @@
                 }
             },
             {
-                "name": "MFb: Light Gem after fire imp room from Sparx",
+                "name": "MFb: Light Gem from Sparx",
                 "id": 203,
                 "options": [],
                 "access_rule": {
@@ -17469,7 +17469,7 @@
                 }
             },
             {
-                "name": "MFb: Dragon Egg from thief behind chargeable wall",
+                "name": "MFb: Dragon Egg from thief",
                 "id": 201,
                 "options": [],
                 "access_rule": {
@@ -17655,7 +17655,7 @@
         ],
         "locations": [
             {
-                "name": "DM: Locked Chest in first room",
+                "name": "DM: Empty Locked Chest in entrance",
                 "id": 252,
                 "options": [],
                 "access_rule": {
@@ -17668,7 +17668,7 @@
                 }
             },
             {
-                "name": "DM: Light Gem after first room in Locked Chest",
+                "name": "DM: Light Gem in Locked Chest after entrance",
                 "id": 206,
                 "options": [],
                 "access_rule": {
@@ -17934,7 +17934,7 @@
         ],
         "locations": [
             {
-                "name": "DM: Light Gem behind Light Gem door in acid",
+                "name": "DM: Light Gem in Light Gem door area",
                 "id": 204,
                 "options": [],
                 "access_rule": {
@@ -17961,7 +17961,7 @@
                 }
             },
             {
-                "name": "DM: Dragon Egg behind Light Gem door in acid",
+                "name": "DM: Dragon Egg in Light Gem door area",
                 "id": 205,
                 "options": [],
                 "access_rule": {
@@ -18092,7 +18092,7 @@
         ],
         "locations": [
             {
-                "name": "DM: Dragon Egg in piston wall kick room Locked Chest",
+                "name": "DM: Dragon Egg in Locked Chest in piston room",
                 "id": 207,
                 "options": [],
                 "access_rule": {
@@ -18123,7 +18123,7 @@
                 }
             },
             {
-                "name": "DM: Firework in piston wall kick room below entrance",
+                "name": "DM: Firework in piston room",
                 "id": 5020,
                 "options": [
                     {
@@ -18142,7 +18142,7 @@
                 }
             },
             {
-                "name": "DM: Light Gem in piston wall kick room",
+                "name": "DM: Light Gem in piston room",
                 "id": 208,
                 "options": [],
                 "access_rule": {
@@ -18342,7 +18342,7 @@
         ],
         "locations": [
             {
-                "name": "DM: Dragon Egg after turret room from Blink",
+                "name": "DM: Dragon Egg from Blink",
                 "id": 210,
                 "options": [],
                 "access_rule": {
@@ -18353,7 +18353,7 @@
                 }
             },
             {
-                "name": "DM: Light Gem after turret room from Blink",
+                "name": "DM: Light Gem from Blink",
                 "id": 211,
                 "options": [],
                 "access_rule": {
@@ -18364,7 +18364,7 @@
                 }
             },
             {
-                "name": "DM: Dragon Egg after turret room below walkway",
+                "name": "DM: Dragon Egg below walkway",
                 "id": 212,
                 "options": [],
                 "access_rule": {
@@ -18994,7 +18994,7 @@
         ],
         "locations": [
             {
-                "name": "RL: Locked Chest in start area after pole spin puzzle",
+                "name": "RL: Empty Locked Chest above poles",
                 "id": 253,
                 "options": [],
                 "access_rule": {
@@ -19007,7 +19007,7 @@
                 }
             },
             {
-                "name": "RL: Locked Chest in start area above charge switches",
+                "name": "RL: Empty Locked Chest above charge switches",
                 "id": 254,
                 "options": [],
                 "access_rule": {
@@ -19117,7 +19117,7 @@
         ],
         "locations": [
             {
-                "name": "RL: Dragon Egg in center room from thief",
+                "name": "RL: Dragon Egg from thief in center room",
                 "id": 217,
                 "options": [],
                 "access_rule": {
@@ -19501,7 +19501,7 @@
         ],
         "locations": [
             {
-                "name": "RL: Light Gem in northeast after conveyor belt",
+                "name": "RL: Light Gem after conveyor belt",
                 "id": 226,
                 "options": [],
                 "access_rule": {
@@ -19680,7 +19680,7 @@
         ],
         "locations": [
             {
-                "name": "RL: Dark Gem in northeast guarded by Robo-Gnorcs",
+                "name": "RL: Dark Gem in northeast",
                 "id": 227,
                 "options": [],
                 "access_rule": {
@@ -19781,7 +19781,7 @@
         ],
         "locations": [
             {
-                "name": "RL: Dragon Egg in northwest in piston room",
+                "name": "RL: Dragon Egg in northwest piston room",
                 "id": 222,
                 "options": [],
                 "access_rule": {
@@ -20311,7 +20311,7 @@
         ],
         "locations": [
             {
-                "name": "RL: Dark Gem after southeast laser parkour",
+                "name": "RL: Dark Gem in southeast",
                 "id": 219,
                 "options": [],
                 "access_rule": {
@@ -20325,7 +20325,7 @@
                 }
             },
             {
-                "name": "RL: Light Gem above southeast boiler",
+                "name": "RL: Light Gem above boiler",
                 "id": 220,
                 "options": [],
                 "access_rule": {
@@ -20342,7 +20342,7 @@
                 }
             },
             {
-                "name": "RL: Dragon Egg in southeast behind lasers",
+                "name": "RL: Dragon Egg behind lasers",
                 "id": 221,
                 "options": [],
                 "access_rule": {
