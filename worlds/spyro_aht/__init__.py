@@ -21,21 +21,21 @@ icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
 
 minigame_locs = [
         "DV: Dragon Egg from Sgt. Byrd", "DV: Light Gem from Sgt. Byrd",
-        "CD: Dragon Egg atop tower from Sgt. Byrd", "CD: Light Gem atop tower from Sgt. Byrd",
-        "IC: Dragon Egg opposite drawbridge from Sgt. Byrd", "IC: Light Gem opposite drawbridge from Sgt. Byrd",
+        "CD: Dragon Egg from Sgt. Byrd", "CD: Light Gem from Sgt. Byrd",
+        "IC: Dragon Egg from Sgt. Byrd", "IC: Light Gem from Sgt. Byrd",
         "MM: Dragon Egg from Sgt. Byrd", "MM: Light Gem from Sgt. Byrd",
-        "CS: Dragon Egg near Elder's tree from Blink", "CS: Light Gem near Elder's tree from Blink",
-        "CR: Dragon Egg in west area from Blink", "CR: Light Gem in west area from Blink",
-        "FV: Dragon Egg approaching icy camp from Blink", "FV: Light Gem approaching icy camp from Blink",
-        "DM: Dragon Egg after turret room from Blink", "DM: Light Gem after turret room from Blink",
-        "DF: Dragon Egg near elder statue from Sparx", "DF: Light Gem near elder statue from Sparx",
-        "SR: Dragon Egg in depths from Sparx", "SR: Light Gem in depths from Sparx",
-        "GG: Dragon Egg after spinning bones from Sparx", "GG: Light Gem after spinning bones from Sparx",
-        "MFb: Dragon Egg after fire imp room from Sparx", "MFb: Light Gem after fire imp room from Sparx",
+        "CS: Dragon Egg from Blink", "CS: Light Gem from Blink",
+        "CR: Dragon Egg from Blink", "CR: Light Gem from Blink",
+        "FV: Dragon Egg from Blink", "FV: Light Gem from Blink",
+        "DM: Dragon Egg from Blink", "DM: Light Gem from Blink",
+        "DF: Dragon Egg from Sparx", "DF: Light Gem from Sparx",
+        "SR: Dragon Egg from Sparx", "SR: Light Gem from Sparx",
+        "GG: Dragon Egg from Sparx", "GG: Light Gem from Sparx",
+        "MFb: Dragon Egg from Sparx", "MFb: Light Gem from Sparx",
         "CS: Dragon Egg from Fredneck", "CS: Light Gem from Fredneck",
-        "CR: Dragon Egg from southern beach Turtle Mother", "CR: Light Gem from southern beach Turtle Mother",
-        "FV: Dragon Egg after electric gate from Peggy", "FV: Light Gem after electric gate from Peggy",
-        "SB: Dragon Egg in upper Stormy Beach from Wally", "SB: Light Gem in upper Stormy Beach from Wally"
+        "CR: Dragon Egg from Turtle Mother", "CR: Light Gem from Turtle Mother",
+        "FV: Dragon Egg from Peggy", "FV: Light Gem from Peggy",
+        "SB: Dragon Egg from Wally", "SB: Light Gem from Wally"
 ]
 
 # used for UT custom sorting
