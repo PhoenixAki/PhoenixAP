@@ -30,15 +30,15 @@ class LoggingLevel(Choice):
     The log will contain messages from all levels up to, and including, your choice. For example, "medium" will log low
     and medium messages, but not high or maximum messages. **Warning messages stemming from YAML issues are always logged.**
     
-    In a worst-case, low and medium each log around 15 messages
+    In a worst-case, low and medium each log around 15 messages, high can log around 30 messages, and maximum
+    can log multiple hundreds of messages. Maximum is only intended for developer use, but you can enable it if curious :)
     
     None: No additional logging beyond warnings.
     Low: Logs notable generation steps, such as "Checking if any minigames need vanilla rewards forced."
     Medium: Logs useful debugging information, such as listing your randomized shop prices. This is the default because
       the information in these messages can be very helpful when making bug reports.
     High: Logs messages with extra generation logic, such as "Fire Breath has been placed into Starter Checks: Breath."
-    Maximum: Logs with extreme detail, such as noting every single item created. Adds hundreds of lines to the log.
-      Intended for developer use, but you can enable it if you're curious :)
+    Maximum: Logs with extreme detail, such as noting every single item created.
     """
     option_none = 1
     option_low = 2
