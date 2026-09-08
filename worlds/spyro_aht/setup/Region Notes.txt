@@ -163,7 +163,7 @@ REGION CSPyramidAndTemple: vanilla entryway, pyramid, and outside temple
 	CSPyramidAndTemple -> ShopPads | True_()
 
 	LOCATION CSPyramidAndTemple | CS: Dark Gem near Perilous Pyramid | 18 | Has('Double Jump')
-	LOCATION CSPyramidAndTemple | CS: Light Gem inside Perilous Pyramid | 21 | SuperchargeGadget()
+	LOCATION CSPyramidAndTemple | CS: Light Gem inside Perilous Pyramid behind supercharge door | 21 | SuperchargeGadget()
 	LOCATION CSPyramidAndTemple | CS: Light Gem atop Perilous Pyramid | 22 | HasAll('Double Jump', 'Glide')
 	LOCATION CSPyramidAndTemple | CS: Dragon Egg in Locked Chest after Perilous Pyramid | 23 | LockedChestRule('Crocovile Swamp')
 	LOCATION CSPyramidAndTemple | CS: Light Gem behind wall with chargeable switch | 26 | Has('Charge')

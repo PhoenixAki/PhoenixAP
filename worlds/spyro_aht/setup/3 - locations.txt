@@ -81,7 +81,7 @@ DVOutsideBallGadget | DV: Firework next to Ball Gadget | 5001 | Has('Fire Breath
 DVTunnelToCroc | DV: Firework across Crocovile bridge | 5003 | Has('Fire Breath')
 DVTunnelToCroc | DV: Light Gem in Locked Chest across Crocovile bridge | 15 | LockedChestRule('Dragon Village')
 CSPyramidAndTemple | CS: Dark Gem near Perilous Pyramid | 18 | Has('Double Jump')
-CSPyramidAndTemple | CS: Light Gem inside Perilous Pyramid | 21 | SuperchargeGadget()
+CSPyramidAndTemple | CS: Light Gem inside Perilous Pyramid behind supercharge door | 21 | SuperchargeGadget()
 CSPyramidAndTemple | CS: Light Gem atop Perilous Pyramid | 22 | HasAll('Double Jump', 'Glide')
 CSPyramidAndTemple | CS: Dragon Egg in Locked Chest after Perilous Pyramid | 23 | LockedChestRule('Crocovile Swamp')
 CSPyramidAndTemple | CS: Light Gem behind wall with chargeable switch | 26 | Has('Charge')

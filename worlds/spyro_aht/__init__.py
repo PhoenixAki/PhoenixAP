@@ -65,23 +65,11 @@ loc_names_to_ids = _location_name_to_id(_load_file("locations.json"))
 
 def create_location_groups(location_data) -> dict[str, set[str]]:
     level_lookup = {
-        "Starter Checks": "Starter Checks",
-        "DV": "Dragon Village",
-        "CS": "Crocovile Swamp",
-        "DF": "Dragonfly Falls",
-        "CR": "Coastal Remains",
-        "CD": "Cloudy Domain",
-        "SR": "Sunken Ruins",
-        "FV": "Frostbite Village",
-        "GG": "Gloomy Glacier",
-        "IC": "Ice Citadel",
-        "SB": "Stormy Beach",
-        "MM": "Molten Mount",
-        "MFt": "Magma Falls Top",
-        "MFb": "Magma Falls Bottom",
-        "DM": "Dark Mine",
-        "RL": "Red's Laboratory",
-        "Moneybags": "Shop Items"
+        "Starter Checks": "Starter Checks", "Moneybags": "Shop Items",
+        "DV": "Dragon Village", "CS": "Crocovile Swamp", "DF": "Dragonfly Falls",
+        "CR": "Coastal Remains", "CD": "Cloudy Domain", "SR": "Sunken Ruins",
+        "FV": "Frostbite Village", "GG": "Gloomy Glacier", "IC": "Ice Citadel",
+        "SB": "Stormy Beach", "MM": "Molten Mount", "MFt": "Magma Falls Top", "MFb": "Magma Falls Bottom", "DM": "Dark Mine", "RL": "Red's Laboratory",
     }
     
     loc_groups = defaultdict(set)
@@ -94,47 +82,49 @@ def create_location_groups(location_data) -> dict[str, set[str]]:
                 if level in REALM_LEVEL_LISTS[realm_lookup]:
                     realm = realm_lookup
                     break
-                    
-            loc_groups[level_lookup[abbreviation]].add(location['name'])
             
+            # level groups e.g. "Dragon Village", "Coastal Remains"
+            loc_groups[level].add(location['name'])
+            
+            # the 5 main collectibles
+            for key in [": Dark Gem", ": Dragon Egg", ": Light Gem", "Locked Chest", ": Firework"]:
+                if key in location['name']:
+                    key = key.replace(": ", "")
+                    loc_groups[f"All {key}s"].add(location['name'])
+                    loc_groups[f"{level} {key}s"].add(location['name'])
+                    loc_groups[f"{realm} {key}s"].add(location['name'])
+            # 3 of the 4 minigame types
+            for key in ["from Sgt. Byrd", "from Blink", "from Sparx"]:
+                if key in location['name']:
+                    key = key.replace("from ", "")
+                    loc_groups[f"{key} Minigames"].add(location['name'])
+                    loc_groups[f"All Minigames"].add(location['name'])
+                    loc_groups[f"{realm} Minigames"].add(location['name'])
+            # turrets separate because the names don't say "Turret"        
+            for npc in ["Fredneck", "Turtle Mother", "Peggy", "Wally"]:
+                if f"from {npc}" in location['name']:
+                    loc_groups["Turret Minigames"].add(location['name'])
+                    loc_groups["All Minigames"].add(location['name'])
+                    loc_groups[f"{realm} Minigames"].add(location['name'])
+            # bosses
             if "Defeat" in location['name'] or "Breath from" in location['name']:  # bosses
                 loc_groups["All Bosses"].add(location['name'])
-            if ": Dark Gem" in location['name']:
-                loc_groups["All Dark Gems"].add(location['name'])
-                loc_groups[f"{level} Dark Gems"].add(location['name'])
-                loc_groups[f"{realm} Dark Gems"].add(location['name'])
-            if ": Dragon Egg" in location['name']:
-                loc_groups["All Dragon Eggs"].add(location['name'])
-                loc_groups[f"{level} Dragon Eggs"].add(location['name'])
-                loc_groups[f"{realm} Dragon Eggs"].add(location['name'])
-            if ": Light Gem" in location['name']:
-                loc_groups["All Light Gems"].add(location['name'])
-                loc_groups[f"{level} Light Gems"].add(location['name'])
-                loc_groups[f"{realm} Light Gems"].add(location['name'])
-            if "Locked Chest" in location['name']:
-                loc_groups["All Locked Chests"].add(location['name'])
-                loc_groups[f"{level} Locked Chests"].add(location['name'])
-                loc_groups[f"{realm} Locked Chests"].add(location['name'])
-            if ": Firework" in location['name']:
-                loc_groups["All Fireworks"].add(location['name'])
-                loc_groups[f"{level} Fireworks"].add(location['name'])
-                loc_groups[f"{realm} Fireworks"].add(location['name'])
-            if "Sgt. Byrd" in location['name']:
-                loc_groups["Sgt. Byrd Minigames"].add(location['name'])
-                loc_groups["All Minigames"].add(location['name'])
-                loc_groups[f"{realm} Minigames"].add(location['name'])
-            if "Blink" in location['name']:
-                loc_groups["Blink Minigames"].add(location['name'])
-                loc_groups["All Minigames"].add(location['name'])
-                loc_groups[f"{realm} Minigames"].add(location['name'])
-            if "Sparx" in location['name']:
-                loc_groups["Sparx Minigames"].add(location['name'])
-                loc_groups["All Minigames"].add(location['name'])
-                loc_groups[f"{realm} Minigames"].add(location['name'])
-            if "Fredneck" in location['name'] or "Turtle Mother" in location['name'] or "Peggy" in location['name'] or "Wally" in location['name']:
-                loc_groups["Turret Minigames"].add(location['name'])
-                loc_groups["All Minigames"].add(location['name'])
-                loc_groups[f"{realm} Minigames"].add(location['name'])
+            # light gem doors
+            if "Light Gem door" in location['name']:
+                loc_groups["Light Gem Doors"].add(location['name'])
+                loc_groups[f"{level} Light Gem Door"].add(location['name'])
+            # ball gadget checks (including the firework after it in CD since it requires Ball Gadget to reach)
+            if region['name'] in ["CDBallGadget", "MFBallGadget"]:
+                loc_groups["Ball Gadget"].add(location['name'])
+                loc_groups["All Gadgets"].add(location['name'])
+            # supercharge checks
+            if "supercharge" in location['name'] or region['name'] in ["FVReturnFromIC", "ICUseSupercharge"]:
+                loc_groups["Supercharge Gadget"].add(location['name'])
+                loc_groups["All Gadgets"].add(location['name'])
+            # invincibility checks
+            if region['name'] in ["SRAfterSwim2", "SRDepthsUpper", "SRToxicSwim2", "SRToxicSwimAbove", "DMLGDoorPastGnorc", "RLNorthEast2"]:
+                loc_groups["Invincibility Gadget"].add(location['name'])
+                loc_groups["All Gadgets"].add(location['name'])
     return loc_groups
 
 
