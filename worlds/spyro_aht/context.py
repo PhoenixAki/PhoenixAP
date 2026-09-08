@@ -635,7 +635,7 @@ class SpyroAHTContext(SuperContext):
             for obj, loc in consts.BOSS_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
-                    locations.add(loc)
+                    locations.update(loc)
         
         if self.slot_data['hint_shop_items'] and not self.shop_hinted:
             if self.slot_data['key_rings']: locations.update(consts.SHOP_ITEM_IDS[0:18])
