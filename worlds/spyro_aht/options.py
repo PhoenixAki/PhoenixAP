@@ -50,13 +50,11 @@ class LoggingLevel(Choice):
     
 
 class AutoCorrections(Choice):
-    """This option decides the behavior of the generator whenever YAML issues are encountered.
+    """This option decides the behavior of the generator if YAML issues are encountered. It is strongly recommended to enable
+    this if putting AHT AP into a larger multiworld, to increase the chance of generation success even if issues are encountered.
     
-    halt: The generator will prioritize player choice by halting generation when issues are encountered. This is ideal
-      for solo or small multiworld generations, since issues can be resolved without much impact on time. 
-    fix: The generator will prioritize generation success by fixing issues automatically. Options which can lead to this
-      have the automatic fixes detailed in their descriptions. This is ideal for longer generations, since a generation
-      being halted after significant time has passed can be frustrating."""
+    halt: YAML issues will result in generation being halted so that the player can decide how to resolve it.
+    fix: YAML issues will be automatically fixed. Options which can lead to known issues have their automatic fixes described in them."""
     display_name = "Auto Corrections"
     option_halt = 0
     option_fix = 1
@@ -66,7 +64,7 @@ class AutoCorrections(Choice):
 class Goal(OptionList):
     """Choose your goal(s) for this seed. Run /check_goal overview in the client for mid-run information. Any locations in
     exclude_locations will be left out of goals they belong to. If you exclude all locations for all chosen goal types and
-    auto_corrections is set to 'fix', Mecha-Red will be forced as your goal regardless of exclusions.
+    auto_corrections is enabled, Mecha-Red will be forced as your goal regardless of exclusions.
     
     Collectible goals are based on *AHT locations*, not item collection. For example, "Dragon Eggs" requires checking all
     80 AHT locations which have "Dragon Egg" in their name. This can lead to early goals if your seed allows the use !collect
@@ -74,16 +72,16 @@ class Goal(OptionList):
 
     Available Goals:
     Gnasty Gnorc/Ineptune/Red/Mecha-Red: Defeat each boss.
-    Fireworks: Flame all 22 fireworks. firework_checks will be enabled automatically if auto_corrections is set to 'fix'.
+    Fireworks: Flame all 22 fireworks. firework_checks will be enabled automatically if auto_corrections is enabled.
     Dark Gems: Break all 40 Dark Gems.
     Dragon Eggs: Collect all 80 Dragon Eggs (including those from locked chests).
     Light Gems: Collect all 100 Light Gems (including those from locked chests).
     Locked Chests: Open all 52 locked chests.
-    Shop Items: Buy all randomized shop items. shop_randomization will be enabled automatically if auto_corrections is set to 'fix'.
+    Shop Items: Buy all randomized shop items. shop_randomization will be enabled automatically if auto_corrections is enabled.
     Random: For each "Random" you include, a random goal from above will be chosen, excluding any from exclude_from_random_goal.
     
-    If the list is empty and auto_corrections is set to 'fix', a single random goal will be chosen.
-    If the list has too many entries and auto_corrections is set to 'fix', entries will be removed at random until in range."""
+    If the list is empty and auto_corrections is enabled, a single random goal will be chosen.
+    If the list has too many entries and auto_corrections is enabled, entries will be removed at random until in range."""
     display_name = "Goal"
     valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Fireworks", "Dark Gems", "Dragon Eggs", "Light Gems", "Locked Chests", "Shop Items", "Random")
     default = ("Mecha-Red",)
@@ -93,7 +91,7 @@ class ExcludeFromRandomGoal(OptionSet):
     """This option lets you exclude goals from being randomly chosen. For example, entering "Shop Items" below means "Shop Items"
     will never be chosen in place of "Random" (you can still explicitly choose "Shop Items" in this example).
     
-    If too many goals are excluded to allow for enough random choices and auto_corrections is set to 'fix', goals will be
+    If too many goals are excluded to allow for enough random choices and auto_corrections is enabled, goals will be
     un-excluded at random until in range. If this isn't enough to fix it, random choices will be skipped entirely.
     
     Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Fireworks", "Dark Gems", "Dragon Eggs", "Light Gems", "Locked Chests", "Shop Items"]"""
@@ -154,7 +152,7 @@ class FillerItems(OptionSet):
       It is advised to exclude gem packs if using shop_randomization and gem_logic, as gem logic does not account for gem packs.
     Generics: Items which do nothing, but have humorous names referencing things in the game and series.
     
-    If the list is empty and auto_corrections is set to 'fix', the filler pool will default to only "Generics".
+    If the list is empty and auto_corrections is enabled, the filler pool will default to only "Generics".
 
     Valid options: ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics"]"""
     display_name = "Filler Items"
@@ -169,7 +167,7 @@ class StartingBreaths(OptionSet):
     "None" will start you with no breath, meaning "Starter Checks: Breath" will have a random item determined by Archipelago.
     If the list is left empty, 1 random breath will be chosen.
     
-    If the list contains both "None" and breath(s) and auto_corrections is set to 'fix', the "None" will be discarded.
+    If the list contains both "None" and breath(s) and auto_corrections is enabled, the "None" will be discarded.
     
     Valid Options: ["Fire", "Electric", "Water", "Ice", "None"]"""
     display_name = "Starting Breaths"
@@ -202,7 +200,7 @@ class StartingRealms(OptionSet):
       See pause_menu_patch for a potential alteration to this.
         
     Starting in Icy Wilderness with shop_randomization disabled and movement_randomization empty is disallowed due to impossible starts.
-    If this is done and auto_corrections is set to 'fix', your starting realm will be changed to Dragon Kingdom.
+    If this is done and auto_corrections is enabled, your starting realm will be changed to Dragon Kingdom.
     
     Valid Options: ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"]"""
     display_name = "Starting Realms"
@@ -325,7 +323,7 @@ class RandomizeBossLairDoorCosts(Choice):
 
 
 class BossLairDoorCostMin(Range):
-    """Minimum cost for boss lairs, if set to be random. Will be swapped with boss lair maximum if min > max and auto_corrections is set to 'fix'."""
+    """Minimum cost for boss lairs, if set to be random. Will be swapped with boss lair maximum if min > max and auto_corrections is enabled."""
     display_name = "Boss Lair Door Cost Minimum"
     range_start = 1
     range_end = 40
@@ -333,7 +331,7 @@ class BossLairDoorCostMin(Range):
 
 
 class BossLairDoorCostMax(Range):
-    """Maximum cost for boss lairs, if set to be random. Will be swapped with boss lair minimum if min > max and auto_corrections is set to 'fix'."""
+    """Maximum cost for boss lairs, if set to be random. Will be swapped with boss lair minimum if min > max and auto_corrections is enabled."""
     display_name = "Boss Lair Door Cost Maximum"
     range_start = 1
     range_end = 40
@@ -376,7 +374,7 @@ class RandomizeLightGemDoorCosts(Choice):
 
 
 class LightGemDoorCostMin(Range):
-    """Minimum cost for light gem doors, if set to be random. Will be swapped with light gem door maximum if min > max and auto_corrections is set to 'fix'."""
+    """Minimum cost for light gem doors, if set to be random. Will be swapped with light gem door maximum if min > max and auto_corrections is enabled."""
     display_name = "Minimum Light Gem Door Cost"
     range_start = 1
     range_end = 100
@@ -384,7 +382,7 @@ class LightGemDoorCostMin(Range):
 
 
 class LightGemDoorCostMax(Range):
-    """Maximum cost for light gem doors, if set to be random. Will be swapped with light gem door minimum if min > max and auto_corrections is set to 'fix'."""
+    """Maximum cost for light gem doors, if set to be random. Will be swapped with light gem door minimum if min > max and auto_corrections is enabled."""
     display_name = "Maximum Light Gem Door Cost"
     range_start = 1
     range_end = 100
@@ -405,7 +403,7 @@ class RandomizeGadgetCosts(Choice):
 
 
 class GadgetCostMin(Range):
-    """Minimum cost for gadgets, if set to be random. Will be swapped with gadget maximum if min > max and auto_corrections is set to 'fix'."""
+    """Minimum cost for gadgets, if set to be random. Will be swapped with gadget maximum if min > max and auto_corrections is enabled."""
     display_name = "Minimum Gadget Cost"
     range_start = 1
     range_end = 100
@@ -413,7 +411,7 @@ class GadgetCostMin(Range):
 
 
 class GadgetCostMax(Range):
-    """Maximum cost for gadgets, if set to be random. Will be swapped with gadget minimum if min > max and auto_corrections is set to 'fix'."""
+    """Maximum cost for gadgets, if set to be random. Will be swapped with gadget minimum if min > max and auto_corrections is enabled."""
     display_name = "Maximum Gadget Cost"
     range_start = 1
     range_end = 100

@@ -80,7 +80,8 @@ class SpyroAHTCommands(ClientCommandProcessor):
         
         self.output("---------------GENERATION SETTINGS---------------")
         # logging level
-        self.output(f"You set your logging level to include the following levels: {self.ctx.slot_data['logging_level']}.")
+        convert = {1: "None", 2: "Low", 3: "Medium", 4: "High", 5: "Maximum"}
+        self.output(f"You set your logging level to {self.ctx.slot_data['logging_level']}.")
         # auto corrections
         convert = {0: "halt on", 1: "auto fix"}
         self.output(f"You chose to {convert[self.ctx.slot_data['auto_corrections']]} generation errors.")
