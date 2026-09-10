@@ -128,18 +128,17 @@ class SpyroAHTCommands(ClientCommandProcessor):
         # starting realm(s)
         self.output(f"You chose to start with access to the following realm(s): {self.ctx.slot_data['starting_realms']}.")
 
-        self.output("---------------SHOP---------------")
+        self.output("---------------SHOP SETTINGS---------------")
         # shop items & key rings
         output = "randomized" if self.ctx.slot_data["shop_randomization"] == 1 else "not randomized"
         output_2 = "enabled" if self.ctx.slot_data["key_rings"] == 1 else "not enabled"
         self.output(f"Shop items are {output} and key rings are {output_2}.")
-        # gem logic
-        output = "enabled" if self.ctx.slot_data["shop_randomization"] and self.ctx.slot_data["gem_logic"] else "disabled"
-        self.output(f"Gem logic is {output}.")
-        
-        # shop randomization-related things
         if self.ctx.slot_data["shop_randomization"]:
-            # non_blink_gems and blink_gems
+            # TODO: add shop item count
+            # shop logic
+            output = "ordered" if self.ctx.slot_data["shop_logic"] == 1 else "unordered"
+            self.output(f"The shop logic system is set to {output}.")
+            # gem collection options
             self.output(f"You chose to collect {self.ctx.slot_data['blink_gems']}% of Blink's gems, {self.ctx.slot_data['non_blink_enemies']}% of non-Blink enemy gems, and {self.ctx.slot_data['other_gems']}% of other gems.")
             # shop prices
             self.output(f"This means your shop prices are {self.ctx.slot_data['shop_costs']}.")
@@ -733,8 +732,6 @@ class SpyroAHTContext(SuperContext):
             if death_id < 0 or death_id > 27:
                 raise TypeError(f"Invalid outgoing deathlink id: {death_id}.")
             await self.send_death(consts.DEATHLINK_MESSAGES[death_id-1].format(name=self.player_names[self.slot]))
-    
-    
 
     async def _receive_deathlink(self, msg: str):
         self.emu_client.msg_queue.put_nowait((consts.COLOUR_RED, msg))

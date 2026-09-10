@@ -227,12 +227,14 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_TELEPORT_MODE, 2)
         elif ctx.slot_data['pause_menu_patch'] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_TELEPORT_MODE, 1)
-
+        
+        # TODO: come back here to mess with IDs later
         if ctx.slot_data['shop_randomization']:
             locations = list(range(1000, 1005))
             locations.extend(range(2000, 2013))
             if not ctx.slot_data['key_rings']:
                 locations.extend(range(3013, 3051))
+            consts.SHOP_ITEM_IDS = locations
             await ctx.send_msgs([{"cmd": "LocationScouts", "locations": locations, "create_as_hint": 0}])
             await ctx._shop_items_received.wait()
             await self._prepare_shop_items(ctx, *ctx._shop_items)
@@ -278,7 +280,7 @@ class DolphinClient(GenericClient):
                         bosses[3] = True
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_EASY_MODE, struct.pack(">????", *bosses))
 
-        if ctx.slot_data['shop_randomization'] and ctx.slot_data['gem_logic']:
+        if ctx.slot_data['shop_randomization'] and ctx.slot_data['shop_logic']:
             dolphin_memory_engine.write_byte(self.addresses.p_SHOP_UNLOCK_MODE, 1)
         if ctx.slot_data['teleport_across_realms']:
             dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
@@ -330,7 +332,7 @@ class DolphinClient(GenericClient):
                         model = consts.ShopItemModel.Keychain
             
             remote_price = price if ctx.slot_data["shop_randomization"] else (price * 1.25)
-            large_prices = ctx.slot_data["shop_randomization"] and ctx.slot_data["gem_logic"]  # large prices are only a concern if gem logic enabled
+            large_prices = ctx.slot_data["shop_randomization"] == 1 and ctx.slot_data["shop_logic"] == 1  # large prices are only a concern if shop logic is ordered
             name = "???" if ctx.slot_data["hide_shop_item_names"] else name
             i = consts.XLSShoppingItem(model, consts.TextEntry(idx, f"{player}'s {name}"), (price, remote_price), large_prices)
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (idx + 1)), i.to_bytes('big'))
@@ -354,7 +356,7 @@ class DolphinClient(GenericClient):
     async def update_pause_gems(self, ctx: "SpyroAHTContext", events: list[str]):
         if not ctx.slot_data["shop_randomization"]:
             return
-        if ctx.slot_data["shop_randomization"] and not ctx.slot_data["gem_logic"]:
+        if ctx.slot_data["shop_randomization"] and not ctx.slot_data["shop_logic"]:
             return
         
         blink_available, non_blink_enemies_available, other_available = 0, 0, 0

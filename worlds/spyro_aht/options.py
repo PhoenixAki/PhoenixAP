@@ -149,7 +149,7 @@ class FillerItems(OptionSet):
     Dragon Eggs: These are considered filler due to having no impact on game progression.
     Breath Bombs: Fire, Electric, Water, and Ice Bombs. Bombs are only usable if you have their respective breath unlocked.
     Gem Packs: Gives a random amount of gems (400-600 or 800-1200 if you have double gems).
-      It is advised to exclude gem packs if using shop_randomization and gem_logic, as gem logic does not account for gem packs.
+      It is advised to exclude gem packs if randomizing the shop, as gem logic does not account for gem packs.
     Generics: Items which do nothing, but have humorous names referencing things in the game and series.
     
     If the list is empty and auto_corrections is enabled, the filler pool will default to only "Generics".
@@ -207,7 +207,7 @@ class StartingRealms(OptionSet):
     valid_keys = ("Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle")
     default = ("Dragon Kingdom",)
     
-###############SHOP & GEM LOGIC###############
+###############SHOP SETTINGS###############
 class ShopRandomization(Toggle):
     """Determines whether to randomize Moneybags' shop. If not randomized, it will function identically to the vanilla game. 
 
@@ -220,49 +220,56 @@ class ShopRandomization(Toggle):
     
 
 class KeyRings(Toggle):
-    """This option replaces lockpicks with level-specific key rings which will open all locked chests in that level.
-    This indirectly decides how many items you will have in your shop.
-
-    If shop_randomization is disabled: this decides whether key rings or lockpicks will be buyable in the shop.
-      Locked chests will be in-logic as soon as you can reach them.
-    If shop_randomization and key_rings are enabled: you will have 18 shop items, and 14 key rings will be placed into the world.
-      Locked chests will be in-logic once their level's key ring is obtained.
-    If shop_randomization is enabled and key_rings is disabled: you will have 56 shop items, and 52 lockpicks will be placed in the world.
-      Locked chests will be in-logic once you have all 52 lockpicks, to prevent softlock situations from opening them in the 'wrong' order."""
+    """This option lets you replace lockpicks as AP items with level-specific "key rings" which open all chests in that level once obtained.
+    
+    shop_randomization off & key_rings on: 14 key rings will be available in the shop. Chests will be in-logic as soon as you have access to them.
+    shop_randomization off & key_rings off: 52 lockpicks will be available in the shop. Chests will be in-logic as soon as you have access to them.
+    shop_randomization on & key_rings on: 14 key rings will be placed into the world. Chests will be in-logic once you obtain that level's key ring.
+    shop_randomization on & key_rings off: 52 lockpicks will be placed into the world. Chests will be in-logic once you have all 52 lockpicks."""
     display_name = "Key Rings"
     default = 0
 
+
+class ShopItemCount(Range):
+    """Decide how many shop items you want to have in your randomized shop.
+    Note that choosing a low number of shop items can result in having too many items in your seed, depending on other settings.
+    If this occurs and auto_corrections is enabled, the shop item count will be raised until generation succeeds.
     
-class GemLogic(Choice):
-    """This option is only used when shop_randomization is enabled. The generator is capable of keeping track of how many gems you
-    have access to, and can use that information to improve the logic of the shop.
+    TODO: Does not do anything yet."""
+    display_name = "Shop Item Count"
+    range_start = 1
+    range_end = 56
+    default = 18
+
+
+class ShopLogic(Choice):
+    """When the shop is randomized, a series of "gem logic" rules will track how many gems you have access to at all times.
+    The generator uses these rules to determine how to logically spread out shop item purchases in one of 2 ways, determined by this option.
     
-    Regardless of gem_logic, the formula below calculates your prices. It is included for those who are math-inclined, but you can always
-    do test generation(s) to see your prices. The first item is always free due to inflation in the Dragon Kingdom (it prevents restrictive starts).
+    unordered: shop items will all have the same price. You can buy them in whatever order you wish, but the generator will assume
+      you will buy the items in order left -> right. If you go against that order, you risk needing to farm gems for the previous items.
+    ordered: shop items will instead display as "Unlocked at X Gems". Once you have X gems, the item will be free to purchase.
+      Prices will steadily increase to enforce a specific order of unlocking the items, removing the risk of getting logically softlocked.
     
-    disabled: shop items will be priced equally and all be in-logic in sphere 1. This can result in difficult or impossible
-      seeds as it is infeasible to afford every item that early. However, it does give you the choice of which order to buy them.
-    enabled: shop items will instead display "Unlocked at X Gems". Once you have X gems, the item will be free to purchase.
-      Prices will steadily increase so that you unlock them in a spread-out set order, instead of all in sphere 1. This is significantly
-      safer and improves generation quality a bit, at the cost of losing the ability to choose which order you buy them.
-    
-    Gems that come from any minigames added to exclude_locations will not be factored into gem calculations. 
+    Either way, the formula below is used to calculate your "base shop price", and your choice here determines the final prices.
+    Your first shop item will always be free (this prevents restrictive starts). If you don't fancy doing the math, you
+    can do some test seed(s) and tweak settings until you're happy with the prices.
     
     ********************************FORMULA INFO (for the math nerds)********************************
-    blink_gems_total = (20,203 - blink exclusions) * blink_gems%
-    non_blink_enemies_total = 16,353 * non_blink_enemies%
-    other_gems_total = (105,087 - sparx/byrd exclusions) * other_gems%
+    blink_gems_total = (20,203 - exclusions) * blink_gems%
+    non_blink_enemies_total = (16,353 - exclusions) * non_blink_enemies%
+    other_gems_total = (105,357 - exclusions) * other_gems%
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
     base_shop_price = gem_total / (number of shop items - 1)
 
-    If gem_logic is disabled, shop items will all cost base_shop_price, rounded down if needed.
-    If gem_logic is enabled, shop items will cost base_shop_price * 1, base_shop_price * 2, etc., rounded down if needed.
+    If shop_logic is unordered, shop items will all cost base_shop_price, rounded down as needed.
+    If shop_logic is ordered, shop items will cost base_shop_price * 1, base_shop_price * 2, etc., rounded down as needed.
     *************************************************************************************************"""
-    display_name = "Gem Logic"
-    option_disabled = 0
-    option_enabled = 1
-    default = 0
-
+    display_name = "Shop Logic"
+    option_unordered = 0
+    option_ordered = 1
+    default = 0 
+    
 
 class BlinkGems(Range):
     """This option is used when shop_randomization is enabled. It lets you decide what % of gems from Blink's minigames you
@@ -518,7 +525,8 @@ class SpyroAHTOptions(PerGameCommonOptions):
     
     shop_randomization: ShopRandomization
     key_rings: KeyRings
-    gem_logic: GemLogic
+    shop_item_count: ShopItemCount
+    shop_logic: ShopLogic
     blink_gems: BlinkGems
     non_blink_enemies: NonBlinkEnemies
     other_gems: OtherGems
@@ -560,8 +568,8 @@ spyro_options_groups = [
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms
     ]),
-    OptionGroup("SHOP & GEM LOGIC", [
-        ShopRandomization, KeyRings, GemLogic, BlinkGems, NonBlinkEnemies, OtherGems, DoubleGems
+    OptionGroup("SHOP SETTINGS", [
+        ShopRandomization, KeyRings, ShopItemCount, ShopLogic, BlinkGems, NonBlinkEnemies, OtherGems, DoubleGems
     ]),
     OptionGroup("GATE & GADGET COSTS", [
         RandomizeBossLairDoorCosts, BossLairDoorCostMin, BossLairDoorCostMax, BossLairForcing,

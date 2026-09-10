@@ -394,7 +394,7 @@ class SpyroAHTWorld(World):
         
         self.options.shop_randomization.value = slot_data['shop_randomization']
         self.options.key_rings.value = slot_data['key_rings']
-        self.options.gem_logic.value = slot_data['gem_logic']
+        self.options.shop_logic.value = slot_data['shop_logic']
         self.options.blink_gems.value = slot_data['blink_gems']
         self.options.non_blink_enemies.value = slot_data['non_blink_enemies']
         self.options.other_gems.value = slot_data['other_gems']
@@ -590,9 +590,10 @@ class SpyroAHTWorld(World):
         self.log("Locations created.", LoggingLevel.HIGH)
 
         # add gem events, only if shop is randomized with gem logic
-        self.log("Checking if gem logic needs to be set up.", LoggingLevel.LOW)
+        self.log("Checking if shop randomization needs to be set up.", LoggingLevel.LOW)
         blink_exclusions, other_exclusions = 0, 0
-        if self.options.shop_randomization.value == 1 and self.options.gem_logic.value == 1:
+        if self.options.shop_randomization.value == 1:
+            self.log("Setting up gem logic events.", LoggingLevel.LOW)
             convert = {"1-1": 0, "1-2": 1, "2-1": 2, "2-2": 3, "3-1": 4, "3-2": 5, "4-1": 6, "4-2": 7}
             for reg, region_data in data.items():
                 for gem_event in region_data["gem_events"]:
@@ -621,7 +622,7 @@ class SpyroAHTWorld(World):
                         self.log(f"Created gem event with location name {location_name}, item name {gem_event['name']}, and rule {gem_event['access_rule']}.", LoggingLevel.MAXIMUM)
                     
         # shop costs determined by multiple options. Doing after gem events in case of exclusions
-        self.log("Checking if shop costs need to be set up.", LoggingLevel.LOW)
+        self.log("Setting up shop prices.", LoggingLevel.LOW)
         if self.options.shop_randomization.value == 1:
             shop_item_count = 18 if self.options.key_rings.value else 56
             blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
@@ -629,13 +630,13 @@ class SpyroAHTWorld(World):
             other = (105357 - other_exclusions) * self.options.other_gems.value / 100
             gem_total = blink + non_blink_enemies + other
             base_price = gem_total / (shop_item_count - 1)
-            self.log(f"Shop prices are being initialized. blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
+            self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
             self.shop_costs.append(0)
 
-            if self.options.gem_logic:  # gem logic = incrementing prices
+            if self.options.shop_logic.value == 1:  # 1 = ordered, meaning incrementing prices
                 for counter in range(shop_item_count - 1):
                     self.shop_costs.append(int(base_price * (counter + 1)))
-            else:  # no gem logic = items have equal pricing
+            else:  # 0 = unordered, meaning equal pricing
                 for _ in range(shop_item_count - 1):
                     self.shop_costs.append(int(base_price))
             self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
@@ -871,7 +872,7 @@ class SpyroAHTWorld(World):
 
             "shop_randomization": self.options.shop_randomization.value,
             "key_rings": self.options.key_rings.value,
-            "gem_logic": self.options.gem_logic.value,
+            "shop_logic": self.options.shop_logic.value,
             "blink_gems": self.options.blink_gems.value,
             "non_blink_enemies": self.options.non_blink_enemies.value,
             "other_gems": self.options.other_gems.value,
@@ -977,15 +978,12 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
     
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        if world.options.gem_logic:
-            if self.index == 0:
-                return True_().resolve(world)  # first item always free. This ensures True_() before evaluating any gem logic so that it's in sphere 1
-            blink_scaling = world.options.blink_gems.value / 100
-            non_blink_enemy_scaling = world.options.non_blink_enemies.value / 100
-            other_scaling = world.options.other_gems.value / 100
-            return self.Resolved(world.shop_costs[self.index], blink_scaling, non_blink_enemy_scaling, other_scaling, player=world.player)
-        else:
-            return True_().resolve(world)  # always accessible if gem logic is not in use
+        blink_scaling = world.options.blink_gems.value / 100
+        non_blink_enemy_scaling = world.options.non_blink_enemies.value / 100
+        other_scaling = world.options.other_gems.value / 100
+        # cost is the cost itself if shop is ordered (shop logic == 1). Otherwise, emulate that logic by summing the cost of items so far
+        cost = world.shop_costs[self.index] if world.options.shop_logic.value == 1 else sum(world.shop_costs[:self.index+1])
+        return self.Resolved(cost, blink_scaling, non_blink_enemy_scaling, other_scaling, player=world.player)
 
     class Resolved(Rule.Resolved):
         item_cost: int
