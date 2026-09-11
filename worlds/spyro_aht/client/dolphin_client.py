@@ -97,7 +97,7 @@ class DolphinClient(GenericClient):
         m_pause = dolphin_memory_engine.read_byte(self.addresses.PAUSE)
         return m_state == 3 and (m_pause & 0x80 == 0)
 
-    async def scan_locations(self, *, shop_items: bool = False, key_rings: bool = False) -> set[int]:
+    async def scan_locations(self, slot_data: dict) -> set[int]:
         result: set[int] = set()
         for aploc, index in consts.LOCATIONS_BITFIELD.items():
             await asyncio.sleep(0)
@@ -117,22 +117,12 @@ class DolphinClient(GenericClient):
                         result.add(aploc)
         
         # TODO: continue from here
-        if shop_items:
-            for i in range(18):
+        if slot_data["shop_randomization"]:
+            for i in range(slot_data["shop_item_count"]):
                 await asyncio.sleep(0)
-
                 purchase_flag = dolphin_memory_engine.read_byte(self.addresses.g_SHOP_TEXT + (0x62 * i))
                 if purchase_flag:
                     result.add(901 + i)
-            offset = 18
-            if not key_rings:
-                for i in range(38):
-                    await asyncio.sleep(0)
-
-                    purchase_flag = dolphin_memory_engine.read_byte(self.addresses.g_SHOP_TEXT + (0x62 * (i + offset)))
-                    if purchase_flag:
-                        result.add(919 + i)
-
         return result
 
     async def set_flag(self, address: int, flag: int, to: bool):
@@ -220,9 +210,7 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_TELEPORT_MODE, 1)
         
         if ctx.slot_data['shop_randomization']:
-            locations = list(range(901, 919))
-            if not ctx.slot_data['key_rings']:
-                locations.extend(range(919, 957))
+            locations = consts.SHOP_ITEM_IDS[:ctx.slot_data["shop_item_count"]]
             await ctx.send_msgs([{"cmd": "LocationScouts", "locations": locations, "create_as_hint": 0}])
             await ctx._shop_items_received.wait()
             await self._prepare_shop_items(ctx, *ctx._shop_items)

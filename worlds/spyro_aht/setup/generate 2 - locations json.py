@@ -50,12 +50,12 @@ for line in file_in:
         options = [{
             "option": "shop_randomization",
             "value": 1
+        },
+        {
+            "option": "shop_item_count",
+            "operator": "ge",
+            "value": int(loc_name[-2:])
         }]
-        if int(loc_name[-2:]) > 18:
-            options.append({
-                "option": "key_rings",
-                "value": 0
-            })
     elif "Firework" in loc_name:
         options = [{
             "option": "firework_checks",

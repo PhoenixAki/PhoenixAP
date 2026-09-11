@@ -208,24 +208,20 @@ class ShopRandomization(Toggle):
     
 
 class KeyRings(Toggle):
-    """This option lets you replace lockpicks as AP items with level-specific "key rings" which open all chests in that level once obtained.
+    """This option decides whether you can purchase lockpicks or key rings, which are keys that open all locked chests in a level.
     
-    shop_randomization off & key_rings on: 14 key rings will be available in the shop. Chests will be in-logic as soon as you have access to them.
-    shop_randomization off & key_rings off: 52 lockpicks will be available in the shop. Chests will be in-logic as soon as you have access to them.
-    shop_randomization on & key_rings on: 14 key rings will be placed into the world. Chests will be in-logic once you obtain that level's key ring.
-    shop_randomization on & key_rings off: 52 lockpicks will be placed into the world. Chests will be in-logic once you have all 52 lockpicks."""
+    If shop_randomization is off, they will be placed in the shop, and locked chests will be in logic as soon as you have access to them.
+    If shop_randomization is on, they will be placed into the world by Archipelago. Locked chests will be in logic as you collect each
+      level's key ring, or once you collect all 52 lockpicks."""
     display_name = "Key Rings"
     default = 0
 
 
 class ShopItemCount(Range):
-    """Choose how many items you want to have in your randomized shop.
-    Note that depending on other settings, choosing a low number of shop items can result in having not enough locations.
-    If this occurs and auto_corrections is enabled, the shop item count will be raised until generation succeeds.
-    
-    TODO: Does not do anything yet."""
+    """This option decides how many shop items you will have, if shop_randomization is on. The shop must have a minimum
+    of 2 items when randomized because the gem logic system results in the first item always being free."""
     display_name = "Shop Item Count"
-    range_start = 1
+    range_start = 2
     range_end = 56
     default = 18
 

@@ -1,7 +1,7 @@
 import asyncio
-import pkgutil
-import logging
 import copy
+import logging
+import pkgutil
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Any, TextIO, override
@@ -14,8 +14,8 @@ from Options import OptionError
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny, HasAll
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
-from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
 from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel
+from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
 
@@ -394,6 +394,7 @@ class SpyroAHTWorld(World):
         
         self.options.shop_randomization.value = slot_data['shop_randomization']
         self.options.key_rings.value = slot_data['key_rings']
+        self.options.shop_item_count.value = slot_data['shop_item_count']
         self.options.shop_logic.value = slot_data['shop_logic']
         self.options.blink_gems.value = slot_data['blink_gems']
         self.options.non_blink_enemies.value = slot_data['non_blink_enemies']
@@ -426,13 +427,12 @@ class SpyroAHTWorld(World):
         # a bit ugly to have triple nested loop, but I don't think it's avoidable
         # needs to be "for every location in every region, check every enabled goal for matches" which is just inherently triple-nested
         count = 1
-        shop_item_count = 18 if self.options.key_rings else 56
         for reg, region_data in _load_file("locations.json").items():
             for location in region_data["locations"]:
                 for goal in self.options.goal.value:
                     if convert[goal] in location["name"]:
-                        if "Shop Item" in location["name"] and int(location["name"][-2:]) > shop_item_count:
-                            continue  # skip shop items 19-56 if key rings are enabled
+                        if "Shop Item" in location["name"] and int(location["id"]) > self.options.shop_item_count.value:
+                            continue  # don't include shop items that are above the amount of enabled items
                         if location['name'] in self.options.exclude_locations.value:
                             self.log(f"{goal} is a goal, but {location['name']} is excluded, so it will not be required for goal.", LoggingLevel.HIGH)
                             self.excluded_goal_ids[goal].append(location['id'])
@@ -443,7 +443,7 @@ class SpyroAHTWorld(World):
                         count += 1
         
         # handle cases where the player excluded all locations for a given goal
-        counts = {"Gnasty Gnorc": 1, "Ineptune": 1, "Red": 1, "Mecha-Red": 1, "Fireworks": 22, "Dragon Eggs": 80, "Dark Gems": 40, "Light Gems": 100, "Locked Chests": 52, "Shop Items": shop_item_count}
+        counts = {"Gnasty Gnorc": 1, "Ineptune": 1, "Red": 1, "Mecha-Red": 1, "Fireworks": 22, "Dragon Eggs": 80, "Dark Gems": 40, "Light Gems": 100, "Locked Chests": 52, "Shop Items": self.options.shop_item_count.value}
         found_valid_goal = False
         to_remove = []
         for goal in self.options.goal.value:
@@ -624,20 +624,19 @@ class SpyroAHTWorld(World):
         # shop costs determined by multiple options. Doing after gem events in case of exclusions
         self.log("Setting up shop prices.", LoggingLevel.LOW)
         if self.options.shop_randomization.value == 1:
-            shop_item_count = 18 if self.options.key_rings.value else 56
             blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
             non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
             other = (105357 - other_exclusions) * self.options.other_gems.value / 100
             gem_total = blink + non_blink_enemies + other
-            base_price = gem_total / (shop_item_count - 1)
+            base_price = gem_total / (self.options.shop_item_count.value - 1)
             self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
             self.shop_costs.append(0)
 
             if self.options.shop_logic.value == 1:  # 1 = ordered, meaning incrementing prices
-                for counter in range(shop_item_count - 1):
+                for counter in range(self.options.shop_item_count.value - 1):
                     self.shop_costs.append(int(base_price * (counter + 1)))
             else:  # 0 = unordered, meaning equal pricing
-                for _ in range(shop_item_count - 1):
+                for _ in range(self.options.shop_item_count.value - 1):
                     self.shop_costs.append(int(base_price))
             self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
             
@@ -872,6 +871,7 @@ class SpyroAHTWorld(World):
 
             "shop_randomization": self.options.shop_randomization.value,
             "key_rings": self.options.key_rings.value,
+            "shop_item_count": self.options.shop_item_count.value,
             "shop_logic": self.options.shop_logic.value,
             "blink_gems": self.options.blink_gems.value,
             "non_blink_enemies": self.options.non_blink_enemies.value,

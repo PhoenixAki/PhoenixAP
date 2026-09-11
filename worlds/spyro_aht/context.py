@@ -134,7 +134,8 @@ class SpyroAHTCommands(ClientCommandProcessor):
         output_2 = "enabled" if self.ctx.slot_data["key_rings"] == 1 else "not enabled"
         self.output(f"Shop items are {output} and key rings are {output_2}.")
         if self.ctx.slot_data["shop_randomization"]:
-            # TODO: add shop item count
+            # shop item count
+            self.output(f"You chose to have {self.ctx.slot_data['shop_item_count']} shop items.")
             # shop logic
             output = "ordered" if self.ctx.slot_data["shop_logic"] == 1 else "unordered"
             self.output(f"The shop logic system is set to {output}.")
@@ -231,7 +232,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         self.output(f"Goals: {", ".join(self.ctx.goal_list)}.")
         for goal in self.ctx.goal_list:
             goal_locs = self.ctx.convert_goal_info[goal][1]
-            if goal == "Shop Items" and self.ctx.slot_data['key_rings'] == 1: goal_locs = goal_locs[0:18]
+            if goal == "Shop Items": goal_locs = goal_locs[:self.ctx.slot_data['shop_item_count']]
             count = len([loc for loc in goal_locs if loc not in self.ctx.checked_locations])
             if count > 0:
                 not_done += f"{goal} ({count} check(s) left), "
@@ -248,7 +249,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
 
     def goal_full(self, goal):
         goal_locs = self.ctx.convert_goal_info[goal][1]
-        if goal == "Shop Items" and self.ctx.slot_data['key_rings'] == 1: goal_locs = goal_locs[0:18]
+        if goal == "Shop Items": goal_locs = goal_locs[:self.ctx.slot_data['shop_item_count']]
         not_checked = ""
 
         for loc in goal_locs:
@@ -342,8 +343,8 @@ class SpyroAHTContext(SuperContext):
         await self.send_connect(game=self.game)
     
     def goal_id_helper(self, goal: str, id_list: list[int]):
-        if goal == "Shop Items" and self.slot_data['key_rings']:
-            return [id for id in id_list[0:18] if id not in self.slot_data['excluded_goal_ids'][goal]]
+        if goal == "Shop Items":
+            return [id for id in id_list[0:self.slot_data['shop_item_count']] if id not in self.slot_data['excluded_goal_ids'][goal]]
         else:
             return [id for id in id_list if id not in self.slot_data['excluded_goal_ids'][goal]]
     
@@ -615,7 +616,7 @@ class SpyroAHTContext(SuperContext):
                 self.emu_client.msg_queue.put_nowait(msg)
 
     async def _location_checks(self):
-        locations = await self.emu_client.scan_locations(shop_items=self.slot_data['shop_randomization'] == 1, key_rings=self.slot_data['key_rings'] == 1)
+        locations = await self.emu_client.scan_locations(self.slot_data)
         if consts.STARTER_CHECK_IDS[0] not in self.checked_locations:
             locations.update(consts.STARTER_CHECK_IDS)
         locations -= self.checked_locations
@@ -637,8 +638,7 @@ class SpyroAHTContext(SuperContext):
                     locations.update(loc)
         
         if self.slot_data['hint_shop_items'] and not self.shop_hinted:
-            if self.slot_data['key_rings']: locations.update(consts.SHOP_ITEM_IDS[0:18])
-            else: locations.update(consts.SHOP_ITEM_IDS)
+            locations.update(consts.SHOP_ITEM_IDS[:self.slot_data['shop_item_count']])
             self.shop_hinted = True
                 
         locations -= self._scouted_locations
@@ -661,8 +661,7 @@ class SpyroAHTContext(SuperContext):
         last_one = (self.goal_tally == self.goal_target - 1)  # marks if check-goal_component should acknowledge being last goal or not
         for goal in self.goal_list:
             goal_index, goal_locs = self.convert_goal_info[goal]
-            if goal == "Shop Items" and self.slot_data['key_rings'] == 1:
-                goal_locs = goal_locs[0:18]
+            if goal == "Shop Items": goal_locs = goal_locs[:self.slot_data['shop_item_count']]
             
             if not self.finished_goals[goal_index]:
                 self.finished_goals[goal_index] = await self.check_goal_component(goal, goal_locs, last_one)
