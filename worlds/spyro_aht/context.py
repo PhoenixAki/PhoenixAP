@@ -362,7 +362,7 @@ class SpyroAHTContext(SuperContext):
                 self.auth_ready.set()
                 
                 # set up internal goal ID lists now that slot data is obtained. TODO this is almost certainly not the best/right place to do this. Figure that out later?
-                self.convert_goal_info = {"Gnasty Gnorc": (0, [consts.BOSS_IDS[0]]), "Ineptune": (1, [consts.BOSS_IDS[1]]), "Red": (2, [consts.BOSS_IDS[2]]), "Mecha-Red": (3, [consts.BOSS_IDS[3]]),
+                self.convert_goal_info = {"Gnasty Gnorc": (0, consts.BOSS_IDS[0:2]), "Ineptune": (1, consts.BOSS_IDS[2:4]), "Red": (2, consts.BOSS_IDS[4:6]), "Mecha-Red": (3, consts.BOSS_IDS[6]),
                     "Fireworks": (4, self.goal_id_helper("Fireworks", consts.FIREWORK_IDS)), "Dark Gems": (5, self.goal_id_helper("Dark Gems", consts.DARK_GEM_IDS)), "Dragon Eggs": (6, self.goal_id_helper("Dragon Eggs", consts.DRAGON_EGG_IDS)),
                     "Light Gems": (7, self.goal_id_helper("Light Gems", consts.LIGHT_GEM_IDS)), "Locked Chests": (8, self.goal_id_helper("Locked Chests", consts.LOCKED_CHEST_IDS)), "Shop Items": (9, self.goal_id_helper("Shop Items", consts.SHOP_ITEM_IDS))
                 }
@@ -374,7 +374,7 @@ class SpyroAHTContext(SuperContext):
                     self._shop_items_received.set()
             case 'PrintJSON':
                 match args.get('type', ''):
-                    case 'ItemSend':
+                    case 'ItemSend':  # TODO: put the send notification here?
                         if args['receiving'] == self.slot:
                             item = args['item']
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {self.item_names.lookup_in_slot(item.item, self.slot)} from {self.player_names[item.player]}'))
@@ -616,8 +616,8 @@ class SpyroAHTContext(SuperContext):
 
     async def _location_checks(self):
         locations = await self.emu_client.scan_locations(shop_items=self.slot_data['shop_randomization'] == 1, key_rings=self.slot_data['key_rings'] == 1)
-        for c in {229, 230, 231, 232}:  # starter checks
-            locations.add(c)
+        if consts.STARTER_CHECK_IDS[0] not in self.checked_locations:
+            locations.update(consts.STARTER_CHECK_IDS)
         locations -= self.checked_locations
         if locations:
             await self.send_msgs([{"cmd": "LocationChecks", "locations": locations}])

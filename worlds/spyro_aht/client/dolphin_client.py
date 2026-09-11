@@ -105,42 +105,33 @@ class DolphinClient(GenericClient):
             addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
             data = dolphin_memory_engine.read_byte(addr)
             flag = data & (0b01 << ((index * 2) % 8))
-            # 17: 245, 79: 246, 136: 247, 228: 248
             if flag:
                 match aploc:
-                    case 17:
-                        result.update({17, 4000})
-                    case 79:
-                        result.update({79, 4001})
-                    case 136:
-                        result.update({136, 4002})
-                    case 228:
-                        result.add(4003)
+                    case 701:  # breath from gnasty -> add defeated gnasty
+                        result.update({701, 702})
+                    case 703:  # breath from ineptune -> add defeated ineptune
+                        result.update({703, 704})
+                    case 705:  # breath from red -> add defeated red
+                        result.update({705, 706})
                     case _:
                         result.add(aploc)
         
+        # TODO: continue from here
         if shop_items:
-            for i in range(5):
+            for i in range(18):
                 await asyncio.sleep(0)
 
                 purchase_flag = dolphin_memory_engine.read_byte(self.addresses.g_SHOP_TEXT + (0x62 * i))
                 if purchase_flag:
-                    result.add(1000 + i)
-            offset = 5
-            for i in range(13):
-                await asyncio.sleep(0)
-
-                purchase_flag = dolphin_memory_engine.read_byte(self.addresses.g_SHOP_TEXT + (0x62 * (i + offset)))
-                if purchase_flag:
-                    result.add(2000 + i)
-            offset += 13
+                    result.add(901 + i)
+            offset = 18
             if not key_rings:
-                for i in range(39):
+                for i in range(38):
                     await asyncio.sleep(0)
 
                     purchase_flag = dolphin_memory_engine.read_byte(self.addresses.g_SHOP_TEXT + (0x62 * (i + offset)))
                     if purchase_flag:
-                        result.add(3013 + i)
+                        result.add(919 + i)
 
         return result
 
@@ -228,13 +219,10 @@ class DolphinClient(GenericClient):
         elif ctx.slot_data['pause_menu_patch'] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_TELEPORT_MODE, 1)
         
-        # TODO: come back here to mess with IDs later
         if ctx.slot_data['shop_randomization']:
-            locations = list(range(1000, 1005))
-            locations.extend(range(2000, 2013))
+            locations = list(range(901, 919))
             if not ctx.slot_data['key_rings']:
-                locations.extend(range(3013, 3051))
-            consts.SHOP_ITEM_IDS = locations
+                locations.extend(range(919, 957))
             await ctx.send_msgs([{"cmd": "LocationScouts", "locations": locations, "create_as_hint": 0}])
             await ctx._shop_items_received.wait()
             await self._prepare_shop_items(ctx, *ctx._shop_items)
