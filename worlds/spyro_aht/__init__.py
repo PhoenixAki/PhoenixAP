@@ -11,10 +11,11 @@ import orjson
 import Utils
 from BaseClasses import Item, ItemClassification, MultiWorld, Region, CollectionState
 from Options import OptionError
-from rule_builder.rules import Has, Rule, True_, And, False_, HasAny, HasAll
+from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
-from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel
+from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel, BOSS_IDS, DARK_GEM_IDS, \
+    LIGHT_GEM_IDS, DRAGON_EGG_IDS, FIREWORK_IDS, SHOP_ITEM_IDS, LOCKED_CHEST_IDS
 from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
@@ -169,11 +170,6 @@ class SpyroAHTWorld(World):
         self.shop_costs = []
         self.filler_items: dict[str, list[str]] = {}
 
-        # tracks IDs of all locations that are part of a goal but are excluded. Sent to client via slot data
-        self.excluded_goal_ids = {"Gnasty Gnorc": [], "Ineptune": [], "Red": [], "Mecha-Red": [],
-            "Fireworks": [], "Dark Gems": [], "Dragon Eggs": [], "Light Gems": [], "Locked Chests": [], "Shop Items": []
-        }
-
     def get_filler_item_name(self):
         """Override of World.get_filler_item_name which returns a random filler item name.
         Used whenever start_inventory_from_pool is used."""
@@ -281,15 +277,22 @@ class SpyroAHTWorld(World):
         if isinstance(passthrough, dict) and self.game in passthrough:
             self._apply_slot_data(passthrough[self.game])
         
-        auto_corrections = self.options.auto_corrections.value  # storing locally as micro-optimization compared to checking option
-        self.log("Checking for common YAML issues with starting breaths and realms, filler items, and goals.", LoggingLevel.LOW)
+        auto_corrections = self.options.auto_corrections.value
+        self.log("Checking for common YAML option/setting issues.", LoggingLevel.LOW)
+        
+        bad_condition = self.options.teleport_across_realms.value == 0 and self.options.open_world_mode.value != 0
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling teleport_across_realms.", LoggingLevel.WARNING)
+            self.options.teleport_across_realms.value = 1
+        elif bad_condition:
+            raise OptionError("teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value  # "none" alongside breath choices
-        if bad_condition and auto_corrections:
-            self.log("Starting breath list cannot contain breaths and \"None\". Fixing by removing the \"None\".", LoggingLevel.WARNING)
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: Starting breath list cannot contain breaths and \"None\". Fixing by removing the \"None\".", LoggingLevel.WARNING)
             self.options.starting_breaths.value.remove("None")
         elif bad_condition:
-            raise OptionError("Starting breath list cannot contain breaths and \"None\". Automatic fixing is available via auto_corrections.")
+            raise OptionError("Starting breath list cannot contain breaths and \"None\". Fix this, or set auto_corrections to at least fix_minor.")
         
         if len(self.options.starting_breaths.value) == 0:
             random_breath = self.random.choice(["Fire", "Electric", "Water", "Ice"])
@@ -302,75 +305,79 @@ class SpyroAHTWorld(World):
             self.options.starting_realms.value.add(random_realm)
         
         bad_condition = len(self.options.filler_items.value) == 0  # empty filler list
-        if bad_condition and auto_corrections:
-            self.log("Filler item list cannot be empty. Fixing by adding \"Generics\".", LoggingLevel.WARNING)
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: Filler item list cannot be empty. Fixing by adding \"Generics\".", LoggingLevel.WARNING)
             self.options.filler_items.value.add("Generics")
         elif bad_condition:
-            raise OptionError("Filler item list cannot be empty. Automatic fixing is available via auto_corrections.")
-
-        bad_condition = len(self.options.goal.value) < 1  # no goals
-        if bad_condition and auto_corrections:
-            self.log("Goal list cannot be empty. Fixing by adding 1 \"Random\" to the list.", LoggingLevel.WARNING)
-            self.options.goal.value.append("Random")
-        elif bad_condition:
-            raise OptionError("Goal list cannot be empty. Automatic fixing is available via auto_corrections.")
-            
-        if len(self.options.goal.value) > len(self.options.goal.valid_keys)-1 and auto_corrections:  # too many goals
-            removed = []  # logging
-            while len(self.options.goal.value) > len(self.options.goal.valid_keys)-1:
-                to_remove = self.random.choice(self.options.goal.value)
-                removed.append(to_remove)
-                self.options.goal.value.remove(to_remove)
-            self.log(f"Goal list can't have more than {len(self.options.goal.valid_keys)-1} entries. Fixed by removing {removed} at random to shrink the list.", LoggingLevel.WARNING)
-        elif len(self.options.goal.value) > len(self.options.goal.valid_keys)-1:
-            raise OptionError(f"Goal list can't have more than {len(self.options.goal.valid_keys)-1} entries. Automatic fixing is available via auto_corrections.")
+            raise OptionError("Filler item list cannot be empty. Fix this, or set auto_corrections to at least fix_minor.")
         
-        # this is disgustingly long, but it grabs all non-random and non-excluded goals which are not already chosen by the player
-        random_choices = [goal for goal in self.options.goal.valid_keys if goal != "Random" and goal not in self.options.exclude_from_random_goal.value and goal not in self.options.goal.value]
-        random_count = self.options.goal.value.count("Random")
-        if random_count > len(random_choices):
-            # fix (or halt) specifically for if random_choices list is empty
-            if len(random_choices) == 0:
-                if auto_corrections:
-                    self.log("Random goal(s) were requested, but no goals are available for random selection. Fixing by skipping random choices.", LoggingLevel.WARNING)
-                    random_count = 0
-                else:
-                    raise OptionError("Random goal(s) were requested, but no goals are available for random selection. Automatic fixing is available via auto_corrections.")
-
-            if random_count > 0 and auto_corrections:
-                removed = []
-                while random_count > len(random_choices):
-                    to_remove = self.random.choice(random_choices)
-                    removed.append(to_remove)
-                    random_choices.remove(to_remove)
-                self.log(f"Too many excluded-from-random goals to support {random_count} random choice(s). Fixed by removing {removed} at random from the list of exclusions.", LoggingLevel.WARNING)
-            elif random_count > 0 and not self.options.auto_corrections:
-                raise OptionError(f"Too many excluded-from-random goals to support {random_count} random choice(s). Automatic fixing is available via auto_corrections.")
-        
-        converted_goal_set = set(self.options.goal.value)
-        if "Random" in converted_goal_set:
-            converted_goal_set.remove("Random")
-
-        for _ in range(random_count):
-            random_goal = self.random.choice(random_choices)
-            converted_goal_set.add(random_goal)
-            random_choices.remove(random_goal)
-        
-        bad_condition = "Fireworks" in converted_goal_set and not self.options.firework_checks.value
-        if bad_condition and auto_corrections:
-            self.log("Fireworks is a goal but firework_checks is disabled. Fixing by enabling firework_checks.", LoggingLevel.WARNING)
+        bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: Fireworks was enabled as a goal, but firework_checks is disabled. Fixing by enabling firework_checks.", LoggingLevel.WARNING)
             self.options.firework_checks.value = 1
         elif bad_condition:
-            raise OptionError("Fireworks is a goal but firework_checks is disabled. Automatic fixing is available via auto_corrections.")
+            raise OptionError("Fireworks was enabled as a goal, but firework_checks is disabled. Fix this, or set auto_corrections to at least fix_minor.")
+        
+        if "Random" in self.options.boss_goal.value:  # 3 cases to deal with here, all relate to having Random in the list
+            bosses = [boss for boss in self.options.boss_goal.valid_keys if boss in self.options.boss_goal.value and boss != "Random"]
+            rand_count = 0
+            if len(bosses) == 0:  # random is the only thing in the list
+                rand_count = self.random.randint(1, 4)
+            elif 1 <= len(bosses) <= 3:  # there's other things in the list
+                rand_count = self.random.randint(1, 5-len(bosses))
+            elif len(bosses) == 4:
+                if auto_corrections >= 1:  # fix_minor
+                    self.log("Minor Warning: \"Random\" was entered into boss_goal, but all 4 bosses were chosen alongside it. Fixing by removing the \"Random\".", LoggingLevel.WARNING)
+                    self.options.boss_goal.value.remove("Random")
+                else:
+                    raise OptionError("\"Random\" was entered into boss_goal, but all 4 bosses were chosen alongside it. Fix this, or set auto_corrections to at least fix_minor.")
             
-        bad_condition = "Shop Items" in converted_goal_set and not self.options.shop_randomization.value
-        if bad_condition and auto_corrections:
-            self.log("Shop Items is a goal but shop_randomization is disabled. Fixing by enabling shop_randomization.", LoggingLevel.WARNING)
+            if rand_count > 0:
+                self.options.boss_goal.value.remove("Random")
+                available_bosses = [boss for boss in self.options.boss_goal.valid_keys if boss not in bosses and boss != "Random"]
+                while rand_count > 0:
+                    rand_boss = self.random.choice(available_bosses)
+                    self.options.boss_goal.value.add(rand_boss)
+                    available_bosses.remove(rand_boss)
+                    rand_count -= 1
+                    
+        bad_condition = self.options.shop_items_goal.value > 0 and self.options.shop_randomization.value == 0
+        if bad_condition and auto_corrections == 1:  # fix_minor specific
+            self.log("Minor Warning: shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fixing by disabling shop_items_goal.", LoggingLevel.WARNING)
+            self.options.shop_items_goal.value = 0
+        elif bad_condition and auto_corrections == 2:  # fix_major specific
+            self.log("Major Warning: shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fixing by enabling shop_randomization.", LoggingLevel.WARNING)
             self.options.shop_randomization.value = 1
         elif bad_condition:
-            raise OptionError("Shop Items is a goal but shop_randomization is disabled. Automatic fixing is available via auto_corrections.")
-                
-        self.options.goal.value = converted_goal_set
+            raise OptionError("shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fix this, or set auto_corrections to at least fix_minor.")
+        
+        # randomizing each collectible option if the player requested it. Done here before the remainder of the edge case tests which require having a value known
+        goal_options = [[self.options.dark_gems_goal, 40], [self.options.light_gems_goal, 100], [self.options.dragon_eggs_goal, 80],
+                        [self.options.fireworks_goal, 22], [self.options.shop_items_goal, 56], [self.options.locked_chests_goal, 52]]
+        for goal, max_range in goal_options:
+            if goal.value == -1:
+                goal.value = self.random.randint(1, max_range)
+        
+        bad_condition = self.options.shop_items_goal.value > self.options.shop_item_count.value
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fixing by lowering shop_items_goal to match shop_item_count.", LoggingLevel.WARNING)
+            self.options.shop_items_goal.value = self.options.shop_item_count.value
+        elif bad_condition:
+            raise OptionError("shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fix this, or set auto_corrections to at least fix_minor.")
+        
+        bad_condition = self.options.light_gems_goal.value > 85 and self.options.exclude_chest_items.value > 1  # 2 = just lg, 3 = both
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: light_gems_goal was set higher than 85, but 15 Light Gems from chests are excluded from goals via exclude_chest_items. Fixing by lowering light_gems_goal by 15.", LoggingLevel.WARNING)
+            self.options.light_gems_goal.value -= 15
+        elif bad_condition:
+            raise OptionError("light_gems_goal was set higher than 85, but 15 Light Gems from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
+        
+        bad_condition = self.options.dragon_eggs_goal.value > 64 and self.options.exclude_chest_items.value in [1, 3]  # 1 = just eggs, 3 = both
+        if bad_condition and auto_corrections >= 1:  # fix_minor
+            self.log("Minor Warning: dragon_eggs_goal was set higher than 64, but 16 Dragon Eggs from chests are excluded from goals via exclude_chest_items. Fixing by lowering dragon_eggs_goal by 16.", LoggingLevel.WARNING)
+            self.options.dragon_eggs_goal.value -= 16
+        elif bad_condition:
+            raise OptionError("dragon_eggs_goal was set higher than 64, but 16 Dragon Eggs from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
         
     def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
         self._ut_active = True
@@ -381,8 +388,15 @@ class SpyroAHTWorld(World):
         self.options.logging_level.value = slot_data['logging_level']
         self.options.auto_corrections.value = slot_data['auto_corrections']
         
-        self.options.goal.value = slot_data['goal']
-        self.options.exclude_from_random_goal.value = slot_data['exclude_from_random_goal']
+        self.options.boss_goal.value = slot_data['boss_goal']
+        self.options.dark_gems_goal.value = slot_data['dark_gems_goal']
+        self.options.light_gems_goal.value = slot_data['light_gems_goal']
+        self.options.dragon_eggs_goal.value = slot_data['dragon_eggs_goal']
+        self.options.fireworks_goal.value = slot_data['fireworks_goal']
+        self.options.shop_items_goal.value = slot_data['shop_items_goal']
+        self.options.locked_chests_goal.value = slot_data['locked_chests_goal']
+        self.options.exclude_chest_items.value = slot_data['exclude_chest_items']
+        
         self.options.open_world_mode.value = slot_data['open_world_mode']
         self.options.firework_checks.value = slot_data['firework_checks']
         self.options.vanilla_minigame_rewards.value = slot_data['vanilla_minigame_rewards']
@@ -407,7 +421,6 @@ class SpyroAHTWorld(World):
         
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
-        self.excluded_goal_ids = slot_data['excluded_goal_ids']
     
     def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
         level_acronym, rest_of_name = location_label.split(": ")
@@ -416,58 +429,60 @@ class SpyroAHTWorld(World):
 
     def handle_goaling(self):
         self.log("Processing goal choices.", LoggingLevel.LOW)
-        # convert goal names to searchable form for location matching
-        # in an ideal world, everything would be named in such a way that this isn't necessary, but...¯\_(ツ)_/¯
-            # TODO: do something about it then, boy!
-        convert = {"Fireworks": ": Firework", "Dragon Eggs": ": Dragon Egg", "Dark Gems": ": Dark Gem",
-                   "Light Gems": ": Light Gem", "Gnasty Gnorc": "Defeat Gnasty Gnorc", "Ineptune": "Defeat Ineptune",
-                   "Red": "Defeat Red", "Mecha-Red": "Defeat Mecha-Red", "Locked Chests": "Locked Chest", "Shop Items": "Shop Item"}
-        victory_cons = []
-
-        # a bit ugly to have triple nested loop, but I don't think it's avoidable
-        # needs to be "for every location in every region, check every enabled goal for matches" which is just inherently triple-nested
-        count = 1
-        for reg, region_data in _load_file("locations.json").items():
-            for location in region_data["locations"]:
-                for goal in self.options.goal.value:
-                    if convert[goal] in location["name"]:
-                        if "Shop Item" in location["name"] and int(location["id"]) > self.options.shop_item_count.value:
-                            continue  # don't include shop items that are above the amount of enabled items
-                        if location['name'] in self.options.exclude_locations.value:
-                            self.log(f"{goal} is a goal, but {location['name']} is excluded, so it will not be required for goal.", LoggingLevel.HIGH)
-                            self.excluded_goal_ids[goal].append(location['id'])
-                            continue
-                        self.get_region(reg).add_event(f"{location['name']} Victory{count}", f"VictoryCon{count}", rule=self.rule_from_dict(location['access_rule']))
-                        victory_cons.append(f"VictoryCon{count}")
-                        self.log(f"Added VictoryCon{count} event for {location['name']}.", LoggingLevel.MAXIMUM)
-                        count += 1
+        victory_cons = defaultdict(tuple[str])
+        enabled_goals = []
         
-        # handle cases where the player excluded all locations for a given goal
-        counts = {"Gnasty Gnorc": 1, "Ineptune": 1, "Red": 1, "Mecha-Red": 1, "Fireworks": 22, "Dragon Eggs": 80, "Dark Gems": 40, "Light Gems": 100, "Locked Chests": 52, "Shop Items": self.options.shop_item_count.value}
-        found_valid_goal = False
-        to_remove = []
-        for goal in self.options.goal.value:
-            if len(self.excluded_goal_ids[goal]) == counts[goal]:
-                self.log(f"All locations that belong to the {goal} goal were excluded. {goal} has been removed from the goal list.", LoggingLevel.WARNING)
-                to_remove.append(goal)
-            elif not found_valid_goal:
-                found_valid_goal = True
-        self.options.goal.value = [goal for goal in self.options.goal.value if goal not in to_remove]
+        goal_info = [
+            ["Gnasty Gnorc", [BOSS_IDS[0]]], ["Ineptune", [BOSS_IDS[2]]], ["Red", [BOSS_IDS[4]]], ["Mecha-Red", [BOSS_IDS[6]]],
+            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS],
+            ["Fireworks", FIREWORK_IDS], ["Shop Items", SHOP_ITEM_IDS[0:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS]
+        ]
+        # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
+        if self.options.exclude_chest_items.value >= 2:  # 2 = exclude light gems, 3 = exclude both
+            goal_info[5][1] = goal_info[5][1][:-15]
+        if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
+            goal_info[6][1] = goal_info[6][1][:-16]
+        amounts = {
+            "Gnasty Gnorc": 1, "Ineptune": 1, "Red": 1, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value, "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
+            "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value
+        }
+        lookup_methods = [
+            "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune" in self.options.boss_goal.value, "Red" in self.options.boss_goal.value,
+            "Mecha-Red" in self.options.boss_goal.value, amounts["Dark Gems"] > 0, amounts["Light Gems"] > 0, amounts["Dragon Eggs"] > 0, amounts["Fireworks"] > 0, amounts["Shop Items"] > 0, amounts["Locked Chests"] > 0
+        ]
+        for counter, (goal_name, id_list) in enumerate(goal_info):
+            ind_count = 1
+            if not lookup_methods[counter]:
+                continue
+            for loc_id in id_list:
+                loc = self.get_location(self.location_id_to_name[loc_id])
+                loc.parent_region.add_event(f"{loc.name} Victory{ind_count}", f"VictoryCon{goal_name.replace(" ", "")}{ind_count}", rule=loc.access_rule, show_in_spoiler=False)
+                victory_cons[goal_name] += (f"VictoryCon{goal_name.replace(" ", "")}{ind_count}",)
+                self.log(f"Added VictoryCon{goal_name.replace(" ", "")}{ind_count} event for {loc.name}.", LoggingLevel.MAXIMUM)
+                ind_count += 1
+                if goal_name not in enabled_goals: enabled_goals.append(goal_name)
+            self.log(f"Set up {ind_count-1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
+        if len(enabled_goals) == 0 and self.options.auto_corrections.value == 2:
+            self.log("No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.", LoggingLevel.WARNING)
+            loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
+            loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
+            victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
+            enabled_goals.append("Mecha-Red")
+            
+        self.log(f"Final goal list: {", ".join(enabled_goals)}.", LoggingLevel.MEDIUM)
         
-        if not found_valid_goal and self.options.auto_corrections:
-            self.log(f"All locations for all selected goals were excluded. Fixing by forcing Mecha-Red as the only goal.", LoggingLevel.WARNING)
-            loc = self.get_location("RL: Defeat Mecha-Red")
-            loc.parent_region.add_event(f"RL: Defeat Mecha-Red Victory1", "VictoryCon1", rule=HasAll('Double Jump', 'Fire Breath', 'Electric Breath'))  # hardcoded because no access to the json here
-            victory_cons.append(f"VictoryCon1")
-            count += 1
-            self.options.goal.value = ["Mecha-Red"]
-        elif not found_valid_goal:
-            raise OptionError("All locations for all selected goals were excluded. Automatic fixing is available via auto_corrections.")
+        def check_for_goal(state: CollectionState) -> bool:
+            for goal in enabled_goals:
+                events = victory_cons[goal]
+                amount = amounts[goal]
+                if state.has_from_list(events, self.player, amount):
+                    continue
+                else:
+                    return False
+            return True
         
-        self.log(f"Set up {count-1} VictoryCon events.", LoggingLevel.HIGH)
-        self.log(f"Final goal list: {", ".join(self.options.goal.value)}.", LoggingLevel.MEDIUM)
-        self.multiworld.completion_condition[self.player] = lambda state: state.has_all(victory_cons, self.player)
-    
+        self.multiworld.completion_condition[self.player] = lambda state: check_for_goal(state)
+        
     def create_regions(self):
         # TODO: how much of this needs to be here specifically? lot of setup done here and in create_items and probably would be good to review if it could be all in one place
         auto_corrections = self.options.auto_corrections.value  # setting as micro-optimization for checking later
@@ -479,11 +494,11 @@ class SpyroAHTWorld(World):
             else:  # randomized:
                 lmin, lmax = self.options.gadget_cost_min.value, self.options.gadget_cost_max.value
                 bad_condition = lmin > lmax
-                if bad_condition and auto_corrections:
-                    self.log(f"gadget_cost_min of {lmin} is greater than {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
+                if bad_condition and auto_corrections >= 1:  # fix_minor
+                    self.log(f"Minor Warning: gadget_cost_min of {lmin} is greater than {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
                     lmin, lmax = lmax, lmin
                 elif bad_condition:
-                    raise OptionError(f"gadget_cost_min of {lmin} is greater than {lmax}. Automatic fixing is available via auto_corrections.")
+                    raise OptionError(f"gadget_cost_min of {lmin} is greater than {lmax}. Fix this, or set auto_corrections to at least fix_minor.")
                 self._gadget_costs = [self.random.randint(lmin, lmax) for _ in range(3)]
         self.log(f"Gadget Costs (in Light Gems): Ball requires {self._gadget_costs[0]}, invincibility requires {self._gadget_costs[1]}, and supercharge requires {self._gadget_costs[2]}.", LoggingLevel.MEDIUM)
         
@@ -494,11 +509,11 @@ class SpyroAHTWorld(World):
             else:
                 bmin, bmax = self.options.boss_lair_door_cost_min.value, self.options.boss_lair_door_cost_max.value
                 bad_condition = bmin > bmax
-                if bad_condition and auto_corrections:
-                    self.log(f"boss_lair_door_cost_min of {bmin} is greater than {bmax}. Fixing by swapping them.", LoggingLevel.WARNING)
+                if bad_condition and auto_corrections >= 1:
+                    self.log(f"Minor Warning: boss_lair_door_cost_min of {bmin} is greater than {bmax}. Fixing by swapping them.", LoggingLevel.WARNING)
                     bmin, bmax = bmax, bmin
                 elif bad_condition:
-                    raise OptionError(f"boss_lair_door_cost_min of {bmin} is greater than {bmax}. Automatic fixing is available via auto_corrections.")
+                    raise OptionError(f"boss_lair_door_cost_min of {bmin} is greater than {bmax}. Fix this, or set auto_corrections to at least fix_minor.")
 
                 self._boss_lairs = [self.random.randint(bmin, bmax) for _ in range(4)]
         
@@ -541,11 +556,11 @@ class SpyroAHTWorld(World):
             else:
                 lmin, lmax = self.options.light_gem_door_cost_min.value, self.options.light_gem_door_cost_max.value
                 bad_condition = lmin > lmax
-                if bad_condition and auto_corrections:
-                    self.log(f"light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
+                if bad_condition and auto_corrections >= 1:
+                    self.log(f"Minor Warning: light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
                     lmin, lmax = lmax, lmin
                 elif bad_condition:
-                    raise OptionError(f"light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Automatic fixing is available via auto_corrections.")
+                    raise OptionError(f"light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Fix this, or set auto_corrections to at least fix_minor.")
                 self._lg_doors = [self.random.randint(lmin, lmax) for _ in range(4)]
         self.log(f"Light Gem Door costs (in Light Gems): Dragonfly Falls requires {self._lg_doors[0]}, Coastal Remains requires {self._lg_doors[1]}, Frostbite Village requires {self._lg_doors[2]}, and Dark Mine requires {self._lg_doors[3]}.", LoggingLevel.MEDIUM)
 
@@ -722,11 +737,11 @@ class SpyroAHTWorld(World):
             self._starting_realms = list(self.options.starting_realms.value)
         
         if len(self._starting_realms) == 1 and self._starting_realms[0] == "Icy Wilderness" and self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
-            if self.options.auto_corrections:
-                self.log("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
+            if self.options.auto_corrections == 2:  # fix_major specific
+                self.log("Major Warning: Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
                 self._starting_realms[0] = "Dragon Kingdom"
             else:
-                raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Automatic fixing is available via auto_corrections.")
+                raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
             
         # add starting realm choices to start inventory, if not already in start inventory
         added_realms, subtract_one = [], []
@@ -858,8 +873,15 @@ class SpyroAHTWorld(World):
             "logging_level": self.options.logging_level.value,
             "auto_corrections": self.options.auto_corrections.value,
             
-            "goal": self.options.goal.value,
-            "exclude_from_random_goal": self.options.exclude_from_random_goal.value,
+            "boss_goal": self.options.boss_goal.value,
+            "dark_gems_goal": self.options.dark_gems_goal.value,
+            "light_gems_goal": self.options.light_gems_goal.value,
+            "dragon_eggs_goal": self.options.dragon_eggs_goal.value,
+            "fireworks_goal": self.options.fireworks_goal.value,
+            "shop_items_goal": self.options.shop_items_goal.value,
+            "locked_chests_goal": self.options.locked_chests_goal.value,
+            "exclude_chest_items": self.options.exclude_chest_items.value,
+            
             "open_world_mode": self.options.open_world_mode.value,
             "firework_checks": self.options.firework_checks.value,
             "vanilla_minigame_rewards": self.options.vanilla_minigame_rewards.value,
@@ -897,8 +919,6 @@ class SpyroAHTWorld(World):
             "skip_cutscenes": self.options.skip_cutscenes.value,
             "skip_elevators": self.options.skip_elevators.value,
             "teleport_across_realms": self.options.teleport_across_realms.value,
-            
-            "excluded_goal_ids": self.excluded_goal_ids
         }
         
         return slot_data

@@ -267,8 +267,6 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_MAIN_SHOP_ALWAYS_AVAILABLE, 1)
             if ctx.slot_data['shop_pad_proximity_activation'] == 0:
                 dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_SHOP_PAD_PROXIMITY_ACTIVATE, 1)
-        if ctx.slot_data['open_world_mode'] != 0:
-            dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
         
         dolphin_memory_engine.write_byte(self.addresses.p_PATCH_BEEN_WRITTEN_TO, 1)
         

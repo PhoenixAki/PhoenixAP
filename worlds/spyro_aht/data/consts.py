@@ -125,7 +125,7 @@ DRAGON_EGG_IDS = list(range(301, 365)) + list(range(837, 853))  # IDs 301-364 an
 FIREWORK_IDS = list(range(401, 423))  # IDs 401-422
 STARTER_CHECK_IDS = list(range(501, 505))  # IDs 501-504
 ELDER_ABILITY_IDS = list(range(601, 605))  # IDs 601-604
-BOSS_IDS = list(range(701, 708))  # IDs 701-707
+BOSS_IDS = list(range(701, 708))  # IDs 701-707. odds are "defeat", evens are breaths
 LOCKED_CHEST_IDS = list(range(801, 853))  # IDs 801-852
 SHOP_ITEM_IDS = list(range(901, 957))  # IDs 901-956
 

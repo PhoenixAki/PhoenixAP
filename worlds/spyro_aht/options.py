@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup, StartInventoryPool, OptionList, Visibility
+from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup, StartInventoryPool, NamedRange
 
 ###############DEATHLINK###############
 class DeathLink(Choice):
@@ -47,66 +47,137 @@ class LoggingLevel(Choice):
     
 
 class AutoCorrections(Choice):
-    """This option decides the behavior of the generator if YAML issues are encountered. It is strongly recommended to enable
-    this if putting AHT AP into a larger multiworld, to increase the chance of generation success even if issues are encountered.
+    """This option decides the behavior of the generator if YAML issues are encountered. It is strongly recommended to
+    set this to fix_minor or fix_major if putting AHT AP into a larger multiworld. Doing so drastically decreases the
+    chance of hitting a generation error after potentially a long time of generating.
     
-    halt: YAML issues will result in generation being halted so that the player can decide how to resolve it.
-    fix: YAML issues will be automatically fixed. Options which can lead to known issues have their automatic fixes described in them."""
+    A full detailing of every edge case that exists, and how auto_corrections reacts to them, is beyond the scope
+    of this YAML. A full list can be found at the link below. It is only capable of fixing issues that stem from
+    combinations of AHT options - issues with the base syntax of your YAML are not automatically fixable.
+    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1.2-%E2%80%90-List-of-auto_corrections-Fixes
+    
+    halt: Generation will be strictly halted upon any sort of YAML issue.
+    fix_minor: Minor YAML issues will be automatically fixed to avoid making too big an impact on the seed.
+    fix_major: All known YAML issues will be fixed, even if the fix has a significant impact on the seed."""
     display_name = "Auto Corrections"
     option_halt = 0
-    option_fix = 1
+    option_fix_minor = 1
+    option_fix_major = 2
+    default = 1
+
+###############GOAL###############
+class BossGoals(OptionSet):
+    """This option lets you choose which bosses are required in order to goal. They will stack on top of other goals.
+    Leave the list empty to have no boss requirements. You can enter "Random" to have a random selection of bosses chosen,
+    even if you also choose a few bosses explicitly alongside "Random".
+    
+    Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
+    display_name = "Boss Goals"
+    valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random")
+    default = ["Mecha-Red"]
+
+
+class DarkGemsGoal(NamedRange):
+    """This option lets you require completing a number of Dark Gem checks in order to goal. This stacks on top of other goals.
+    To enable this, enter a number 1-40 to require that many Dark Gem checks in order to goal.
+    To disable this, enter 0. To have a random number 1-40 chosen, select "random-range-1-40", or enter -1."""
+    display_name = "Dark Gems Goal"
+    range_start = -1
+    range_end = 40
     default = 0
-
-###############GOAL, CHECKS, AND ITEMS###############
-class Goal(OptionList):
-    """Choose your goal(s) for this seed. Run /check_goal overview in the client for mid-run information. Any locations in
-    exclude_locations will be left out of goals they belong to. If you exclude all locations for all chosen goal types and
-    auto_corrections is enabled, Mecha-Red will be forced as your goal regardless of exclusions.
-    
-    Collectible goals are based on *AHT locations*, not item collection. For example, "Dragon Eggs" requires checking all
-    80 AHT locations which have "Dragon Egg" in their name. This can lead to early goals if your seed allows the use !collect
-    (check the project wiki FAQ for details). 
-
-    Available Goals:
-    Gnasty Gnorc/Ineptune/Red/Mecha-Red: Defeat each boss.
-    Fireworks: Flame all 22 fireworks. firework_checks will be enabled automatically if auto_corrections is enabled.
-    Dark Gems: Break all 40 Dark Gems.
-    Dragon Eggs: Collect all 80 Dragon Eggs (including those from locked chests).
-    Light Gems: Collect all 100 Light Gems (including those from locked chests).
-    Locked Chests: Open all 52 locked chests.
-    Shop Items: Buy all randomized shop items. shop_randomization will be enabled automatically if auto_corrections is enabled.
-    Random: For each "Random" you include, a random goal from above will be chosen, excluding any from exclude_from_random_goal.
-    
-    If the list is empty and auto_corrections is enabled, a single random goal will be chosen.
-    If the list has too many entries and auto_corrections is enabled, entries will be removed at random until in range."""
-    display_name = "Goal"
-    valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Fireworks", "Dark Gems", "Dragon Eggs", "Light Gems", "Locked Chests", "Shop Items", "Random")
-    default = ("Mecha-Red",)
-    
-    
-class ExcludeFromRandomGoal(OptionSet):
-    """This option lets you exclude goals from being randomly chosen. For example, entering "Shop Items" below means "Shop Items"
-    will never be chosen in place of "Random".
-    
-    If too many goals are excluded to allow for enough random choices and auto_corrections is enabled, goals will be
-    un-excluded at random until in range. If this isn't enough to fix it, random choices will be skipped entirely.
-    
-    Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Fireworks", "Dark Gems", "Dragon Eggs", "Light Gems", "Locked Chests", "Shop Items"]"""
-    display_name= "Exclude From Random Goal"
-    valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Fireworks", "Dark Gems", "Dragon Eggs", "Light Gems", "Locked Chests", "Shop Items")
-    default = frozenset()
+    special_range_names = {
+        "random-range-1-40": -1
+    }
     
 
+class LightGemsGoal(NamedRange):
+    """This option lets you require completing a number of Light Gem checks in order to goal. This stacks on top of other goals.
+    To enable this, enter a number 1-100 to require that many Dark Gem checks in order to goal.
+    To disable this, enter 0. To have a random number 1-100 chosen, select "random-range-1-100", or enter -1."""
+    display_name = "Light Gems Goal"
+    range_start = -1
+    range_end = 100
+    default = 0
+    special_range_names = {
+        "random-range-1-100": -1
+    }
+    
+
+class DragonEggsGoal(NamedRange):
+    """This option lets you require completing a number of Dragon Egg checks in order to goal. This stacks on top of other goals.
+    To enable this, enter a number 1-80 to require that many Dragon Egg checks in order to goal.
+    To disable this, enter 0. To have a random number 1-80 chosen, select "random-range-1-80", or enter -1."""
+    display_name = "Dragon Eggs Goal"
+    range_start = -1
+    range_end = 80
+    default = 0
+    special_range_names = {
+        "random-range-1-80": -1
+    }
+    
+
+class FireworksGoal(NamedRange):
+    """This option lets you require completing a number of firework checks in order to goal. This stacks on top of other goals.
+    To enable this, enter a number 1-22 to require that many firework checks in order to goal.
+    To disable this, enter 0. To have a random number 1-22 chosen, select "random-range-1-22", or enter -1.
+    This goal requires firework_checks to be enabled.""" 
+    display_name = "Fireworks Goal"
+    range_start = -1
+    range_end = 22
+    default = 0
+    special_range_names = {
+        "random-range-1-22": -1
+    }
+    
+
+class ShopItemsGoal(NamedRange):
+    """This option lets you require purchasing a number of randomized shop items in order to goal. This stacks on top of other goals.
+    To enable this, enter a number 1-56 to require that many shop item purchases checks in order to goal.
+    To disable this, enter 0. To have a random number 1-56 chosen, select "random-range-1-56", or enter -1.
+    This goal requires shop_randomization to be enabled."""
+    display_name = "Shop Items Goal"
+    range_start = -1
+    range_end = 56
+    default = 0
+    special_range_names = {
+        "random-range-1-56": -1
+    }
+    
+
+class LockedChestsGoal(NamedRange):
+    """This option lets you require opening a number of locked chests in order to goal. This stacks on top of other goals.
+    To enable this, enter a number 1-52 to require opening that many locked chests checks in order to goal.
+    To disable this, enter 0. To have a random number 1-52 chosen, select "random-range-1-52", or enter -1."""
+    display_name = "Locked Chests Goal"
+    range_start = -1
+    range_end = 52
+    default = 0
+    special_range_names = {
+        "random-range-1-52": -1
+    }
+    
+    
+class ExcludeChestItems(Choice):
+    """dragon_eggs_goal includes locked chests which contain Dragon Eggs as a valid way to make goal progress.
+    light_gems_goal is the same with Light Gems. This option lets you limit these goals to only Dragon Eggs and Light
+    Gems which come from other sources. Useful if wanting to require them as goals but with less requirement on locked chests."""
+    display_name = "Exclude Chest Items"
+    option_disabled = 0
+    option_exclude_eggs = 1
+    option_exclude_light_gems = 2
+    option_exclude_both = 3
+    default = 0
+    
+###############CHECKS AND ITEMS###############
 class OpenWorldMode(Choice):
     """In the vanilla game, you can only teleport to a remote shop pad once you have physically reached it.
     open_world_mode lets you choose from a variety of ways to have shop pads become unlocked by Archipelago items.
-    Logic will expect you to teleport around the game in a very non-vanilla order to progress the seed.
+    Any choice besides 'vanilla' requires enabling teleport_across_realms to prevent potential softlock scenarios.
     
     vanilla: Shop pads are only unlocked by physically reaching them.
     full: All shop pads are unlocked from the start of the seed.
     randomized: Shop pads unlock through individual AP items e.g. "Dark Mine - Miner's Drop Shop Unlock".
-    progressive_levels: Shop pads unlock per-level in vanilla game order e.g. "Progressive Crocovile Swamp Shop Unlock"
-      would first unlock Perilous Pyramid, then Forgotten Temple, then Elder's Tree. AHT AP's wiki has a reference list for this. 
+    progressive_levels: Shop pads unlock per-level in vanilla game order e.g. "Progressive Crocovile Swamp Shop Unlock". 
     reverse_progressive_levels: Same as progressive_levels, but backwards vanilla order.
     full_level: All shop pads in a level will unlock at once through AP items. e.g. "Sunken Ruins - Shop Unlock".
     full_realm: All shop pads in a realm will unlock at once through AP items. e.g. "Icy Wilderness - Shop Unlock"."""
@@ -122,7 +193,7 @@ class OpenWorldMode(Choice):
     
 
 class FireworkChecks(Toggle):
-    """Enables 22 locations for flaming fireworks."""
+    """Enables 22 checks for flaming fireworks."""
     display_name = "Firework Checks"
     default = 0
 
@@ -140,15 +211,12 @@ class VanillaMinigameRewards(OptionSet):
 class FillerItems(OptionSet):
     """This option lets you choose the contents of your filler item pool. Items will be chosen at random from the enabled categories.
 
-    Categories:
     Dragon Eggs: These are considered filler due to having no impact on game progression.
     Breath Bombs: Fire, Electric, Water, and Ice Bombs. Bombs are only usable if you have their respective breath unlocked.
     Gem Packs: Gives a random amount of gems (400-600 or 800-1200 if you have double gems).
       It is advised to disable gem packs if randomizing the shop, as gem logic does not account for them.
     Generics: Items which do nothing, but have humorous names referencing things in the game and series.
     
-    If the list is empty and auto_corrections is enabled, the filler pool will default to only "Generics".
-
     Valid options: ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics"]"""
     display_name = "Filler Items"
     valid_keys = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics")
@@ -162,8 +230,6 @@ class StartingBreaths(OptionSet):
     "None" will start you with no breath, meaning "Starter Checks: Breath" will have a random item determined by Archipelago.
     If the list is left empty, 1 random breath will be chosen.
     
-    If the list contains both "None" and breath(s) and auto_corrections is enabled, the "None" will be discarded.
-    
     Valid Options: ["Fire", "Electric", "Water", "Ice", "None"]"""
     display_name = "Starting Breaths"
     valid_keys = ("Fire", "Electric", "Water", "Ice", "None")
@@ -172,7 +238,7 @@ class StartingBreaths(OptionSet):
 
 class MovementRandomization(OptionSet):
     """Choose whether to randomize each of the 3 base movement abilities (glide, swim, and charge).
-    Each one listed below will be randomized, meaning you will start with a different random item from Archipelago in their place.
+    If any are randomized, you will start with a random item from Archipelago in their place.
     
     Valid Options: ["Glide", "Swim", "Charge"]"""
     display_name = "Movement Randomization"
@@ -187,8 +253,7 @@ class StartingRealms(OptionSet):
     If using full open_world_mode, you will start with all 4 access cards.
     If using non-full open_world_mode, non-starting realms will be unlocked when their "Depot" shops are unlocked.
         
-    Starting in Icy Wilderness with unrandomized shop and movement is disallowed due to impossible starts.
-    If this is done and auto_corrections is enabled, your starting realm will be changed to Dragon Kingdom.
+    Starting in Icy Wilderness with shop_randomization odd and no movement abilities randomized is disallowed due to restrictive starts.
     
     Valid Options: ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"]"""
     display_name = "Starting Realms"
@@ -219,7 +284,7 @@ class KeyRings(Toggle):
 
 class ShopItemCount(Range):
     """This option decides how many shop items you will have, if shop_randomization is on. The shop must have a minimum
-    of 2 items when randomized because the gem logic system results in the first item always being free."""
+    of 2 items to enable the gem logic system to function properly."""
     display_name = "Shop Item Count"
     range_start = 2
     range_end = 56
@@ -236,8 +301,7 @@ class ShopLogic(Choice):
       Prices will steadily increase to enforce a specific order of unlocking the items, removing the risk of getting logically softlocked.
     
     Either way, the formula below is used to calculate your "base shop price", and your choice here determines the final prices.
-    Your first shop item will always be free (this prevents restrictive starts). If you don't fancy doing the math, you
-    can do some test seed(s) and tweak settings until you're happy with the prices.
+    The first shop item is always free. If you don't fancy doing the math, you can tweak test seed(s) until you're happy with the prices.
     
     ********************************FORMULA INFO (for the math nerds)********************************
     blink_gems_total = (20,203 - exclusions) * blink_gems%
@@ -246,7 +310,7 @@ class ShopLogic(Choice):
       If a full level location group or an individual minigame location is added to exclude_locations, the gems inside
       will be left out of the above calculations so you aren't logically expected to get those gems.
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
-    base_shop_price = gem_total / (number of shop items - 1)
+    base_shop_price = gem_total / (shop_item_count - 1)
 
     If shop_logic is unordered, shop items will all cost base_shop_price, rounded down as needed.
     If shop_logic is ordered, shop items will cost base_shop_price * 1, base_shop_price * 2, etc., rounded down as needed.
@@ -307,7 +371,7 @@ class RandomizeBossLairDoorCosts(Choice):
 
 
 class BossLairDoorCostMin(Range):
-    """Minimum cost for boss lairs, if set to randomized. Will be swapped with boss lair maximum if min > max and auto_corrections is enabled."""
+    """Minimum cost for boss lairs, if set to randomized. Must be less than or equal to boss_lair_door_cost_max."""
     display_name = "Boss Lair Door Cost Minimum"
     range_start = 1
     range_end = 40
@@ -315,7 +379,7 @@ class BossLairDoorCostMin(Range):
 
 
 class BossLairDoorCostMax(Range):
-    """Maximum cost for boss lairs, if set to randomized. Will be swapped with boss lair minimum if min > max and auto_corrections is enabled."""
+    """Maximum cost for boss lairs, if set to randomized."""
     display_name = "Boss Lair Door Cost Maximum"
     range_start = 1
     range_end = 40
@@ -354,7 +418,7 @@ class RandomizeLightGemDoorCosts(Choice):
 
 
 class LightGemDoorCostMin(Range):
-    """Minimum cost for light gem doors, if set to randomized. Will be swapped with light gem door maximum if min > max and auto_corrections is enabled."""
+    """Minimum cost for light gem doors, if set to randomized. Must be less than or equal to light_gem_door_cost_max."""
     display_name = "Minimum Light Gem Door Cost"
     range_start = 1
     range_end = 100
@@ -362,7 +426,7 @@ class LightGemDoorCostMin(Range):
 
 
 class LightGemDoorCostMax(Range):
-    """Maximum cost for light gem doors, if set to randomized. Will be swapped with light gem door minimum if min > max and auto_corrections is enabled."""
+    """Maximum cost for light gem doors, if set to randomized."""
     display_name = "Maximum Light Gem Door Cost"
     range_start = 1
     range_end = 100
@@ -383,7 +447,7 @@ class RandomizeGadgetCosts(Choice):
 
 
 class GadgetCostMin(Range):
-    """Minimum cost for gadgets, if set to randomized. Will be swapped with gadget maximum if min > max and auto_corrections is enabled."""
+    """Minimum cost for gadgets, if set to randomized. Must be less than or equal to gadget_cost_max."""
     display_name = "Minimum Gadget Cost"
     range_start = 1
     range_end = 100
@@ -391,7 +455,7 @@ class GadgetCostMin(Range):
 
 
 class GadgetCostMax(Range):
-    """Maximum cost for gadgets, if set to randomized. Will be swapped with gadget minimum if min > max and auto_corrections is enabled."""
+    """Maximum cost for gadgets, if set to randomized."""
     display_name = "Maximum Gadget Cost"
     range_start = 1
     range_end = 100
@@ -469,10 +533,9 @@ class SkipElevators(Toggle):
 
 class TeleportAcrossRealms(Toggle):
     """Allows for teleporting to unlocked shop pads in any realm, from any realm. For example, you could
-    teleport directly from Dragonfly Falls to Dark Mine without needing to use a hub realm teleporter.
-    This option is automatically enabled if using any form of open_world_mode."""
+    teleport directly from Dragonfly Falls to Dark Mine without needing to use a hub realm teleporter."""
     display_name = "Teleport Across Realms"
-    default = 0
+    default = 1
 
 
 @dataclass
@@ -484,8 +547,15 @@ class SpyroAHTOptions(PerGameCommonOptions):
     auto_corrections: AutoCorrections
     start_inventory_from_pool: StartInventoryPool
     
-    goal: Goal
-    exclude_from_random_goal: ExcludeFromRandomGoal
+    boss_goal: BossGoals
+    dark_gems_goal: DarkGemsGoal
+    light_gems_goal: LightGemsGoal
+    dragon_eggs_goal: DragonEggsGoal
+    fireworks_goal: FireworksGoal
+    shop_items_goal: ShopItemsGoal
+    locked_chests_goal: LockedChestsGoal
+    exclude_chest_items: ExcludeChestItems
+    
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
     vanilla_minigame_rewards: VanillaMinigameRewards
@@ -534,8 +604,11 @@ spyro_options_groups = [
     OptionGroup("GENERATION SETTINGS", [
         LoggingLevel, AutoCorrections
     ]),
-    OptionGroup("GOAL, CHECKS, AND ITEMS", [
-        Goal, ExcludeFromRandomGoal, OpenWorldMode, FireworkChecks, VanillaMinigameRewards, FillerItems
+    OptionGroup("GOAL", [
+        BossGoals, DarkGemsGoal, LightGemsGoal, DragonEggsGoal, FireworksGoal, ShopItemsGoal, LockedChestsGoal, ExcludeChestItems
+    ]),
+    OptionGroup("CHECKS AND ITEMS", [
+        OpenWorldMode, FireworkChecks, VanillaMinigameRewards, FillerItems
     ]),
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms
