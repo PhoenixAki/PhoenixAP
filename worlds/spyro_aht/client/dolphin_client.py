@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 def retrieve_mod_version() -> tuple[int, int]:
-    mod_version_full = dolphin_memory_engine.read_word(0x80187620)
+    mod_version_full = dolphin_memory_engine.read_word(self.addresses.AP_VERSION_MAJOR)
     mod_version_major = mod_version_full >> 16
     mod_version_minor = mod_version_full & 0xFFFF
     if mod_version_major == 0:  # old mod versions reported only a single version in the space the minor version currently uses now. Need adjusting to match new format
@@ -31,7 +31,7 @@ class DolphinClient(GenericClient):
         self._notification_task = asyncio.create_task(self.notification_task())
         self.ready = asyncio.Event()
         self.msg_queue = asyncio.Queue()
-        self.addresses = consts.G5SE7D()
+        self.addresses = consts.G5SE7D() # temp
         
         self.goal_list = []
         self.goal_target, self.goal_tally = 0, 0
@@ -67,7 +67,12 @@ class DolphinClient(GenericClient):
             
             game_id = dolphin_memory_engine.read_bytes(0x80000000, 6)
             logger.info(f"Detected game ID: {game_id.decode()!r}.")
-            if game_id != b'G5SE7D':
+
+            if game_id == b'G5SE7D':
+                self.addresses = consts.G5SE7D()
+            elif game_id == b'G5SP7D':
+                self.addresses = consts.G5SP7D()
+            else:
                 # dolphin_memory_engine.un_hook()
                 logger.error("WARNING: Invalid or unsupported game ID.")
                 return False
