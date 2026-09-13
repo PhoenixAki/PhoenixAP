@@ -14,18 +14,16 @@ from ..data import consts
 if TYPE_CHECKING:
     from ..context import SpyroAHTContext
 
-
-def retrieve_mod_version() -> tuple[int, int]:
-    mod_version_full = dolphin_memory_engine.read_word(self.addresses.AP_VERSION_MAJOR)
-    mod_version_major = mod_version_full >> 16
-    mod_version_minor = mod_version_full & 0xFFFF
-    if mod_version_major == 0:  # old mod versions reported only a single version in the space the minor version currently uses now. Need adjusting to match new format
-        return mod_version_minor, 0
-    else:
-        return mod_version_major, mod_version_minor
-
-
 class DolphinClient(GenericClient):
+    def retrieve_mod_version(self) -> tuple[int, int]:
+        mod_version_full = dolphin_memory_engine.read_word(self.addresses.AP_VERSION_MAJOR)
+        mod_version_major = mod_version_full >> 16
+        mod_version_minor = mod_version_full & 0xFFFF
+        if mod_version_major == 0:  # old mod versions reported only a single version in the space the minor version currently uses now. Need adjusting to match new format
+            return mod_version_minor, 0
+        else:
+            return mod_version_major, mod_version_minor
+        
     def __init__(self) -> None:
         super().__init__()
         self._notification_task = asyncio.create_task(self.notification_task())
