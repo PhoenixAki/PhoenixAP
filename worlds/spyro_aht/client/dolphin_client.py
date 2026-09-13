@@ -29,7 +29,7 @@ class DolphinClient(GenericClient):
         self._notification_task = asyncio.create_task(self.notification_task())
         self.ready = asyncio.Event()
         self.msg_queue = asyncio.Queue()
-        self.addresses = consts.G5SE7D() # temp
+        self.addresses = None  # will be assigned when game mod version is loaded
         
         self.goal_list = []
         self.goal_target, self.goal_tally = 0, 0

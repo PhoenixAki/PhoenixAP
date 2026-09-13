@@ -92,7 +92,7 @@ class DarkGemsGoal(NamedRange):
 
 class LightGemsGoal(NamedRange):
     """This option lets you require completing a number of Light Gem checks in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-100 to require that many Dark Gem checks in order to goal.
+    To enable this, enter a number 1-100 to require that many Light Gem checks in order to goal.
     To disable this, enter 0. To have a random number 1-100 chosen, select "random-range-1-100", or enter -1."""
     display_name = "Light Gems Goal"
     range_start = -1
