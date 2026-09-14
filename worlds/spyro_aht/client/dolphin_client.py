@@ -31,10 +31,6 @@ class DolphinClient(GenericClient):
         self.msg_queue = asyncio.Queue()
         self.addresses = None  # will be assigned when game mod version is loaded
         
-        self.goal_list = []
-        self.goal_target, self.goal_tally = 0, 0
-        self.finished_goals = [False, False, False, False, False, False, False, False, False]
-    
     async def notification_task(self):
         from CommonClient import logger
         try:
@@ -75,7 +71,7 @@ class DolphinClient(GenericClient):
                 logger.error("WARNING: Invalid or unsupported game ID.")
                 return False
 
-            mod_version_major, mod_version_minor = retrieve_mod_version()
+            mod_version_major, mod_version_minor = self.retrieve_mod_version()
             logger.info(f"Detected game mod version: {mod_version_major}.{mod_version_minor}.")
             
             if mod_version_major != consts.MOD_MAJOR:
@@ -119,7 +115,6 @@ class DolphinClient(GenericClient):
                     case _:
                         result.add(aploc)
         
-        # TODO: continue from here
         if slot_data["shop_randomization"]:
             for i in range(slot_data["shop_item_count"]):
                 await asyncio.sleep(0)
@@ -144,7 +139,6 @@ class DolphinClient(GenericClient):
         uint = index // 32
         bit = index % 32
         if await self.get_flag(self.addresses.OBJECTIVES + (uint * 4), 1 << bit):
-            self.goal_tally += 1
             return True
         else:
             return False
@@ -273,10 +267,6 @@ class DolphinClient(GenericClient):
         
         dolphin_memory_engine.write_byte(self.addresses.p_PATCH_BEEN_WRITTEN_TO, 1)
         
-        # set up some goal stuff while here since ctx is available and this is guaranteed to run at the start of save file
-        self.goal_list = ctx.slot_data["goal"]
-        self.goal_target = len(self.goal_list)
-    
     async def _prepare_shop_items(self, ctx: "SpyroAHTContext", *shop_items: NetworkItem):
         dolphin_memory_engine.write_byte(self.addresses.p_RANDOMIZE_SHOP, 1)
         dolphin_memory_engine.write_word(self.addresses.p_XLS_SHOP_ROWCOUNT, len(shop_items)+1)

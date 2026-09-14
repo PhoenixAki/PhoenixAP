@@ -128,6 +128,11 @@ ELDER_ABILITY_IDS = list(range(601, 605))  # IDs 601-604
 BOSS_IDS = list(range(701, 708))  # IDs 701-707. odds are "defeat", evens are breaths
 LOCKED_CHEST_IDS = list(range(801, 853))  # IDs 801-852
 SHOP_ITEM_IDS = list(range(901, 957))  # IDs 901-956
+# these 4 aren't as generalizable since the ID design didn't specifically separate them 
+BYRD_IDS = [302, 201, 328, 234, 342, 260, 352, 267]
+BLINK_IDS = [309, 210, 323, 228, 335, 243, 359, 278]
+TURRET_IDS = [311, 212, 318, 221, 333, 242, 349, 266]
+SPARX_IDS = [315, 217, 331, 238, 341, 254, 356, 275]
 
 DEATHLINK_MESSAGES = [
     "{name} died.",

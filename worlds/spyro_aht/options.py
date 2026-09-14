@@ -134,7 +134,7 @@ class ShopItemsGoal(NamedRange):
     """This option lets you require purchasing a number of randomized shop items in order to goal. This stacks on top of other goals.
     To enable this, enter a number 1-56 to require that many shop item purchases checks in order to goal.
     To disable this, enter 0. To have a random number 1-56 chosen, select "random-range-1-56", or enter -1.
-    This goal requires shop_randomization to be enabled."""
+    This goal requires shop_randomization to be enabled. Keep in mind that the first randomized shop item is always free."""
     display_name = "Shop Items Goal"
     range_start = -1
     range_end = 56
@@ -155,6 +155,39 @@ class LockedChestsGoal(NamedRange):
     special_range_names = {
         "random-range-1-52": -1
     }
+
+
+class EldersGoal(OptionSet):
+    """This option lets you choose which of the elder dragons you have to talk to in order to goal. They will stack on top of other goals.
+    Leave the list empty to have no elder requirements. You can enter "Random" to have a random selection of elders chosen,
+    even if you also choose a few elders explicitly alongside "Random".
+    
+    Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]"""
+    display_name = "Elders Goal"
+    valid_keys = ("Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor")
+    default = frozenset()
+
+
+class MinigamesGoal(OptionSet):
+    """This option lets you choose which minigame types you will have a goal requirement for. They will stack on top of other goals.
+    Leave the list empty to have no minigame requirements. You can enter "Random" to have a random selection of minigames chosen,
+    even if you also choose a few minigames explicitly alongside "Random".
+    
+    Valid Options: ["Sgt. Byrd", "Blink", "Turret", "Sparx"]"""
+    display_name = "Minigames Goal"
+    valid_keys = ("Sgt. Byrd", "Blink", "Turret", "Sparx")
+    default = frozenset()
+
+
+class MinigamesGoalCount(Range):
+    """This option customizes how many of each minigame type enabled in minigames_goal you have to do.
+    This number applies separately to each enabled one; it is not a count of how many you need to do in total.
+    
+    Enter a number 1-8 to require that many of each minigame type to goal."""
+    display_name = "Minigames Count"
+    range_start = 1
+    range_end = 8
+    default = 1
     
     
 class ExcludeChestItems(Choice):
@@ -555,6 +588,9 @@ class SpyroAHTOptions(PerGameCommonOptions):
     shop_items_goal: ShopItemsGoal
     locked_chests_goal: LockedChestsGoal
     exclude_chest_items: ExcludeChestItems
+    elders_goal: EldersGoal
+    minigames_goal: MinigamesGoal
+    minigames_goal_count: MinigamesGoalCount
     
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
@@ -605,7 +641,8 @@ spyro_options_groups = [
         LoggingLevel, AutoCorrections
     ]),
     OptionGroup("GOAL", [
-        BossGoals, DarkGemsGoal, LightGemsGoal, DragonEggsGoal, FireworksGoal, ShopItemsGoal, LockedChestsGoal, ExcludeChestItems
+        BossGoals, DarkGemsGoal, LightGemsGoal, DragonEggsGoal, FireworksGoal, ShopItemsGoal, 
+        LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal, MinigamesGoalCount
     ]),
     OptionGroup("CHECKS AND ITEMS", [
         OpenWorldMode, FireworkChecks, VanillaMinigameRewards, FillerItems
