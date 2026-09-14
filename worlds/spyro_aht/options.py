@@ -239,21 +239,55 @@ class VanillaMinigameRewards(OptionSet):
     display_name = "Vanilla Minigame Rewards"
     valid_keys = ("Sgt. Byrd", "Blink", "Turret", "Sparx")
     default = frozenset()
+    
+    
+class TrapPercentage(Range):
+    """This option decides how much of the junk item pool will contain traps, as a percentage out of 100.
+    The resulting number of traps will always be rounded down, unless it is between 0-1, in which case it's rounded up.
+    For example, if your seed needs 23 junk items, and you set trap_percentage to 50%, you would get 11 traps and 12 fillers.
+    If you instead set trap_percentage to 4%, you would have 1 trap and 22 fillers."""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
 
 
 class FillerItems(OptionSet):
-    """This option lets you choose the contents of your filler item pool. Items will be chosen at random from the enabled categories.
+    """This option lets you choose which categories of filler (neutral-to-positive effect) items are enabled.
 
     Dragon Eggs: These are considered filler due to having no impact on game progression.
     Breath Bombs: Fire, Electric, Water, and Ice Bombs. Bombs are only usable if you have their respective breath unlocked.
     Gem Packs: Gives a random amount of gems (400-600 or 800-1200 if you have double gems).
       It is advised to disable gem packs if randomizing the shop, as gem logic does not account for them.
-    Generics: Items which do nothing, but have humorous names referencing things in the game and series.
+    Shinies: Items which do nothing, but have humorous names referencing things in the game and series.
     
-    Valid options: ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics"]"""
+    Valid options: ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]"""
     display_name = "Filler Items"
-    valid_keys = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics")
-    default = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics")
+    valid_keys = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies")
+    default = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies")
+
+
+class TrapItems(OptionSet):
+    """This option lets you choose which categories of traps (neutral-to-negative effect) items are enabled.
+
+    TODO: TBD how they work if received offline or while one is already happening 
+    
+    Spam Call: A random line of Moneybags dialog + his shop music will play in-game for trap_length seconds.
+    Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.
+    Damage Sparx: Sparx will take 1 hit of damage. If he is gone, nothing happens (as in, this will never kill Spyro).
+    Gem Tax: Takes away a random amount of gems (500-1000).
+    
+    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax"]"""
+    display_name = "Trap Items"
+    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax")
+    default = frozenset()
+
+
+class TrapLength(Range):
+    """The Spam Call and Reverse Controls traps can run for a customizable number of seconds, which you can choose here."""
+    display_name = "Trap Length"
+    range_start = 5
+    range_end = 60
+    default = 30
 
 ###############START OF GAME###############
 class StartingBreaths(OptionSet):
@@ -595,7 +629,10 @@ class SpyroAHTOptions(PerGameCommonOptions):
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
     vanilla_minigame_rewards: VanillaMinigameRewards
+    trap_percentage: TrapPercentage
     filler_items: FillerItems
+    trap_items: TrapItems
+    trap_length: TrapLength
     
     starting_breaths: StartingBreaths
     movement_randomization: MovementRandomization
@@ -645,7 +682,7 @@ spyro_options_groups = [
         LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal, MinigamesGoalCount
     ]),
     OptionGroup("CHECKS AND ITEMS", [
-        OpenWorldMode, FireworkChecks, VanillaMinigameRewards, FillerItems
+        OpenWorldMode, FireworkChecks, VanillaMinigameRewards, TrapPercentage, FillerItems, TrapItems, TrapLength
     ]),
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms

@@ -2,6 +2,7 @@ import asyncio
 import copy
 import logging
 import pkgutil
+import math
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Any, TextIO, override
@@ -298,12 +299,8 @@ class SpyroAHTWorld(World):
         self.check_breaths_and_realms(self.options.starting_breaths, ["Fire", "Electric", "Water", "Ice"])
         self.check_breaths_and_realms(self.options.starting_realms, ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"])
         
-        bad_condition = len(self.options.filler_items.value) == 0  # empty filler list
-        if bad_condition and auto_corrections >= 1:  # fix_minor
-            self.log("Minor Warning: Filler item list cannot be empty. Fixing by adding \"Generics\".", LoggingLevel.WARNING)
-            self.options.filler_items.value.add("Generics")
-        elif bad_condition:
-            raise OptionError("Filler item list cannot be empty. Fix this, or set auto_corrections to at least fix_minor.")
+        self.check_filler_and_traps(self.options.filler_items, "Filler", "Shinies")
+        self.check_filler_and_traps(self.options.trap_items, "Trap", "Spam Call")
         
         self.check_lists(self.options.boss_goal, "boss_goal", "bosses")
         self.check_lists(self.options.elders_goal, "elders_goal", "elders")
@@ -350,6 +347,14 @@ class SpyroAHTWorld(World):
             random_choice = self.random.choice(choices)
             self.log(f"Starting breath list is empty. {random_choice} was chosen at random.", LoggingLevel.MEDIUM)
             option.value.add(random_choice)
+        
+    def check_filler_and_traps(self, option: OptionSet, error_txt_1: str, error_txt_2: str):
+        bad_condition = len(option.value) == 0  # empty list
+        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+            self.log(f"Minor Warning: {error_txt_1} item list cannot be empty when {error_txt_1.lower()}s are enabled. Fixing by adding \"{error_txt_2}\".", LoggingLevel.WARNING)
+            option.value.add(error_txt_2)
+        elif bad_condition:
+            raise OptionError(f"{error_txt_1} item list cannot be empty when {error_txt_1.lower()}s are enabled. Fix this, or set auto_corrections to at least fix_minor.")
     
     def check_lists(self, option: OptionSet, error_text_1: str, error_text_2: str):
         if "Random" in option.value:  # 3 cases to deal with here, all relate to having Random in the list
@@ -407,7 +412,10 @@ class SpyroAHTWorld(World):
         self.options.open_world_mode.value = slot_data['open_world_mode']
         self.options.firework_checks.value = slot_data['firework_checks']
         self.options.vanilla_minigame_rewards.value = slot_data['vanilla_minigame_rewards']
+        self.options.trap_percentage.value = slot_data['trap_percentage']
         self.options.filler_items.value = slot_data['filler_items']
+        self.options.trap_items.value = slot_data['trap_items']
+        self.options.trap_length.value = slot_data['trap_length']
         
         self.options.starting_breaths.value = slot_data['starting_breaths']
         self.options.movement_randomization.value = slot_data['movement_randomization']
@@ -680,9 +688,9 @@ class SpyroAHTWorld(World):
         """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
         all_filler_items = [item for item in item_data if item["group"] == "Filler"]
         enabled_filler_items: dict[str, list[str]] = {}
-        generics = []
+        shinies = []
         
-        for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics"]:
+        for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
             if category in self.options.filler_items.value:
                 enabled_filler_items[category] = []
         
@@ -693,11 +701,11 @@ class SpyroAHTWorld(World):
                 enabled_filler_items["Dragon Eggs"].append(filler_item["name"])
             elif "Bomb" in filler_item["name"] and "Breath Bombs" in enabled_filler_items.keys():
                 enabled_filler_items["Breath Bombs"].append(filler_item["name"])
-            elif filler_item.get("type", "") == "Generic" and "Generics" in enabled_filler_items.keys():
-                enabled_filler_items["Generics"].append(filler_item["name"])
-                generics.append(filler_item["name"])
+            elif filler_item.get("type", "") == "Shinies" and "Shinies" in enabled_filler_items.keys():
+                enabled_filler_items["Shinies"].append(filler_item["name"])
+                shinies.append(filler_item["name"])
         
-        return enabled_filler_items, generics
+        return enabled_filler_items, shinies
     
     def create_items(self) -> None:
         item_data = _load_file("items.json")
@@ -849,24 +857,37 @@ class SpyroAHTWorld(World):
                 for _ in range(count):
                     item_pool.append(self.create_item(item['name']))
                 self.log(f"Created {count} of item {item['name']}.", LoggingLevel.MAXIMUM)
+        self.multiworld.itempool.extend(item_pool)
                 
-        # add filler. Randomly choose a category, randomly choose an item from that category.
-        # generics have extra logic to force variety in the choices before duplicating
-        self.log("Setting up and creating filler items.", LoggingLevel.LOW)
-        self.filler_items, unchosen_generics = self.setup_filler_list(item_data)
-        self.log(f"Enabled filler categories: {list(self.filler_items.keys())}.", LoggingLevel.MEDIUM)
-        reset_generics = copy.copy(unchosen_generics)
-        while len(item_pool) < len(self.multiworld.get_unfilled_locations(self.player)):
+        # add junk items. First figure out how many of filler and trap are needed, then create them
+        self.log("Setting up filler and trap items.", LoggingLevel.LOW)
+        junk_count = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
+        trap_number = junk_count * (self.options.trap_percentage.value / 100)
+        if 0 < trap_number < 1: trap_number = math.ceil(trap_number)
+        else: trap_number = math.floor(trap_number)
+        filler_number = junk_count - trap_number
+        self.log(f"Number of fillers: {filler_number}. Number of traps: {trap_number}.", LoggingLevel.HIGH)
+
+        self.log(f"Enabled trap items: {", ".join(self.options.trap_items.value)}.", LoggingLevel.MEDIUM)
+        for _ in range(trap_number):
+            choice = self.random.choice(list(self.options.trap_items.value))
+            self.log(f"Created trap item {choice}.", LoggingLevel.MAXIMUM)
+            self.multiworld.itempool.append(self.create_item(choice))
+
+        # shinies have extra logic to force variety in the choices before duplicating
+        self.filler_items, unchosen_shinies = self.setup_filler_list(item_data)
+        self.log(f"Enabled filler categories: {", ".join(self.filler_items.keys())}.", LoggingLevel.MEDIUM)
+        reset_shinies = copy.copy(unchosen_shinies)
+        for _ in range(filler_number):
             category, items = self.random.choice(list(self.filler_items.items()))
             choice = self.random.choice(items)
-            if category == "Generics":
-                if len(unchosen_generics) == 0: unchosen_generics = copy.copy(reset_generics)
-                while choice not in unchosen_generics:
-                    choice = self.random.choice(unchosen_generics)
-                unchosen_generics.remove(choice)
+            if category == "Shinies":
+                if len(unchosen_shinies) == 0: unchosen_shinies = copy.copy(reset_shinies)
+                while choice not in unchosen_shinies:
+                    choice = self.random.choice(unchosen_shinies)
+                unchosen_shinies.remove(choice)
             self.log(f"Created filler item {choice}.", LoggingLevel.MAXIMUM)
-            item_pool.append(self.create_item(choice))
-        self.multiworld.itempool.extend(item_pool)
+            self.multiworld.itempool.append(self.create_item(choice))
   
     def set_rules(self) -> None:
         self.log("Setting up location rules.", LoggingLevel.LOW)
@@ -904,7 +925,10 @@ class SpyroAHTWorld(World):
             "open_world_mode": self.options.open_world_mode.value,
             "firework_checks": self.options.firework_checks.value,
             "vanilla_minigame_rewards": self.options.vanilla_minigame_rewards.value,
+            "trap_percentage": self.options.trap_percentage.value,
             "filler_items": self.options.filler_items.value,
+            "trap_items": self.options.trap_items.value,
+            "trap_length": self.options.trap_length.value,
 
             "starting_breaths": self.options.starting_breaths.value,
             "movement_randomization": self.options.movement_randomization.value,

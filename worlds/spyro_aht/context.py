@@ -141,7 +141,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         self.output(f"Minigames: {output[:-2]}.")
         # filler items
         output = ""
-        for minigame_type in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Generics"]:
+        for minigame_type in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
             if minigame_type in self.ctx.slot_data['filler_items']: output+= f"{minigame_type}, "
         self.output(f"Enabled Filler Item Types: {output[:-2]}.")
         
