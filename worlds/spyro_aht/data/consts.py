@@ -79,7 +79,6 @@ LOCATIONS_BITFIELD: dict[int, int] = {
 
 KEY_RINGS = [0x22, 0x23, 0x24, 0x25, 0x27, 0x26, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F]
 
-
 MINIGAME_OBJECTIVES: dict[int, tuple[int, int]] = {
     # byrd
     0x44000017: (302, 201),
@@ -100,7 +99,7 @@ MINIGAME_OBJECTIVES: dict[int, tuple[int, int]] = {
     0x4400007b: (315, 217),
     0x440000a5: (331, 238),    
     0x440000aa: (341, 254),
-    0x440000bb: (356, 275),
+    0x440000bb: (356, 275)
 }
 
 BOSS_OBJECTIVES = {

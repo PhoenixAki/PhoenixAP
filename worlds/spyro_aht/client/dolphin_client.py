@@ -208,6 +208,9 @@ class DolphinClient(GenericClient):
         
         if ctx.slot_data['shop_randomization']:
             locations = consts.SHOP_ITEM_IDS[:ctx.slot_data["shop_item_count"]]
+            dolphin_memory_engine.write_byte(self.addresses.p_DISPLAY_GEM_STATS, 1)
+            if ctx.slot_data['shop_logic']:
+                dolphin_memory_engine.write_byte(self.addresses.p_SHOP_UNLOCK_MODE, 1)
             await ctx.send_msgs([{"cmd": "LocationScouts", "locations": locations, "create_as_hint": 0}])
             await ctx._shop_items_received.wait()
             await self._prepare_shop_items(ctx, *ctx._shop_items)
@@ -252,9 +255,7 @@ class DolphinClient(GenericClient):
                     case 'Mecha-Red':
                         bosses[3] = True
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_EASY_MODE, struct.pack(">????", *bosses))
-
-        if ctx.slot_data['shop_randomization'] and ctx.slot_data['shop_logic']:
-            dolphin_memory_engine.write_byte(self.addresses.p_SHOP_UNLOCK_MODE, 1)
+            
         if ctx.slot_data['teleport_across_realms']:
             dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
             
