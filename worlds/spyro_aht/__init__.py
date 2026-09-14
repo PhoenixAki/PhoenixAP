@@ -444,7 +444,7 @@ class SpyroAHTWorld(World):
             ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS],
             ["Fireworks", FIREWORK_IDS], ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS],
             ["Elder Tomas", [ELDER_ABILITY_IDS[0]]], ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
-            ["Sgt. Byrd Minigames", BYRD_IDS], ["Blink Minigames", BLINK_IDS], ["Turret Minigames", TURRET_IDS], ["Sparx Minigames", SPARX_IDS]
+            ["Sgt. Byrd", BYRD_IDS], ["Blink", BLINK_IDS], ["Turret", TURRET_IDS], ["Sparx", SPARX_IDS]
         ]
         # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
         if self.options.exclude_chest_items.value >= 2:  # 2 = exclude light gems, 3 = exclude both
@@ -454,8 +454,8 @@ class SpyroAHTWorld(World):
         amounts = {
             "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value, "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
             "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value,
-            "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Sgt. Byrd Minigames": self.options.minigames_goal_count.value,
-            "Blink Minigames": self.options.minigames_goal_count.value, "Turret Minigames": self.options.minigames_goal_count.value, "Sparx Minigames": self.options.minigames_goal_count.value
+            "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Sgt. Byrd": self.options.minigames_goal_count.value,
+            "Blink": self.options.minigames_goal_count.value, "Turret": self.options.minigames_goal_count.value, "Sparx": self.options.minigames_goal_count.value
         }
         lookup_methods = [
             "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune" in self.options.boss_goal.value, "Red" in self.options.boss_goal.value,

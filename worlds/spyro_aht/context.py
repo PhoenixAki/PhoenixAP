@@ -80,18 +80,54 @@ class SpyroAHTCommands(ClientCommandProcessor):
         
         self.output("---------------GENERATION SETTINGS---------------")
         # logging level
-        convert = {1: "None", 2: "Low", 3: "Medium", 4: "High", 5: "Maximum"}
-        self.output(f"You set your logging level to {self.ctx.slot_data['logging_level']}.")
+        convert = {1: "none", 2: "low", 3: "medium", 4: "high", 5: "maximum"}
+        self.output(f"You set your logging level to {convert[self.ctx.slot_data['logging_level']]}.")
         # auto corrections
         convert = {0: "halt on", 1: "auto fix"}
         self.output(f"You chose to {convert[self.ctx.slot_data['auto_corrections']]} generation errors.")
         
-        # TODO goal: needs Big Updating for goal
-        self.output("---------------GOAL, CHECKS, & ITEMS---------------")
-        # goal
-        self.output(f"Your chose the following as your goal(s): {self.ctx.slot_data['goal']}.")
-        # exclude from random goal
-        self.output(f"You chose to exclude the following goals from random choosing: {self.ctx.slot_data['exclude_from_random_goal']}.")
+        self.output("---------------GOAL---------------")
+        # 4 boss goals
+        enabled = []
+        for goal in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]:
+            if goal in self.ctx.slot_data["goals_dict"].keys(): enabled.append(goal)
+        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
+        self.output(f"Enabled Boss Goals: {output}.")
+        # 6 collectible goals
+        enabled = []
+        for goal in ["Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests"]:
+            chests = ""
+            if goal in self.ctx.slot_data["goals_dict"].keys():
+                amount = self.ctx.slot_data[self.ctx.convert_goal_info[goal][1]]
+                
+                if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2:
+                    chests = " excluding chests"
+                elif goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] < 2:
+                    chests = " including chests"
+                elif goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] in [1, 3]:
+                    chests = " excluding chests"
+                elif goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] not in [1, 3]:
+                    chests = " including chests"
+                    
+                enabled.append(f"{goal} ({amount} required{chests})")
+        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
+        self.output(f"Enabled Collectible Goals: {output}.")
+        # elder goals
+        enabled = []
+        for goal in ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]:
+            if goal in self.ctx.slot_data["goals_dict"].keys(): enabled.append(goal)
+        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
+        self.output(f"Enabled Elder Titan Goals: {output}.")
+        # minigame goals
+        enabled = []
+        for goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]:
+            if goal in self.ctx.slot_data["goals_dict"].keys():
+                amount = self.ctx.slot_data["minigames_goal_count"]
+                enabled.append(f"{goal} ({amount} required)")
+        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
+        self.output(f"Enabled Minigame Goals: {output}.")
+
+        self.output("---------------CHECKS & ITEMS---------------")
         # open world mode
         convert = {0: "vanilla", 1: "full", 2: "randomized", 3: "progressive levels", 4: "reverse progressive levels", 5: "full levels", 6: "full realms"}
         self.output(f"You chose to set open world mode to {convert[self.ctx.slot_data['open_world_mode']]}.")
@@ -194,74 +230,39 @@ class SpyroAHTCommands(ClientCommandProcessor):
 
         return True
 
-    async def _cmd_check_goal(self, argument: str = "") -> bool:
-        """Format: /check_goal overview OR /check_goal goal_name.
-        "overview" summarizes status of each enabled goal.
-        "goal_name" gives a detailed list of every unchecked location for that goal."""
-        if argument == "":
-            self.output("Missing argument. Run again as /check_goal overview or /check_goal goal_name.")
-            return True
-    
-        if self.ctx.goal_list is None or len(self.ctx.goal_list) == 0:
-            self.output("Command cannot be ran before entering your save file. Try again once loaded in. If you still receive this message then, please report this as a bug to the developers.")
+    async def _cmd_check_goal(self) -> bool:
+        """Details completion progress on all enabled goals, including how many checks are left to do for each."""
+        if self.ctx.goals_dict == {}:
+            self.output("Command cannot be ran before entering your save file.")
             return True
         
-        argument = argument.lower()  # just in case
-        
-        if argument == "overview":
-            self.goal_overview()
-            return True
-
-        if "_" in argument:
-            fixed = argument.replace("_", " ").title()  # gnasty_gnorc -> Gnasty Gnorc, for example
-            if fixed == "Mecha Red": fixed = "Mecha-Red"  # Mecha Red doesn't match internal goal name of Mecha-Red this fixes it
-        else:
-            fixed = argument.title()
-
-        if fixed in self.ctx.goal_list:
-            self.goal_full(fixed)
-        elif fixed not in self.ctx.goal_list and fixed in list(self.ctx.convert_goal_info.keys()):
-            self.output(f"You do not have {fixed} as one of your enabled goals.")
-        else:
-            self.output("Invalid argument for command. Must be /check_goal overview or /check_goal goal_name.")
-
+        completed_goals, incomplete_goals = [], []
+        for goal in self.ctx.goals_dict.keys():
+            # have all enabled goals here. check status of each
+            _, option_name, id_list = self.ctx.convert_goal_info[goal]
+            # get amounts
+            if goal in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]: amount = 1
+            elif "Elder" in goal: amount = 1
+            elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.ctx.slot_data["minigames_goal_count"]
+            else: amount = self.ctx.slot_data[option_name]
+            # adjust id lists
+            if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2: id_list = id_list[:-15]
+            if goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] in [1, 3]: id_list = id_list[:-16]
+            if goal == "Shop Items": id_list = id_list[:self.ctx.slot_data["shop_item_count"]]
+            # tally it up
+            count = 0
+            for goal_id in id_list:
+                count += goal_id in self.ctx.checked_locations  # += 1 if true, otherwise 0
+            # check for copmleted status
+            if count >= amount: completed_goals.append(goal)
+            else: incomplete_goals.append(f"{goal} ({amount-count} checks left)")
+        # output while being cautious of empty lists
+        complete_text = "none" if len(completed_goals) == 0 else f"{", ".join(completed_goals)}"
+        incomplete_text = "none" if len(incomplete_goals) == 0 else f"{", ".join(incomplete_goals)}"
+        self.output(f"Completed Goals: {complete_text}.")
+        self.output(f"Incomplete Goals: {incomplete_text}.")
         return True
 
-    def goal_overview(self):
-        fully_done = True
-        done, not_done = "", ""
-        self.output(f"Goals: {", ".join(self.ctx.goal_list)}.")
-        for goal in self.ctx.goal_list:
-            goal_locs = self.ctx.convert_goal_info[goal][1]
-            if goal == "Shop Items": goal_locs = goal_locs[:self.ctx.slot_data['shop_item_count']]
-            count = len([loc for loc in goal_locs if loc not in self.ctx.checked_locations])
-            if count > 0:
-                not_done += f"{goal} ({count} check(s) left), "
-                fully_done = False
-            else:
-                done += f"{goal}, "
-
-        if fully_done:
-            self.output("All goals appear to be complete! If the client did not recognize this automatically, please report this to the developers.")
-        else:
-            if done != "": self.output(f"You have completed the following goals: {done[:-2]}.")
-            if not_done != "": self.output(f"You have not completed the following goals: {not_done[:-2]}.")
-            self.output("For a detailed breakdown (with potentially very long output), run this command again with a goal as the argument. For example, /check_goal mecha_red or /check_goal locked_chests.")
-
-    def goal_full(self, goal):
-        goal_locs = self.ctx.convert_goal_info[goal][1]
-        if goal == "Shop Items": goal_locs = goal_locs[:self.ctx.slot_data['shop_item_count']]
-        not_checked = ""
-
-        for loc in goal_locs:
-            if loc not in self.ctx.checked_locations:
-                not_checked += f"{self.ctx.location_names.lookup_in_slot(loc)}, "
-
-        if not_checked == "":
-            self.output(f"You have completed the {goal} goal!")
-        else:
-            self.output(f"You have not completed the {goal} goal. The following checks are not done yet: {not_checked[:-2]}.")
-    
     async def _cmd_costs(self) -> bool:
         """Displays the cost of each boss lair, light gem door, and gadget.
         This information is also listed in /list_options.
@@ -270,7 +271,6 @@ class SpyroAHTCommands(ClientCommandProcessor):
             self.output("Connect to a slot before using commands.")
             return True
         
-        self.output("---------------GATE AND GADGET COSTS---------------")
         # boss costs
         data = self.ctx.slot_data["boss_lair_costs"]
         self.output(f"The boss lair gates require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Dark Gems.")
@@ -315,8 +315,8 @@ class SpyroAHTContext(SuperContext):
             "Dark Gems": (4, "dark_gems_goal", consts.DARK_GEM_IDS), "Light Gems": (5, "light_gems_goal", consts.LIGHT_GEM_IDS), "Dragon Eggs": (6, "dragon_eggs_goal", consts.DRAGON_EGG_IDS),
             "Fireworks": (7, "fireworks_goal", consts.FIREWORK_IDS), "Shop Items": (8, "shop_items_goal", consts.SHOP_ITEM_IDS), "Locked Chests": (9, "locked_chests_goal", consts.LOCKED_CHEST_IDS),
             "Elder Tomas": (10, "elders_goal", [consts.ELDER_ABILITY_IDS[0]]), "Elder Magnus": (11, "elders_goal", [consts.ELDER_ABILITY_IDS[1]]), "Elder Titan": (12, "elders_goal", [consts.ELDER_ABILITY_IDS[2]]),
-            "Elder Astor": (13, "elders_goal", [consts.ELDER_ABILITY_IDS[3]]), "Sgt. Byrd Minigames": (14, "minigames_goal", consts.BYRD_IDS), "Blink Minigames": (15, "minigames_goal", consts.BLINK_IDS),
-            "Turret Minigames": (16, "minigames_goal", consts.TURRET_IDS), "Sparx Minigames": (17, "minigames_goal", consts.SPARX_IDS)
+            "Elder Astor": (13, "elders_goal", [consts.ELDER_ABILITY_IDS[3]]), "Sgt. Byrd": (14, "minigames_goal", consts.BYRD_IDS), "Blink": (15, "minigames_goal", consts.BLINK_IDS),
+            "Turret": (16, "minigames_goal", consts.TURRET_IDS), "Sparx": (17, "minigames_goal", consts.SPARX_IDS)
         }
         
         self.unlocked_shops = []
@@ -681,7 +681,7 @@ class SpyroAHTContext(SuperContext):
             return True
         else:
             if len(output) > 0:
-                logger.info(f"You've completed the following goal(s): {", ".join(output)}! Run /check_goal overview for info on what's left to do.")
+                logger.info(f"You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
             return False
 
     async def check_goal_component(self, goal: str, loc_id_list: list[int], option_name: str, last_one: bool) -> tuple[bool, str]:
@@ -689,7 +689,7 @@ class SpyroAHTContext(SuperContext):
         # find how many ids need to be checked
         if goal in ["Gnasty Gnorc", "Ineptune", "Red"]: amount = 2
         elif "Elder" in goal or goal == "Mecha-Red": amount = 1
-        elif "Minigames" in goal: amount = self.slot_data["minigames_goal_count"]
+        elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.slot_data["minigames_goal_count"]
         else: amount = self.slot_data[option_name]
         for goal_id in loc_id_list:
             if goal_id in self.checked_locations:
