@@ -13,7 +13,7 @@ class LoggingLevel(IntEnum):
     MAXIMUM = 5
 
 MOD_MAJOR = 16
-MOD_MINOR = 2
+MOD_MINOR = 3
 MOD_VERSION_STR = f"{MOD_MAJOR}.{MOD_MINOR}"
 
 CLIENT_MAJOR = 2
@@ -32,8 +32,6 @@ DRAGON_EGG = 0xA
 
 COLOUR_WHITE = (0x80, 0x80, 0x80, 0x80)
 COLOUR_RED = (0x80, 0x20, 0x20, 0x80)
-
-# https://discord.com/channels/619694339777495056/692182418429575260/1477821351879507998
 
 # (AP location ID, bitfield offset)
 LOCATIONS_BITFIELD: dict[int, int] = {
@@ -134,33 +132,15 @@ TURRET_IDS = [311, 212, 318, 221, 333, 242, 349, 266]
 SPARX_IDS = [315, 217, 331, 238, 341, 254, 356, 275]
 
 DEATHLINK_MESSAGES = [
-    "{name} died.",
-    "{name} ended their tail.",
-    "{name} was fed to the fish.",
-    "{name} forgot their wings.",
-    "{name} did a jig and then blew up.",
-    "{name} became a dragon fossil.",
-    "{name} became a purple pancake.",
-    "{name} became grape ice cream.",
-    "{name} spend one of their 9 lives.",
-    "{name} failed to land on their feet.",
-    "{name} discovered why cats hate water.",
-    "{name} became roadkill.",
-    "{name} blinked out of existence.",
-    "{name} went in too deep.",
-    "{name} touched the Earth's mantle.",
-    "{name} discovered the dangers of cave diving.",
-    "{name} caved in.",
-    "{name} died in a reality-defying fashion.",
-    "{name} failed a water landing.",
-    "{name} became roasted chicken.",
-    "{name}'s parachute failed.",
-    "{name} ended the Bug's Life.",
-    "{name} dropped the ball.",
-    "{name} let Fredneck starve.",
-    "{name} was a terrible godfather.",
-    "{name} was put on ice.",
-    "{name} was overrun."
+    "{name} died.", "{name} ended their tail.", "{name} was fed to the fish.", "{name} forgot their wings.",
+    "{name} did a jig and then blew up.", "{name} became a dragon fossil.", "{name} became a purple pancake.",
+    "{name} became grape ice cream.", "{name} spend one of their 9 lives.", "{name} failed to land on their feet.",
+    "{name} discovered why cats hate water.", "{name} became roadkill.", "{name} blinked out of existence.",
+    "{name} went in too deep.", "{name} touched the Earth's mantle.", "{name} discovered the dangers of cave diving.",
+    "{name} caved in.", "{name} died in a reality-defying fashion.", "{name} failed a water landing.",
+    "{name} became roasted chicken.", "{name}'s parachute failed.", "{name} ended the Bug's Life.",
+    "{name} dropped the ball.", "{name} let Fredneck starve.", "{name} was a terrible godfather.",
+    "{name} was put on ice.", "{name} was overrun."
 ]
 
 # matches order of shops in bitfield. Will look up bitfield indexes via .index(shop_name)
@@ -342,17 +322,17 @@ class AddressList:
     AP_VERSION_MAJOR: int
     AP_VERSION_MINOR: int
 
+    PLAYER_HEALTH: int
 
-
-
+# NTSC PS2
 class SLUS_20884(AddressList):
     pass
 
-
+# PAL PS2
 class SLES_52569(AddressList):
     pass
 
-
+# NTSC GC
 class G5SE7D(AddressList):
     p_LOCATION_BITFIELD = 0x803d8fa8
     p_KEYRING_BITFIELD = 0x803d8ff8
@@ -481,7 +461,10 @@ class G5SE7D(AddressList):
 
     AP_VERSION_MAJOR = 0x80187620
     AP_VERSION_MINOR = 0x80187622
+    
+    PLAYER_HEALTH = 0x80465B64
 
+# PAL GC
 class G5SP7D(AddressList):
     p_LOCATION_BITFIELD = 0x803d99f8
     p_KEYRING_BITFIELD = 0x803d9a48
@@ -610,6 +593,8 @@ class G5SP7D(AddressList):
 
     AP_VERSION_MAJOR = 0x80187c30
     AP_VERSION_MINOR = 0x80187c32
+
+    # PLAYER_HEALTH = TODO: need PAL address
 
 
 class AbilityFlags(IntFlag):

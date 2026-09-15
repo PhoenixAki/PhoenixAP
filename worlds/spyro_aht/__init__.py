@@ -799,7 +799,7 @@ class SpyroAHTWorld(World):
         
         self.log("Starting main item creation loop.", LoggingLevel.LOW)
         for item in item_data:
-            if item["group"] == "Filler":  # filler handled later
+            if item["group"] in ["Filler", "Traps"]:  # filler handled later
                 continue
             
             if item['name'] == "Double Gems" and skip_double_gems:

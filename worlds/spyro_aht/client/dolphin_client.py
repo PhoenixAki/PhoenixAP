@@ -180,6 +180,27 @@ class DolphinClient(GenericClient):
         dolphin_memory_engine.write_word(self.addresses.GEMS, count + value)
         dolphin_memory_engine.write_word(self.addresses.TOTAL_GEMS, total + value)
     
+    async def gem_tax(self):
+        value = random.randint(500, 1000)
+        count = dolphin_memory_engine.read_word(self.addresses.GEMS)
+        total = dolphin_memory_engine.read_word(self.addresses.TOTAL_GEMS)
+        if (count - value) < 0: value = count
+        dolphin_memory_engine.write_word(self.addresses.GEMS, count - value)
+        dolphin_memory_engine.write_word(self.addresses.TOTAL_GEMS, total - value)
+    
+    async def damage_sparx(self, ctx: SpyroAHTContext, logger):
+        health = dolphin_memory_engine.read_word(self.addresses.PLAYER_HEALTH)
+        logger.info(f"received damage sparx. current health: {health}.")
+        decrease = 32
+        if health == 64 and len([item for item in ctx.items_received if item.item == 0xF]) == 0:  # if no red Sparx
+            logger.info("returning to not kill player (at red sparx health but no red sparx")
+            return
+        if health - decrease <= 0:  # don't kill player
+            logger.info("returning to not kill player.")
+            return
+        logger.info(f"decreasing health to {health-decrease}.")
+        dolphin_memory_engine.write_word(self.addresses.PLAYER_HEALTH, health - decrease)
+    
     async def import_deathlink(self, mode: int):
         dolphin_memory_engine.write_byte(self.addresses.g_DEATHLINK_INGOING, mode)
 

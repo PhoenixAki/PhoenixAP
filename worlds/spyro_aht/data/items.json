@@ -304,92 +304,85 @@
         "type": "Shinies"
     },
     {
-        "name": "Spam Call from Moneybags",
+        "name": "A Cracked Gem",
         "id": 56,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "A Cracked Gem",
+        "name": "Mouthwash for Ineptune",
         "id": 57,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Mouthwash for Ineptune",
+        "name": "Anger Management Class for Red",
         "id": 58,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Anger Management Class for Red",
+        "name": "A Long Story from Elder Tomas",
         "id": 59,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "A Long Story from Elder Tomas",
+        "name": "1 Million Brain Cells",
         "id": 60,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "1 Million Brain Cells",
+        "name": "Treasure from the 10th Dimension",
         "id": 61,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Treasure from the 10th Dimension",
+        "name": "Stress Ball for Gnasty Gnorc",
         "id": 62,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Stress Ball for Gnasty Gnorc",
+        "name": "Portable Heater for the Ice Princess",
         "id": 63,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Portable Heater for the Ice Princess",
+        "name": "Apartment Lease for Teena",
         "id": 64,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Apartment Lease for Teena",
+        "name": "New Sneakers for Crash...wait, wrong series",
         "id": 65,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "New Sneakers for Crash...wait, wrong series",
+        "name": "Green Eco for Jak...wait, wrong series",
         "id": 66,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
     },
     {
-        "name": "Green Eco for Jak...wait, wrong series",
-        "id": 67,
-        "classification": 0,
-        "group": "Filler",
-        "type": "Shinies"
-    },
-    {
         "name": "Oil Change for Clank...wait, wrong series",
-        "id": 68,
+        "id": 67,
         "classification": 0,
         "group": "Filler",
         "type": "Shinies"
