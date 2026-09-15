@@ -24,11 +24,14 @@ class DolphinClient(GenericClient):
         else:
             return mod_version_major, mod_version_minor
         
-    def __init__(self) -> None:
+    def __init__(self, ctx: SpyroAHTContext) -> None:
         super().__init__()
         self._notification_task = asyncio.create_task(self.notification_task())
+        self._trap_task = asyncio.create_task(self.trap_task())
         self.ready = asyncio.Event()
         self.msg_queue = asyncio.Queue()
+        self.trap_queue = asyncio.Queue()
+        self.trap_timer = ctx.slot_data['trap_length']
         self.addresses = None  # will be assigned when game mod version is loaded
         
     async def notification_task(self):
@@ -51,6 +54,22 @@ class DolphinClient(GenericClient):
                     dolphin_memory_engine.write_word(self.addresses.n_AP_NOTIFICATION_TIMER, 5*60)
         except Exception:
             logger.error("ERROR IN NOTIFICATION TASK, REPORT IN THREAD", exc_info=True)
+    
+    async def trap_task(self):
+        from CommonClient import logger
+        try:
+            await self.ready.wait()
+            while True:
+                await asyncio.sleep(0.5)
+                if await self.should_process_checks():
+                    await asyncio.sleep(self.trap_timer)
+                    name = await self.trap_queue.get()
+                    
+                    dolphin_memory_engine.write_word(self.addresses.g_TRAP_DATA, 60*self.trap_timer)
+                    if name == "Spam Call": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 1)
+                    elif name == "Reverse Controls": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 2)
+        except Exception:
+            logger.error("ERROR IN TRAP TASK< REPORT IN THREAD", exc_info=True)
 
     async def connect(self):
         if not dolphin_memory_engine.is_hooked():
@@ -344,8 +363,6 @@ class DolphinClient(GenericClient):
 
     async def update_pause_gems(self, ctx: "SpyroAHTContext", events: list[str]):
         if not ctx.slot_data["shop_randomization"]:
-            return
-        if ctx.slot_data["shop_randomization"] and not ctx.slot_data["shop_logic"]:
             return
         
         blink_available, non_blink_enemies_available, other_available = 0, 0, 0

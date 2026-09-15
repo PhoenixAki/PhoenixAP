@@ -9,6 +9,7 @@ from ..data import consts
 class GenericClient(ABC):
     addresses: consts.AddressList | None
     msg_queue: asyncio.Queue[tuple[tuple[int, int, int, int], str]]
+    trap_queue: asyncio.Queue[str]
     ready: asyncio.Event
 
     @abstractmethod

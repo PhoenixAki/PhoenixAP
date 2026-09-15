@@ -268,11 +268,11 @@ class FillerItems(OptionSet):
 
 class TrapItems(OptionSet):
     """This option lets you choose which categories of traps (neutral-to-negative effect) items are enabled.
+    Spam Call + Reverse Controls will be queued and triggered sequentially. Any trap received while offline
+    will trigger (or get queued) upon next client reconnection.
 
-    TODO: TBD how they work if received offline or while one is already happening 
-    
     Spam Call: A random line of Moneybags dialog + his shop music will play in-game for trap_length seconds.
-    Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.
+    Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.  # TODO: currently only X axis.
     Damage Sparx: You will take 1 hit of damage. If Sparx is gone, nothing happens (as in, this will never kill you).
       Currently, this does not take away health from the minigame version of Sparx.
     Gem Tax: Takes away a random amount of gems (500-1000).
@@ -286,7 +286,7 @@ class TrapItems(OptionSet):
 class TrapLength(Range):
     """The Spam Call and Reverse Controls traps can run for a customizable number of seconds, which you can choose here."""
     display_name = "Trap Length"
-    range_start = 5
+    range_start = 1
     range_end = 60
     default = 30
 

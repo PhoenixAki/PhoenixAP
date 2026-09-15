@@ -392,7 +392,7 @@ class SpyroAHTContext(SuperContext):
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
     
     async def start_emu_client(self):
-        self.emu_client = DolphinClient()
+        self.emu_client = DolphinClient(self)
         await self.emu_client.connect()
         await self.emu_client.apply_patch(self)
         await self.emu_client.ready.wait()
@@ -495,10 +495,10 @@ class SpyroAHTContext(SuperContext):
                     await self._set_keyring_or_shop(bit, address)
                 case 0x30 | 0x31 | 0x32 | 0x33: # access cards
                     await self.emu_client.allow_realm_access(item.item)
-                case 0x50:  # spam call trap
-                    pass
-                case 0x51:  # reverse controls trap
-                    pass
+                case 0x50 | 0x51:  # spam call + reverse controls
+                    if item.item == 0x50: name = "Spam Call"
+                    elif item.item == 0x51: name = "Reverse Controls"
+                    self.emu_client.trap_queue.put_nowait(name)
                 case 0x52:  # damage sparx trap
                     await self.emu_client.damage_sparx(self, logger)
                 case 0x53:  # gem tax trap
