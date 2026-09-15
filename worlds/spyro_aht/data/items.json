@@ -27,14 +27,12 @@
         "name": "Dark Gem",
         "id": 8,
         "classification": 25,
-        "count": 40,
         "group": "Collectibles"
     },
     {
         "name": "Light Gem",
         "id": 9,
         "classification": 25,
-        "count": 100,
         "group": "Collectibles"
     },
     {
@@ -89,25 +87,18 @@
         "name": "Lockpick",
         "id": 28,
         "classification": 25,
-        "count": 52,
-        "option": [
-            {"option": "shop_randomization", "value": 1},
-            {"option": "key_rings", "value": 0}
-        ],
         "group": "Shop Items"
     },
     {
         "name": "Health Unit+",
         "id": 15,
         "classification": 2,
-        "option": [{"option": "shop_randomization", "value": 1}],
         "group": "Shop Items"
     },
     {
         "name": "Butterfly Jar",
         "id": 25,
         "classification": 2,
-        "option": [{"option": "shop_randomization", "value": 1}],
         "group": "Shop Items"
     },
     {
@@ -120,7 +111,6 @@
         "name": "Shockwave",
         "id": 27,
         "classification": 2,
-        "option": [{"option": "shop_randomization", "value": 1}],
         "group": "Shop Items"
     },
     {
@@ -157,98 +147,84 @@
         "name": "Dragon Village Key Ring",
         "id": 34,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Crocovile Swamp Key Ring",
         "id": 35,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Dragonfly Falls Key Ring",
         "id": 36,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Coastal Remains Key Ring",
         "id": 37,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Cloudy Domain Key Ring",
         "id": 38,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Sunken Ruins Key Ring",
         "id": 39,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Frostbite Village Key Ring",
         "id": 40,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Gloomy Glacier Key Ring",
         "id": 41,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Ice Citadel Key Ring",
         "id": 42,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Stormy Beach Key Ring",
         "id": 43,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Molten Mount Key Ring",
         "id": 44,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Magma Falls Key Ring",
         "id": 45,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Dark Mine Key Ring",
         "id": 46,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
         "name": "Red's Laboratory Key Ring",
         "id": 47,
         "classification": 1,
-        "option": [{"option": "key_rings", "value": 1}, {"option": "shop_randomization", "value": 1}],
         "group": "Key Rings"
     },
     {
@@ -415,519 +391,402 @@
         "name": "Dragon Village - Village Depot Shop Unlock",
         "id": 100,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Crocovile Swamp - Perilous Pyramid Shop Unlock",
         "id": 101,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Crocovile Swamp - Forgotten Temple Shop Unlock",
         "id": 102,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Crocovile Swamp - Elder's Tree Shop Unlock",
         "id": 103,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dragonfly Falls - Steep Canyon Shop Unlock",
         "id": 104,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dragonfly Falls - Tropical Cove Shop Unlock",
         "id": 105,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dragonfly Falls - Secret Area Shop Unlock",
         "id": 106,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Coastal Remains - Coastal Depot Shop Unlock",
         "id": 107,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Coastal Remains - Domain Doorstep Shop Unlock",
         "id": 108,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Coastal Remains - Waterfall Walkway Shop Unlock",
         "id": 109,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Cloudy Domain - Elevator Top Shop Unlock",
         "id": 110,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Cloudy Domain - Elder's Homestead Shop Unlock",
         "id": 111,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Cloudy Domain - Tallest Tower Shop Unlock",
         "id": 112,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Sunken Ruins - Atlantian Entryway Shop Unlock",
         "id": 113,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Sunken Ruins - The Depths Shop Unlock",
         "id": 114,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Sunken Ruins - Toxic Rise Shop Unlock",
         "id": 115,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Frostbite Village - Frosty Depot Shop Unlock",
         "id": 116,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Frostbite Village - Icy Camp Shop Unlock",
         "id": 117,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Frostbite Village - Eskimole Village Shop Unlock",
         "id": 118,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Ice Citadel - Cool Courtyard Shop Unlock",
         "id": 119,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Ice Citadel - Supercharge Central Shop Unlock",
         "id": 120,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Ice Citadel - Royal Chamber Shop Unlock",
         "id": 121,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Ice Citadel - Drawbridge Drop-off Shop Unlock",
         "id": 122,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Stormy Beach - Stormy Depot Shop Unlock",
         "id": 123,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Molten Mount - Destroyed Village Shop Unlock",
         "id": 124,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Molten Mount - Collapsed Bridge Shop Unlock",
         "id": 125,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Molten Mount - Lumber Storage Shop Unlock",
         "id": 126,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Magma Falls - Crackling Cave Shop Unlock",
         "id": 127,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Magma Falls - Chains of Lava Shop Unlock",
         "id": 128,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Magma Falls - Sparx Can Fly Shop Unlock",
         "id": 129,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dark Mine - Mine Mouth Shop Unlock",
         "id": 130,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dark Mine - Hidden Depths Shop Unlock",
         "id": 131,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dark Mine - Miner's Drop Shop Unlock",
         "id": 132,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Red's Laboratory - Celestial Show Shop Unlock",
         "id": 133,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Red's Laboratory - Mechanical Mishaps Shop Unlock",
         "id": 134,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Red's Laboratory - Pre-production Shop Unlock",
         "id": 135,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Red's Laboratory - Laser Leaps Shop Unlock",
         "id": 136,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 2}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Dragon Village - Shop Unlock",
         "id": 137,
         "classification": 1,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Crocovile Swamp - Shop Unlock",
         "id": 138,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Dragonfly Falls - Shop Unlock",
         "id": 139,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Coastal Remains - Shop Unlock",
         "id": 140,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Cloudy Domain - Shop Unlock",
         "id": 141,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Sunken Ruins - Shop Unlock",
         "id": 142,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Frostbite Village - Shop Unlock",
         "id": 143,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Ice Citadel - Shop Unlock",
         "id": 144,
         "classification": 1,
-        "count": 4,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Stormy Beach - Shop Unlock",
         "id": 145,
         "classification": 1,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Molten Mount - Shop Unlock",
         "id": 146,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Magma Falls - Shop Unlock",
         "id": 147,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Dark Mine - Shop Unlock",
         "id": 148,
         "classification": 1,
-        "count": 3,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Progressive Red's Laboratory - Shop Unlock",
         "id": 149,
         "classification": 1,
-        "count": 4,
-        "option": [
-            {"option": "open_world_mode", "value": 3, "operator": "ge"},
-            {"option": "open_world_mode", "value": 4, "operator": "le"}
-        ],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dragon Village - Shop Unlock",
         "id": 150,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Crocovile Swamp - Shop Unlock",
         "id": 151,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dragonfly Falls - Shop Unlock",
         "id": 152,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Coastal Remains - Shop Unlock",
         "id": 153,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Cloudy Domain - Shop Unlock",
         "id": 154,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Sunken Ruins - Shop Unlock",
         "id": 155,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Frostbite Village - Shop Unlock",
         "id": 156,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Ice Citadel - Shop Unlock",
         "id": 157,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Stormy Beach - Shop Unlock",
         "id": 158,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Molten Mount - Shop Unlock",
         "id": 159,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Magma Falls - Shop Unlock",
         "id": 160,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dark Mine - Shop Unlock",
         "id": 161,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Red's Laboratory - Shop Unlock",
         "id": 162,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 5}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Dragon Kingdom - Shop Unlock",
         "id": 163,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 6}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Lost Cities - Shop Unlock",
         "id": 164,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 6}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Icy Wilderness - Shop Unlock",
         "id": 165,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 6}],
         "group": "Shop Unlocks"
     },
     {
         "name": "Volcanic Isle - Shop Unlock",
         "id": 166,
         "classification": 1,
-        "option": [{"option": "open_world_mode", "value": 6}],
         "group": "Shop Unlocks"
     }
 ]

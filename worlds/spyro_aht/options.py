@@ -294,14 +294,14 @@ class TrapLength(Range):
 class StartingBreaths(OptionSet):
     """Choose which breath(s) you want to start with.
     
-    If multiple breaths are listed, all will be given (one into "Starter Checks: Breath", the rest into your start inventory).
+    If multiple breaths are listed, one will go into "Starter Checks: Breath", and the rest will go into your start inventory.
     "None" will start you with no breath, meaning "Starter Checks: Breath" will have a random item determined by Archipelago.
     If the list is left empty, 1 random breath will be chosen.
     
-    Valid Options: ["Fire", "Electric", "Water", "Ice", "None"]"""
+    Valid Options: ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "None"]"""
     display_name = "Starting Breaths"
-    valid_keys = ("Fire", "Electric", "Water", "Ice", "None")
-    default = ("Fire",)
+    valid_keys = ("Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "None")
+    default = ("Fire Breath",)
 
 
 class MovementRandomization(OptionSet):
@@ -319,7 +319,7 @@ class StartingRealms(OptionSet):
     
     If the list is left empty, 1 random realm will be chosen.
     If using full open_world_mode, you will start with all 4 access cards.
-    If using non-full open_world_mode, non-starting realms will be unlocked when their "Depot" shops are unlocked.
+    If using non-full open_world_mode, non-starting realms will be unlocked via their "Depot" shop unlocks, instead of access cards.
         
     Starting in Icy Wilderness with shop_randomization odd and no movement abilities randomized is disallowed due to restrictive starts.
     

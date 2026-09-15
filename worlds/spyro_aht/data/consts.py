@@ -160,6 +160,14 @@ SHOP_PAD_LIST = [
     "Red's Laboratory - Celestial Show", "Red's Laboratory - Mechanical Mishaps", "Red's Laboratory - Pre-production", "Red's Laboratory - Laser Leaps"
 ]
 
+# level name -> realm
+LEVEL_TO_REALM = {
+    "Dragon Village": "Dragon Kingdom", "Crocovile Swamp": "Dragon Kingdom", "Dragonfly Falls": "Dragon Kingdom",
+    "Coastal Remains": "Lost Cities", "Sunken Ruins": "Lost Cities", "Cloudy Domain": "Lost Cities",
+    "Frostbite Village": "Icy Wilderness", "Gloomy Glacier": "Icy Wilderness", "Ice Citadel": "Icy Wilderness",
+    "Stormy Beach": "Volcanic Isle", "Molten Mount": "Volcanic Isle", "Magma Falls": "Volcanic Isle", "Dark Mine": "Volcanic Isle", "Red's Laboratory": "Volcanic Isle"
+}
+
 # used to find all shops for a given level, in vanilla game order (list is reversed if reverse progressive is in use)
 LEVEL_SHOP_LOOKUP = {
     "Dragon Village": ["Village Depot"],

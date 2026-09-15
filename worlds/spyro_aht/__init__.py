@@ -16,7 +16,7 @@ from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
 from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel, BOSS_IDS, DARK_GEM_IDS, \
-    LIGHT_GEM_IDS, DRAGON_EGG_IDS, FIREWORK_IDS, SHOP_ITEM_IDS, LOCKED_CHEST_IDS, ELDER_ABILITY_IDS, BYRD_IDS, BLINK_IDS, TURRET_IDS, SPARX_IDS
+    LIGHT_GEM_IDS, DRAGON_EGG_IDS, FIREWORK_IDS, SHOP_ITEM_IDS, LOCKED_CHEST_IDS, ELDER_ABILITY_IDS, BYRD_IDS, BLINK_IDS, TURRET_IDS, SPARX_IDS, SHOP_PAD_LIST, LEVEL_TO_REALM
 from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
@@ -141,7 +141,7 @@ class SpyroAHTWorld(World):
     origin_region_name = "START"
 
     options_dataclass = SpyroAHTOptions
-    options: SpyroAHTOptions # type: ignore
+    options: SpyroAHTOptions
     web = SpyroAHTWeb()
     
     item_data = _load_file("items.json")
@@ -282,6 +282,14 @@ class SpyroAHTWorld(World):
         auto_corrections = self.options.auto_corrections.value
         self.log("Checking for common YAML option/setting issues.", LoggingLevel.LOW)
         
+        if self.options.open_world_mode.value != 1 and self.options.starting_realms.value == {"Icy Wilderness"}:
+            if self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
+                if self.options.auto_corrections == 2:  # fix_major specific
+                    self.log("Major Warning: Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
+                    self.options.starting_realms.value = {"Icy Wilderness"}
+                else:
+                    raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
+            
         bad_condition = self.options.teleport_across_realms.value == 0 and self.options.open_world_mode.value != 0
         if bad_condition and auto_corrections >= 1:  # fix_minor
             self.log("Minor Warning: teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling teleport_across_realms.", LoggingLevel.WARNING)
@@ -296,8 +304,8 @@ class SpyroAHTWorld(World):
         elif bad_condition:
             raise OptionError("Starting breath list cannot contain breaths and \"None\". Fix this, or set auto_corrections to at least fix_minor.")
         
-        self.check_breaths_and_realms(self.options.starting_breaths, ["Fire", "Electric", "Water", "Ice"])
-        self.check_breaths_and_realms(self.options.starting_realms, ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"])
+        self.check_breaths_and_realms(self.options.starting_breaths, ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"], "breath")
+        self.check_breaths_and_realms(self.options.starting_realms, ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"], "realm")
         
         self.check_filler_and_traps(self.options.filler_items, "Filler", "Shinies")
         self.check_filler_and_traps(self.options.trap_items, "Trap", "Spam Call")
@@ -342,10 +350,10 @@ class SpyroAHTWorld(World):
         self.check_eggs_and_gems(self.options.light_gems_goal, "light_gems_goal", 85, 15, self.options.exclude_chest_items >= 2)
         self.check_eggs_and_gems(self.options.dragon_eggs_goal, "dragon_eggs_goal", 64, 16, self.options.exclude_chest_items.value in [1, 3])
         
-    def check_breaths_and_realms(self, option: OptionSet, choices: list):
+    def check_breaths_and_realms(self, option: OptionSet, choices: list, error_txt: str):
         if len(option.value) == 0:
             random_choice = self.random.choice(choices)
-            self.log(f"Starting breath list is empty. {random_choice} was chosen at random.", LoggingLevel.MEDIUM)
+            self.log(f"Starting {error_txt} list is empty. {random_choice} was chosen at random.", LoggingLevel.MEDIUM)
             option.value.add(random_choice)
         
     def check_filler_and_traps(self, option: OptionSet, error_txt_1: str, error_txt_2: str):
@@ -682,11 +690,12 @@ class SpyroAHTWorld(World):
     
     def create_item(self, name: str) -> Item:
         """Helper method for create_items which returns an Item object."""
+        self.log(f"Created item {name} with classification {self._classifications[name]} and ID {self.item_name_to_id[name]}.", LoggingLevel.MAXIMUM)
         return Item(name, self._classifications[name], self.item_name_to_id[name], self.player)
 
-    def setup_filler_list(self, item_data) -> tuple[dict[str, list], list[str]]:
+    def setup_filler_list(self) -> tuple[dict[str, list], list[str]]:
         """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
-        all_filler_items = [item for item in item_data if item["group"] == "Filler"]
+        all_filler_items = [item for item in self.item_data if item["group"] == "Filler"]
         enabled_filler_items: dict[str, list[str]] = {}
         shinies = []
         
@@ -708,160 +717,115 @@ class SpyroAHTWorld(World):
         return enabled_filler_items, shinies
     
     def create_items(self) -> None:
-        item_data = _load_file("items.json")
-        item_pool = []
+        aht_items = []
+        # 4 Elder Abilities
+        for ability in ["Double Jump", "Pole Spin", "Wing Shield", "Wall Kick"]:
+            aht_items.append(self.create_item(ability))
         
-        skip_double_gems = self.options.shop_randomization.value == 1 and self.options.double_gems.value == 1
+        # 4 Shop Items
+        if self.options.shop_randomization.value == 1:
+            for shop_item in ["Health Unit+", "Butterfly Jar", "Double Gems", "Shockwave"]:
+                if shop_item == "Double Gems" and self.options.double_gems.value == 1:  # bit backwards. 0 = enabled, 1 = disabled
+                    self.log("Skipping creating Double Gems as double_gems is disabled.", LoggingLevel.HIGH)
+                    continue
+                else: aht_items.append(self.create_item(shop_item))
+
+        # 4 Breaths
+        self.log("Setting up starting breath(s).", LoggingLevel.LOW)
+        starter_placed = False
+        for breath in ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"]:
+            if breath in self.options.starting_breaths.value and not starter_placed:
+                self.log(f"Placing {breath} into Starter Checks: Breath.", LoggingLevel.HIGH)
+                self.get_location("Starter Checks: Breath").place_locked_item(self.create_item(breath))
+                starter_placed = True
+            elif breath in self.options.starting_breaths.value:
+                self.log(f"Placing {breath} into start inventory.", LoggingLevel.HIGH)
+                self.push_precollected(self.create_item(breath))
+            else:
+                aht_items.append(self.create_item(breath))
+        output = "none" if "None" in self.options.starting_breaths.value else ", ".join(self.options.starting_breaths.value)
+        self.log(f"Starting breaths: {output}.", LoggingLevel.MEDIUM)
+        
+        # 3 Base Movement Abilities
+        self.log("Setting up base movement abilities (glide, swim, and charge).", LoggingLevel.LOW)
+        for movement in ["Glide", "Swim", "Charge"]:
+            if movement not in self.options.movement_randomization.value:
+                self.log(f"Placing {movement} into Starter Checks: {movement}.", LoggingLevel.HIGH)
+                self.get_location(f"Starter Checks: {movement}").place_locked_item(self.create_item(movement))
+            else:
+                aht_items.append(self.create_item(movement))
+        
+        # Dark Gems & Light Gems
+        for _ in range(40):
+            aht_items.append(self.create_item("Dark Gem"))
+            
+        make_less_lgs = len(self.options.vanilla_minigame_rewards.value) * 4
+        for _ in range(100-make_less_lgs):
+            aht_items.append(self.create_item("Light Gem"))
         
         self.log("Checking if any minigames need vanilla rewards forced.", LoggingLevel.LOW)
-        vanilla = self.options.vanilla_minigame_rewards.value  # just to make rest a  bit more readable
-        skip_light_gems = len(vanilla) * 4  # done here so that it always has a value. 0 if no forcing, multiples of 4 otherwise
-        if len(vanilla) != 0:
-            self.log(f"Minigame types which will have vanilla rewards forced: {", ".join(vanilla)}.", LoggingLevel.MEDIUM)
+        if len(self.options.vanilla_minigame_rewards.value) != 0:
+            self.log(f"Minigame types which will have vanilla rewards forced: {", ".join(self.options.vanilla_minigame_rewards.value)}.", LoggingLevel.MEDIUM)
             npc_names = ["Sgt. Byrd"] * 8 + ["Blink"] * 8 + ["Sparx"] * 8 + ["Turret"] * 8
             for npc, minigame_loc in zip(npc_names, minigame_locs):
-                if npc in vanilla:
+                if npc in self.options.vanilla_minigame_rewards.value:
                     item = "Dragon Egg" if "Dragon Egg" in minigame_loc else "Light Gem"
                     self.get_location(minigame_loc).place_locked_item(self.create_item(item))
         
-        self.log("Setting up starting breath(s).", LoggingLevel.LOW)
-        starter_done = False
-        if "None" not in self.options.starting_breaths.value:  # if none is there at all, it will be the only thing there, thus nothing should be done
-            for breath in self.options.starting_breaths.value:
-                breath_name = f"{breath} Breath"
-                self._starting_breaths.append(breath_name)
-                if starter_done:
-                    self.push_precollected(self.create_item(breath_name))
-                    self.log(f"{breath_name} has been placed into start inventory.", LoggingLevel.HIGH)
-                else:
-                    self.get_location("Starter Checks: Breath").place_locked_item(self.create_item(breath_name))
-                    self.log(f"{breath_name} has been placed into Starter Checks: Breath.", LoggingLevel.HIGH)
-                    starter_done = True
-            self.log(f"Starting breath(s) are {", ".join(self._starting_breaths)}.", LoggingLevel.MEDIUM)
-        else:
-            self.log(f"Starting with no breaths.", LoggingLevel.MEDIUM)
-        
-        self.log("Setting up base movement abilities (glide, swim, and charge).", LoggingLevel.LOW)
-        skip_movements = []
-        for movement in ["Glide", "Swim", "Charge"]:
-            if movement not in self.options.movement_randomization.value:
-                self.get_location(f"Starter Checks: {movement}").place_locked_item(self.create_item(movement))
-                self.log(f"{movement} has been placed into Starter Checks: {movement}.", LoggingLevel.HIGH)
-                skip_movements.append(movement)
-            else:
-                self.log(f"{movement} will be added to the item pool.", LoggingLevel.HIGH)
-        self.log(f"Starting movement abilities: {", ".join(skip_movements)}.", LoggingLevel.MEDIUM)
+        # Key Rings & Lockpicks
+        if self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1:
+            for level in ["Dragon Village", "Crocovile Swamp", "Dragonfly Falls", "Coastal Remains", "Sunken Ruins", "Cloudy Domain", "Frostbite Village", "Gloomy Glacier", "Ice Citadel", "Stormy Beach", "Molten Mount", "Magma Falls", "Dark Mine", "Red's Laboratory"]:
+                aht_items.append(self.create_item(f"{level} Key Ring"))
+        elif self.options.shop_randomization.value == 1:
+            for _ in range(52):
+                aht_items.append(self.create_item("Lockpick"))
             
+        # Starting Realms
         self.log("Setting up starting realms, access cards, and starting shop unlocks (if open world mode is enabled).", LoggingLevel.LOW)
-        if self.options.open_world_mode.value == 1:  # all 4 if open world is on
-            self._starting_realms = ['Dragon Kingdom', 'Lost Cities', 'Icy Wilderness', 'Volcanic Isle']
-            self.log("open_world_mode is set to full. starting_realms list has been overridden to start with all 4 realms.", LoggingLevel.WARNING)
-        else:
-            self._starting_realms = list(self.options.starting_realms.value)
+        for realm in REALM_LEVEL_LISTS.keys():
+            if self.options.open_world_mode.value == 1 and realm not in self.options.starting_realms.value:
+                self.log(f"Adding {realm} to starting realm list due to full open world mode.", LoggingLevel.HIGH)
+                self.options.starting_realms.value.add(realm)
+            if realm in self.options.starting_realms.value:
+                self.log(f"Placing {realm} Access Card into start inventory.", LoggingLevel.HIGH)
+                self.push_precollected(self.create_item(f"{realm} Access Card"))
+            elif self.options.open_world_mode.value == 0:  # non-starting realm access cards only exist if non-open world
+                self.multiworld.itempool.append(self.create_item(f"{realm} Access Card"))
+        self.log(f"Starting realm list: {", ".join(self.options.starting_realms.value)}.", LoggingLevel.MEDIUM)
         
-        if len(self._starting_realms) == 1 and self._starting_realms[0] == "Icy Wilderness" and self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
-            if self.options.auto_corrections == 2:  # fix_major specific
-                self.log("Major Warning: Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
-                self._starting_realms[0] = "Dragon Kingdom"
-            else:
-                raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
-            
-        # add starting realm choices to start inventory, if not already in start inventory
-        added_realms, subtract_one = [], []
-        convert = {"Dragon Kingdom": "Dragon Village - Village Depot Shop Unlock", "Lost Cities": "Coastal Remains - Coastal Depot Shop Unlock", "Icy Wilderness": "Frostbite Village - Frosty Depot Shop Unlock", "Volcanic Isle": "Stormy Beach - Stormy Depot Shop Unlock"}
-        for realm in self._starting_realms:
-            new_card = self.create_item(f"{realm} Access Card")
-            added_realms.append(f"{realm} Access Card")
-            if new_card not in self.multiworld.precollected_items[self.player]:  # don't add the card if the player already put it there
-                self.log(f"Added {new_card.name} to start inventory.", LoggingLevel.HIGH)
-                self.push_precollected(new_card)
-            else:
-                self.log(f"Skipped adding {new_card.name} to start inventory because it's already there.", LoggingLevel.HIGH)
-                
-            # also unlock starting realm depot shops if open world is on but not full and pause menu is open shop
-            # this is to prevent softlocks if starting in a realm and teleporting away too early and thus being unable to return to the starting hub area
-            # this is done by manually creating and pre-collecting individual depot unlock items regardless of mode
-            # modes 5 and 6 (full levels + realms) doesn't need to have an item subtracted because their shop unlock items always include at least one non-starting hub shop
-            if 2 <= self.options.open_world_mode.value <= 4 and self.options.pause_menu_patch.value == 0:
-                new_shop_unlock = self.create_item(convert[realm])
-                if new_shop_unlock not in self.multiworld.precollected_items[self.player]:
-                    self.log(f"Adding {new_shop_unlock.name} to start inventory.", LoggingLevel.HIGH)
-                    self.push_precollected(new_shop_unlock)
+        # Shop Unlocks (including pre-collecting ones in starting realms, depending on settings)
+        if self.options.open_world_mode.value == 2:  # individual shop unlocks
+            for shop in SHOP_PAD_LIST:
+                realm = LEVEL_TO_REALM[shop.split(" - ")[0]]
+                if self.options.pause_menu_patch.value == 0 and "Depot" in shop and realm in self.options.starting_realms.value:
+                    self.log(f"Placing {shop} Shop Unlock into start inventory due to being in a starting realm.", LoggingLevel.HIGH)
+                    self.push_precollected(self.create_item(f"{shop} Shop Unlock"))
                 else:
-                    self.log(f"Skipping adding {new_shop_unlock.name} to start inventory because player already put it there.", LoggingLevel.HIGH)
+                    aht_items.append(self.create_item(f"{shop} Shop Unlock"))
+        elif self.options.open_world_mode.value in [3, 4]:  # 3 = progressive, 4 = reverse progressive
+            for level in LEVEL_TO_REALM.keys():
+                if level in ["Dragon Village", "Stormy Beach"]: count = 1
+                elif level in ["Crocovile Swamp", "Dragonfly Falls", "Coastal Remains", "Cloudy Domain", "Sunken Ruins", "Frostbite Village", "Molten Mount", "Magma Falls", "Dark Mine"]: count = 3
+                elif level in ["Ice Citadel", "Red's Laboratory"]: count = 4
+                else: count = 0  # gloomy glacier
                 
-                if self.options.open_world_mode.value == 2:  # randomized
-                    subtract_one.append(convert[realm])
-                elif 3 <= self.options.open_world_mode.value <= 4:  # progressive or rev progressive
-                    depot_level = REALM_LEVEL_LOOKUP[realm][0]
-                    subtract_one.append(f"Progressive {depot_level} - Shop Unlock")
-        self.log(f"Starting realm list: {", ".join(self._starting_realms)}.", LoggingLevel.MEDIUM)
-        
-        self.log("Starting main item creation loop.", LoggingLevel.LOW)
-        for item in item_data:
-            if item["group"] in ["Filler", "Traps"]:  # filler handled later
-                continue
-            
-            if item['name'] == "Double Gems" and skip_double_gems:
-                self.log("Skipping creating Double Gems item because shop_randomization is enabled but double_gems is disabled.", LoggingLevel.HIGH)
-                continue
-            
-            if item['name'] in skip_movements:
-                self.log(f"Skipping creating {item['name']} due to already being placed into Starter Checks: {item['name']}.", LoggingLevel.HIGH)
-                continue
-                
-            if item['name'] in self._starting_breaths:
-                self.log(f"Skipping creating {item['name']} due to being a starting breath.", LoggingLevel.HIGH)
-                continue
-            
-            if self.options.open_world_mode.value != 0 and "Access Card" in item['name']:
-                # open world mode == 1 has access cards, but they're created and pre-collected above, thus all should be skipped here
-                # open world mode > 1 has no access cards besides the one(s) the player starts with, created and pre-collected above, thus all should be skipped here
-                self.log(f"Skipping creating {item['name']} because access cards have already been handled.", LoggingLevel.HIGH)
-                continue
-            elif item['name'] in added_realms:
-                self.log(f"Skipping creating {item['name']} because it's a starting realm.", LoggingLevel.HIGH)
-                continue  # non-open world has normal access card logic. only skip the ones pre-added, add the rest to the pool
-            
-            add = True
-
-            for curr_option in item.get("option", ()):
-                option = getattr(self.options, curr_option['option'])
-                match curr_option.get('operator', 'eq'):
-                    case 'eq':
-                        add = add and option.value == curr_option['value']
-                    case 'ne':
-                        add = add and option.value != curr_option['value']
-                    case 'gt':
-                        add = add and option.value > curr_option['value']
-                    case 'ge':
-                        add = add and option.value >= curr_option['value']
-                    case 'lt':
-                        add = add and option.value < curr_option['value']
-                    case 'le':
-                        add = add and option.value <= curr_option['value']
-
-            if add:
-                count = item.get('count', 1)
-                if item['name'] == 'Light Gem':
-                    if skip_light_gems > 0:
-                        self.log(f"Making {skip_light_gems} less Light Gems due to {skip_light_gems} being pre-placed via vanilla_minigame_rewards.", LoggingLevel.HIGH)
-                        count -= skip_light_gems
-                if item['name'] in subtract_one:  # make one less of each corresponding depot shop level unlock if added above already
-                    if count == 1:
-                        self.log(f"Skipping making {item['name']} because its corresponding realm is a starting realm.", LoggingLevel.HIGH)
-                    else:
-                        self.log(f"Making 1 less {item['name']} because its corresponding realm is a starting realm.", LoggingLevel.HIGH)
+                if self.options.pause_menu_patch.value == 0 and LEVEL_TO_REALM[level] in self.options.starting_realms.value and count > 0:
+                    self.log(f"Placing 1 Progressive {level} - Shop Unlock into start inventory due to being in a starting realm.", LoggingLevel.HIGH)
+                    self.push_precollected(self.create_item(f"Progressive {level} - Shop Unlock"))
                     count -= 1
-
-                for _ in range(count):
-                    item_pool.append(self.create_item(item['name']))
-                self.log(f"Created {count} of item {item['name']}.", LoggingLevel.MAXIMUM)
-        self.multiworld.itempool.extend(item_pool)
                 
-        # add junk items. First figure out how many of filler and trap are needed, then create them
+                for _ in range(count):
+                    aht_items.append(self.create_item(f"Progressive {level} - Shop Unlock"))
+        elif self.options.open_world_mode.value == 5:  # full levels
+            for level in LEVEL_TO_REALM.keys():
+                if level != "Gloomy Glacier": aht_items.append(self.create_item(f"{level} - Shop Unlock"))
+        elif self.options.open_world_mode.value == 6:  # full realms
+            for realm in REALM_LEVEL_LISTS.keys():
+                aht_items.append(self.create_item(f"{realm} - Shop Unlock"))
+        
+        # Filler and Traps
         self.log("Setting up filler and trap items.", LoggingLevel.LOW)
-        junk_count = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
+        junk_count = len(self.multiworld.get_unfilled_locations(self.player)) - len(aht_items)
         trap_number = junk_count * (self.options.trap_percentage.value / 100)
         if 0 < trap_number < 1: trap_number = math.ceil(trap_number)
         else: trap_number = math.floor(trap_number)
@@ -872,10 +836,10 @@ class SpyroAHTWorld(World):
         for _ in range(trap_number):
             choice = self.random.choice(list(self.options.trap_items.value))
             self.log(f"Created trap item {choice}.", LoggingLevel.MAXIMUM)
-            self.multiworld.itempool.append(self.create_item(choice))
+            aht_items.append(self.create_item(choice))
 
         # shinies have extra logic to force variety in the choices before duplicating
-        self.filler_items, unchosen_shinies = self.setup_filler_list(item_data)
+        self.filler_items, unchosen_shinies = self.setup_filler_list()
         self.log(f"Enabled filler categories: {", ".join(self.filler_items.keys())}.", LoggingLevel.MEDIUM)
         reset_shinies = copy.copy(unchosen_shinies)
         for _ in range(filler_number):
@@ -887,7 +851,9 @@ class SpyroAHTWorld(World):
                     choice = self.random.choice(unchosen_shinies)
                 unchosen_shinies.remove(choice)
             self.log(f"Created filler item {choice}.", LoggingLevel.MAXIMUM)
-            self.multiworld.itempool.append(self.create_item(choice))
+            aht_items.append(self.create_item(choice))
+    
+        self.multiworld.itempool.extend(aht_items)
   
     def set_rules(self) -> None:
         self.log("Setting up location rules.", LoggingLevel.LOW)
@@ -932,7 +898,7 @@ class SpyroAHTWorld(World):
 
             "starting_breaths": self.options.starting_breaths.value,
             "movement_randomization": self.options.movement_randomization.value,
-            "starting_realms": self._starting_realms,
+            "starting_realms": self.options.starting_realms.value,
 
             "shop_randomization": self.options.shop_randomization.value,
             "key_rings": self.options.key_rings.value,
