@@ -24,15 +24,17 @@ class DolphinClient(GenericClient):
         else:
             return mod_version_major, mod_version_minor
         
-    def __init__(self, ctx: SpyroAHTContext) -> None:
+    def __init__(self, ctx: SpyroAHTContext, logger) -> None:
         super().__init__()
+        self.logger = logger
+        self.ctx: SpyroAHTContext = ctx
         self._notification_task = asyncio.create_task(self.notification_task())
         self._trap_task = asyncio.create_task(self.trap_task())
         self.ready = asyncio.Event()
         self.msg_queue = asyncio.Queue()
         self.trap_queue = asyncio.Queue()
         self.trap_timer = ctx.slot_data['trap_length']
-        self.addresses = None  # will be assigned when game mod version is loaded
+        self.addresses = None  # type: ignore
         
     async def notification_task(self):
         from CommonClient import logger
@@ -69,29 +71,27 @@ class DolphinClient(GenericClient):
                     if name == "Spam Call": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 1)
                     elif name == "Reverse Controls": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 2)
         except Exception:
-            logger.error("ERROR IN TRAP TASK< REPORT IN THREAD", exc_info=True)
+            logger.error("ERROR IN TRAP TASK, REPORT IN THREAD", exc_info=True)
 
     async def connect(self):
         if not dolphin_memory_engine.is_hooked():
             from CommonClient import logger
-            logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) client initializing.")
-            logger.info(f"Detected client version: {consts.CLIENT_VERSION_STR}.")            
+            logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing.")
             dolphin_memory_engine.hook()
             
             game_id = dolphin_memory_engine.read_bytes(0x80000000, 6)
-            logger.info(f"Detected game ID: {game_id.decode()!r}.")
 
             if game_id == b'G5SE7D':
+                logger.info("NTSC game version detected.")
                 self.addresses = addresses.G5SE7D()
             elif game_id == b'G5SP7D':
+                logger.info("PAL game version detected.")
                 self.addresses = addresses.G5SP7D()
             else:
-                # dolphin_memory_engine.un_hook()
                 logger.error("WARNING: Invalid or unsupported game ID.")
                 return False
 
             mod_version_major, mod_version_minor = self.retrieve_mod_version()
-            logger.info(f"Detected game mod version: {mod_version_major}.{mod_version_minor}.")
             
             if mod_version_major != consts.MOD_MAJOR:
                 # dolphin_memory_engine.un_hook()
@@ -200,10 +200,10 @@ class DolphinClient(GenericClient):
         if (count - value) < 0: value = count
         dolphin_memory_engine.write_word(self.addresses.GEMS, count - value)
     
-    async def damage_sparx(self, ctx: SpyroAHTContext, logger):
+    async def damage_sparx(self, logger):
         health = dolphin_memory_engine.read_word(self.addresses.HEALTH)
         decrease = 32
-        if health == 64 and len([item for item in ctx.items_received if item.item == 0xF]) == 0: return # if no red Sparx
+        if health == 64 and len([item for item in self.ctx.items_received if item.item == 0xF]) == 0: return # if no red Sparx
         if health - decrease <= 0: return # don't kill player
         dolphin_memory_engine.write_word(self.addresses.HEALTH, health - decrease)
     
@@ -217,61 +217,61 @@ class DolphinClient(GenericClient):
             return b
         return False
 
-    async def apply_patch(self, ctx: "SpyroAHTContext"):
-        dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, ctx.slot_data['skip_cutscenes'])
+    async def apply_patch(self):
+        dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, self.ctx.slot_data['skip_cutscenes'])
         dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_POPUPS, 1)
-        dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, ctx.slot_data['skip_elevators'])
-        dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(ctx._seed) & 0xffffffff))
-        dolphin_memory_engine.write_byte(self.addresses.p_USE_KEY_RINGS, ctx.slot_data['key_rings'])
-        dolphin_memory_engine.write_byte(self.addresses.p_FIREWORKS_ARE_RANDOMIZED, ctx.slot_data['firework_checks'])
-        dolphin_memory_engine.write_byte(self.addresses.p_UT_ENABLED, int(ctx.tracker_found))
-        if ctx.slot_data['death_link']:
-            dolphin_memory_engine.write_byte(self.addresses.p_DEATHLINK_DEATHS_BEFORE_SEND, ctx.slot_data['death_link_amnesty'])
+        dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, self.ctx.slot_data['skip_elevators'])
+        dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(self.ctx._seed) & 0xffffffff))
+        dolphin_memory_engine.write_byte(self.addresses.p_USE_KEY_RINGS, self.ctx.slot_data['key_rings'])
+        dolphin_memory_engine.write_byte(self.addresses.p_FIREWORKS_ARE_RANDOMIZED, self.ctx.slot_data['firework_checks'])
+        dolphin_memory_engine.write_byte(self.addresses.p_UT_ENABLED, int(self.ctx.tracker_found))
+        if self.ctx.slot_data['death_link']:
+            dolphin_memory_engine.write_byte(self.addresses.p_DEATHLINK_DEATHS_BEFORE_SEND, self.ctx.slot_data['death_link_amnesty'])
 
-        if ctx.slot_data['pause_menu_patch'] == 0:
+        if self.ctx.slot_data['pause_menu_patch'] == 0:
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_TELEPORT_MODE, 2)
-        elif ctx.slot_data['pause_menu_patch'] == 1:
+        elif self.ctx.slot_data['pause_menu_patch'] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_TELEPORT_MODE, 1)
         
-        if ctx.slot_data['shop_randomization']:
-            locations = consts.SHOP_ITEM_IDS[:ctx.slot_data["shop_item_count"]]
+        if self.ctx.slot_data['shop_randomization']:
+            locations = consts.SHOP_ITEM_IDS[:self.ctx.slot_data["shop_item_count"]]
             dolphin_memory_engine.write_byte(self.addresses.p_DISPLAY_GEM_STATS, 1)
-            if ctx.slot_data['shop_logic']:
+            if self.ctx.slot_data['shop_logic']:
                 dolphin_memory_engine.write_byte(self.addresses.p_SHOP_UNLOCK_MODE, 1)
-            await ctx.send_msgs([{"cmd": "LocationScouts", "locations": locations, "create_as_hint": 0}])
-            await ctx._shop_items_received.wait()
-            await self._prepare_shop_items(ctx, *ctx._shop_items)
+            await self.ctx.send_msgs([{"cmd": "LocationScouts", "locations": locations, "create_as_hint": 0}])
+            await self.ctx._shop_items_received.wait()
+            await self._prepare_shop_items(*self.ctx._shop_items)
         
-        if ctx.slot_data["randomize_light_gem_door_costs"]:
-            dolphin_memory_engine.write_bytes(self.addresses.p_LG_DOOR_COSTS, struct.pack(">BBBB", *ctx.slot_data["light_gem_door_costs"]))
-        if ctx.slot_data["randomize_boss_lair_doors"]:
-            dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_COSTS, struct.pack(">BBBB", *ctx.slot_data["boss_lair_costs"]))
+        if self.ctx.slot_data["randomize_light_gem_door_costs"]:
+            dolphin_memory_engine.write_bytes(self.addresses.p_LG_DOOR_COSTS, struct.pack(">BBBB", *self.ctx.slot_data["light_gem_door_costs"]))
+        if self.ctx.slot_data["randomize_boss_lair_doors"]:
+            dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_COSTS, struct.pack(">BBBB", *self.ctx.slot_data["boss_lair_costs"]))
         
-        b, i, s = ctx.slot_data['gadget_costs']
+        b, i, s = self.ctx.slot_data['gadget_costs']
         dolphin_memory_engine.write_byte(self.addresses.p_BALL_GADGET_COST, b)
         dolphin_memory_engine.write_byte(self.addresses.p_INVINCIBILITY_COST, i)
         dolphin_memory_engine.write_byte(self.addresses.p_SUPERCHARGE_COST, s)
 
         convert = {"Dragon Kingdom": 0, "Lost Cities": 1, "Icy Wilderness": 2, "Volcanic Isle": 3}
         realm_access = [False, False, False, False]
-        for realm in ctx.slot_data['starting_realms']:
+        for realm in self.ctx.slot_data['starting_realms']:
             realm_access[convert[realm]] = True
 
-        dolphin_memory_engine.write_byte(self.addresses.p_STARTING_REALM, convert[ctx.slot_data['starting_realms'][0]])
+        dolphin_memory_engine.write_byte(self.addresses.p_STARTING_REALM, convert[self.ctx.slot_data['starting_realms'][0]])
         dolphin_memory_engine.write_bytes(self.addresses.p_REALM_ACCESS, struct.pack(">????", *realm_access))
 
-        if ctx.slot_data['open_world_mode'] > 1 and ctx.slot_data['pause_menu_patch'] == 0:
+        if self.ctx.slot_data['open_world_mode'] > 1 and self.ctx.slot_data['pause_menu_patch'] == 0:
             # non-full open world with "open shop" pause menu needs to have starting realm depot shops forcibly unlocked
             convert = {0: "Dragon Village - Village Depot", 1: "Coastal Remains - Coastal Depot", 2: "Frostbite Village - Frosty Depot", 3: "Stormy Beach - Stormy Depot"}
             for index, realm in enumerate(realm_access):
                 if realm:  # if this is a starting realm
                     shop_name = convert[index]
-                    ctx.unlocked_shops.append(shop_name)
-                    await ctx._unlock_starting_realm_shop(shop_name)
+                    self.ctx.unlocked_shops.append(shop_name)
+                    await self.ctx._unlock_starting_realm_shop(shop_name)
         
-        if ctx.slot_data['easy_bosses']:
+        if self.ctx.slot_data['easy_bosses']:
             bosses = [False, False, False, False]
-            for b in ctx.slot_data['easy_bosses']:
+            for b in self.ctx.slot_data['easy_bosses']:
                 match b:
                     case 'Gnasty Gnorc':
                         bosses[0] = True
@@ -283,28 +283,28 @@ class DolphinClient(GenericClient):
                         bosses[3] = True
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_EASY_MODE, struct.pack(">????", *bosses))
             
-        if ctx.slot_data['teleport_across_realms']:
+        if self.ctx.slot_data['teleport_across_realms']:
             dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
             
-        if ctx.slot_data['open_world_mode'] == 1:
+        if self.ctx.slot_data['open_world_mode'] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_UNLOCK_ALL_SHOPS, 1)
-        if ctx.slot_data['open_world_mode'] >= 2:
+        if self.ctx.slot_data['open_world_mode'] >= 2:
             dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_MAIN_SHOP_ALWAYS_AVAILABLE, 1)
-            if ctx.slot_data['shop_pad_proximity_activation'] == 0:
+            if self.ctx.slot_data['shop_pad_proximity_activation'] == 0:
                 dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_SHOP_PAD_PROXIMITY_ACTIVATE, 1)
         
         dolphin_memory_engine.write_byte(self.addresses.p_PATCH_BEEN_WRITTEN_TO, 1)
         
-    async def _prepare_shop_items(self, ctx: "SpyroAHTContext", *shop_items: NetworkItem):
+    async def _prepare_shop_items(self, *shop_items: NetworkItem):
         dolphin_memory_engine.write_byte(self.addresses.p_RANDOMIZE_SHOP, 1)
         dolphin_memory_engine.write_word(self.addresses.p_XLS_SHOP_ROWCOUNT, len(shop_items)+1)
 
         for idx, item in enumerate(shop_items):
-            player = ctx.player_names[item.player]
-            name = ctx.item_names.lookup_in_slot(item.item, item.player)
-            game = ctx.slot_info[item.player]
+            player = self.ctx.player_names[item.player]
+            name = self.ctx.item_names.lookup_in_slot(item.item, item.player)
+            game = self.ctx.slot_info[item.player]
             model = consts.ShopItemModel.Lockpick
-            price = ctx.slot_data["shop_costs"][idx]
+            price = self.ctx.slot_data["shop_costs"][idx]
             if game.game == "Spyro: A Hero's Tail":
                 match item.item:
                     case 0xE:
@@ -326,14 +326,14 @@ class DolphinClient(GenericClient):
                     case 0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B | 0x2C | 0x2D | 0x2E | 0x2F:
                         model = consts.ShopItemModel.Keychain
             
-            remote_price = price if ctx.slot_data["shop_randomization"] else (price * 1.25)
-            large_prices = ctx.slot_data["shop_randomization"] == 1 and ctx.slot_data["shop_logic"] == 1  # large prices are only a concern if shop logic is ordered
-            name = "???" if ctx.slot_data["hide_shop_item_names"] else name
+            remote_price = price if self.ctx.slot_data["shop_randomization"] else (price * 1.25)
+            large_prices = self.ctx.slot_data["shop_randomization"] == 1 and self.ctx.slot_data["shop_logic"] == 1  # large prices are only a concern if shop logic is ordered
+            name = "???" if self.ctx.slot_data["hide_shop_item_names"] else name
             i = consts.XLSShoppingItem(model, consts.TextEntry(idx, f"{player}'s {name}"), (price, remote_price), large_prices)
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (idx + 1)), i.to_bytes('big'))
             dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * idx), i.text.to_bytes('big'))
 
-    async def update_tracker(self, ctx: "SpyroAHTContext", locs: list[str]):
+    async def update_tracker(self, locs: list[str]):
         from .. import loc_names_to_ids
         
         for loc in locs:
@@ -348,8 +348,8 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_byte(addr, data | (0b10 << bit))
         return loc_names_to_ids
 
-    async def update_pause_gems(self, ctx: "SpyroAHTContext", events: list[str]):
-        if not ctx.slot_data["shop_randomization"]:
+    async def update_pause_gems(self, events: list[str]):
+        if not self.ctx.slot_data["shop_randomization"]:
             return
         
         blink_available, non_blink_enemies_available, other_available = 0, 0, 0
@@ -364,9 +364,9 @@ class DolphinClient(GenericClient):
             else:
                 other_available += gem_amount
         
-        blink_in_logic = (blink_available * ctx.slot_data['blink_gems'] / 100)
-        non_blink_enemy_in_logic = (non_blink_enemies_available * ctx.slot_data['non_blink_enemies'] / 100)
-        other_in_logic = (other_available * ctx.slot_data['other_gems'] / 100)
+        blink_in_logic = (blink_available * self.ctx.slot_data['blink_gems'] / 100)
+        non_blink_enemy_in_logic = (non_blink_enemies_available * self.ctx.slot_data['non_blink_enemies'] / 100)
+        other_in_logic = (other_available * self.ctx.slot_data['other_gems'] / 100)
         
         dolphin_memory_engine.write_word(self.addresses.g_TOTAL_GEMS_IN_LOGIC, int(blink_in_logic + non_blink_enemy_in_logic + other_in_logic))
         dolphin_memory_engine.write_word(self.addresses.g_TOTAL_GEMS_AVAILABLE, int(blink_available + non_blink_enemies_available + other_available))

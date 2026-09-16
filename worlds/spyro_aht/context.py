@@ -395,14 +395,14 @@ class SpyroAHTContext(SuperContext):
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
     
     async def start_emu_client(self):
-        self.emu_client = DolphinClient(self)
+        self.emu_client = DolphinClient(self, logger)
         await self.emu_client.connect()
-        await self.emu_client.apply_patch(self)
+        await self.emu_client.apply_patch()
         await self.emu_client.ready.wait()
     
     async def _receive_items(self):
         item_counts = collections.Counter(self.item_names.lookup_in_slot(i.item, self.slot) for i in self.items_received)
-        for item in self.items_received:  # TODO: re-investigate and look at what each item object looks like? maybe look into counts?
+        for item in self.items_received:
             if item in self._handled_items: continue
             self._handled_items.add(item)
             match item.item:
@@ -512,7 +512,7 @@ class SpyroAHTContext(SuperContext):
                     total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
                     if total < item_counts["Damage Sparx"]:
                         await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 2, total + 1)
-                        await self.emu_client.damage_sparx(self, logger)
+                        await self.emu_client.damage_sparx(logger)
                 case 0x53:  # gem tax trap
                     total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 3)
                     if total < item_counts["Gem Tax"]:
@@ -736,11 +736,6 @@ class SpyroAHTContext(SuperContext):
                     logger.info("Client disconnected")
                     await self.emu_client.disconnect()
                     return
-                
-                # TODO: try doing this as a way to force disconnect upon game id/mod mismatch
-                # if self.mismatch:
-                #     await self.emu_client.disconnect()
-                #     return
 
                 try:
                     await asyncio.wait_for(self.watcher_event.wait(), 1.0)
@@ -762,9 +757,9 @@ class SpyroAHTContext(SuperContext):
                     await self._location_checks()
                     await self._location_scouts()
                     if self.event_flag and tracker_loaded:
-                        await self.emu_client.update_pause_gems(self, self._in_logic_events)
+                        await self.emu_client.update_pause_gems(self._in_logic_events)
                     if self.loc_flag and tracker_loaded:
-                        await self.emu_client.update_tracker(self, self._in_logic_locations)
+                        await self.emu_client.update_tracker(self._in_logic_locations)
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:
