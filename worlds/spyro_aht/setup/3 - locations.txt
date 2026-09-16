@@ -265,7 +265,7 @@ SBEntryLower | SB: Empty Locked Chest at end of west cove | 813 | LockedChestRul
 SBEntryLower | SB: Firework in west cove | 417 | Has('Fire Breath')
 SBEntryLower | SB: Dragon Egg from thief below shop | 348 | Has('Charge')
 SBEntryUpper | SB: Light Gem in shipwreck | 265 | True_()
-SBEntryUpper | SB: Empty Locked Chest in upper Stormy Beach near Wally | 814 | LockedChestRule('Stormy Beach')
+SBEntryUpper | SB: Empty Locked Chest near Wally | 814 | LockedChestRule('Stormy Beach')
 SBEntryUpper | SB: Dragon Egg from Wally | 349 | True_()
 SBEntryUpper | SB: Light Gem from Wally | 266 | True_()
 SBEntryUpper | SB: Empty Locked Chest in cave entrance | 815 | LockedChestRule('Stormy Beach')

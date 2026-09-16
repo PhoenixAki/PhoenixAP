@@ -860,7 +860,7 @@ REGION SBEntryUpper: DJ'able areas of SB
 		would have DJ
 
 	LOCATION SBEntryUpper | SB: Light Gem in shipwreck | 265 | True_()
-	LOCATION SBEntryUpper | SB: Empty Locked Chest in upper Stormy Beach near Wally | 814 | LockedChestRule('Stormy Beach')
+	LOCATION SBEntryUpper | SB: Empty Locked Chest near Wally | 814 | LockedChestRule('Stormy Beach')
 	LOCATION SBEntryUpper | SB: Dragon Egg from Wally | 349 | True_()
 	LOCATION SBEntryUpper | SB: Light Gem from Wally | 266 | True_()
 	LOCATION SBEntryUpper | SB: Empty Locked Chest in cave entrance | 815 | LockedChestRule('Stormy Beach')
@@ -1077,7 +1077,7 @@ REGION MFbBeforeImpRoom: past double jump and on the way to imp room
 	LOCATION MFbBeforeImpRoom | MFb: Light Gem in Locked Chest | 835 | LockedChestRule('Magma Falls')
 
 REGION MFbImpRoom: imp wizard room, only the room itself i.e. doesn't include anything in hallway after
-	MFbSouthEast -> MFbImpRoom | True_()
+	MFbBeforeImpRoom -> MFbImpRoom | True_()
 		would have DJ and wall kick and (water or ice)
 	MFbSparxShop -> MFbImpRoom | True_()
 		could have nothing

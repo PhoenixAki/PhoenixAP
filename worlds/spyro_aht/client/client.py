@@ -3,11 +3,11 @@ from __future__ import annotations
 import asyncio
 from abc import ABC, abstractmethod
 
-from ..data import consts
+from ..data import addresses
 
 
 class GenericClient(ABC):
-    addresses: consts.AddressList | None
+    addresses: addresses.AddressList | None
     msg_queue: asyncio.Queue[tuple[tuple[int, int, int, int], str]]
     trap_queue: asyncio.Queue[str]
     ready: asyncio.Event

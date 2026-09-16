@@ -14375,7 +14375,7 @@
                 }
             },
             {
-                "name": "SB: Empty Locked Chest in upper Stormy Beach near Wally",
+                "name": "SB: Empty Locked Chest near Wally",
                 "id": 814,
                 "options": [],
                 "access_rule": {
@@ -17396,7 +17396,7 @@
         "name": "MFbImpRoom",
         "entrances": [
             {
-                "name": "MFbSouthEast -> MFbImpRoom",
+                "name": "MFbBeforeImpRoom -> MFbImpRoom",
                 "access_rule": {
                     "rule": "True_",
                     "options": [],

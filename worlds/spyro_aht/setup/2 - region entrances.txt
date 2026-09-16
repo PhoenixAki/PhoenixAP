@@ -223,7 +223,7 @@ MFbEntry -> MFbSouthEast | And(HasAll('Double Jump', 'Wall Kick'), HasAny('Water
 MFbBeforeImpRoom -> MFbSouthEast | Has('Double Jump')
 MFbSouthEast -> MFbBeforeImpRoom | True_()
 MFbImpRoom -> MFbBeforeImpRoom | HasAny('Water Breath', 'Ice Breath')
-MFbSouthEast -> MFbImpRoom | True_()
+MFbBeforeImpRoom -> MFbImpRoom | True_()
 MFbSparxShop -> MFbImpRoom | True_()
 MFbImpRoom -> MFbSparxShop | True_()
 ShopPads -> MFbSparxShop | OpenWorldRule(['Magma Falls - Sparx Can Fly'])

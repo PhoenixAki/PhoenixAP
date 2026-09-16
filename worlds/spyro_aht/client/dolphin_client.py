@@ -9,7 +9,7 @@ import dolphin_memory_engine
 
 from NetUtils import NetworkItem
 from .client import GenericClient
-from ..data import consts
+from ..data import consts, addresses
 
 if TYPE_CHECKING:
     from ..context import SpyroAHTContext
@@ -42,16 +42,16 @@ class DolphinClient(GenericClient):
                 await asyncio.sleep(0.5)
                 if await self.should_process_checks():
                     await asyncio.sleep(5)
-                    dolphin_memory_engine.write_word(self.addresses.n_AP_NOTIFICATION_TIMER, 0)
+                    dolphin_memory_engine.write_word(self.addresses.n_TIMER, 0)
                     col, msg = await self.msg_queue.get()
 
                     if len(msg) > 254:
                         msg = msg[:254]
                     
-                    colour = struct.pack(">BBBB", *col)
-                    dolphin_memory_engine.write_bytes(self.addresses.n_AP_NOTIFICATION_COLOR, colour)
-                    dolphin_memory_engine.write_bytes(self.addresses.n_AP_NOTIFICATION_TEXT_BUFFER, (msg + "\0").encode("utf_16_be"))
-                    dolphin_memory_engine.write_word(self.addresses.n_AP_NOTIFICATION_TIMER, 5*60)
+                    color = struct.pack(">BBBB", *col)
+                    dolphin_memory_engine.write_bytes(self.addresses.n_COLOR, color)
+                    dolphin_memory_engine.write_bytes(self.addresses.n_TEXT_BUFFER, (msg + "\0").encode("utf_16_be"))
+                    dolphin_memory_engine.write_word(self.addresses.n_TIMER, 5*60)
         except Exception:
             logger.error("ERROR IN NOTIFICATION TASK, REPORT IN THREAD", exc_info=True)
     
@@ -82,9 +82,9 @@ class DolphinClient(GenericClient):
             logger.info(f"Detected game ID: {game_id.decode()!r}.")
 
             if game_id == b'G5SE7D':
-                self.addresses = consts.G5SE7D()
+                self.addresses = addresses.G5SE7D()
             elif game_id == b'G5SP7D':
-                self.addresses = consts.G5SP7D()
+                self.addresses = addresses.G5SP7D()
             else:
                 # dolphin_memory_engine.un_hook()
                 logger.error("WARNING: Invalid or unsupported game ID.")
@@ -165,9 +165,6 @@ class DolphinClient(GenericClient):
     async def debug_add_item(self, amount: int, address: int, bytes: int) -> bool:
         current_amount = int.from_bytes(dolphin_memory_engine.read_bytes(address, bytes))
         dolphin_memory_engine.write_bytes(address, (current_amount + amount).to_bytes(bytes, 'big'))
-        if address == self.addresses.GEMS:
-            current_total = int.from_bytes(dolphin_memory_engine.read_bytes(self.addresses.TOTAL_GEMS, bytes))
-            dolphin_memory_engine.write_bytes(self.addresses.TOTAL_GEMS, (current_total + amount).to_bytes(bytes, 'big'))        
         return True
     
     async def has_any_breath(self) -> bool:
@@ -195,20 +192,16 @@ class DolphinClient(GenericClient):
         if double:
             value *= 2
         count = dolphin_memory_engine.read_word(self.addresses.GEMS)
-        total = dolphin_memory_engine.read_word(self.addresses.TOTAL_GEMS)
         dolphin_memory_engine.write_word(self.addresses.GEMS, count + value)
-        dolphin_memory_engine.write_word(self.addresses.TOTAL_GEMS, total + value)
     
     async def gem_tax(self):
         value = random.randint(500, 1000)
         count = dolphin_memory_engine.read_word(self.addresses.GEMS)
-        total = dolphin_memory_engine.read_word(self.addresses.TOTAL_GEMS)
         if (count - value) < 0: value = count
         dolphin_memory_engine.write_word(self.addresses.GEMS, count - value)
-        dolphin_memory_engine.write_word(self.addresses.TOTAL_GEMS, total - value)
     
     async def damage_sparx(self, ctx: SpyroAHTContext, logger):
-        health = dolphin_memory_engine.read_word(self.addresses.PLAYER_HEALTH)
+        health = dolphin_memory_engine.read_word(self.addresses.HEALTH)
         logger.info(f"received damage sparx. current health: {health}.")
         decrease = 32
         if health == 64 and len([item for item in ctx.items_received if item.item == 0xF]) == 0:  # if no red Sparx
@@ -218,7 +211,7 @@ class DolphinClient(GenericClient):
             logger.info("returning to not kill player.")
             return
         logger.info(f"decreasing health to {health-decrease}.")
-        dolphin_memory_engine.write_word(self.addresses.PLAYER_HEALTH, health - decrease)
+        dolphin_memory_engine.write_word(self.addresses.HEALTH, health - decrease)
     
     async def import_deathlink(self, mode: int):
         dolphin_memory_engine.write_byte(self.addresses.g_DEATHLINK_INGOING, mode)
@@ -381,8 +374,8 @@ class DolphinClient(GenericClient):
         non_blink_enemy_in_logic = (non_blink_enemies_available * ctx.slot_data['non_blink_enemies'] / 100)
         other_in_logic = (other_available * ctx.slot_data['other_gems'] / 100)
         
-        dolphin_memory_engine.write_word(self.addresses.g_GEMS_IN_LOGIC, int(blink_in_logic + non_blink_enemy_in_logic + other_in_logic))
-        dolphin_memory_engine.write_word(self.addresses.g_GEMS_AVAILABLE, int(blink_available + non_blink_enemies_available + other_available))
+        dolphin_memory_engine.write_word(self.addresses.g_TOTAL_GEMS_IN_LOGIC, int(blink_in_logic + non_blink_enemy_in_logic + other_in_logic))
+        dolphin_memory_engine.write_word(self.addresses.g_TOTAL_GEMS_AVAILABLE, int(blink_available + non_blink_enemies_available + other_available))
     
     async def allow_realm_access(self, id: int):
         current: list[bool] = list(struct.unpack(">????", dolphin_memory_engine.read_bytes(self.addresses.g_REALM_ACCESS, 4)))
