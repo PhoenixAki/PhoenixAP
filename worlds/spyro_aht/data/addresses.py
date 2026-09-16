@@ -94,7 +94,7 @@ class AddressList:
 	g_UT_ENABLED: int
 	g_TRAP: int
 	g_TRAP_DATA: int
-	g_TRAP_COUNTERS: bytearray
+	g_TRAP_COUNTERS: int
 	g_XLS_SHOP_SHEETCOUNT_ALWAYS_1: int
 	g_XLS_SHOP_SHEET_OFFSET_ALWAYS_4: int
 	g_XLS_SHOP_ROWCOUNT: int

@@ -12,8 +12,8 @@ class LoggingLevel(IntEnum):
     HIGH = 4
     MAXIMUM = 5
 
-MOD_MAJOR = 16
-MOD_MINOR = 3
+MOD_MAJOR = 17
+MOD_MINOR = 0
 MOD_VERSION_STR = f"{MOD_MAJOR}.{MOD_MINOR}"
 
 CLIENT_MAJOR = 2

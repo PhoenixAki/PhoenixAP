@@ -202,15 +202,9 @@ class DolphinClient(GenericClient):
     
     async def damage_sparx(self, ctx: SpyroAHTContext, logger):
         health = dolphin_memory_engine.read_word(self.addresses.HEALTH)
-        logger.info(f"received damage sparx. current health: {health}.")
         decrease = 32
-        if health == 64 and len([item for item in ctx.items_received if item.item == 0xF]) == 0:  # if no red Sparx
-            logger.info("returning to not kill player (at red sparx health but no red sparx")
-            return
-        if health - decrease <= 0:  # don't kill player
-            logger.info("returning to not kill player.")
-            return
-        logger.info(f"decreasing health to {health-decrease}.")
+        if health == 64 and len([item for item in ctx.items_received if item.item == 0xF]) == 0: return # if no red Sparx
+        if health - decrease <= 0: return # don't kill player
         dolphin_memory_engine.write_word(self.addresses.HEALTH, health - decrease)
     
     async def import_deathlink(self, mode: int):

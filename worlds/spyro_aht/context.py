@@ -499,24 +499,24 @@ class SpyroAHTContext(SuperContext):
                 case 0x30 | 0x31 | 0x32 | 0x33: # access cards
                     await self.emu_client.allow_realm_access(item.item)
                 case 0x50:  # spam call
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS[0])
+                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS)
                     if total < item_counts["Spam Call"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS[0], total + 1)
+                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS, total + 1)
                         self.emu_client.trap_queue.put_nowait("Spam Call")
                 case 0x51:  # reverse controls
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS[1])
+                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 1)
                     if total < item_counts["Reverse Controls"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS[1], total + 1)
+                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 1, total + 1)
                         self.emu_client.trap_queue.put_nowait("Reverse Controls")
                 case 0x52:  # damage sparx trap
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS[2])
+                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
                     if total < item_counts["Damage Sparx"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS[2], total + 1)
+                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 2, total + 1)
                         await self.emu_client.damage_sparx(self, logger)
                 case 0x53:  # gem tax trap
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS[3])
+                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 3)
                     if total < item_counts["Gem Tax"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS[3], total + 1)
+                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
                         await self.emu_client.gem_tax()
                 case 0x64 | 0x65 | 0x66 | 0x67 | 0x68 | 0x69 | 0x6A | 0x6B | 0x6C | 0x6D | 0x6E | 0x6F | 0x70 | 0x71 | 0x72 | 0x73 | 0x74 | 0x75 \
                 | 0x76 | 0x77 | 0x78 | 0x79 | 0x7A | 0x7B | 0x7C | 0x7D | 0x7E | 0x7F | 0x80 | 0x81 | 0x82 | 0x83 | 0x84 | 0x85 | 0x86 | 0x87 | 0x88:
@@ -736,6 +736,11 @@ class SpyroAHTContext(SuperContext):
                     logger.info("Client disconnected")
                     await self.emu_client.disconnect()
                     return
+                
+                # TODO: try doing this as a way to force disconnect upon game id/mod mismatch
+                # if self.mismatch:
+                #     await self.emu_client.disconnect()
+                #     return
 
                 try:
                     await asyncio.wait_for(self.watcher_event.wait(), 1.0)
