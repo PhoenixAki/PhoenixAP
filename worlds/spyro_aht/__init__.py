@@ -1,22 +1,23 @@
 import asyncio
 import copy
 import logging
-import pkgutil
 import math
+import pkgutil
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Any, TextIO, override
+from typing import Any, override
 
 import orjson
 
 import Utils
 from BaseClasses import Item, ItemClassification, MultiWorld, Region, CollectionState
-from Options import OptionError, OptionSet, NamedRange
+from Options import OptionError, OptionSet, NamedRange, Choice, Range
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
 from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel, BOSS_IDS, DARK_GEM_IDS, \
-    LIGHT_GEM_IDS, DRAGON_EGG_IDS, FIREWORK_IDS, SHOP_ITEM_IDS, LOCKED_CHEST_IDS, ELDER_ABILITY_IDS, BYRD_IDS, BLINK_IDS, TURRET_IDS, SPARX_IDS, SHOP_PAD_LIST, LEVEL_TO_REALM
+    LIGHT_GEM_IDS, DRAGON_EGG_IDS, FIREWORK_IDS, SHOP_ITEM_IDS, LOCKED_CHEST_IDS, ELDER_ABILITY_IDS, BYRD_IDS, \
+    BLINK_IDS, TURRET_IDS, SPARX_IDS, SHOP_PAD_LIST, LEVEL_TO_REALM
 from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
@@ -137,6 +138,7 @@ class SpyroAHTWorld(World):
     """
     Spyro: A Hero's Tail is a 3D platformer and collect-a-thon released in 2004 for the Xbox, Playstation 2 and GameCube.
     """
+    ###############WORLD SETUP & INITIALIZATION###############
     game = "Spyro: A Hero's Tail"
     origin_region_name = "START"
 
@@ -153,24 +155,35 @@ class SpyroAHTWorld(World):
     location_name_groups = create_location_groups(location_data)
     
     ut_can_gen_without_yaml = True
-    
-    def log(self, message, level: LoggingLevel):
-        if self.options.logging_level.value >= level:
-            logging.info(f"[Spyro AHT] LOG-{level.name}: {message}")
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.multiworld.early_items[self.player]["Double Jump"] = 1
-        
-        self._lg_doors = [70, 20, 95, 45]
-        self._boss_lairs = [10, 20, 30, 40]
-        self._gadget_costs = [8, 24, 40]  # ball, invincibility, supercharge
-        self._starting_realms = []
-        self._starting_breaths = []
-        self._classifications = {i['name']: ItemClassification(i['classification']) for i in _load_file("items.json")}
+
+        self.light_gem_doors = [70, 20, 95, 45]
+        self.boss_lairs = [10, 20, 30, 40]
+        self.gadget_costs = [8, 24, 40]  # ball, invincibility, supercharge
+        self.classifications = {i['name']: ItemClassification(i['classification']) for i in self.item_data}
         self.shop_costs = []
         self.filler_items: dict[str, list[str]] = {}
         self.goals_dict: dict[str, list[int]] = defaultdict(list[int])  # dict of enabled goal name -> list of location ids. Sent to client via slot data
+    
+    ###############HELPER METHODS + OVERRIDES###############
+    def log(self, message, level: LoggingLevel):
+        """Logs messages from generation."""
+        if self.options.logging_level.value >= level:
+            logging.info(f"[Spyro AHT] LOG-{level.name}: {message}")
+    
+    def create_item(self, name: str) -> Item:
+        """Returns an Item object, given an item name."""
+        self.log(f"Created item {name} with classification {self.classifications[name]} and ID {self.item_name_to_id[name]}.", LoggingLevel.MAXIMUM)
+        return Item(name, self.classifications[name], self.item_name_to_id[name], self.player)
+    
+    def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
+        """Sorts AHT locations in UT based on vanilla game level order -> alphabetical by region -> alphabetical by location."""
+        level_acronym, rest_of_name = location_label.split(": ")
+        level_id = id_lookup[level_acronym]
+        return f"{level_id} {region_label} {rest_of_name}"
 
     def get_filler_item_name(self):
         """Override of World.get_filler_item_name which returns a random filler item name.
@@ -181,7 +194,7 @@ class SpyroAHTWorld(World):
         return random_choice
             
     def collect(self, state: "CollectionState", item: "Item") -> bool:
-        """Override of World.collect which additionally handles gem events."""
+        """Override of World.collect which additionally handles gem events and shop unlocks."""
         name = self.collect_item(state, item)
         if name:
             if "Unlock" not in item.name:
@@ -228,7 +241,7 @@ class SpyroAHTWorld(World):
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
-        """Override of World.remove which additionally handles gem events."""
+        """Override of World.remove which additionally handles gem events and shop unlocks."""
         name = self.collect_item(state, item, True)
         if name:
             if "Unlock" not in item.name:
@@ -273,14 +286,15 @@ class SpyroAHTWorld(World):
                                 state.remove_item(f"{level} - {shop}", self.player)
             return True
         return False
-
+    
+    ###############GENERATION PROCESS OVERRIDES###############
     def generate_early(self) -> None:
         passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if isinstance(passthrough, dict) and self.game in passthrough:
             self._apply_slot_data(passthrough[self.game])
         
         auto_corrections = self.options.auto_corrections.value
-        self.log("Checking for common YAML option/setting issues.", LoggingLevel.LOW)
+        self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", LoggingLevel.LOW)
         
         if self.options.open_world_mode.value != 1 and self.options.starting_realms.value == {"Icy Wilderness"}:
             if self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
@@ -323,6 +337,7 @@ class SpyroAHTWorld(World):
                 self.log(f"{goal.display_name} requested a random choice. {rand_choice} was selected.", LoggingLevel.MEDIUM)
                 goal.value = rand_choice
         
+        # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
         if bad_condition and auto_corrections >= 1:  # fix_minor
             self.log("Minor Warning: Fireworks was enabled as a goal, but firework_checks is disabled. Fixing by enabling firework_checks.", LoggingLevel.WARNING)
@@ -350,6 +365,89 @@ class SpyroAHTWorld(World):
         self.check_eggs_and_gems(self.options.light_gems_goal, "light_gems_goal", 85, 15, self.options.exclude_chest_items >= 2)
         self.check_eggs_and_gems(self.options.dragon_eggs_goal, "dragon_eggs_goal", 64, 16, self.options.exclude_chest_items.value in [1, 3])
         
+        self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
+        self.setup_costs(self.options.randomize_light_gem_door_costs, self.options.light_gem_door_cost_min, self.options.light_gem_door_cost_max, self.light_gem_doors, "Light Gem door")
+        self.setup_costs(self.options.randomize_boss_lair_door_costs, self.options.boss_lair_door_cost_min, self.options.boss_lair_door_cost_max, self.boss_lairs, "boss lair")
+        
+        # boss lair forcing
+        self.log(f"Checking if boss lair costs need forcing via boss_lair_forcing.", LoggingLevel.LOW)
+        lookup = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]
+        forcing = self.options.boss_lair_forcing.value
+        if forcing != 0:
+            if 1 <= self.options.boss_lair_forcing.value <= 4: goal_boss_indices = [forcing - 1]
+            else: goal_boss_indices = [lookup.index(boss) for boss in lookup if boss in self.options.boss_goal.value]
+            non_goal_boss_indices = [index for index in [0, 1, 2, 3] if index not in goal_boss_indices]
+
+            if len(goal_boss_indices) == 4: self.log("boss_lair_forcing is set to automatic, but all 4 bosses are part of goal. Skipping cost swapping.", LoggingLevel.HIGH)
+            elif len(goal_boss_indices) == 0: self.log("boss_lair_forcing is set to automatic, but you have no goal bosses. Skipping cost swapping.", LoggingLevel.HIGH)
+            else:
+                for goal_boss_index in goal_boss_indices:
+                    goal_boss_cost = self.boss_lairs[goal_boss_index]
+
+                    # find highest-costing non-goal boss
+                    highest_non_goal_index = non_goal_boss_indices[0]
+                    for non_goal_boss_index in non_goal_boss_indices:
+                        if self.boss_lairs[non_goal_boss_index] > self.boss_lairs[highest_non_goal_index]: highest_non_goal_index = non_goal_boss_index
+                    highest_non_goal_cost = self.boss_lairs[highest_non_goal_index]
+
+                    # swap if needed
+                    if self.boss_lairs[goal_boss_index] < highest_non_goal_cost:
+                        self.log(f"Swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is smaller.", LoggingLevel.HIGH)
+                        self.boss_lairs[goal_boss_index] = highest_non_goal_cost
+                        self.boss_lairs[highest_non_goal_index] = goal_boss_cost
+                    else:
+                        self.log(f"Skipping swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is already larger.", LoggingLevel.HIGH)
+        self.log(f"Boss Lair Costs (in Dark Gems): Gnasty Gnorc requires {self.boss_lairs[0]}, Ineptune requires {self.boss_lairs[1]}, Red requires {self.boss_lairs[2]}, and Mecha-Red requires {self.boss_lairs[3]}.", LoggingLevel.MEDIUM)
+
+    def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
+        self._ut_active = True
+
+        self.options.death_link.value = slot_data['death_link']
+        self.options.death_link_amnesty.value = slot_data['death_link_amnesty']
+
+        self.options.logging_level.value = slot_data['logging_level']
+        self.options.auto_corrections.value = slot_data['auto_corrections']
+
+        self.options.boss_goal.value = slot_data['boss_goal']
+        self.options.dark_gems_goal.value = slot_data['dark_gems_goal']
+        self.options.light_gems_goal.value = slot_data['light_gems_goal']
+        self.options.dragon_eggs_goal.value = slot_data['dragon_eggs_goal']
+        self.options.fireworks_goal.value = slot_data['fireworks_goal']
+        self.options.shop_items_goal.value = slot_data['shop_items_goal']
+        self.options.locked_chests_goal.value = slot_data['locked_chests_goal']
+        self.options.elders_goal.value = slot_data['elders_goal']
+        self.options.minigames_goal.value = slot_data['minigames_goal']
+        self.options.minigames_goal_count.value = slot_data['minigames_goal_count']
+        self.options.exclude_chest_items.value = slot_data['exclude_chest_items']
+
+        self.options.open_world_mode.value = slot_data['open_world_mode']
+        self.options.firework_checks.value = slot_data['firework_checks']
+        self.options.vanilla_minigame_rewards.value = slot_data['vanilla_minigame_rewards']
+        self.options.trap_percentage.value = slot_data['trap_percentage']
+        self.options.filler_items.value = slot_data['filler_items']
+        self.options.trap_items.value = slot_data['trap_items']
+        self.options.trap_length.value = slot_data['trap_length']
+
+        self.options.starting_breaths.value = slot_data['starting_breaths']
+        self.options.movement_randomization.value = slot_data['movement_randomization']
+        self.options.starting_realms.value = slot_data['starting_realms']
+
+        self.options.shop_randomization.value = slot_data['shop_randomization']
+        self.options.key_rings.value = slot_data['key_rings']
+        self.options.shop_item_count.value = slot_data['shop_item_count']
+        self.options.shop_logic.value = slot_data['shop_logic']
+        self.options.blink_gems.value = slot_data['blink_gems']
+        self.options.non_blink_enemies.value = slot_data['non_blink_enemies']
+        self.options.other_gems.value = slot_data['other_gems']
+        self.options.double_gems.value = slot_data['double_gems']
+
+        self.boss_lairs = slot_data['boss_lair_costs']
+        self.light_gem_doors = slot_data['light_gem_door_costs']
+        self.gadget_costs = slot_data['gadget_costs']
+
+        self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
+        self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
+                
     def check_breaths_and_realms(self, option: OptionSet, choices: list, error_txt: str):
         if len(option.value) == 0:
             random_choice = self.random.choice(choices)
@@ -395,71 +493,119 @@ class SpyroAHTWorld(World):
             option.value -= count
         elif bad_condition:
             raise OptionError(f"{name} was set higher than {maximum}, but {count} from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
-        
-    def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
-        self._ut_active = True
-        
-        self.options.death_link.value = slot_data['death_link']
-        self.options.death_link_amnesty.value = slot_data['death_link_amnesty']
-        
-        self.options.logging_level.value = slot_data['logging_level']
-        self.options.auto_corrections.value = slot_data['auto_corrections']
-        
-        self.options.boss_goal.value = slot_data['boss_goal']
-        self.options.dark_gems_goal.value = slot_data['dark_gems_goal']
-        self.options.light_gems_goal.value = slot_data['light_gems_goal']
-        self.options.dragon_eggs_goal.value = slot_data['dragon_eggs_goal']
-        self.options.fireworks_goal.value = slot_data['fireworks_goal']
-        self.options.shop_items_goal.value = slot_data['shop_items_goal']
-        self.options.locked_chests_goal.value = slot_data['locked_chests_goal']
-        self.options.elders_goal.value = slot_data['elders_goal']
-        self.options.minigames_goal.value = slot_data['minigames_goal']
-        self.options.minigames_goal_count.value = slot_data['minigames_goal_count']
-        self.options.exclude_chest_items.value = slot_data['exclude_chest_items']
-        
-        self.options.open_world_mode.value = slot_data['open_world_mode']
-        self.options.firework_checks.value = slot_data['firework_checks']
-        self.options.vanilla_minigame_rewards.value = slot_data['vanilla_minigame_rewards']
-        self.options.trap_percentage.value = slot_data['trap_percentage']
-        self.options.filler_items.value = slot_data['filler_items']
-        self.options.trap_items.value = slot_data['trap_items']
-        self.options.trap_length.value = slot_data['trap_length']
-        
-        self.options.starting_breaths.value = slot_data['starting_breaths']
-        self.options.movement_randomization.value = slot_data['movement_randomization']
-        self.options.starting_realms.value = slot_data['starting_realms']
-        
-        self.options.shop_randomization.value = slot_data['shop_randomization']
-        self.options.key_rings.value = slot_data['key_rings']
-        self.options.shop_item_count.value = slot_data['shop_item_count']
-        self.options.shop_logic.value = slot_data['shop_logic']
-        self.options.blink_gems.value = slot_data['blink_gems']
-        self.options.non_blink_enemies.value = slot_data['non_blink_enemies']
-        self.options.other_gems.value = slot_data['other_gems']
-        self.options.double_gems.value = slot_data['double_gems']
-        
-        self._boss_lairs = slot_data['boss_lair_costs']
-        self._lg_doors = slot_data['light_gem_door_costs']
-        self._gadget_costs = slot_data['gadget_costs']
-        
-        self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
-        self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
     
-    def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
-        level_acronym, rest_of_name = location_label.split(": ")
-        level_id = id_lookup[level_acronym]
-        return f"{level_id} {region_label} {rest_of_name}"
+    def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str):  # cost_type = gadget, boss lair, Light Gem door
+        self.log(f"Setting up and checking for issues with {cost_type} costs.", LoggingLevel.LOW)
+        if option.value == 2:  # shuffled:
+            self.random.shuffle(costs)
+        elif option.value == 3:  # randomized:
+            cost_min, cost_max = opt_min.value, opt_max.value
+            bad_condition = opt_min > opt_max
+            if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+                self.log(f"Minor Warning: {opt_min.display_name} of {cost_min} is greater than {cost_max}. Fixing by swapping them.", LoggingLevel.WARNING)
+                cost_min, cost_max = cost_max, cost_min
+            elif bad_condition:
+                raise OptionError(f"{opt_min.display_name} of {cost_min} is greater than {cost_max}. Fix this, or set auto_corrections to at least fix_minor.")
+            costs = [self.random.randint(cost_min, cost_max) for _ in range(3)]
+        self.log(f"{cost_type} Costs: {", ".join(str(cost) for cost in costs)}.", LoggingLevel.MEDIUM)
+        
+    def create_regions(self):
+        self.log("Setting up regions and locations.", LoggingLevel.LOW)
+        self.multiworld.regions.extend(Region(r['name'], self.player, self.multiworld) for r in self.location_data.values())
+        self.log("Regions created.", LoggingLevel.HIGH)
+        
+        for region_name, region_data in self.location_data.items():
+            for entrance in region_data['entrances']:
+                region_from, region_to = entrance['name'].split(" -> ")
+                rule = self.rule_from_dict(entrance['access_rule'])
+                self.get_region(region_from).connect(self.get_region(region_to), f"{region_from} => {region_to}", rule)
+                self.log(f"Connected region {region_from} to region {region_to} with rule {rule}.", LoggingLevel.MAXIMUM)
+        self.log("Regions connected.", LoggingLevel.HIGH)
+
+        for region_data in self.location_data.values():
+            new_locations = {}
+            for location_data in region_data['locations']:
+                add = True
+                for options in location_data.get('options', ()):
+                    option = getattr(self.options, options['option'])
+                    match options.get('operator', 'eq'):
+                        case 'eq': add = add and option.value == options['value']
+                        case 'ne': add = add and option.value != options['value']
+                        case 'gt': add = add and option.value > options['value']
+                        case 'ge': add = add and option.value >= options['value']
+                        case 'lt': add = add and option.value < options['value']
+                        case 'le': add = add and option.value <= options['value']
+                if add:
+                    new_locations[location_data['name']] = location_data['id']
+                    self.log(f"Added location {location_data['name']} with id {location_data['id']} to region {region_data['name']}.", LoggingLevel.MAXIMUM)
+            self.get_region(region_data['name']).add_locations(new_locations)
+        self.log("Locations created.", LoggingLevel.HIGH)
+        
+        blink_exclusions, other_exclusions = self.setup_gem_logic()  # needs regions to be set up already
+        self.setup_shop_prices(blink_exclusions, other_exclusions)  # needs knowledge of blink and other exclusions from setup_gem_logic
+        self.handle_goaling()  # needs regions to be set up already
+        
+    def setup_gem_logic(self) -> tuple[int, int]:
+        self.log("Checking if gem logic needs to be set up.", LoggingLevel.LOW)
+        blink_exclusions, other_exclusions = 0, 0
+        if self.options.shop_randomization.value == 1:
+            self.log("Setting up gem logic events.", LoggingLevel.LOW)
+            convert = {"1-1": 0, "1-2": 1, "2-1": 2, "2-2": 3, "3-1": 4, "3-2": 5, "4-1": 6, "4-2": 7}
+            for reg, region_data in self.location_data.items():
+                for gem_event in region_data["gem_events"]:
+                    exclusion = False
+                    for key in convert.keys():
+                        if key in gem_event['name']:
+                            if "Byrd minigames" in gem_event['name'] and minigame_locs[convert[key]] in self.options.exclude_locations.value:
+                                self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]]} was excluded.", LoggingLevel.HIGH)
+                                other_exclusions += int(gem_event['gem_amount'])
+                                exclusion = True
+                                break
+                            elif "Blink minigames" in gem_event['name'] and minigame_locs[convert[key] + 8] in self.options.exclude_locations.value:
+                                self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {minigame_locs[convert[key] + 8]} was excluded.", LoggingLevel.HIGH)
+                                blink_exclusions += int(gem_event['gem_amount'])
+                                exclusion = True
+                                break
+                            elif "Sparx minigames" in gem_event['name'] and minigame_locs[convert[key] + 16] in self.options.exclude_locations.value:
+                                self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {minigame_locs[convert[key] + 16]} was excluded.", LoggingLevel.HIGH)
+                                other_exclusions += int(gem_event['gem_amount'])
+                                exclusion = True
+                                break
+                    if not exclusion:
+                        location_name = f"{reg}: {gem_event['name']}"
+                        self.get_region(reg).add_event(location_name, gem_event['name'], rule=self.rule_from_dict(gem_event["access_rule"]), show_in_spoiler=False)
+                        self.log(f"Created gem event with location name {location_name}, item name {gem_event['name']}, and rule {gem_event['access_rule']}.", LoggingLevel.MAXIMUM)
+            return blink_exclusions, other_exclusions
+        return 0, 0
+    
+    def setup_shop_prices(self, blink_exclusions, other_exclusions):
+        # shop costs determined by multiple options. Doing after gem events in case of exclusions
+        self.log("Setting up shop prices.", LoggingLevel.LOW)
+        if self.options.shop_randomization.value == 1:
+            blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
+            non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
+            other = (105357 - other_exclusions) * self.options.other_gems.value / 100
+            gem_total = blink + non_blink_enemies + other
+            base_price = gem_total / (self.options.shop_item_count.value - 1)
+            self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
+            self.shop_costs.append(0)
+    
+            if self.options.shop_logic.value == 1:  # 1 = ordered, meaning incrementing prices
+                for counter in range(self.options.shop_item_count.value - 1): self.shop_costs.append(int(base_price * (counter + 1)))
+            else:  # 0 = unordered, meaning equal pricing
+                for _ in range(self.options.shop_item_count.value - 1): self.shop_costs.append(int(base_price))
+            self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
 
     def handle_goaling(self):
         self.log("Processing goal choices.", LoggingLevel.LOW)
         victory_cons = defaultdict(tuple[str])
         enabled_goals = []
-        
+
         goal_info = [
             ["Gnasty Gnorc", BOSS_IDS[0:2]], ["Ineptune", BOSS_IDS[2:4]], ["Red", BOSS_IDS[4:6]], ["Mecha-Red", [BOSS_IDS[6]]],
-            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS],
-            ["Fireworks", FIREWORK_IDS], ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS],
-            ["Elder Tomas", [ELDER_ABILITY_IDS[0]]], ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
+            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS], ["Fireworks", FIREWORK_IDS],
+            ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS], ["Elder Tomas", [ELDER_ABILITY_IDS[0]]],
+            ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
             ["Sgt. Byrd", BYRD_IDS], ["Blink", BLINK_IDS], ["Turret", TURRET_IDS], ["Sparx", SPARX_IDS]
         ]
         # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
@@ -468,7 +614,8 @@ class SpyroAHTWorld(World):
         if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
             goal_info[6][1] = goal_info[6][1][:-16]
         amounts = {
-            "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value, "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
+            "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value,
+            "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
             "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value,
             "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Sgt. Byrd": self.options.minigames_goal_count.value,
             "Blink": self.options.minigames_goal_count.value, "Turret": self.options.minigames_goal_count.value, "Sparx": self.options.minigames_goal_count.value
@@ -493,16 +640,18 @@ class SpyroAHTWorld(World):
                 self.log(f"Added VictoryCon{goal_name.replace(" ", "")}{ind_count} event for {loc.name}.", LoggingLevel.MAXIMUM)
                 ind_count += 1
                 if goal_name not in enabled_goals: enabled_goals.append(goal_name)
-            self.log(f"Set up {ind_count-1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
+            self.log(f"Set up {ind_count - 1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
         if len(enabled_goals) == 0 and self.options.auto_corrections.value == 2:
-            self.log("No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.", LoggingLevel.WARNING)
+            self.log(
+                "No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.",
+                LoggingLevel.WARNING)
             loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
             loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
             victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
             enabled_goals.append("Mecha-Red")
-            
+
         self.log(f"Final goal list: {", ".join(enabled_goals)}.", LoggingLevel.MEDIUM)
-        
+
         def check_for_goal(state: CollectionState) -> bool:
             for goal in enabled_goals:
                 events = victory_cons[goal]
@@ -512,186 +661,8 @@ class SpyroAHTWorld(World):
                 else:
                     return False
             return True
-        
+
         self.multiworld.completion_condition[self.player] = lambda state: check_for_goal(state)
-        
-    def create_regions(self):
-        auto_corrections = self.options.auto_corrections.value  # setting as micro-optimization for checking later
-            
-        self.log("Setting up gadget costs.", LoggingLevel.LOW)
-        if self.options.randomize_gadget_costs.value != 0:
-            if self.options.randomize_gadget_costs.value == 2:  # shuffled:
-                self.random.shuffle(self._gadget_costs)
-            else:  # randomized:
-                lmin, lmax = self.options.gadget_cost_min.value, self.options.gadget_cost_max.value
-                bad_condition = lmin > lmax
-                if bad_condition and auto_corrections >= 1:  # fix_minor
-                    self.log(f"Minor Warning: gadget_cost_min of {lmin} is greater than {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
-                    lmin, lmax = lmax, lmin
-                elif bad_condition:
-                    raise OptionError(f"gadget_cost_min of {lmin} is greater than {lmax}. Fix this, or set auto_corrections to at least fix_minor.")
-                self._gadget_costs = [self.random.randint(lmin, lmax) for _ in range(3)]
-        self.log(f"Gadget Costs (in Light Gems): Ball requires {self._gadget_costs[0]}, invincibility requires {self._gadget_costs[1]}, and supercharge requires {self._gadget_costs[2]}.", LoggingLevel.MEDIUM)
-        
-        self.log("Setting up boss lair costs.", LoggingLevel.LOW)
-        if self.options.randomize_boss_lair_door_costs.value != 0:  # if not default
-            if self.options.randomize_boss_lair_door_costs.value == 2:  # shuffled:
-                self.random.shuffle(self._boss_lairs)
-            else:
-                bmin, bmax = self.options.boss_lair_door_cost_min.value, self.options.boss_lair_door_cost_max.value
-                bad_condition = bmin > bmax
-                if bad_condition and auto_corrections >= 1:
-                    self.log(f"Minor Warning: boss_lair_door_cost_min of {bmin} is greater than {bmax}. Fixing by swapping them.", LoggingLevel.WARNING)
-                    bmin, bmax = bmax, bmin
-                elif bad_condition:
-                    raise OptionError(f"boss_lair_door_cost_min of {bmin} is greater than {bmax}. Fix this, or set auto_corrections to at least fix_minor.")
-
-                self._boss_lairs = [self.random.randint(bmin, bmax) for _ in range(4)]
-        
-        self.log(f"Checking if boss lair costs need forcing via boss_lair_forcing.", LoggingLevel.LOW)
-        lookup = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]
-        forcing = self.options.boss_lair_forcing.value
-        if forcing != 0:
-            if 1 <= self.options.boss_lair_forcing.value <= 4: goal_boss_indices = [forcing-1]
-            else: goal_boss_indices = [lookup.index(boss) for boss in lookup if boss in self.options.boss_goal.value]
-            non_goal_boss_indices = [index for index in [0, 1, 2, 3] if index not in goal_boss_indices]
-            
-            if len(goal_boss_indices) == 4:
-                self.log("boss_lair_forcing is set to automatic, but all 4 bosses are part of goal. Skipping cost swapping.", LoggingLevel.HIGH)
-            elif len(goal_boss_indices) == 0:
-                self.log("boss_lair_forcing is set to automatic, but you have no goal bosses. Skipping cost swapping.", LoggingLevel.HIGH)
-            else:
-                for goal_boss_index in goal_boss_indices:
-                    goal_boss_cost = self._boss_lairs[goal_boss_index]
-                    
-                    # find highest-costing non-goal boss
-                    highest_non_goal_index = non_goal_boss_indices[0]
-                    for non_goal_boss_index in non_goal_boss_indices:
-                        if self._boss_lairs[non_goal_boss_index] > self._boss_lairs[highest_non_goal_index]:
-                            highest_non_goal_index = non_goal_boss_index
-                    highest_non_goal_cost = self._boss_lairs[highest_non_goal_index]
-                    
-                    # swap if needed
-                    if self._boss_lairs[goal_boss_index] < highest_non_goal_cost:
-                        self.log(f"Swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is smaller.", LoggingLevel.HIGH)
-                        self._boss_lairs[goal_boss_index] = highest_non_goal_cost
-                        self._boss_lairs[highest_non_goal_index] = goal_boss_cost
-                    else:
-                        self.log(f"Skipping swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is already larger.", LoggingLevel.HIGH)
-        self.log(f"Boss Lair Costs (in Dark Gems): Gnasty Gnorc requires {self._boss_lairs[0]}, Ineptune requires {self._boss_lairs[1]}, Red requires {self._boss_lairs[2]}, and Mecha-Red requires {self._boss_lairs[3]}.", LoggingLevel.MEDIUM)
-        
-        self.log("Setting up Light Gem door costs.", LoggingLevel.LOW)
-        if self.options.randomize_light_gem_door_costs.value != 0:
-            if self.options.randomize_light_gem_door_costs.value == 2:  # shuffled:
-                self.random.shuffle(self._lg_doors)
-            else:
-                lmin, lmax = self.options.light_gem_door_cost_min.value, self.options.light_gem_door_cost_max.value
-                bad_condition = lmin > lmax
-                if bad_condition and auto_corrections >= 1:
-                    self.log(f"Minor Warning: light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Fixing by swapping them.", LoggingLevel.WARNING)
-                    lmin, lmax = lmax, lmin
-                elif bad_condition:
-                    raise OptionError(f"light_gem_door_cost_min of {lmin} is greater than light_gem_door_cost_max of {lmax}. Fix this, or set auto_corrections to at least fix_minor.")
-                self._lg_doors = [self.random.randint(lmin, lmax) for _ in range(4)]
-        self.log(f"Light Gem Door costs (in Light Gems): Dragonfly Falls requires {self._lg_doors[0]}, Coastal Remains requires {self._lg_doors[1]}, Frostbite Village requires {self._lg_doors[2]}, and Dark Mine requires {self._lg_doors[3]}.", LoggingLevel.MEDIUM)
-
-        self.log("Setting up regions and locations.", LoggingLevel.LOW)
-        data = _load_file("locations.json")
-        self.multiworld.regions.extend(Region(r['name'], self.player, self.multiworld) for r in data.values())
-        self.log("Regions created.", LoggingLevel.HIGH)
-        
-        for region_name, region_data in data.items():
-            for entrance in region_data['entrances']:
-                region_from, region_to = entrance['name'].split(" -> ")
-                rule = self.rule_from_dict(entrance['access_rule'])
-                self.get_region(region_from).connect(self.get_region(region_to), f"{region_from} => {region_to}", rule)
-                self.log(f"Connected region {region_from} to region {region_to} with rule {rule}.", LoggingLevel.MAXIMUM)
-        self.log("Regions connected.", LoggingLevel.HIGH)
-
-        for region_data in data.values():
-            region_object = self.get_region(region_data['name'])
-            new_locations = {}
-            for location_data in region_data['locations']:
-                add = True
-                for options in location_data.get('options', ()):
-                    option = getattr(self.options, options['option'])
-                    match options.get('operator', 'eq'):
-                        case 'eq':
-                            add = add and option.value == options['value']
-                        case 'ne':
-                            add = add and option.value != options['value']
-                        case 'gt':
-                            add = add and option.value > options['value']
-                        case 'ge':
-                            add = add and option.value >= options['value']
-                        case 'lt':
-                            add = add and option.value < options['value']
-                        case 'le':
-                            add = add and option.value <= options['value']
-                if add:
-                    new_locations[location_data['name']] = location_data['id']
-                    
-                    self.log(f"Added location {location_data['name']} with id {location_data['id']} to region {region_data['name']}.", LoggingLevel.MAXIMUM)
-            region_object.add_locations(new_locations)
-        self.log("Locations created.", LoggingLevel.HIGH)
-
-        # add gem events, only if shop is randomized with gem logic
-        self.log("Checking if shop randomization needs to be set up.", LoggingLevel.LOW)
-        blink_exclusions, other_exclusions = 0, 0
-        if self.options.shop_randomization.value == 1:
-            self.log("Setting up gem logic events.", LoggingLevel.LOW)
-            convert = {"1-1": 0, "1-2": 1, "2-1": 2, "2-2": 3, "3-1": 4, "3-2": 5, "4-1": 6, "4-2": 7}
-            for reg, region_data in data.items():
-                for gem_event in region_data["gem_events"]:
-                    exclusion = False
-                    for key in convert.keys():
-                        if key in gem_event['name']:
-                            if "Byrd minigames" in gem_event['name'] and minigame_locs[convert[key]] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]]} was excluded.", LoggingLevel.HIGH)
-                                other_exclusions += int(gem_event['gem_amount'])
-                                exclusion = True
-                                break
-                            elif "Blink minigames" in gem_event['name'] and minigame_locs[convert[key]+8] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]+8]} was excluded.", LoggingLevel.HIGH)
-                                blink_exclusions += int(gem_event['gem_amount'])
-                                exclusion = True
-                                break
-                            elif "Sparx minigames" in gem_event['name'] and minigame_locs[convert[key]+16] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]+16]} was excluded.", LoggingLevel.HIGH)
-                                other_exclusions += int(gem_event['gem_amount'])
-                                exclusion = True
-                                break
-                                
-                    if not exclusion:
-                        location_name = f"{reg}: {gem_event['name']}"
-                        self.get_region(reg).add_event(location_name, gem_event['name'], rule=self.rule_from_dict(gem_event["access_rule"]), show_in_spoiler=False)
-                        self.log(f"Created gem event with location name {location_name}, item name {gem_event['name']}, and rule {gem_event['access_rule']}.", LoggingLevel.MAXIMUM)
-                    
-        # shop costs determined by multiple options. Doing after gem events in case of exclusions
-        self.log("Setting up shop prices.", LoggingLevel.LOW)
-        if self.options.shop_randomization.value == 1:
-            blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
-            non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
-            other = (105357 - other_exclusions) * self.options.other_gems.value / 100
-            gem_total = blink + non_blink_enemies + other
-            base_price = gem_total / (self.options.shop_item_count.value - 1)
-            self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
-            self.shop_costs.append(0)
-
-            if self.options.shop_logic.value == 1:  # 1 = ordered, meaning incrementing prices
-                for counter in range(self.options.shop_item_count.value - 1):
-                    self.shop_costs.append(int(base_price * (counter + 1)))
-            else:  # 0 = unordered, meaning equal pricing
-                for _ in range(self.options.shop_item_count.value - 1):
-                    self.shop_costs.append(int(base_price))
-            self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
-            
-        self.handle_goaling()
-    
-    def create_item(self, name: str) -> Item:
-        """Helper method for create_items which returns an Item object."""
-        self.log(f"Created item {name} with classification {self._classifications[name]} and ID {self.item_name_to_id[name]}.", LoggingLevel.MAXIMUM)
-        return Item(name, self._classifications[name], self.item_name_to_id[name], self.player)
 
     def setup_filler_list(self) -> tuple[dict[str, list], list[str]]:
         """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
@@ -857,8 +828,7 @@ class SpyroAHTWorld(World):
   
     def set_rules(self) -> None:
         self.log("Setting up location rules.", LoggingLevel.LOW)
-        data = _load_file("locations.json")
-        for r in data.values():
+        for r in self.location_data.values():
             for l in r['locations']:
                 try:
                     loc = self.get_location(l['name'])
@@ -911,12 +881,12 @@ class SpyroAHTWorld(World):
             "shop_costs": self.shop_costs,
 
             "randomize_boss_lair_doors": self.options.randomize_boss_lair_door_costs.value,
-            "boss_lair_costs": self._boss_lairs,
+            "boss_lair_costs": self.boss_lairs,
             "boss_lair_forcing": self.options.boss_lair_forcing.value,
             "randomize_light_gem_door_costs": self.options.randomize_light_gem_door_costs.value,
-            "light_gem_door_costs": self._lg_doors,
+            "light_gem_door_costs": self.light_gem_doors,
             "randomize_gadget_costs": self.options.randomize_gadget_costs.value,
-            "gadget_costs": self._gadget_costs,
+            "gadget_costs": self.gadget_costs,
 
             "pause_menu_patch": self.options.pause_menu_patch.value,
             "shop_pad_proximity_activation": self.options.shop_pad_proximity_activation.value,
@@ -935,15 +905,6 @@ class SpyroAHTWorld(World):
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         return slot_data
-    
-    def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        super().write_spoiler(spoiler_handle)
-        
-        if self.options.shop_randomization:
-            spoiler_handle.write(f"Shop Prices:                     {self.shop_costs}\n")
-        spoiler_handle.write(f"Boss Lair Costs:                 {self._boss_lairs}\n")
-        spoiler_handle.write(f"Light Gem Door Costs:            {self._lg_doors}\n")
-        spoiler_handle.write(f"Gadget Costs:                    {self._gadget_costs}\n")
 
 ###############LOGIC RULES###############
 @dataclass
@@ -952,7 +913,7 @@ class BossLairRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
 
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        return Has("Dark Gem", world._boss_lairs[self.index]).resolve(world)
+        return Has("Dark Gem", world.boss_lairs[self.index]).resolve(world)
 
 
 @dataclass
@@ -961,28 +922,28 @@ class LGDoorRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
 
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        return Has("Light Gem", world._lg_doors[self.index]).resolve(world)
+        return Has("Light Gem", world.light_gem_doors[self.index]).resolve(world)
 
 
 @dataclass
 class BallGadget(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        return Has("Light Gem", world._gadget_costs[0]).resolve(world)
+        return Has("Light Gem", world.gadget_costs[0]).resolve(world)
 
 
 @dataclass
 class InvincibilityGadget(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        return Has("Light Gem", world._gadget_costs[1]).resolve(world)
+        return Has("Light Gem", world.gadget_costs[1]).resolve(world)
 
 
 @dataclass
 class SuperchargeGadget(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        return And(Has("Light Gem", world._gadget_costs[2]), Has("Charge")).resolve(world)
+        return And(Has("Light Gem", world.gadget_costs[2]), Has("Charge")).resolve(world)
 
 
 @dataclass
@@ -1015,7 +976,7 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
         return self.Resolved(cost, blink_scaling, non_blink_enemy_scaling, other_scaling, player=world.player)
 
     class Resolved(Rule.Resolved):
-        item_cost: int
+        item_cost: int  # PyCharm, why do you complain about thiiiiiiiiiiiiiis it works
         blink_scaling: float
         non_blink_enemy_scaling: float
         other_scaling: float
