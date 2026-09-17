@@ -321,8 +321,8 @@ class SpyroAHTWorld(World):
         self.check_breaths_and_realms(self.options.starting_breaths, ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"], "breath")
         self.check_breaths_and_realms(self.options.starting_realms, ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"], "realm")
         
-        self.check_filler_and_traps(self.options.filler_items, "Filler", "Shinies")
-        self.check_filler_and_traps(self.options.trap_items, "Trap", "Spam Call")
+        if self.options.trap_percentage.value < 100: self.check_filler_and_traps(self.options.filler_items, "Filler", "Shinies")
+        if self.options.trap_percentage.value > 0: self.check_filler_and_traps(self.options.trap_items, "Trap", "Spam Call")
         
         self.check_lists(self.options.boss_goal, "boss_goal", "bosses")
         self.check_lists(self.options.elders_goal, "elders_goal", "elders")
@@ -802,8 +802,9 @@ class SpyroAHTWorld(World):
         else: trap_number = math.floor(trap_number)
         filler_number = junk_count - trap_number
         self.log(f"Number of fillers: {filler_number}. Number of traps: {trap_number}.", LoggingLevel.HIGH)
-
-        self.log(f"Enabled trap items: {", ".join(self.options.trap_items.value)}.", LoggingLevel.MEDIUM)
+        
+        output = "none" if len(self.options.trap_items.value) == 0 else ", ".join(self.options.trap_items.value)
+        self.log(f"Enabled trap items: {output}.", LoggingLevel.MEDIUM)
         for _ in range(trap_number):
             choice = self.random.choice(list(self.options.trap_items.value))
             self.log(f"Created trap item {choice}.", LoggingLevel.MAXIMUM)
@@ -811,7 +812,8 @@ class SpyroAHTWorld(World):
 
         # shinies have extra logic to force variety in the choices before duplicating
         self.filler_items, unchosen_shinies = self.setup_filler_list()
-        self.log(f"Enabled filler categories: {", ".join(self.filler_items.keys())}.", LoggingLevel.MEDIUM)
+        output = "none" if len(self.filler_items.keys()) == 0 else ", ".join(self.filler_items.keys()) 
+        self.log(f"Enabled filler categories: {output}.", LoggingLevel.MEDIUM)
         reset_shinies = copy.copy(unchosen_shinies)
         for _ in range(filler_number):
             category, items = self.random.choice(list(self.filler_items.items()))

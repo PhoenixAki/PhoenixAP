@@ -297,8 +297,6 @@ class SpyroAHTContext(SuperContext):
         self.tracker_found = tracker_loaded
         
         # these update whenever UT reports a new location or event is in logic
-        self.loc_flag = False
-        self.event_flag = False
         self._in_logic_events: list[str] = []
         self._in_logic_locations: list[str] = []
         
@@ -668,12 +666,10 @@ class SpyroAHTContext(SuperContext):
     
     def _event_update(self, events: list[str]) -> bool:
         self._in_logic_events = events
-        self.loc_flag = True
         return True  # does nothing but is required (and is documented as such by UT)
     
     def _location_update(self, locations: list[str]) -> bool:
         self._in_logic_locations = locations
-        self.event_flag = True
         return True  # does nothing but is required (and is documented as such by UT)
 
     async def check_goal(self) -> bool:
@@ -756,9 +752,9 @@ class SpyroAHTContext(SuperContext):
                     await self._check_doors()
                     await self._location_checks()
                     await self._location_scouts()
-                    if self.event_flag and tracker_loaded:
+                    if tracker_loaded:
                         await self.emu_client.update_pause_gems(self._in_logic_events)
-                    if self.loc_flag and tracker_loaded:
+                    if tracker_loaded:
                         await self.emu_client.update_tracker(self._in_logic_locations)
                     if not has_goaled:
                         has_goaled = await self.check_goal()

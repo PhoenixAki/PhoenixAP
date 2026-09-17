@@ -272,7 +272,7 @@ class TrapItems(OptionSet):
     will trigger (or get queued) upon next client reconnection.
 
     Spam Call: A random line of Moneybags dialog + his shop music will play in-game for trap_length seconds.
-    Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.  # TODO: currently only X axis.
+    Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.
     Damage Sparx: You will take 1 hit of damage. If Sparx is gone, nothing happens (as in, this will never kill you).
       Currently, this does not take away health from the minigame version of Sparx.
     Gem Tax: Takes away a random amount of gems (500-1000).
