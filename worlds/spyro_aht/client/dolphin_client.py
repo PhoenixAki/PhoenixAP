@@ -76,16 +76,14 @@ class DolphinClient(GenericClient):
     async def connect(self):
         if not dolphin_memory_engine.is_hooked():
             from CommonClient import logger
-            logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing.")
             dolphin_memory_engine.hook()
-            
             game_id = dolphin_memory_engine.read_bytes(0x80000000, 6)
 
             if game_id == b'G5SE7D':
-                logger.info("NTSC game version detected.")
+                logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. NTSC game detected.")
                 self.addresses = addresses.G5SE7D()
             elif game_id == b'G5SP7D':
-                logger.info("PAL game version detected.")
+                logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. PAL game detected.")
                 self.addresses = addresses.G5SP7D()
             else:
                 logger.error("WARNING: Invalid or unsupported game ID.")
@@ -94,7 +92,6 @@ class DolphinClient(GenericClient):
             mod_version_major, mod_version_minor = self.retrieve_mod_version()
             
             if mod_version_major != consts.MOD_MAJOR:
-                # dolphin_memory_engine.un_hook()
                 logger.error(f"WARNING: Mod major version {mod_version_major} is incompatible with AHT AP {consts.CLIENT_VERSION_STR}. Please update game mod to major version {consts.MOD_MAJOR}.")
                 return False
             if mod_version_major == consts.MOD_MAJOR and mod_version_minor < consts.MOD_MINOR:
