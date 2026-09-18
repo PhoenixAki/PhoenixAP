@@ -181,7 +181,7 @@ class MinigamesGoal(OptionSet):
 
 class MinigamesGoalCount(Range):
     """This option customizes how many of each minigame type enabled in minigames_goal you have to do.
-    This number applies separately to each enabled one; it is not a count of how many you need to do in total.
+    This number applies separately to each enabled minigame goal; it is not a count of how many you need to do in total.
     
     Enter a number 1-8 to require that many of each minigame type to goal."""
     display_name = "Minigames Count"
@@ -267,7 +267,7 @@ class FillerItems(OptionSet):
 
 
 class TrapItems(OptionSet):
-    """This option lets you choose which categories of traps (neutral-to-negative effect) items are enabled.
+    """This option lets you choose which trap items (neutral-to-negative effect) are enabled.
     Spam Call + Reverse Controls will be queued and triggered sequentially. Any trap received while offline
     will trigger (or get queued) upon next client reconnection.
 
@@ -276,6 +276,7 @@ class TrapItems(OptionSet):
     Damage Sparx: You will take 1 hit of damage. If Sparx is gone, nothing happens (as in, this will never kill you).
       Currently, this does not take away health from the minigame version of Sparx.
     Gem Tax: Takes away a random amount of gems (500-1000).
+      It is advised to disable gem tax if randomizing the shop, as gem logic does not account for them.
     
     Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax"]"""
     display_name = "Trap Items"
