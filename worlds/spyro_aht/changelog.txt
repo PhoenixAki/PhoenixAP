@@ -1,3 +1,25 @@
+2.2.0 (PAL support, redesigned shop & goal systems, traps, and more)
+- Added support for PAL GC version of game.
+- Shop system redesigned to use `shop_logic` instead of `gem_logic`.
+  - `shop_logic = ordered` works identically to `gem_logic = true`.
+  - `shop_logic = unordered` is a replacement for `gem_logic = false` which assumes the player will buy items in order, but won't restrict them from doing otherwise.
+  - Also, added `shop_item_count` for customizing how many shop items there are.
+* Logging system redesigned to be a single choice of level of detail. Warning messages from YAML issues are now always logged.
+* The goal system has been expanded (customizing how many checks per goal, new minigame and elder goals, reworked `/check_goal`)
+* `auto_corrections` expanded to `fix_minor` and `fix_major`. Minor fixes are things that are relatively inconsequential, major have a more notable impact on the seed.
+* Added support for 4 traps (Spam Call, Reverse Controls, Gem Tax, and Damage Sparx).
+- Refactored/organized significant chunks of the codebase to be more smartly designed, particularly the item creation process.
+- Client commands have slightly better error checking now. Also added `/costs` as a convenience command that outputs various costs separately from `/list_options`.
+- Made an updated logic spreadsheet which lists every region and location access rule.
+- Map icons now render as red = unreachable, yellow = reachable, green = checked.
+- Every location was renamed to be less verbose, and they have a new ID mapping system which makes some features *way* easier to code.
+- Partially undid the custom sorting of locations in the tracker page. Locations are now sorted first in order of vanilla game levels, then alphabetically by logical region, then alphabetically by location.
+- Added "Sent <item> to <player>" notifications in-game. None of us have any idea why they weren't there already, either...also added a small Easter egg when you receive a specific type of item from yourself :slight_smile:
+- Added 270 Stormy Beach gems to gem logic that were missed.
+- `hint_boss_rewards` now hints all boss locations, not just the breath rewards.
+- Added location groups for Light Gem doors and gadgets.
+- Fixed an inconsequential logic bug in Magma Falls Bottom.
+
 2.1.0 (various misc. things)
 - Fixed `vanilla_minigame_rewards` not working for turret minigames.
 - Fixed a missing glide requirement in Dragonfly Falls connecting the end of the level back to the start.

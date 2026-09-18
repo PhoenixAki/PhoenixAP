@@ -4,30 +4,19 @@
         "entrances": [],
         "locations": [
             {
-                "name": "Starter Checks: Glide",
-                "id": 229,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "Starter Checks: Charge",
-                "id": 230,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
                 "name": "Starter Checks: Breath",
-                "id": 231,
+                "id": 501,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Starter Checks: Glide",
+                "id": 502,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -38,7 +27,18 @@
             },
             {
                 "name": "Starter Checks: Swim",
-                "id": 232,
+                "id": 503,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Starter Checks: Charge",
+                "id": 504,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -372,10 +372,15 @@
         "locations": [
             {
                 "name": "Moneybags: Shop Item 1",
-                "id": 1000,
+                "id": 901,
                 "options": [
                     {
                         "option": "shop_randomization",
+                        "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
                         "value": 1
                     }
                 ],
@@ -388,11 +393,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 2",
-                "id": 1001,
+                "id": 902,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 2
                     }
                 ],
                 "access_rule": {
@@ -406,11 +416,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 3",
-                "id": 1002,
+                "id": 903,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 3
                     }
                 ],
                 "access_rule": {
@@ -424,11 +439,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 4",
-                "id": 1003,
+                "id": 904,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 4
                     }
                 ],
                 "access_rule": {
@@ -442,11 +462,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 5",
-                "id": 1004,
+                "id": 905,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 5
                     }
                 ],
                 "access_rule": {
@@ -460,11 +485,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 6",
-                "id": 2000,
+                "id": 906,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 6
                     }
                 ],
                 "access_rule": {
@@ -478,11 +508,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 7",
-                "id": 2001,
+                "id": 907,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 7
                     }
                 ],
                 "access_rule": {
@@ -496,11 +531,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 8",
-                "id": 2002,
+                "id": 908,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 8
                     }
                 ],
                 "access_rule": {
@@ -514,11 +554,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 9",
-                "id": 2003,
+                "id": 909,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 9
                     }
                 ],
                 "access_rule": {
@@ -532,11 +577,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 10",
-                "id": 2004,
+                "id": 910,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 10
                     }
                 ],
                 "access_rule": {
@@ -550,11 +600,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 11",
-                "id": 2005,
+                "id": 911,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 11
                     }
                 ],
                 "access_rule": {
@@ -568,11 +623,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 12",
-                "id": 2006,
+                "id": 912,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 12
                     }
                 ],
                 "access_rule": {
@@ -586,11 +646,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 13",
-                "id": 2007,
+                "id": 913,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 13
                     }
                 ],
                 "access_rule": {
@@ -604,11 +669,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 14",
-                "id": 2008,
+                "id": 914,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 14
                     }
                 ],
                 "access_rule": {
@@ -622,11 +692,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 15",
-                "id": 2009,
+                "id": 915,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 15
                     }
                 ],
                 "access_rule": {
@@ -640,11 +715,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 16",
-                "id": 2010,
+                "id": 916,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 16
                     }
                 ],
                 "access_rule": {
@@ -658,11 +738,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 17",
-                "id": 2011,
+                "id": 917,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 17
                     }
                 ],
                 "access_rule": {
@@ -676,11 +761,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 18",
-                "id": 2012,
+                "id": 918,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
+                    },
+                    {
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 18
                     }
                 ],
                 "access_rule": {
@@ -694,15 +784,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 19",
-                "id": 3013,
+                "id": 919,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 19
                     }
                 ],
                 "access_rule": {
@@ -716,15 +807,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 20",
-                "id": 3014,
+                "id": 920,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 20
                     }
                 ],
                 "access_rule": {
@@ -738,15 +830,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 21",
-                "id": 3015,
+                "id": 921,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 21
                     }
                 ],
                 "access_rule": {
@@ -760,15 +853,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 22",
-                "id": 3016,
+                "id": 922,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 22
                     }
                 ],
                 "access_rule": {
@@ -782,15 +876,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 23",
-                "id": 3017,
+                "id": 923,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 23
                     }
                 ],
                 "access_rule": {
@@ -804,15 +899,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 24",
-                "id": 3018,
+                "id": 924,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 24
                     }
                 ],
                 "access_rule": {
@@ -826,15 +922,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 25",
-                "id": 3019,
+                "id": 925,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 25
                     }
                 ],
                 "access_rule": {
@@ -848,15 +945,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 26",
-                "id": 3020,
+                "id": 926,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 26
                     }
                 ],
                 "access_rule": {
@@ -870,15 +968,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 27",
-                "id": 3021,
+                "id": 927,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 27
                     }
                 ],
                 "access_rule": {
@@ -892,15 +991,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 28",
-                "id": 3022,
+                "id": 928,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 28
                     }
                 ],
                 "access_rule": {
@@ -914,15 +1014,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 29",
-                "id": 3023,
+                "id": 929,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 29
                     }
                 ],
                 "access_rule": {
@@ -936,15 +1037,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 30",
-                "id": 3024,
+                "id": 930,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 30
                     }
                 ],
                 "access_rule": {
@@ -958,15 +1060,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 31",
-                "id": 3025,
+                "id": 931,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 31
                     }
                 ],
                 "access_rule": {
@@ -980,15 +1083,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 32",
-                "id": 3026,
+                "id": 932,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 32
                     }
                 ],
                 "access_rule": {
@@ -1002,15 +1106,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 33",
-                "id": 3027,
+                "id": 933,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 33
                     }
                 ],
                 "access_rule": {
@@ -1024,15 +1129,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 34",
-                "id": 3028,
+                "id": 934,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 34
                     }
                 ],
                 "access_rule": {
@@ -1046,15 +1152,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 35",
-                "id": 3029,
+                "id": 935,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 35
                     }
                 ],
                 "access_rule": {
@@ -1068,15 +1175,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 36",
-                "id": 3030,
+                "id": 936,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 36
                     }
                 ],
                 "access_rule": {
@@ -1090,15 +1198,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 37",
-                "id": 3031,
+                "id": 937,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 37
                     }
                 ],
                 "access_rule": {
@@ -1112,15 +1221,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 38",
-                "id": 3032,
+                "id": 938,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 38
                     }
                 ],
                 "access_rule": {
@@ -1134,15 +1244,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 39",
-                "id": 3033,
+                "id": 939,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 39
                     }
                 ],
                 "access_rule": {
@@ -1156,15 +1267,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 40",
-                "id": 3034,
+                "id": 940,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 40
                     }
                 ],
                 "access_rule": {
@@ -1178,15 +1290,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 41",
-                "id": 3035,
+                "id": 941,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 41
                     }
                 ],
                 "access_rule": {
@@ -1200,15 +1313,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 42",
-                "id": 3036,
+                "id": 942,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 42
                     }
                 ],
                 "access_rule": {
@@ -1222,15 +1336,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 43",
-                "id": 3037,
+                "id": 943,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 43
                     }
                 ],
                 "access_rule": {
@@ -1244,15 +1359,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 44",
-                "id": 3038,
+                "id": 944,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 44
                     }
                 ],
                 "access_rule": {
@@ -1266,15 +1382,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 45",
-                "id": 3039,
+                "id": 945,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 45
                     }
                 ],
                 "access_rule": {
@@ -1288,15 +1405,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 46",
-                "id": 3040,
+                "id": 946,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 46
                     }
                 ],
                 "access_rule": {
@@ -1310,15 +1428,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 47",
-                "id": 3041,
+                "id": 947,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 47
                     }
                 ],
                 "access_rule": {
@@ -1332,15 +1451,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 48",
-                "id": 3042,
+                "id": 948,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 48
                     }
                 ],
                 "access_rule": {
@@ -1354,15 +1474,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 49",
-                "id": 3043,
+                "id": 949,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 49
                     }
                 ],
                 "access_rule": {
@@ -1376,15 +1497,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 50",
-                "id": 3044,
+                "id": 950,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 50
                     }
                 ],
                 "access_rule": {
@@ -1398,15 +1520,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 51",
-                "id": 3045,
+                "id": 951,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 51
                     }
                 ],
                 "access_rule": {
@@ -1420,15 +1543,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 52",
-                "id": 3046,
+                "id": 952,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 52
                     }
                 ],
                 "access_rule": {
@@ -1442,15 +1566,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 53",
-                "id": 3047,
+                "id": 953,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 53
                     }
                 ],
                 "access_rule": {
@@ -1464,15 +1589,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 54",
-                "id": 3048,
+                "id": 954,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 54
                     }
                 ],
                 "access_rule": {
@@ -1486,15 +1612,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 55",
-                "id": 3049,
+                "id": 955,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 55
                     }
                 ],
                 "access_rule": {
@@ -1508,15 +1635,16 @@
             },
             {
                 "name": "Moneybags: Shop Item 56",
-                "id": 3050,
+                "id": 956,
                 "options": [
                     {
                         "option": "shop_randomization",
                         "value": 1
                     },
                     {
-                        "option": "key_rings",
-                        "value": 0
+                        "option": "shop_item_count",
+                        "operator": "ge",
+                        "value": 56
                     }
                 ],
                 "access_rule": {
@@ -1580,7 +1708,7 @@
         "locations": [
             {
                 "name": "DV: Double Jump from Elder Tomas",
-                "id": 1,
+                "id": 601,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1591,7 +1719,7 @@
             },
             {
                 "name": "DV: Dark Gem by Ember",
-                "id": 2,
+                "id": 101,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -1719,7 +1847,7 @@
         "locations": [
             {
                 "name": "DV: Dragon Egg in Gnasty Gnorc Cave",
-                "id": 16,
+                "id": 301,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1730,7 +1858,7 @@
             },
             {
                 "name": "DV: Electric Breath from Gnasty Gnorc",
-                "id": 17,
+                "id": 701,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAny",
@@ -1746,7 +1874,7 @@
             },
             {
                 "name": "DV: Defeat Gnasty Gnorc",
-                "id": 4000,
+                "id": 702,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAny",
@@ -1782,7 +1910,7 @@
         "locations": [
             {
                 "name": "DV: Light Gem in Locked Chest near Village Depot",
-                "id": 7,
+                "id": 822,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -1795,7 +1923,7 @@
             },
             {
                 "name": "DV: Dragon Egg from Sgt. Byrd",
-                "id": 13,
+                "id": 302,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1806,7 +1934,7 @@
             },
             {
                 "name": "DV: Light Gem from Sgt. Byrd",
-                "id": 14,
+                "id": 201,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1903,8 +2031,8 @@
         ],
         "locations": [
             {
-                "name": "DV: Firework above Sgt. Byrd after timed platforms",
-                "id": 5002,
+                "name": "DV: Firework above Sgt. Byrd",
+                "id": 401,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -1922,8 +2050,8 @@
                 }
             },
             {
-                "name": "DV: Light Gem above Sgt. Byrd after timed platforms",
-                "id": 10,
+                "name": "DV: Light Gem above Sgt. Byrd",
+                "id": 202,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1933,8 +2061,8 @@
                 }
             },
             {
-                "name": "DV: Dark Gem above Sgt. Byrd on ledge",
-                "id": 11,
+                "name": "DV: Dark Gem above Sgt. Byrd",
+                "id": 102,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1944,8 +2072,8 @@
                 }
             },
             {
-                "name": "DV: Dragon Egg above Sgt. Byrd behind Dark Gem",
-                "id": 12,
+                "name": "DV: Dragon Egg above Sgt. Byrd",
+                "id": 303,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -1990,8 +2118,8 @@
         ],
         "locations": [
             {
-                "name": "DV: Dragon Egg by lab secret entrance in river grating",
-                "id": 8,
+                "name": "DV: Dragon Egg by lab secret entrance",
+                "id": 304,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -2001,8 +2129,8 @@
                 }
             },
             {
-                "name": "DV: Light Gem above lab secret entrance",
-                "id": 9,
+                "name": "DV: Light Gem in lab secret entrance",
+                "id": 203,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -2056,7 +2184,7 @@
         "locations": [
             {
                 "name": "DV: Dark Gem by Elder Tomas",
-                "id": 3,
+                "id": 103,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -2148,8 +2276,8 @@
         ],
         "locations": [
             {
-                "name": "DV: Dragon Egg in Hunter's glide tutorial",
-                "id": 4,
+                "name": "DV: Dragon Egg in glide tutorial",
+                "id": 305,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -2159,8 +2287,8 @@
                 }
             },
             {
-                "name": "DV: Firework in Hunter's glide tutorial",
-                "id": 5000,
+                "name": "DV: Firework at end of glide tutorial",
+                "id": 402,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -2301,7 +2429,7 @@
         "locations": [
             {
                 "name": "DV: Light Gem in nursery",
-                "id": 5,
+                "id": 204,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -2311,8 +2439,8 @@
                 }
             },
             {
-                "name": "DV: Dragon Egg next to Ball Gadget in Locked Chest",
-                "id": 6,
+                "name": "DV: Dragon Egg in Locked Chest next to Ball Gadget",
+                "id": 837,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -2325,7 +2453,7 @@
             },
             {
                 "name": "DV: Firework next to Ball Gadget",
-                "id": 5001,
+                "id": 403,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -2451,8 +2579,8 @@
         ],
         "locations": [
             {
-                "name": "DV: Firework after Crocovile bridge",
-                "id": 5003,
+                "name": "DV: Firework across Crocovile bridge",
+                "id": 404,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -2470,8 +2598,8 @@
                 }
             },
             {
-                "name": "DV: Light Gem after Crocovile bridge in Locked Chest",
-                "id": 15,
+                "name": "DV: Light Gem in Locked Chest across Crocovile bridge",
+                "id": 823,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -2551,7 +2679,7 @@
         "locations": [
             {
                 "name": "CS: Dark Gem near Perilous Pyramid",
-                "id": 18,
+                "id": 104,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -2565,7 +2693,7 @@
             },
             {
                 "name": "CS: Light Gem inside Perilous Pyramid behind supercharge door",
-                "id": 21,
+                "id": 205,
                 "options": [],
                 "access_rule": {
                     "rule": "SuperchargeGadget",
@@ -2576,7 +2704,7 @@
             },
             {
                 "name": "CS: Light Gem atop Perilous Pyramid",
-                "id": 22,
+                "id": 206,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -2591,8 +2719,8 @@
                 }
             },
             {
-                "name": "CS: Dragon Egg near tunnel to Forgotten Temple in Locked Chest",
-                "id": 23,
+                "name": "CS: Dragon Egg in Locked Chest after Perilous Pyramid",
+                "id": 838,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -2605,7 +2733,7 @@
             },
             {
                 "name": "CS: Light Gem behind wall with chargeable switch",
-                "id": 26,
+                "id": 207,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -2823,8 +2951,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Light Gem in west area Locked Chest behind chargeable wall",
-                "id": 19,
+                "name": "CS: Light Gem in Locked Chest behind chargeable wall",
+                "id": 824,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -2852,8 +2980,8 @@
                 }
             },
             {
-                "name": "CS: Firework in west area behind cliff",
-                "id": 5004,
+                "name": "CS: Firework behind cliff in west area",
+                "id": 405,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -2871,8 +2999,8 @@
                 }
             },
             {
-                "name": "CS: Dragon Egg in west area after platforms",
-                "id": 20,
+                "name": "CS: Dragon Egg across muddy platforms in west area",
+                "id": 306,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -2962,8 +3090,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg in Forgotten Temple gated Locked Chest",
-                "id": 24,
+                "name": "CS: Dragon Egg in Locked Chest in Forgotten Temple",
+                "id": 839,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -2995,7 +3123,7 @@
             },
             {
                 "name": "CS: Light Gem in Forgotten Temple cave",
-                "id": 25,
+                "id": 208,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3094,8 +3222,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg from Forgotten Temple electric gate thief",
-                "id": 27,
+                "name": "CS: Dragon Egg from thief in Forgotten Temple",
+                "id": 307,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -3265,8 +3393,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg behind pole spin cave chargeable fence in east",
-                "id": 29,
+                "name": "CS: Dragon Egg in pole spin cave",
+                "id": 308,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -3341,8 +3469,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Light Gem after east sinking platforms",
-                "id": 28,
+                "name": "CS: Light Gem across sinking platforms",
+                "id": 209,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -3355,8 +3483,8 @@
                 }
             },
             {
-                "name": "CS: Dragon Egg near Elder's tree from Blink",
-                "id": 30,
+                "name": "CS: Dragon Egg from Blink",
+                "id": 309,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3366,8 +3494,8 @@
                 }
             },
             {
-                "name": "CS: Light Gem near Elder's tree from Blink",
-                "id": 31,
+                "name": "CS: Light Gem from Blink",
+                "id": 210,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3377,8 +3505,8 @@
                 }
             },
             {
-                "name": "CS: Dark Gem by Elder's tree",
-                "id": 32,
+                "name": "CS: Dark Gem outside Elder's tree",
+                "id": 105,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -3392,7 +3520,7 @@
             },
             {
                 "name": "CS: Pole Spin from Elder Magnus",
-                "id": 33,
+                "id": 602,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -3405,8 +3533,8 @@
                 }
             },
             {
-                "name": "CS: Dark Gem in pole spin cave above Blink",
-                "id": 36,
+                "name": "CS: Dark Gem in cave to Fredneck",
+                "id": 106,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -3697,8 +3825,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg in Elder's tree behind chargeable wall",
-                "id": 34,
+                "name": "CS: Dragon Egg in middle of Elder's tree",
+                "id": 310,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAny",
@@ -3713,8 +3841,8 @@
                 }
             },
             {
-                "name": "CS: Firework in Elder's tree behind chargeable wall",
-                "id": 5006,
+                "name": "CS: Firework in middle of Elder's tree",
+                "id": 406,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -3751,7 +3879,7 @@
             },
             {
                 "name": "CS: Firework atop Elder's tree",
-                "id": 5005,
+                "id": 407,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -3770,7 +3898,7 @@
             },
             {
                 "name": "CS: Light Gem atop Elder's tree",
-                "id": 35,
+                "id": 211,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3829,7 +3957,7 @@
         "locations": [
             {
                 "name": "CS: Dragon Egg from Fredneck",
-                "id": 37,
+                "id": 311,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3840,7 +3968,7 @@
             },
             {
                 "name": "CS: Light Gem from Fredneck",
-                "id": 38,
+                "id": 212,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3850,8 +3978,8 @@
                 }
             },
             {
-                "name": "CS: Light Gem next to Fredneck lilypads",
-                "id": 39,
+                "name": "CS: Light Gem next to lilypads",
+                "id": 213,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -3924,8 +4052,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Light Gem in entry area in Locked Chest",
-                "id": 40,
+                "name": "DF: Light Gem in Locked Chest in entry area",
+                "id": 825,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -4049,8 +4177,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Dark Gem in entry area behind chargeable wall",
-                "id": 41,
+                "name": "DF: Dark Gem behind chargeable wall in entry area",
+                "id": 107,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -4065,8 +4193,8 @@
                 }
             },
             {
-                "name": "DF: Dragon Egg in entry area behind chargeable wall",
-                "id": 42,
+                "name": "DF: Dragon Egg behind chargeable wall in entry area",
+                "id": 312,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -4081,8 +4209,8 @@
                 }
             },
             {
-                "name": "DF: Light Gem by canyon behind cannon door",
-                "id": 43,
+                "name": "DF: Light Gem behind cannon door",
+                "id": 214,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -4098,7 +4226,7 @@
             },
             {
                 "name": "DF: Dark Gem by canyon vultures",
-                "id": 44,
+                "id": 108,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -4459,7 +4587,7 @@
         "locations": [
             {
                 "name": "DF: Dragon Egg after canyon vultures in nest",
-                "id": 45,
+                "id": 313,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -4763,8 +4891,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Light Gem behind Light Gem Door chargeable wall",
-                "id": 56,
+                "name": "DF: Light Gem in Light Gem door area",
+                "id": 215,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -4777,8 +4905,8 @@
                 }
             },
             {
-                "name": "DF: Dragon Egg from Light Gem Door thief",
-                "id": 57,
+                "name": "DF: Dragon Egg from thief in Light Gem door area",
+                "id": 314,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -4898,8 +5026,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Dark Gem near elder statue",
-                "id": 46,
+                "name": "DF: Dark Gem next to Elder statue",
+                "id": 109,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -4909,8 +5037,8 @@
                 }
             },
             {
-                "name": "DF: Light Gem near elder statue behind underwater chargeable wall",
-                "id": 47,
+                "name": "DF: Light Gem behind underwater chargeable wall",
+                "id": 216,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -4925,8 +5053,8 @@
                 }
             },
             {
-                "name": "DF: Dragon Egg near elder statue from Sparx",
-                "id": 48,
+                "name": "DF: Dragon Egg from Sparx",
+                "id": 315,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -4936,8 +5064,8 @@
                 }
             },
             {
-                "name": "DF: Light Gem near elder statue from Sparx",
-                "id": 49,
+                "name": "DF: Light Gem from Sparx",
+                "id": 217,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -5108,8 +5236,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Dragon Egg above wall kick behind chargeable wall",
-                "id": 50,
+                "name": "DF: Dragon Egg behind chargeable wall in cove",
+                "id": 316,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5220,8 +5348,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Light Gem after cove piranha platforms",
-                "id": 51,
+                "name": "DF: Light Gem across platforms in cove",
+                "id": 218,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -5231,8 +5359,8 @@
                 }
             },
             {
-                "name": "DF: Light Gem next to cove piranha platforms in Locked Chest",
-                "id": 52,
+                "name": "DF: Light Gem in Locked Chest in cove",
+                "id": 826,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -5244,8 +5372,8 @@
                 }
             },
             {
-                "name": "DF: Dark Gem after cove",
-                "id": 55,
+                "name": "DF: Dark Gem at end of cove",
+                "id": 110,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5258,8 +5386,8 @@
                 }
             },
             {
-                "name": "DF: Light Gem after cove via wall kick",
-                "id": 58,
+                "name": "DF: Light Gem at end of cove",
+                "id": 219,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -5372,8 +5500,8 @@
         ],
         "locations": [
             {
-                "name": "DF: Dragon Egg in Hunter's area vulture nest",
-                "id": 53,
+                "name": "DF: Dragon Egg in Hunter's area",
+                "id": 317,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -5383,8 +5511,8 @@
                 }
             },
             {
-                "name": "DF: Light Gem at end of Hunter's area",
-                "id": 54,
+                "name": "DF: Light Gem in Hunter's area",
+                "id": 220,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -5492,8 +5620,8 @@
         ],
         "locations": [
             {
-                "name": "CR: Dragon Egg from southern beach Turtle Mother",
-                "id": 63,
+                "name": "CR: Dragon Egg from Turtle Mother",
+                "id": 318,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5506,8 +5634,8 @@
                 }
             },
             {
-                "name": "CR: Light Gem from southern beach Turtle Mother",
-                "id": 64,
+                "name": "CR: Light Gem from Turtle Mother",
+                "id": 221,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5520,8 +5648,8 @@
                 }
             },
             {
-                "name": "CR: Locked Chest behind Coastal Depot",
-                "id": 234,
+                "name": "CR: Empty Locked Chest behind Coastal Depot",
+                "id": 801,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -5533,8 +5661,8 @@
                 }
             },
             {
-                "name": "CR: Locked Chest in southern beach",
-                "id": 235,
+                "name": "CR: Empty Locked Chest in southern beach",
+                "id": 802,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -5546,8 +5674,8 @@
                 }
             },
             {
-                "name": "CR: Light Gem in southern beach above water mill",
-                "id": 69,
+                "name": "CR: Light Gem above water mill",
+                "id": 222,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -5562,8 +5690,8 @@
                 }
             },
             {
-                "name": "CR: Dragon Egg in southern beach after moving shells",
-                "id": 68,
+                "name": "CR: Dragon Egg across moving shells",
+                "id": 319,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5807,7 +5935,7 @@
         "locations": [
             {
                 "name": "CR: Water Breath from Ineptune",
-                "id": 79,
+                "id": 703,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5821,7 +5949,7 @@
             },
             {
                 "name": "CR: Defeat Ineptune",
-                "id": 4001,
+                "id": 704,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5873,7 +6001,7 @@
         "locations": [
             {
                 "name": "CR: Dragon Egg after piranha pool",
-                "id": 78,
+                "id": 320,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -5963,8 +6091,8 @@
         ],
         "locations": [
             {
-                "name": "CR: Dragon Egg from Light Gem door thief",
-                "id": 61,
+                "name": "CR: Dragon Egg from thief in Light Gem door area",
+                "id": 321,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -5977,8 +6105,8 @@
                 }
             },
             {
-                "name": "CR: Light Gem at end of Light Gem door area",
-                "id": 62,
+                "name": "CR: Light Gem in Light Gem door area",
+                "id": 223,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -6186,8 +6314,8 @@
         ],
         "locations": [
             {
-                "name": "CR: Dark Gem in cannon area",
-                "id": 65,
+                "name": "CR: Dark Gem by cannon",
+                "id": 111,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -6200,8 +6328,8 @@
                 }
             },
             {
-                "name": "CR: Dragon Egg in cannon area",
-                "id": 66,
+                "name": "CR: Dragon Egg by cannon",
+                "id": 322,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -6217,8 +6345,8 @@
                 }
             },
             {
-                "name": "CR: Dark Gem in cannon area behind reinforced door",
-                "id": 67,
+                "name": "CR: Dark Gem behind cannon door",
+                "id": 112,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -6385,7 +6513,7 @@
         "locations": [
             {
                 "name": "CR: Light Gem atop windmill area",
-                "id": 59,
+                "id": 224,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -6471,8 +6599,8 @@
         ],
         "locations": [
             {
-                "name": "CR: Light Gem after electric platform near Cloudy Domain elevator",
-                "id": 60,
+                "name": "CR: Light Gem via electric platform",
+                "id": 225,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -6630,8 +6758,8 @@
         ],
         "locations": [
             {
-                "name": "CR: Light Gem above Otto pool",
-                "id": 70,
+                "name": "CR: Light Gem above Otto's pool",
+                "id": 226,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -6671,7 +6799,7 @@
             },
             {
                 "name": "CR: Light Gem from Otto",
-                "id": 71,
+                "id": 227,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -6871,8 +6999,8 @@
         ],
         "locations": [
             {
-                "name": "CR: Dragon Egg in west area from Blink",
-                "id": 72,
+                "name": "CR: Dragon Egg from Blink",
+                "id": 323,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -6882,8 +7010,8 @@
                 }
             },
             {
-                "name": "CR: Light Gem in west area from Blink",
-                "id": 73,
+                "name": "CR: Light Gem from Blink",
+                "id": 228,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -6893,8 +7021,8 @@
                 }
             },
             {
-                "name": "CR: Dark Gem in west area next to Blink",
-                "id": 74,
+                "name": "CR: Dark Gem next to Blink",
+                "id": 113,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -6907,8 +7035,8 @@
                 }
             },
             {
-                "name": "CR: Dragon Egg in west area after Archer Gnorc hallway",
-                "id": 75,
+                "name": "CR: Dragon Egg after Archer Gnorc hallway",
+                "id": 324,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -6923,8 +7051,8 @@
                 }
             },
             {
-                "name": "CR: Dark Gem in west beach",
-                "id": 76,
+                "name": "CR: Dark Gem near Sunken Ruins",
+                "id": 114,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -6937,8 +7065,8 @@
                 }
             },
             {
-                "name": "CR: Light Gem in west beach",
-                "id": 77,
+                "name": "CR: Light Gem near Sunken Ruins",
+                "id": 229,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -7262,8 +7390,8 @@
         ],
         "locations": [
             {
-                "name": "CD: Light Gem near elevator in Locked Chest",
-                "id": 80,
+                "name": "CD: Light Gem in Locked Chest by elevator",
+                "id": 827,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -7275,8 +7403,8 @@
                 }
             },
             {
-                "name": "CD: Locked Chest after Elder Titan in the distance",
-                "id": 236,
+                "name": "CD: Empty Locked Chest after Elder Titan in the distance",
+                "id": 803,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -7433,8 +7561,8 @@
         ],
         "locations": [
             {
-                "name": "CD: Light Gem approaching Elder above thermal",
-                "id": 82,
+                "name": "CD: Light Gem next to Elder's house",
+                "id": 230,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -7444,8 +7572,8 @@
                 }
             },
             {
-                "name": "CD: Dark Gem approaching Elder before thermal",
-                "id": 81,
+                "name": "CD: Dark Gem below thermal",
+                "id": 115,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -7455,8 +7583,8 @@
                 }
             },
             {
-                "name": "CD: Firework approaching Elder next to thermal",
-                "id": 5012,
+                "name": "CD: Firework next to thermal",
+                "id": 408,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -7586,8 +7714,8 @@
         ],
         "locations": [
             {
-                "name": "CD: Dragon Egg behind supercharge door in Locked Chest",
-                "id": 85,
+                "name": "CD: Dragon Egg in Locked Chest behind supercharge door",
+                "id": 840,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -7738,7 +7866,7 @@
         "locations": [
             {
                 "name": "CD: Wing Shield from Elder Titan",
-                "id": 83,
+                "id": 603,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -7749,7 +7877,7 @@
             },
             {
                 "name": "CD: Dragon Egg after Elder Titan",
-                "id": 84,
+                "id": 325,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -7803,7 +7931,7 @@
         "locations": [
             {
                 "name": "CD: Light Gem after Elder Titan",
-                "id": 86,
+                "id": 231,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -7865,7 +7993,7 @@
         "locations": [
             {
                 "name": "CD: Dragon Egg in northwest Locked Chest",
-                "id": 87,
+                "id": 841,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -7877,8 +8005,8 @@
                 }
             },
             {
-                "name": "CD: Light Gem at end of northwest platforming",
-                "id": 88,
+                "name": "CD: Light Gem in northwest",
+                "id": 232,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -7888,8 +8016,8 @@
                 }
             },
             {
-                "name": "CD: Firework at end of northwest platforming",
-                "id": 5011,
+                "name": "CD: Firework in northwest",
+                "id": 409,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -8003,7 +8131,7 @@
         "locations": [
             {
                 "name": "CD: Light Gem after southwest temporary platforms",
-                "id": 89,
+                "id": 233,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8083,8 +8211,8 @@
         ],
         "locations": [
             {
-                "name": "CD: Dragon Egg below endless orbiting platforms",
-                "id": 90,
+                "name": "CD: Dragon Egg below first orbiting platforms",
+                "id": 326,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8094,8 +8222,8 @@
                 }
             },
             {
-                "name": "CD: Dragon Egg after first endless orbiting platforms",
-                "id": 91,
+                "name": "CD: Dragon Egg after first orbiting platforms",
+                "id": 327,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -8108,8 +8236,8 @@
                 }
             },
             {
-                "name": "CD: Dark Gem after second endless orbiting platforms",
-                "id": 92,
+                "name": "CD: Dark Gem after second orbiting platforms",
+                "id": 116,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8232,8 +8360,8 @@
         ],
         "locations": [
             {
-                "name": "CD: Dragon Egg atop tower from Sgt. Byrd",
-                "id": 93,
+                "name": "CD: Dragon Egg from Sgt. Byrd",
+                "id": 328,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8243,8 +8371,8 @@
                 }
             },
             {
-                "name": "CD: Light Gem atop tower from Sgt. Byrd",
-                "id": 94,
+                "name": "CD: Light Gem from Sgt. Byrd",
+                "id": 234,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8254,8 +8382,8 @@
                 }
             },
             {
-                "name": "CD: Light Gem atop tower in wall kick building",
-                "id": 95,
+                "name": "CD: Light Gem in wall kick building",
+                "id": 235,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -8269,7 +8397,7 @@
             },
             {
                 "name": "CD: Dark Gem before Ball Gadget",
-                "id": 96,
+                "id": 117,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8381,7 +8509,7 @@
         "locations": [
             {
                 "name": "CD: Dragon Egg from Ball Gadget",
-                "id": 97,
+                "id": 329,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8392,7 +8520,7 @@
             },
             {
                 "name": "CD: Light Gem from Ball Gadget",
-                "id": 98,
+                "id": 236,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -8403,7 +8531,7 @@
             },
             {
                 "name": "CD: Firework after Ball Gadget",
-                "id": 5013,
+                "id": 410,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -8498,8 +8626,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Locked Chest in entry area",
-                "id": 237,
+                "name": "SR: Empty Locked Chest in entry area",
+                "id": 804,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -8608,8 +8736,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg after first swim in Locked Chest",
-                "id": 99,
+                "name": "SR: Dragon Egg in Locked Chest after first swim",
+                "id": 842,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -8622,7 +8750,7 @@
             },
             {
                 "name": "SR: Dark Gem in thermal room",
-                "id": 100,
+                "id": 118,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -8636,7 +8764,7 @@
             },
             {
                 "name": "SR: Dragon Egg atop thermal room",
-                "id": 101,
+                "id": 330,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -8651,8 +8779,8 @@
                 }
             },
             {
-                "name": "SR: Light Gem atop thermal room in Locked Chest",
-                "id": 102,
+                "name": "SR: Light Gem in Locked Chest atop thermal room",
+                "id": 828,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -8683,7 +8811,7 @@
             },
             {
                 "name": "SR: Firework atop thermal room",
-                "id": 5007,
+                "id": 411,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -8704,8 +8832,8 @@
                 }
             },
             {
-                "name": "SR: Light Gem before second swim in Locked Chest",
-                "id": 103,
+                "name": "SR: Light Gem in Locked Chest by Lily",
+                "id": 829,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -8974,7 +9102,7 @@
         "locations": [
             {
                 "name": "SR: Light Gem via acid swim",
-                "id": 104,
+                "id": 237,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -9174,8 +9302,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg in depths from Sparx",
-                "id": 105,
+                "name": "SR: Dragon Egg from Sparx",
+                "id": 331,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -9185,8 +9313,8 @@
                 }
             },
             {
-                "name": "SR: Light Gem in depths from Sparx",
-                "id": 106,
+                "name": "SR: Light Gem from Sparx",
+                "id": 238,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -9330,8 +9458,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg in Depths above heated wall kick",
-                "id": 107,
+                "name": "SR: Dragon Egg above heated wall kick",
+                "id": 332,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -9344,8 +9472,8 @@
                 }
             },
             {
-                "name": "SR: Firework in Depths above heated wall kick",
-                "id": 5008,
+                "name": "SR: Firework above heated wall kick",
+                "id": 412,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -9428,8 +9556,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Dragon Egg in fish statues Locked Chest",
-                "id": 108,
+                "name": "SR: Dragon Egg in Locked Chest by fish statues",
+                "id": 843,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -9441,8 +9569,8 @@
                 }
             },
             {
-                "name": "SR: Light Gem after fish statues",
-                "id": 109,
+                "name": "SR: Light Gem by fish statues",
+                "id": 239,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -9630,8 +9758,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Light Gem inside acid swim puzzle acid tunnel",
-                "id": 110,
+                "name": "SR: Light Gem in pole room acid tunnel",
+                "id": 240,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -9675,8 +9803,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Dark Gem atop acid swim puzzle",
-                "id": 111,
+                "name": "SR: Dark Gem atop pole rooms",
+                "id": 119,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -9686,8 +9814,8 @@
                 }
             },
             {
-                "name": "SR: Light Gem atop acid swim puzzle in Locked Chest",
-                "id": 112,
+                "name": "SR: Light Gem in Locked Chest atop pole rooms",
+                "id": 830,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -9699,8 +9827,8 @@
                 }
             },
             {
-                "name": "SR: Firework atop acid swim puzzle",
-                "id": 5009,
+                "name": "SR: Firework atop pole rooms",
+                "id": 413,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -9775,7 +9903,7 @@
         "locations": [
             {
                 "name": "SR: Firework in rising statue room",
-                "id": 5010,
+                "id": 414,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -9795,8 +9923,8 @@
                 }
             },
             {
-                "name": "SR: Dragon Egg in rising statue room Locked Chest",
-                "id": 114,
+                "name": "SR: Dragon Egg in Locked Chest in rising statue room",
+                "id": 844,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -9825,7 +9953,7 @@
             },
             {
                 "name": "SR: Dark Gem on rising statue",
-                "id": 113,
+                "id": 120,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -10008,8 +10136,8 @@
         ],
         "locations": [
             {
-                "name": "SR: Light Gem after rising statue room in Locked Chest",
-                "id": 115,
+                "name": "SR: Light Gem in Locked Chest after rising statue room",
+                "id": 831,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -10155,7 +10283,7 @@
         "locations": [
             {
                 "name": "FV: Ice Breath from Red",
-                "id": 136,
+                "id": 705,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10169,7 +10297,7 @@
             },
             {
                 "name": "FV: Defeat Red",
-                "id": 4002,
+                "id": 706,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10202,8 +10330,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem after electric gate via floating platform",
-                "id": 116,
+                "name": "FV: Light Gem via floating platform near Peggy",
+                "id": 241,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -10218,8 +10346,8 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg after electric gate from Peggy",
-                "id": 117,
+                "name": "FV: Dragon Egg from Peggy",
+                "id": 333,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -10229,8 +10357,8 @@
                 }
             },
             {
-                "name": "FV: Light Gem after electric gate from Peggy",
-                "id": 118,
+                "name": "FV: Light Gem from Peggy",
+                "id": 242,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -10240,8 +10368,8 @@
                 }
             },
             {
-                "name": "FV: Dark Gem after electric gate in cave",
-                "id": 119,
+                "name": "FV: Dark Gem in cave near Peggy",
+                "id": 121,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10254,8 +10382,8 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg after electric gate underground",
-                "id": 120,
+                "name": "FV: Dragon Egg underground near Peggy",
+                "id": 334,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10268,8 +10396,8 @@
                 }
             },
             {
-                "name": "FV: Locked Chest after electric gate underground",
-                "id": 238,
+                "name": "FV: Empty Locked Chest underground near Peggy",
+                "id": 805,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -10419,40 +10547,40 @@
         "locations": [
             {
                 "name": "FV: Dark Gem approaching icy camp blocking Blink",
-                "id": 121,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "FV: Dragon Egg approaching icy camp from Blink",
-                "id": 124,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "FV: Light Gem approaching icy camp from Blink",
-                "id": 125,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "FV: Dragon Egg approaching icy camp from thief",
                 "id": 122,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "FV: Dragon Egg from Blink",
+                "id": 335,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "FV: Light Gem from Blink",
+                "id": 243,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "FV: Dragon Egg from thief after bouncing snowballs",
+                "id": 336,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10465,8 +10593,8 @@
                 }
             },
             {
-                "name": "FV: Light Gem approaching icy camp after whirlwind cavern",
-                "id": 123,
+                "name": "FV: Light Gem after bouncing snowballs",
+                "id": 244,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -10604,8 +10732,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem after icy camp by Hunter",
-                "id": 135,
+                "name": "FV: Light Gem by Gloomy Glacier entrance",
+                "id": 245,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10861,8 +10989,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Dragon Egg behind icy camp chargeable wall",
-                "id": 130,
+                "name": "FV: Dragon Egg behind chargeable wall",
+                "id": 337,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -10875,8 +11003,8 @@
                 }
             },
             {
-                "name": "FV: Dark Gem in icy camp orbiting platforms room",
-                "id": 131,
+                "name": "FV: Dark Gem in orbiting platforms room",
+                "id": 123,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -10886,8 +11014,8 @@
                 }
             },
             {
-                "name": "FV: Light Gem in icy camp orbiting platforms room",
-                "id": 132,
+                "name": "FV: Light Gem in orbiting platforms room",
+                "id": 246,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -10973,8 +11101,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem behind supercharge door returning from Ice Citadel",
-                "id": 172,
+                "name": "FV: Light Gem returning from Ice Citadel",
+                "id": 247,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11027,7 +11155,7 @@
         "locations": [
             {
                 "name": "FV: Dark Gem in eskimole village",
-                "id": 126,
+                "id": 124,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -11351,8 +11479,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Dragon Egg behind Light Gem door in Locked Chest",
-                "id": 133,
+                "name": "FV: Dragon Egg in Locked Chest in Light Gem door area",
+                "id": 845,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -11494,8 +11622,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Light Gem at end of Light Gem door area",
-                "id": 134,
+                "name": "FV: Light Gem in Light Gem door area",
+                "id": 248,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11611,8 +11739,8 @@
         ],
         "locations": [
             {
-                "name": "FV: Dark Gem in falling icicle room",
-                "id": 127,
+                "name": "FV: Dark Gem in icicle room",
+                "id": 125,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11622,8 +11750,8 @@
                 }
             },
             {
-                "name": "FV: Dragon Egg in falling icicle room in Locked Chest",
-                "id": 128,
+                "name": "FV: Dragon Egg in Locked Chest in icicle room",
+                "id": 846,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -11635,8 +11763,8 @@
                 }
             },
             {
-                "name": "FV: Locked Chest after falling icicles under bridge",
-                "id": 244,
+                "name": "FV: Empty Locked Chest under bridge",
+                "id": 806,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -11648,8 +11776,8 @@
                 }
             },
             {
-                "name": "FV: Light Gem after falling icicles via poles",
-                "id": 129,
+                "name": "FV: Light Gem above poles",
+                "id": 249,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -11829,8 +11957,8 @@
         ],
         "locations": [
             {
-                "name": "GG: Locked Chest in Bentley's house",
-                "id": 239,
+                "name": "GG: Empty Locked Chest in Bentley's house",
+                "id": 807,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -11842,8 +11970,8 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg in Bentley's Locked Chest",
-                "id": 137,
+                "name": "GG: Dragon Egg in Locked Chest in Bentley's house",
+                "id": 847,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -11856,7 +11984,7 @@
             },
             {
                 "name": "GG: Light Gem from Bentley",
-                "id": 138,
+                "id": 250,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11867,7 +11995,7 @@
             },
             {
                 "name": "GG: Light Gem in skeleton ambush room",
-                "id": 139,
+                "id": 251,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11877,8 +12005,8 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg after skeleton ambush room in Locked Chest",
-                "id": 140,
+                "name": "GG: Dragon Egg in Locked Chest after skeleton ambush room",
+                "id": 848,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -11890,8 +12018,8 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg in swinging axe room behind breakable wall",
-                "id": 141,
+                "name": "GG: Dragon Egg behind breakable wall",
+                "id": 338,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11901,8 +12029,8 @@
                 }
             },
             {
-                "name": "GG: Light Gem after crumbling platforms by yeti",
-                "id": 142,
+                "name": "GG: Light Gem after crumbling platforms",
+                "id": 252,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11913,7 +12041,7 @@
             },
             {
                 "name": "GG: Dragon Egg under bone bridge",
-                "id": 143,
+                "id": 339,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11923,8 +12051,8 @@
                 }
             },
             {
-                "name": "GG: Light Gem near crumbling platforms behind yeti",
-                "id": 144,
+                "name": "GG: Light Gem near crumbling platforms",
+                "id": 253,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11935,7 +12063,7 @@
             },
             {
                 "name": "GG: Dragon Egg after spinning bones",
-                "id": 145,
+                "id": 340,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11945,8 +12073,8 @@
                 }
             },
             {
-                "name": "GG: Dragon Egg after spinning bones from Sparx",
-                "id": 146,
+                "name": "GG: Dragon Egg from Sparx",
+                "id": 341,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11956,8 +12084,8 @@
                 }
             },
             {
-                "name": "GG: Light Gem after spinning bones from Sparx",
-                "id": 147,
+                "name": "GG: Light Gem from Sparx",
+                "id": 254,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11967,8 +12095,8 @@
                 }
             },
             {
-                "name": "GG: Light Gem in climbing room beyond moving platform",
-                "id": 148,
+                "name": "GG: Light Gem beyond moving platform",
+                "id": 255,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11978,8 +12106,8 @@
                 }
             },
             {
-                "name": "GG: Light Gem in climbing room behind gate",
-                "id": 149,
+                "name": "GG: Light Gem behind lowering gate",
+                "id": 256,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -11989,8 +12117,8 @@
                 }
             },
             {
-                "name": "GG: Light Gem before Ice Citadel",
-                "id": 150,
+                "name": "GG: Light Gem at end of level",
+                "id": 257,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -12128,8 +12256,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Locked Chest before lower courtyard",
-                "id": 240,
+                "name": "IC: Empty Locked Chest in entryway",
+                "id": 808,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -12141,8 +12269,8 @@
                 }
             },
             {
-                "name": "IC: Light Gem in lower courtyard from lighting boiler",
-                "id": 151,
+                "name": "IC: Light Gem from lighting boiler in courtyard",
+                "id": 258,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -12399,8 +12527,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Light Gem above upper courtyard",
-                "id": 152,
+                "name": "IC: Light Gem atop courtyard",
+                "id": 259,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -12410,8 +12538,8 @@
                 }
             },
             {
-                "name": "IC: Firework in upper courtyard next to water wheel",
-                "id": 5014,
+                "name": "IC: Firework atop courtyard",
+                "id": 415,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -12492,8 +12620,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Dragon Egg after upper courtyard in Locked Chest behind chargeable wall",
-                "id": 153,
+                "name": "IC: Dragon Egg in Locked Chest behind chargeable wall",
+                "id": 849,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -12522,7 +12650,7 @@
             },
             {
                 "name": "IC: Dark Gem above Elder Astor",
-                "id": 154,
+                "id": 126,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -12725,7 +12853,7 @@
         "locations": [
             {
                 "name": "IC: Wall Kick from Elder Astor",
-                "id": 155,
+                "id": 604,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -12780,8 +12908,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Light Gem after Elder Astor in Locked Chest",
-                "id": 156,
+                "name": "IC: Light Gem in Locked Chest after Elder Astor",
+                "id": 832,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -12793,8 +12921,8 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg opposite drawbridge from Sgt. Byrd",
-                "id": 160,
+                "name": "IC: Dragon Egg from Sgt. Byrd",
+                "id": 342,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -12804,8 +12932,8 @@
                 }
             },
             {
-                "name": "IC: Light Gem opposite drawbridge from Sgt. Byrd",
-                "id": 161,
+                "name": "IC: Light Gem from Sgt. Byrd",
+                "id": 260,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -12815,8 +12943,8 @@
                 }
             },
             {
-                "name": "IC: Light Gem next to drawbridge from lighting boiler",
-                "id": 162,
+                "name": "IC: Light Gem from lighting boiler near drawbridge",
+                "id": 261,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -12831,8 +12959,8 @@
                 }
             },
             {
-                "name": "IC: Locked Chest before drawbridge in tunnel",
-                "id": 241,
+                "name": "IC: Empty Locked Chest in tunnel to drawbridge",
+                "id": 809,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -12844,8 +12972,8 @@
                 }
             },
             {
-                "name": "IC: Locked Chest next to drawbridge supercharge door",
-                "id": 242,
+                "name": "IC: Empty Locked Chest next to drawbridge",
+                "id": 810,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -13087,8 +13215,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Dark Gem in toxic sewer",
-                "id": 157,
+                "name": "IC: Dark Gem in sewer",
+                "id": 127,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -13101,8 +13229,8 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg at end of toxic sewer",
-                "id": 158,
+                "name": "IC: Dragon Egg at end of sewer",
+                "id": 343,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -13115,8 +13243,8 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg behind drawbridge supercharge door",
-                "id": 159,
+                "name": "IC: Dragon Egg behind supercharge door",
+                "id": 344,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -13127,7 +13255,7 @@
             },
             {
                 "name": "IC: Dark Gem by drawbridge",
-                "id": 170,
+                "id": 128,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -13238,8 +13366,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Dragon Egg from thief by drawbridge shop",
-                "id": 171,
+                "name": "IC: Dragon Egg from thief after drawbridge",
+                "id": 345,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAny",
@@ -13323,8 +13451,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Locked Chest in royal chamber",
-                "id": 243,
+                "name": "IC: Empty Locked Chest in royal chamber",
+                "id": 811,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -13337,7 +13465,7 @@
             },
             {
                 "name": "IC: Dragon Egg next to cannon area via pole spin",
-                "id": 164,
+                "id": 346,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -13352,8 +13480,8 @@
                 }
             },
             {
-                "name": "IC: Light Gem in royal chamber from lighting all boilers",
-                "id": 169,
+                "name": "IC: Light Gem from Ice Princess",
+                "id": 262,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -13590,8 +13718,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Dark Gem behind royal chamber via electric platform",
-                "id": 165,
+                "name": "IC: Dark Gem via electric platform",
+                "id": 129,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -13647,8 +13775,8 @@
         ],
         "locations": [
             {
-                "name": "IC: Dark Gem in cannon area",
-                "id": 163,
+                "name": "IC: Dark Gem by cannon",
+                "id": 130,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -13658,8 +13786,8 @@
                 }
             },
             {
-                "name": "IC: Dragon Egg in cannon area above elevator",
-                "id": 166,
+                "name": "IC: Dragon Egg above elevator by cannon",
+                "id": 347,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -13669,8 +13797,8 @@
                 }
             },
             {
-                "name": "IC: Light Gem in cannon area behind reinforced door",
-                "id": 167,
+                "name": "IC: Light Gem behind cannon door",
+                "id": 263,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -13683,8 +13811,8 @@
                 }
             },
             {
-                "name": "IC: Light Gem after cannon area from lighting boiler",
-                "id": 168,
+                "name": "IC: Light Gem from lighting boiler after cannon area",
+                "id": 264,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -13887,7 +14015,7 @@
         "locations": [
             {
                 "name": "SB: Firework in lower Stormy Beach",
-                "id": 5015,
+                "id": 416,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -13905,8 +14033,8 @@
                 }
             },
             {
-                "name": "SB: Locked Chest in west cove behind hut",
-                "id": 245,
+                "name": "SB: Empty Locked Chest behind hut in west cove",
+                "id": 812,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -13918,8 +14046,8 @@
                 }
             },
             {
-                "name": "SB: Locked Chest at end of west cove",
-                "id": 246,
+                "name": "SB: Empty Locked Chest at end of west cove",
+                "id": 813,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -13931,8 +14059,8 @@
                 }
             },
             {
-                "name": "SB: Firework at end of west cove",
-                "id": 5016,
+                "name": "SB: Firework in west cove",
+                "id": 417,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -13950,8 +14078,8 @@
                 }
             },
             {
-                "name": "SB: Dragon Egg in lower Stormy Beach from thief",
-                "id": 174,
+                "name": "SB: Dragon Egg from thief below shop",
+                "id": 348,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -14236,8 +14364,8 @@
         ],
         "locations": [
             {
-                "name": "SB: Light Gem above west cove in shipwreck",
-                "id": 173,
+                "name": "SB: Light Gem in shipwreck",
+                "id": 265,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14247,8 +14375,8 @@
                 }
             },
             {
-                "name": "SB: Locked Chest in upper Stormy Beach near Wally",
-                "id": 247,
+                "name": "SB: Empty Locked Chest near Wally",
+                "id": 814,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -14260,8 +14388,8 @@
                 }
             },
             {
-                "name": "SB: Dragon Egg in upper Stormy Beach from Wally",
-                "id": 175,
+                "name": "SB: Dragon Egg from Wally",
+                "id": 349,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14271,8 +14399,8 @@
                 }
             },
             {
-                "name": "SB: Light Gem in upper Stormy Beach from Wally",
-                "id": 176,
+                "name": "SB: Light Gem from Wally",
+                "id": 266,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14282,8 +14410,8 @@
                 }
             },
             {
-                "name": "SB: Locked Chest approaching cave",
-                "id": 248,
+                "name": "SB: Empty Locked Chest in cave entrance",
+                "id": 815,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -14295,8 +14423,8 @@
                 }
             },
             {
-                "name": "SB: Firework in cave next to hut",
-                "id": 5017,
+                "name": "SB: Firework in cave",
+                "id": 418,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -14314,8 +14442,8 @@
                 }
             },
             {
-                "name": "SB: Dark Gem in cave entering Molten Mount",
-                "id": 177,
+                "name": "SB: Dark Gem in cave",
+                "id": 131,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14327,8 +14455,8 @@
         ],
         "gem_events": [
             {
-                "name": "1414 Gems (on the ground/baskets/dark shards/headbash chests)",
-                "gem_amount": 1414,
+                "name": "1684 Gems (on the ground/baskets/dark shards/headbash chests)",
+                "gem_amount": 1684,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14437,8 +14565,8 @@
         ],
         "locations": [
             {
-                "name": "SB: Locked Chest atop cave via wall kick",
-                "id": 249,
+                "name": "SB: Empty Locked Chest atop cave",
+                "id": 816,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -14513,8 +14641,8 @@
         ],
         "locations": [
             {
-                "name": "MM: Firework in entry area on log",
-                "id": 5018,
+                "name": "MM: Firework in entrance",
+                "id": 419,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -14735,8 +14863,8 @@
         ],
         "locations": [
             {
-                "name": "MM: Dark Gem in village near rock monsters",
-                "id": 178,
+                "name": "MM: Dark Gem near rock monsters",
+                "id": 132,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -14749,8 +14877,8 @@
                 }
             },
             {
-                "name": "MM: Dragon Egg in village from Teena for killing rock monsters",
-                "id": 179,
+                "name": "MM: Dragon Egg for avenging Teena",
+                "id": 350,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -14895,7 +15023,7 @@
         "locations": [
             {
                 "name": "MM: Dragon Egg approaching Sgt. Byrd",
-                "id": 180,
+                "id": 351,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14906,7 +15034,7 @@
             },
             {
                 "name": "MM: Dragon Egg from Sgt. Byrd",
-                "id": 181,
+                "id": 352,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14917,7 +15045,7 @@
             },
             {
                 "name": "MM: Light Gem from Sgt. Byrd",
-                "id": 182,
+                "id": 267,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -14927,8 +15055,8 @@
                 }
             },
             {
-                "name": "MM: Light Gem next to Sgt. Byrd in Locked Chest",
-                "id": 183,
+                "name": "MM: Light Gem in Locked Chest next to Sgt. Byrd",
+                "id": 833,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -15171,8 +15299,8 @@
         ],
         "locations": [
             {
-                "name": "MM: Light Gem after village in pole spin room",
-                "id": 184,
+                "name": "MM: Light Gem in pole spin room",
+                "id": 268,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -15480,8 +15608,8 @@
         ],
         "locations": [
             {
-                "name": "MM: Light Gem opposite collapsed bridge",
-                "id": 185,
+                "name": "MM: Light Gem across collapsed bridge",
+                "id": 269,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -15656,7 +15784,7 @@
         "locations": [
             {
                 "name": "MM: Dark Gem before timed platform challenge",
-                "id": 186,
+                "id": 133,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -15750,7 +15878,7 @@
         "locations": [
             {
                 "name": "MM: Light Gem from timed platform challenge",
-                "id": 187,
+                "id": 270,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -15939,8 +16067,8 @@
         ],
         "locations": [
             {
-                "name": "MM: Dragon Egg behind chargeable wall in Locked Chest",
-                "id": 188,
+                "name": "MM: Dragon Egg in Locked Chest behind chargeable wall",
+                "id": 850,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -15968,8 +16096,8 @@
                 }
             },
             {
-                "name": "MM: Light Gem behind chargeable wall in Locked Chest",
-                "id": 190,
+                "name": "MM: Light Gem in Locked Chest behind chargeable wall",
+                "id": 834,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -15997,8 +16125,8 @@
                 }
             },
             {
-                "name": "MM: Dark Gem approaching Magma Falls",
-                "id": 191,
+                "name": "MM: Dark Gem at end of level",
+                "id": 134,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -16089,8 +16217,8 @@
         ],
         "locations": [
             {
-                "name": "MM: Dragon Egg in thief area from thief",
-                "id": 189,
+                "name": "MM: Dragon Egg from thief in northeast",
+                "id": 353,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -16103,8 +16231,8 @@
                 }
             },
             {
-                "name": "MM: Locked Chest in thief area",
-                "id": 250,
+                "name": "MM: Empty Locked Chest near thief",
+                "id": 817,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -16384,8 +16512,8 @@
         ],
         "locations": [
             {
-                "name": "MFt: Dragon Egg behind shop chargeable wall in Locked Chest",
-                "id": 193,
+                "name": "MFt: Dragon Egg in Locked Chest behind chargeable wall",
+                "id": 851,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -16413,8 +16541,8 @@
                 }
             },
             {
-                "name": "MFt: Locked Chest across shop",
-                "id": 251,
+                "name": "MFt: Empty Locked Chest across shop",
+                "id": 818,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -16582,8 +16710,8 @@
         ],
         "locations": [
             {
-                "name": "MFt: Light Gem atop wall kick room",
-                "id": 192,
+                "name": "MFt: Light Gem in wall kick room",
+                "id": 271,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -16596,8 +16724,8 @@
                 }
             },
             {
-                "name": "MFt: Firework atop wall kick room",
-                "id": 5019,
+                "name": "MFt: Firework in wall kick room",
+                "id": 420,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -16758,7 +16886,7 @@
         "locations": [
             {
                 "name": "MFt: Dragon Egg 1 in Ball Gadget",
-                "id": 194,
+                "id": 354,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -16769,7 +16897,7 @@
             },
             {
                 "name": "MFt: Light Gem 1 in Ball Gadget",
-                "id": 195,
+                "id": 272,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -16780,7 +16908,7 @@
             },
             {
                 "name": "MFt: Dragon Egg 2 in Ball Gadget",
-                "id": 196,
+                "id": 355,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -16791,7 +16919,7 @@
             },
             {
                 "name": "MFt: Light Gem 2 in Ball Gadget",
-                "id": 197,
+                "id": 273,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -16855,8 +16983,8 @@
         ],
         "locations": [
             {
-                "name": "MFb: Dark Gem above entry area via wall kick",
-                "id": 198,
+                "name": "MFb: Dark Gem in entry area",
+                "id": 135,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -17159,8 +17287,8 @@
         ],
         "locations": [
             {
-                "name": "MFb: Light Gem before fire imp room in Locked Chest",
-                "id": 199,
+                "name": "MFb: Light Gem in Locked Chest",
+                "id": 835,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -17268,7 +17396,7 @@
         "name": "MFbImpRoom",
         "entrances": [
             {
-                "name": "MFbSouthEast -> MFbImpRoom",
+                "name": "MFbBeforeImpRoom -> MFbImpRoom",
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -17289,7 +17417,7 @@
         "locations": [
             {
                 "name": "MFb: Light Gem in fire imp room",
-                "id": 200,
+                "id": 274,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -17447,8 +17575,8 @@
         ],
         "locations": [
             {
-                "name": "MFb: Dragon Egg after fire imp room from Sparx",
-                "id": 202,
+                "name": "MFb: Dragon Egg from Sparx",
+                "id": 356,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -17458,8 +17586,8 @@
                 }
             },
             {
-                "name": "MFb: Light Gem after fire imp room from Sparx",
-                "id": 203,
+                "name": "MFb: Light Gem from Sparx",
+                "id": 275,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -17469,8 +17597,8 @@
                 }
             },
             {
-                "name": "MFb: Dragon Egg from thief behind chargeable wall",
-                "id": 201,
+                "name": "MFb: Dragon Egg from thief",
+                "id": 357,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -17655,8 +17783,8 @@
         ],
         "locations": [
             {
-                "name": "DM: Locked Chest in first room",
-                "id": 252,
+                "name": "DM: Empty Locked Chest in entrance",
+                "id": 819,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -17668,8 +17796,8 @@
                 }
             },
             {
-                "name": "DM: Light Gem after first room in Locked Chest",
-                "id": 206,
+                "name": "DM: Light Gem in Locked Chest after entrance",
+                "id": 836,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -17934,8 +18062,8 @@
         ],
         "locations": [
             {
-                "name": "DM: Light Gem behind Light Gem door in acid",
-                "id": 204,
+                "name": "DM: Light Gem in Light Gem door area",
+                "id": 276,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -17961,8 +18089,8 @@
                 }
             },
             {
-                "name": "DM: Dragon Egg behind Light Gem door in acid",
-                "id": 205,
+                "name": "DM: Dragon Egg in Light Gem door area",
+                "id": 358,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -18092,8 +18220,8 @@
         ],
         "locations": [
             {
-                "name": "DM: Dragon Egg in piston wall kick room Locked Chest",
-                "id": 207,
+                "name": "DM: Dragon Egg in Locked Chest in piston room",
+                "id": 852,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -18123,8 +18251,8 @@
                 }
             },
             {
-                "name": "DM: Firework in piston wall kick room below entrance",
-                "id": 5020,
+                "name": "DM: Firework in piston room",
+                "id": 421,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -18142,8 +18270,8 @@
                 }
             },
             {
-                "name": "DM: Light Gem in piston wall kick room",
-                "id": 208,
+                "name": "DM: Light Gem in piston room",
+                "id": 277,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -18262,7 +18390,7 @@
         "locations": [
             {
                 "name": "DM: Dark Gem in turret room",
-                "id": 209,
+                "id": 136,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18342,8 +18470,8 @@
         ],
         "locations": [
             {
-                "name": "DM: Dragon Egg after turret room from Blink",
-                "id": 210,
+                "name": "DM: Dragon Egg from Blink",
+                "id": 359,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18353,8 +18481,8 @@
                 }
             },
             {
-                "name": "DM: Light Gem after turret room from Blink",
-                "id": 211,
+                "name": "DM: Light Gem from Blink",
+                "id": 278,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18364,8 +18492,8 @@
                 }
             },
             {
-                "name": "DM: Dragon Egg after turret room below walkway",
-                "id": 212,
+                "name": "DM: Dragon Egg below walkway",
+                "id": 360,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18624,7 +18752,7 @@
         "locations": [
             {
                 "name": "DM: Light Gem after ice pole spin",
-                "id": 213,
+                "id": 279,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18635,7 +18763,7 @@
             },
             {
                 "name": "DM: Firework after ice pole spin",
-                "id": 5021,
+                "id": 422,
                 "options": [
                     {
                         "option": "firework_checks",
@@ -18807,7 +18935,7 @@
         "locations": [
             {
                 "name": "DM: Dragon Egg next to Miner's Drop shop",
-                "id": 214,
+                "id": 361,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18933,7 +19061,7 @@
         "locations": [
             {
                 "name": "DM: Light Gem in green pole room",
-                "id": 215,
+                "id": 280,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18944,7 +19072,7 @@
             },
             {
                 "name": "DM: Dark Gem in green pole room",
-                "id": 216,
+                "id": 137,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18994,8 +19122,8 @@
         ],
         "locations": [
             {
-                "name": "RL: Locked Chest in start area after pole spin puzzle",
-                "id": 253,
+                "name": "RL: Empty Locked Chest above poles",
+                "id": 820,
                 "options": [],
                 "access_rule": {
                     "rule": "LockedChestRule",
@@ -19007,8 +19135,8 @@
                 }
             },
             {
-                "name": "RL: Locked Chest in start area above charge switches",
-                "id": 254,
+                "name": "RL: Empty Locked Chest above charge switches",
+                "id": 821,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -19117,8 +19245,8 @@
         ],
         "locations": [
             {
-                "name": "RL: Dragon Egg in center room from thief",
-                "id": 217,
+                "name": "RL: Dragon Egg from thief in center room",
+                "id": 362,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -19347,7 +19475,7 @@
         "locations": [
             {
                 "name": "RL: Defeat Mecha-Red",
-                "id": 4003,
+                "id": 707,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -19501,8 +19629,8 @@
         ],
         "locations": [
             {
-                "name": "RL: Light Gem in northeast after conveyor belt",
-                "id": 226,
+                "name": "RL: Light Gem after conveyor belt",
+                "id": 281,
                 "options": [],
                 "access_rule": {
                     "rule": "And",
@@ -19680,8 +19808,8 @@
         ],
         "locations": [
             {
-                "name": "RL: Dark Gem in northeast guarded by Robo-Gnorcs",
-                "id": 227,
+                "name": "RL: Dark Gem in northeast",
+                "id": 138,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -19781,8 +19909,8 @@
         ],
         "locations": [
             {
-                "name": "RL: Dragon Egg in northwest in piston room",
-                "id": 222,
+                "name": "RL: Dragon Egg in northwest piston room",
+                "id": 363,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -19884,7 +20012,7 @@
         "locations": [
             {
                 "name": "RL: Light Gem from northwest laser parkour",
-                "id": 223,
+                "id": 282,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -19898,7 +20026,7 @@
             },
             {
                 "name": "RL: Light Gem from northwest pole spinning",
-                "id": 224,
+                "id": 283,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -19915,7 +20043,7 @@
             },
             {
                 "name": "RL: Dark Gem in northwest",
-                "id": 225,
+                "id": 139,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -20087,7 +20215,7 @@
         "locations": [
             {
                 "name": "RL: Light Gem atop southeast first room",
-                "id": 218,
+                "id": 284,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -20311,8 +20439,8 @@
         ],
         "locations": [
             {
-                "name": "RL: Dark Gem after southeast laser parkour",
-                "id": 219,
+                "name": "RL: Dark Gem in southeast",
+                "id": 140,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -20325,8 +20453,8 @@
                 }
             },
             {
-                "name": "RL: Light Gem above southeast boiler",
-                "id": 220,
+                "name": "RL: Light Gem above boiler",
+                "id": 285,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -20342,8 +20470,8 @@
                 }
             },
             {
-                "name": "RL: Dragon Egg in southeast behind lasers",
-                "id": 221,
+                "name": "RL: Dragon Egg behind lasers",
+                "id": 364,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
