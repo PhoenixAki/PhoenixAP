@@ -370,13 +370,24 @@ class SpyroAHTContext(SuperContext):
                     self._shop_items_received.set()
             case 'PrintJSON':
                 match args.get('type', ''):
-                    case 'ItemSend':  # TODO: put the send notification here?
+                    case 'ItemSend':
+                        # item.player = # of player who sent it
+                        # args['receiving'] = # of player receiving it
+                        # item.item = id of item
+                        # item.location = id of location where it was found
+                        # self.slot = # of currently connected AHT player
                         item = args['item']
                         if args['receiving'] == self.slot:
-                            if item.item in [80, 83]: player = "Moneybags"
-                            else: player = self.player_names[item.player]
-                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {self.item_names.lookup_in_slot(item.item, self.slot)} from {player}'))
-                        elif args['receiving'] != self.slot: self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {self.item_names.lookup_in_slot(item.item, self.slot)} to {self.player_names[item.player]}"))
+                            if item.item in [80, 83]: sender = "Moneybags"
+                            elif item.player == self.slot: sender = "yourself"
+                            else: sender = self.player_names[item.player]
+                            item_name = self.item_names.lookup_in_slot(item.item, self.slot)
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {item_name} from {sender}'))
+                        elif args['receiving'] != self.slot and item.player == self.slot:
+                            receiver_id = args['receiving']
+                            receiver_name = self.player_names[receiver_id]
+                            item_name = self.item_names.lookup_in_slot(item.item, receiver_id)
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {item_name} to {receiver_name}"))
                     case 'Hint':
                         if args['found']: return
                         if args['receiving'] == self.slot:
@@ -669,7 +680,12 @@ class SpyroAHTContext(SuperContext):
         return True  # does nothing but is required (and is documented as such by UT)
     
     def _location_update(self, locations: list[str]) -> bool:
+        from . import loc_names_to_ids
         self._in_logic_locations = locations
+        self.in_logic_ids_to_names = collections.defaultdict(str)
+        for loc_name in self._in_logic_locations:
+            id = str(loc_names_to_ids[loc_name])
+            self.in_logic_ids_to_names[id] = loc_name
         return True  # does nothing but is required (and is documented as such by UT)
 
     async def check_goal(self) -> bool:
@@ -755,7 +771,7 @@ class SpyroAHTContext(SuperContext):
                     if tracker_loaded:
                         await self.emu_client.update_pause_gems(self._in_logic_events)
                     if tracker_loaded:
-                        await self.emu_client.update_tracker(self._in_logic_locations)
+                        await self.emu_client.update_tracker(self.in_logic_ids_to_names)
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:

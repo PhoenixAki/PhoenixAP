@@ -330,19 +330,24 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (idx + 1)), i.to_bytes('big'))
             dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * idx), i.text.to_bytes('big'))
 
-    async def update_tracker(self, locs: list[str]):
+    async def update_tracker(self, in_logic_ids_to_names: dict[str, str]):
         from .. import loc_names_to_ids
-        
-        for loc in locs:
-            loc_id = loc_names_to_ids[loc]
-            if loc_id not in consts.LOCATIONS_BITFIELD:
-                continue
-            
-            index = consts.LOCATIONS_BITFIELD[loc_id]
-            addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
-            bit = (index * 2) % 8
-            data = dolphin_memory_engine.read_byte(addr)
-            dolphin_memory_engine.write_byte(addr, data | (0b10 << bit))
+        # server_locations is list of all location ids for this slot, regardless of check status. combination of checked_locations and missing_locations
+        for loc_id in self.ctx.server_locations:
+            if loc_id in self.ctx.checked_locations:
+                continue  # don't update icon if already checked
+            else:
+                if loc_id not in consts.LOCATIONS_BITFIELD:
+                    continue  # don't update if it doesn't have an icon
+                    
+                if in_logic_ids_to_names[str(loc_id)] == "":
+                    continue  # skip if not in logic (no KeyError because defaultdict. Instead, "" comes back
+                
+                index = consts.LOCATIONS_BITFIELD[loc_id]
+                addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
+                bit = (index * 2) % 8
+                data = dolphin_memory_engine.read_byte(addr)
+                dolphin_memory_engine.write_byte(addr, data | (0b10 << bit))
         return loc_names_to_ids
 
     async def update_pause_gems(self, events: list[str]):
