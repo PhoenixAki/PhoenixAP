@@ -378,12 +378,16 @@ class SpyroAHTContext(SuperContext):
                         # self.slot = # of currently connected AHT player
                         item = args['item']
                         if args['receiving'] == self.slot:
-                            if item.item in [80, 83]: player = "Moneybags"
-                            elif item.player == self.slot: player = "yourself"
-                            else: player = self.player_names[item.player]
-                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {self.item_names.lookup_in_slot(item.item, self.slot)} from {player}'))
-                        elif args['receiving'] != self.slot:
-                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {self.item_names.lookup_in_slot(item.item, self.slot)} to {self.player_names[args['receiving']]}"))
+                            if item.item in [80, 83]: sender = "Moneybags"
+                            elif item.player == self.slot: sender = "yourself"
+                            else: sender = self.player_names[item.player]
+                            item_name = self.item_names.lookup_in_slot(item.item, self.slot)
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {item_name} from {sender}'))
+                        elif args['receiving'] != self.slot and item.player == self.slot:
+                            receiver_id = args['receiving']
+                            receiver_name = self.player_names[receiver_id]
+                            item_name = self.item_names.lookup_in_slot(item.item, receiver_id)
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {item_name} to {receiver_name}"))
                     case 'Hint':
                         if args['found']: return
                         if args['receiving'] == self.slot:
