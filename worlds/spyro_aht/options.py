@@ -374,10 +374,10 @@ class ShopLogic(Choice):
     
     ********************************FORMULA INFO (for the math nerds)********************************
     blink_gems_total = (20,203 - exclusions) * blink_gems%
-    non_blink_enemies_total = (16,353 - exclusions) * non_blink_enemies%
+    non_blink_enemies_total = 16,353 * non_blink_enemies%
     other_gems_total = (105,357 - exclusions) * other_gems%
-      If a full level location group or an individual minigame location is added to exclude_locations, the gems inside
-      will be left out of the above calculations so you aren't logically expected to get those gems.
+      If an individual minigame location is added to exclude_locations, the gems inside will be left out of the above
+      calculations so you aren't logically expected to get those gems. Works for Blink, Byrd, and Sparx minigames.
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
     base_shop_price = gem_total / (shop_item_count - 1)
 
