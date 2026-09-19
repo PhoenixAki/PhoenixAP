@@ -370,13 +370,21 @@ class SpyroAHTContext(SuperContext):
                     self._shop_items_received.set()
             case 'PrintJSON':
                 match args.get('type', ''):
-                    case 'ItemSend':  # TODO: put the send notification here?
+                    case 'ItemSend':
+                        # item.player = # of player who sent it
+                        # args['receiving'] = # of player receiving it
+                        # item.item = id of item
+                        # item.location = id of location where it was found
+                        # self.slot = # of currently connected AHT player
+                        logger.info(args)
                         item = args['item']
                         if args['receiving'] == self.slot:
                             if item.item in [80, 83]: player = "Moneybags"
+                            elif item.player == self.slot: player = "yourself"
                             else: player = self.player_names[item.player]
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {self.item_names.lookup_in_slot(item.item, self.slot)} from {player}'))
-                        elif args['receiving'] != self.slot: self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {self.item_names.lookup_in_slot(item.item, self.slot)} to {self.player_names[item.player]}"))
+                        elif args['receiving'] != self.slot:
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {self.item_names.lookup_in_slot(item.item, self.slot)} to {self.player_names[args['receiving']]}"))
                     case 'Hint':
                         if args['found']: return
                         if args['receiving'] == self.slot:

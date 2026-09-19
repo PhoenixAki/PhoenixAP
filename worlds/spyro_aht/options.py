@@ -499,7 +499,7 @@ class LightGemDoorCostMax(Range):
     display_name = "Maximum Light Gem Door Cost"
     range_start = 1
     range_end = 100
-    default = 50
+    default = 100
 
 
 class RandomizeGadgetCosts(Choice):
