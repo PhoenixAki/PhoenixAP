@@ -496,9 +496,9 @@ class SpyroAHTWorld(World):
     
     def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str):  # cost_type = gadget, boss lair, Light Gem door
         self.log(f"Setting up and checking for issues with {cost_type} costs.", LoggingLevel.LOW)
-        if option.value == 2:  # shuffled:
+        if option.value == 2:  # shuffled
             self.random.shuffle(costs)
-        elif option.value == 3:  # randomized:
+        elif option.value == 1:  # randomized
             cost_min, cost_max = opt_min.value, opt_max.value
             bad_condition = opt_min > opt_max
             if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
