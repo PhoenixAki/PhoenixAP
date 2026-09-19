@@ -365,9 +365,11 @@ class SpyroAHTWorld(World):
         self.check_eggs_and_gems(self.options.light_gems_goal, "light_gems_goal", 85, 15, self.options.exclude_chest_items >= 2)
         self.check_eggs_and_gems(self.options.dragon_eggs_goal, "dragon_eggs_goal", 64, 16, self.options.exclude_chest_items.value in [1, 3])
         
-        self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
-        self.setup_costs(self.options.randomize_light_gem_door_costs, self.options.light_gem_door_cost_min, self.options.light_gem_door_cost_max, self.light_gem_doors, "Light Gem door")
-        self.setup_costs(self.options.randomize_boss_lair_door_costs, self.options.boss_lair_door_cost_min, self.options.boss_lair_door_cost_max, self.boss_lairs, "boss lair")
+        self.gadget_costs = self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
+        self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.gadget_costs)}.", LoggingLevel.MEDIUM)
+        self.light_gem_doors = self.setup_costs(self.options.randomize_light_gem_door_costs, self.options.light_gem_door_cost_min, self.options.light_gem_door_cost_max, self.light_gem_doors, "Light Gem door")
+        self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.light_gem_doors)}.", LoggingLevel.MEDIUM)
+        self.boss_lairs = self.setup_costs(self.options.randomize_boss_lair_door_costs, self.options.boss_lair_door_cost_min, self.options.boss_lair_door_cost_max, self.boss_lairs, "boss lair")
         
         # boss lair forcing
         self.log(f"Checking if boss lair costs need forcing via boss_lair_forcing.", LoggingLevel.LOW)
@@ -494,20 +496,26 @@ class SpyroAHTWorld(World):
         elif bad_condition:
             raise OptionError(f"{name} was set higher than {maximum}, but {count} from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
     
-    def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str):  # cost_type = gadget, boss lair, Light Gem door
+    def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str) -> list[int]:  # returns costs
         self.log(f"Setting up and checking for issues with {cost_type} costs.", LoggingLevel.LOW)
+        if option.value == 0:  # default
+            return costs
         if option.value == 2:  # shuffled
             self.random.shuffle(costs)
+            return costs
         elif option.value == 1:  # randomized
             cost_min, cost_max = opt_min.value, opt_max.value
+            rand_count = 3 if cost_type == "gadget" else 4
             bad_condition = opt_min > opt_max
             if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
                 self.log(f"Minor Warning: {opt_min.display_name} of {cost_min} is greater than {cost_max}. Fixing by swapping them.", LoggingLevel.WARNING)
                 cost_min, cost_max = cost_max, cost_min
             elif bad_condition:
                 raise OptionError(f"{opt_min.display_name} of {cost_min} is greater than {cost_max}. Fix this, or set auto_corrections to at least fix_minor.")
-            costs = [self.random.randint(cost_min, cost_max) for _ in range(3)]
-        self.log(f"{cost_type} Costs: {", ".join(str(cost) for cost in costs)}.", LoggingLevel.MEDIUM)
+            return [self.random.randint(cost_min, cost_max) for _ in range(rand_count)]
+        else:
+            self.log("Something has gone TERRIBLY wrong if you are seeing this log message. Report to devs ASAP.", LoggingLevel.WARNING)
+            return [0]  # something has gone VERY wrong, this should never happen and is only here to shush Python warnings
         
     def create_regions(self):
         self.log("Setting up regions and locations.", LoggingLevel.LOW)
