@@ -376,7 +376,6 @@ class SpyroAHTContext(SuperContext):
                         # item.item = id of item
                         # item.location = id of location where it was found
                         # self.slot = # of currently connected AHT player
-                        logger.info(args)
                         item = args['item']
                         if args['receiving'] == self.slot:
                             if item.item in [80, 83]: player = "Moneybags"
@@ -677,7 +676,12 @@ class SpyroAHTContext(SuperContext):
         return True  # does nothing but is required (and is documented as such by UT)
     
     def _location_update(self, locations: list[str]) -> bool:
+        from . import loc_names_to_ids
         self._in_logic_locations = locations
+        self.in_logic_ids_to_names = collections.defaultdict(str)
+        for loc_name in self._in_logic_locations:
+            id = str(loc_names_to_ids[loc_name])
+            self.in_logic_ids_to_names[id] = loc_name
         return True  # does nothing but is required (and is documented as such by UT)
 
     async def check_goal(self) -> bool:
@@ -763,7 +767,7 @@ class SpyroAHTContext(SuperContext):
                     if tracker_loaded:
                         await self.emu_client.update_pause_gems(self._in_logic_events)
                     if tracker_loaded:
-                        await self.emu_client.update_tracker(self._in_logic_locations)
+                        await self.emu_client.update_tracker(self.in_logic_ids_to_names)
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:
