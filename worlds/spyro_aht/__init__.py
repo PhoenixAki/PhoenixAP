@@ -368,7 +368,7 @@ class SpyroAHTWorld(World):
         self.gadget_costs = self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
         self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.gadget_costs)}.", LoggingLevel.MEDIUM)
         self.light_gem_doors = self.setup_costs(self.options.randomize_light_gem_door_costs, self.options.light_gem_door_cost_min, self.options.light_gem_door_cost_max, self.light_gem_doors, "Light Gem door")
-        self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.light_gem_doors)}.", LoggingLevel.MEDIUM)
+        self.log(f"Light Gem Door Costs: {", ".join(str(cost) for cost in self.light_gem_doors)}.", LoggingLevel.MEDIUM)
         self.boss_lairs = self.setup_costs(self.options.randomize_boss_lair_door_costs, self.options.boss_lair_door_cost_min, self.options.boss_lair_door_cost_max, self.boss_lairs, "boss lair")
         
         # boss lair forcing
