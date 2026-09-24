@@ -570,7 +570,6 @@ class SpyroAHTWorld(World):
         
         blink_exclusions, other_exclusions = self.setup_gem_logic()  # needs regions to be set up already
         self.setup_shop_prices(blink_exclusions, other_exclusions)  # needs knowledge of blink and other exclusions from setup_gem_logic
-        self.handle_goaling()  # needs regions to be set up already
         
     def setup_gem_logic(self) -> tuple[int, int]:
         self.log("Checking if gem logic needs to be set up.", LoggingLevel.LOW)
@@ -865,6 +864,8 @@ class SpyroAHTWorld(World):
                 except KeyError:
                     continue
                 self.set_rule(loc, self.rule_from_dict(l['access_rule']))
+
+        self.handle_goaling()  # must be done here because setting up the victorycon events requires location rules to be set up first
     
     def fill_slot_data(self):
         self.log("Filling slot data.", LoggingLevel.LOW)
