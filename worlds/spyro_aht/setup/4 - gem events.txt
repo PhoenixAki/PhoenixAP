@@ -135,7 +135,7 @@ CRCannon | 2020 Gems (armored chests by dark gem via cannon/and on the ground af
 CRCannon | 1050 Gems (armored chests by dragon egg via cannon/and baskets by dragon egg) | HasAll('Double Jump', 'Glide', 'Pole Spin')
 CRCannon | 125 Gems (underwater vases) | HasAll('Swim', 'Charge')
 CRCannon | 150 Gems ([enemy] underwater clams) | HasAll('Swim', 'Charge')
-CRWindmills | 525 Gems (on the ground/meatl chests/headbash chests) | True_()
+CRWindmills | 525 Gems (on the ground/metal chests/headbash chests) | True_()
 CRWindmills | 25 Gems ([enemy] tiki men) | HasAny('Fire Breath', 'Electric Breath', 'Charge')
 CRCloudyElevator | 20 Gems ([enemy] armored huge gnorc by shop) | And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))
 CRCloudyElevator | 50 Gems (baskets by shop) | HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')
