@@ -10260,12 +10260,14 @@
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "HasAll",
                             "options": [],
                             "filtered_resolution": false,
                             "args": {
-                                "item_name": "Double Jump",
-                                "count": "Water Breath"
+                                "item_names": [
+                                    "Double Jump",
+                                    "Water Breath"
+                                ]
                             }
                         },
                         {
