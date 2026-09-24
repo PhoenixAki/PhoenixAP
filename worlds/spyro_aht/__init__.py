@@ -621,75 +621,6 @@ class SpyroAHTWorld(World):
             else:  # 0 = unordered, meaning equal pricing
                 for _ in range(self.options.shop_item_count.value - 1): self.shop_costs.append(int(base_price))
             self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
-
-    def handle_goaling(self):
-        self.log("Processing goal choices.", LoggingLevel.LOW)
-        victory_cons = defaultdict(tuple[str])
-        enabled_goals = []
-
-        goal_info = [
-            ["Gnasty Gnorc", BOSS_IDS[0:2]], ["Ineptune", BOSS_IDS[2:4]], ["Red", BOSS_IDS[4:6]], ["Mecha-Red", [BOSS_IDS[6]]],
-            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS], ["Fireworks", FIREWORK_IDS],
-            ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS], ["Elder Tomas", [ELDER_ABILITY_IDS[0]]],
-            ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
-            ["Blink", BLINK_IDS], ["Sgt. Byrd", BYRD_IDS], ["Sparx", SPARX_IDS], ["Turret", TURRET_IDS]
-        ]
-        # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
-        if self.options.exclude_chest_items.value >= 2:  # 2 = exclude light gems, 3 = exclude both
-            goal_info[5][1] = goal_info[5][1][:-15]
-        if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
-            goal_info[6][1] = goal_info[6][1][:-16]
-        amounts = {
-            "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value,
-            "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
-            "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value,
-            "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Blink": self.options.minigames_goal.value["Blink"],
-            "Sgt. Byrd": self.options.minigames_goal.value["Sgt. Byrd"], "Sparx": self.options.minigames_goal.value["Sparx"], "Turret": self.options.minigames_goal.value["Turret"]
-        }
-        lookup_methods = [
-            "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune" in self.options.boss_goal.value, "Red" in self.options.boss_goal.value,
-            "Mecha-Red" in self.options.boss_goal.value, amounts["Dark Gems"] > 0, amounts["Light Gems"] > 0, amounts["Dragon Eggs"] > 0, amounts["Fireworks"] > 0,
-            amounts["Shop Items"] > 0, amounts["Locked Chests"] > 0, "Elder Tomas" in self.options.elders_goal.value, "Elder Magnus" in self.options.elders_goal.value,
-            "Elder Titan" in self.options.elders_goal.value, "Elder Astor" in self.options.elders_goal.value, self.options.minigames_goal["Blink"] > 0,
-            self.options.minigames_goal.value["Sgt. Byrd"] > 0, self.options.minigames_goal.value["Sparx"] > 0, self.options.minigames_goal.value["Turret"] > 0
-        ]
-        for counter, (goal_name, id_list) in enumerate(goal_info):
-            ind_count = 1
-            if not lookup_methods[counter]:
-                continue
-            for loc_id in id_list:
-                loc_name = self.location_id_to_name[loc_id]
-                loc = self.get_location(loc_name)
-                loc.parent_region.add_event(f"{loc.name} Victory{ind_count}", f"VictoryCon{goal_name.replace(" ", "")}{ind_count}", rule=loc.access_rule, show_in_spoiler=False)
-                victory_cons[goal_name] += (f"VictoryCon{goal_name.replace(" ", "")}{ind_count}",)
-                self.goals_dict[goal_name].append(loc_id)
-                self.log(f"Added VictoryCon{goal_name.replace(" ", "")}{ind_count} event for {loc.name}.", LoggingLevel.MAXIMUM)
-                ind_count += 1
-                if goal_name not in enabled_goals: enabled_goals.append(goal_name)
-            self.log(f"Set up {ind_count - 1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
-        bad_condition = len(enabled_goals) == 0
-        if bad_condition and self.options.auto_corrections.value == 2:  # fix_major exclusive
-            self.log("No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.", LoggingLevel.WARNING)
-            loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
-            loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
-            victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
-            enabled_goals.append("Mecha-Red")
-        elif bad_condition:
-            raise OptionError("No enabled goals were detected. Seeds must have at least 1 goal. Fix this, or set auto_corrections to fix_major to have this automatically fixed.")
-        enabled_with_amounts = [f"{goal} ({amounts[goal]} checks)" for goal in enabled_goals]
-        self.log(f"Final goal list: {", ".join(enabled_with_amounts)}.", LoggingLevel.MEDIUM)
-
-        def check_for_goal(state: CollectionState) -> bool:
-            for goal in enabled_goals:
-                events = victory_cons[goal]
-                amount = amounts[goal]
-                if state.has_from_list(events, self.player, amount):
-                    continue
-                else:
-                    return False
-            return True
-
-        self.multiworld.completion_condition[self.player] = lambda state: check_for_goal(state)
     
     def create_items(self) -> None:
         aht_items = []
@@ -866,6 +797,75 @@ class SpyroAHTWorld(World):
                 self.set_rule(loc, self.rule_from_dict(l['access_rule']))
 
         self.handle_goaling()  # must be done here because setting up the victorycon events requires location rules to be set up first
+    
+    def handle_goaling(self):
+        self.log("Processing goal choices.", LoggingLevel.LOW)
+        victory_cons = defaultdict(tuple[str])
+        enabled_goals = []
+
+        goal_info = [
+            ["Gnasty Gnorc", BOSS_IDS[0:2]], ["Ineptune", BOSS_IDS[2:4]], ["Red", BOSS_IDS[4:6]], ["Mecha-Red", [BOSS_IDS[6]]],
+            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS], ["Fireworks", FIREWORK_IDS],
+            ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS], ["Elder Tomas", [ELDER_ABILITY_IDS[0]]],
+            ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
+            ["Blink", BLINK_IDS], ["Sgt. Byrd", BYRD_IDS], ["Sparx", SPARX_IDS], ["Turret", TURRET_IDS]
+        ]
+        # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
+        if self.options.exclude_chest_items.value >= 2:  # 2 = exclude light gems, 3 = exclude both
+            goal_info[5][1] = goal_info[5][1][:-15]
+        if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
+            goal_info[6][1] = goal_info[6][1][:-16]
+        amounts = {
+            "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value,
+            "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
+            "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value,
+            "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Blink": self.options.minigames_goal.value["Blink"],
+            "Sgt. Byrd": self.options.minigames_goal.value["Sgt. Byrd"], "Sparx": self.options.minigames_goal.value["Sparx"], "Turret": self.options.minigames_goal.value["Turret"]
+        }
+        lookup_methods = [
+            "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune" in self.options.boss_goal.value, "Red" in self.options.boss_goal.value,
+            "Mecha-Red" in self.options.boss_goal.value, amounts["Dark Gems"] > 0, amounts["Light Gems"] > 0, amounts["Dragon Eggs"] > 0, amounts["Fireworks"] > 0,
+            amounts["Shop Items"] > 0, amounts["Locked Chests"] > 0, "Elder Tomas" in self.options.elders_goal.value, "Elder Magnus" in self.options.elders_goal.value,
+            "Elder Titan" in self.options.elders_goal.value, "Elder Astor" in self.options.elders_goal.value, self.options.minigames_goal["Blink"] > 0,
+            self.options.minigames_goal.value["Sgt. Byrd"] > 0, self.options.minigames_goal.value["Sparx"] > 0, self.options.minigames_goal.value["Turret"] > 0
+        ]
+        for counter, (goal_name, id_list) in enumerate(goal_info):
+            ind_count = 1
+            if not lookup_methods[counter]:
+                continue
+            for loc_id in id_list:
+                loc_name = self.location_id_to_name[loc_id]
+                loc = self.get_location(loc_name)
+                loc.parent_region.add_event(f"{loc.name} Victory{ind_count}", f"VictoryCon{goal_name.replace(" ", "")}{ind_count}", rule=loc.access_rule, show_in_spoiler=False)
+                victory_cons[goal_name] += (f"VictoryCon{goal_name.replace(" ", "")}{ind_count}",)
+                self.goals_dict[goal_name].append(loc_id)
+                self.log(f"Added VictoryCon{goal_name.replace(" ", "")}{ind_count} event for {loc.name}.", LoggingLevel.MAXIMUM)
+                ind_count += 1
+                if goal_name not in enabled_goals: enabled_goals.append(goal_name)
+            self.log(f"Set up {ind_count - 1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
+        bad_condition = len(enabled_goals) == 0
+        if bad_condition and self.options.auto_corrections.value == 2:  # fix_major exclusive
+            self.log("No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.", LoggingLevel.WARNING)
+            loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
+            loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
+            victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
+            enabled_goals.append("Mecha-Red")
+        elif bad_condition:
+            raise OptionError("No enabled goals were detected. Seeds must have at least 1 goal. Fix this, or set auto_corrections to fix_major to have this automatically fixed.")
+        enabled_with_amounts = [f"{goal} ({amounts[goal]} checks)" for goal in enabled_goals]
+        self.log(f"Final goal list: {", ".join(enabled_with_amounts)}.", LoggingLevel.MEDIUM)
+
+        def check_for_goal(state: CollectionState) -> bool:
+            for goal in enabled_goals:
+                events = victory_cons[goal]
+                amount = amounts[goal]
+                if state.has_from_list(events, self.player, amount):
+                    continue
+                else:
+                    return False
+            return True
+
+        self.multiworld.completion_condition[self.player] = lambda state: check_for_goal(state)
     
     def fill_slot_data(self):
         self.log("Filling slot data.", LoggingLevel.LOW)
