@@ -6530,7 +6530,7 @@
         ],
         "gem_events": [
             {
-                "name": "525 Gems (on the ground/meatl chests/headbash chests)",
+                "name": "525 Gems (on the ground/metal chests/headbash chests)",
                 "gem_amount": 525,
                 "options": [],
                 "access_rule": {
@@ -10260,12 +10260,26 @@
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "HasAll",
                             "options": [],
                             "filtered_resolution": false,
                             "args": {
-                                "item_name": "Double Jump",
-                                "count": 1
+                                "item_names": [
+                                    "Double Jump",
+                                    "Water Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Electric Breath",
+                                    "Fire Breath"
+                                ]
                             }
                         },
                         {
@@ -10286,13 +10300,10 @@
                 "id": 705,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Water Breath",
-                        "count": 1
-                    }
+                    "args": {}
                 }
             },
             {
@@ -10300,13 +10311,10 @@
                 "id": 706,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Water Breath",
-                        "count": 1
-                    }
+                    "args": {}
                 }
             }
         ],

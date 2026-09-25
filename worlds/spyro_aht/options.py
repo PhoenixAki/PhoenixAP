@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup, StartInventoryPool, NamedRange
+from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup, StartInventoryPool, OptionDict
 
 ###############DEATHLINK###############
 class DeathLink(Choice):
@@ -35,8 +35,7 @@ class LoggingLevel(Choice):
     Medium: Logs useful debugging information, such as listing your randomized shop prices. This is the default because
       the information in these messages can be very helpful when making bug reports.
     High: Logs messages with extra generation logic, such as "Fire Breath has been placed into Starter Checks: Breath."
-    Maximum: Logs with extreme detail, such as noting every single item created.
-    """
+    Maximum: Logs with extreme detail, such as noting every single item created."""
     option_none = 1
     option_low = 2
     option_medium = 3
@@ -47,18 +46,17 @@ class LoggingLevel(Choice):
     
 
 class AutoCorrections(Choice):
-    """This option decides the behavior of the generator if YAML issues are encountered. It is strongly recommended to
-    set this to fix_minor or fix_major if putting AHT AP into a larger multiworld. Doing so drastically decreases the
-    chance of hitting a generation error after potentially a long time of generating.
-    
-    A full detailing of every edge case that exists, and how auto_corrections reacts to them, is beyond the scope
-    of this YAML. A full list can be found at the link below. It is only capable of fixing issues that stem from
-    combinations of AHT options - issues with the base syntax of your YAML are not automatically fixable.
-    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1.2-%E2%80%90-List-of-auto_corrections-Fixes
+    """This option decides the behavior of the generator if YAML issues are encountered. It is recommended to leave this
+    set to fix_minor, especially if intending to randomize multiple options. Clashes stemming from this (such as having
+    fireworks_goal on but having firework_checks disabled) are fixed by fix_minor.
     
     halt: Generation will be strictly halted upon any sort of YAML issue.
-    fix_minor: Minor YAML issues will be automatically fixed to avoid making too big an impact on the seed.
-    fix_major: All known YAML issues will be fixed, even if the fix has a significant impact on the seed."""
+    fix_minor: Only issues deemed minor will be fixed (such as the above example with fireworks_goal).
+    fix_major: All issues will be fixed, even if it has a major impact (such as changing your starting realm to avoid an impossible start).
+    
+    A full, detailed list of every scenario that can lead to a generation issue can be found on the project's wiki,
+    linked below. auto_corrections is not capable of fixing issues with the base syntax of your YAML.
+    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1.2-%E2%80%90-List-of-auto_corrections-Fixes"""
     display_name = "Auto Corrections"
     option_halt = 0
     option_fix_minor = 1
@@ -67,9 +65,12 @@ class AutoCorrections(Choice):
 
 ###############GOAL###############
 class BossGoals(OptionSet):
-    """This option lets you choose which bosses are required in order to goal. They will stack on top of other goals.
-    Leave the list empty to have no boss requirements. You can enter "Random" to have a random selection of bosses chosen,
-    even if you also choose a few bosses explicitly alongside "Random".
+    """This option lets you add a requirement to defeat a number of bosses to your goal. You can enter "Random" to have
+    a random selection of bosses chosen, even if you also choose a few bosses explicitly alongside "Random".
+    
+    Note that this + all other goals are based on AHT checks. In specific circumstances, this can result in AHT registering
+    goals unexpectedly early. See the below project wiki FAQ post for more info.
+    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1-%E2%80%90-Setup-Guide-&-FAQ#i-goaled-early-what-gives 
     
     Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
     display_name = "Boss Goals"
@@ -77,90 +78,59 @@ class BossGoals(OptionSet):
     default = ["Mecha-Red"]
 
 
-class DarkGemsGoal(NamedRange):
-    """This option lets you require completing a number of Dark Gem checks in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-40 to require that many Dark Gem checks in order to goal.
-    To disable this, enter 0. To have a random number 1-40 chosen, select "random-range-1-40", or enter -1."""
+class DarkGemsGoal(Range):
+    """This option lets you add a requirement to complete a number of Dark Gem checks to your goal."""
     display_name = "Dark Gems Goal"
-    range_start = -1
+    range_start = 0
     range_end = 40
     default = 0
-    special_range_names = {
-        "random-range-1-40": -1
-    }
     
 
-class LightGemsGoal(NamedRange):
-    """This option lets you require completing a number of Light Gem checks in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-100 to require that many Light Gem checks in order to goal.
-    To disable this, enter 0. To have a random number 1-100 chosen, select "random-range-1-100", or enter -1."""
+class LightGemsGoal(Range):
+    """This option lets you add a requirement to complete a number of Light Gem checks to your goal."""
     display_name = "Light Gems Goal"
-    range_start = -1
+    range_start = 0
     range_end = 100
     default = 0
-    special_range_names = {
-        "random-range-1-100": -1
-    }
     
 
-class DragonEggsGoal(NamedRange):
-    """This option lets you require completing a number of Dragon Egg checks in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-80 to require that many Dragon Egg checks in order to goal.
-    To disable this, enter 0. To have a random number 1-80 chosen, select "random-range-1-80", or enter -1."""
+class DragonEggsGoal(Range):
+    """This option lets you add a requirement to complete a number of Dragon Egg checks to your goal."""
     display_name = "Dragon Eggs Goal"
-    range_start = -1
+    range_start = 0
     range_end = 80
     default = 0
-    special_range_names = {
-        "random-range-1-80": -1
-    }
     
 
-class FireworksGoal(NamedRange):
-    """This option lets you require completing a number of firework checks in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-22 to require that many firework checks in order to goal.
-    To disable this, enter 0. To have a random number 1-22 chosen, select "random-range-1-22", or enter -1.
-    This goal requires firework_checks to be enabled.""" 
+class FireworksGoal(Range):
+    """This option lets you add a requirement to complete a number of firework checks to your goal.
+    This requires firework_checks to be enabled.""" 
     display_name = "Fireworks Goal"
-    range_start = -1
+    range_start = 0
     range_end = 22
     default = 0
-    special_range_names = {
-        "random-range-1-22": -1
-    }
     
 
-class ShopItemsGoal(NamedRange):
-    """This option lets you require purchasing a number of randomized shop items in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-56 to require that many shop item purchases checks in order to goal.
-    To disable this, enter 0. To have a random number 1-56 chosen, select "random-range-1-56", or enter -1.
+class ShopItemsGoal(Range):
+    """This option lets you add a requirement to purchase a number of randomized shop items to your goal.
     This goal requires shop_randomization to be enabled. Keep in mind that the first randomized shop item is always free."""
     display_name = "Shop Items Goal"
-    range_start = -1
+    range_start = 0
     range_end = 56
     default = 0
-    special_range_names = {
-        "random-range-1-56": -1
-    }
     
 
-class LockedChestsGoal(NamedRange):
-    """This option lets you require opening a number of locked chests in order to goal. This stacks on top of other goals.
-    To enable this, enter a number 1-52 to require opening that many locked chests checks in order to goal.
-    To disable this, enter 0. To have a random number 1-52 chosen, select "random-range-1-52", or enter -1."""
+class LockedChestsGoal(Range):
+    """This option lets you add a requirement of opening a number of locked chests to your goal."""
     display_name = "Locked Chests Goal"
-    range_start = -1
+    range_start = 0
     range_end = 52
     default = 0
-    special_range_names = {
-        "random-range-1-52": -1
-    }
 
 
 class EldersGoal(OptionSet):
-    """This option lets you choose which of the elder dragons you have to talk to in order to goal. They will stack on top of other goals.
-    Leave the list empty to have no elder requirements. You can enter "Random" to have a random selection of elders chosen,
-    even if you also choose a few elders explicitly alongside "Random".
+    """This option lets you add a requirement of talking to a number of elder dragons to your goal. You can enter "Random"
+    to have a random selection of elders chosen, even if you also choose a few elders explicitly alongside "Random".
     
     Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]"""
     display_name = "Elders Goal"
@@ -168,32 +138,25 @@ class EldersGoal(OptionSet):
     default = frozenset()
 
 
-class MinigamesGoal(OptionSet):
-    """This option lets you choose which minigame types you will have a goal requirement for. They will stack on top of other goals.
-    Leave the list empty to have no minigame requirements. You can enter "Random" to have a random selection of minigames chosen,
-    even if you also choose a few minigames explicitly alongside "Random".
-    
-    Valid Options: ["Sgt. Byrd", "Blink", "Turret", "Sparx"]"""
+class MinigamesGoal(OptionDict):
+    """This option lets add minigame requirements to your goal. Next to each type, you can enter any of the following:
+    - 0-8: you will need to complete this many of that minigame to goal.
+    - random-on: picks a random number from 1-8.
+    - random-off: 50% chance of a 0, 50% chance of a number 1-8."""
     display_name = "Minigames Goal"
-    valid_keys = ("Sgt. Byrd", "Blink", "Turret", "Sparx")
-    default = frozenset()
+    valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
+    default = {
+        "Blink": 0,
+        "Sgt. Byrd": 0,
+        "Sparx": 0,
+        "Turret": 0
+    }
+    
 
-
-class MinigamesGoalCount(Range):
-    """This option customizes how many of each minigame type enabled in minigames_goal you have to do.
-    This number applies separately to each enabled minigame goal; it is not a count of how many you need to do in total.
-    
-    Enter a number 1-8 to require that many of each minigame type to goal."""
-    display_name = "Minigames Count"
-    range_start = 1
-    range_end = 8
-    default = 1
-    
-    
 class ExcludeChestItems(Choice):
-    """dragon_eggs_goal includes locked chests which contain Dragon Eggs as a valid way to make goal progress.
-    light_gems_goal is the same with Light Gems. This option lets you limit these goals to only Dragon Eggs and Light
-    Gems which come from other sources. Useful if wanting to require them as goals but with less requirement on locked chests."""
+    """dragon_eggs_goal and light_gems_goal include locked chests which contain Dragon Eggs/Light Gems as valid ways to
+    make goal progress. This option lets you limit dragon_eggs_goal and light_gems_goal to only count those which don't
+    come from locked chests. Useful if wanting to have less direct requirement on chests for this seed."""
     display_name = "Exclude Chest Items"
     option_disabled = 0
     option_exclude_eggs = 1
@@ -376,7 +339,7 @@ class ShopLogic(Choice):
     blink_gems_total = (20,203 - exclusions) * blink_gems%
     non_blink_enemies_total = 16,353 * non_blink_enemies%
     other_gems_total = (105,357 - exclusions) * other_gems%
-      If an individual minigame location is added to exclude_locations, the gems inside will be left out of the above
+      If an individual minigame check is added to exclude_locations, the gems inside will be left out of the above
       calculations so you aren't logically expected to get those gems. Works for Blink, Byrd, and Sparx minigames.
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
     base_shop_price = gem_total / (shop_item_count - 1)
@@ -626,7 +589,6 @@ class SpyroAHTOptions(PerGameCommonOptions):
     exclude_chest_items: ExcludeChestItems
     elders_goal: EldersGoal
     minigames_goal: MinigamesGoal
-    minigames_goal_count: MinigamesGoalCount
     
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
@@ -681,7 +643,7 @@ spyro_options_groups = [
     ]),
     OptionGroup("GOAL", [
         BossGoals, DarkGemsGoal, LightGemsGoal, DragonEggsGoal, FireworksGoal, ShopItemsGoal, 
-        LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal, MinigamesGoalCount
+        LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal
     ]),
     OptionGroup("CHECKS AND ITEMS", [
         OpenWorldMode, FireworkChecks, VanillaMinigameRewards, TrapPercentage, FillerItems, TrapItems, TrapLength

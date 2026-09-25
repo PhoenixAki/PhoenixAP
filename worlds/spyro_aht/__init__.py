@@ -293,7 +293,6 @@ class SpyroAHTWorld(World):
         if isinstance(passthrough, dict) and self.game in passthrough:
             self._apply_slot_data(passthrough[self.game])
         
-        auto_corrections = self.options.auto_corrections.value
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", LoggingLevel.LOW)
         
         if self.options.open_world_mode.value != 1 and self.options.starting_realms.value == {"Icy Wilderness"}:
@@ -305,14 +304,14 @@ class SpyroAHTWorld(World):
                     raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
             
         bad_condition = self.options.teleport_across_realms.value == 0 and self.options.open_world_mode.value != 0
-        if bad_condition and auto_corrections >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
             self.log("Minor Warning: teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling teleport_across_realms.", LoggingLevel.WARNING)
             self.options.teleport_across_realms.value = 1
         elif bad_condition:
             raise OptionError("teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value  # "none" alongside breath choices
-        if bad_condition and auto_corrections >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
             self.log("Minor Warning: Starting breath list cannot contain breaths and \"None\". Fixing by removing the \"None\".", LoggingLevel.WARNING)
             self.options.starting_breaths.value.remove("None")
         elif bad_condition:
@@ -326,37 +325,57 @@ class SpyroAHTWorld(World):
         
         self.check_lists(self.options.boss_goal, "boss_goal", "bosses")
         self.check_lists(self.options.elders_goal, "elders_goal", "elders")
-        self.check_lists(self.options.minigames_goal, "minigames_goal", "minigames")
         
-        # randomizing each collectible option if the player requested it. Done here before the remainder of the edge case tests which require having a value known
-        goal_options = [[self.options.dark_gems_goal, 40], [self.options.light_gems_goal, 100], [self.options.dragon_eggs_goal, 80],
-                        [self.options.fireworks_goal, 22], [self.options.shop_items_goal, 56], [self.options.locked_chests_goal, 52]]
-        for goal, max_range in goal_options:
-            if goal.value == -1:
-                rand_choice = self.random.randint(1, max_range)
-                self.log(f"{goal.display_name} requested a random choice. {rand_choice} was selected.", LoggingLevel.MEDIUM)
-                goal.value = rand_choice
+        # minigames goal
+        for key in self.options.minigames_goal.valid_keys:
+            choice = self.options.minigames_goal.value[key]
+            bad_condition = choice in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+            if bad_condition and self.options.auto_corrections.value >= 1:
+                self.log(f"Minor Warning: \"{choice}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fixing by auto-converting \"{choice}\" to {int(choice)}.", LoggingLevel.WARNING)
+                self.options.minigames_goal.value[key] = int(choice)
+            elif bad_condition:
+                raise OptionError(f"Minor Warning: \"{choice}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fix this, or set auto_corrections to at least fix_minor.")
+            
+            bad_condition = self.options.minigames_goal.value[key] not in [0, 1, 2, 3, 4, 5, 6, 7, 8, "random-on", "random-off"]
+            if bad_condition and self.options.auto_corrections.value >= 1:
+                self.log(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fixing by setting {key} to 0.", LoggingLevel.WARNING)
+                self.options.minigames_goal.value[key] = 0
+            elif bad_condition:
+                raise OptionError(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fix this, or set auto_corrections to at least fix_minor.")
+            
+            # if here, it's a safe value. 0-8 is ignored and processed in handle_goaling. Just need to figure out random choice here
+            if self.options.minigames_goal.value[key] == "random-on":
+                self.options.minigames_goal.value[key] = self.random.randint(1, 8)
+                self.log(f"\"random-on\" was requested for {key} for minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", LoggingLevel.MEDIUM)
+            elif self.options.minigames_goal.value[key] == "random-off":
+                coin_flip = self.random.randint(0, 1)  # 0 = off, 1 = on (and do a new random spin of 1-8)
+                if coin_flip == 1:
+                    self.options.minigames_goal.value[key] = self.random.randint(1, 8)
+                    self.log(f"\"random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being enabled with a requirement of {self.options.minigames_goal.value[key]}.", LoggingLevel.MEDIUM)
+                elif coin_flip == 0:
+                    self.options.minigames_goal.value[key] = 0
+                    self.log(f"\"random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", LoggingLevel.MEDIUM)
         
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
-        if bad_condition and auto_corrections >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
             self.log("Minor Warning: Fireworks was enabled as a goal, but firework_checks is disabled. Fixing by enabling firework_checks.", LoggingLevel.WARNING)
             self.options.firework_checks.value = 1
         elif bad_condition:
             raise OptionError("Fireworks was enabled as a goal, but firework_checks is disabled. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = self.options.shop_items_goal.value > 0 and self.options.shop_randomization.value == 0
-        if bad_condition and auto_corrections == 1:  # fix_minor specific
+        if bad_condition and self.options.auto_corrections.value == 1:  # fix_minor specific
             self.log("Minor Warning: shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fixing by disabling shop_items_goal.", LoggingLevel.WARNING)
             self.options.shop_items_goal.value = 0
-        elif bad_condition and auto_corrections == 2:  # fix_major specific
+        elif bad_condition and self.options.auto_corrections.value == 2:  # fix_major specific
             self.log("Major Warning: shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fixing by enabling shop_randomization.", LoggingLevel.WARNING)
             self.options.shop_randomization.value = 1
         elif bad_condition:
             raise OptionError("shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = self.options.shop_items_goal.value > self.options.shop_item_count.value
-        if bad_condition and auto_corrections >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
             self.log("Minor Warning: shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fixing by lowering shop_items_goal to match shop_item_count.", LoggingLevel.WARNING)
             self.options.shop_items_goal.value = self.options.shop_item_count.value
         elif bad_condition:
@@ -419,7 +438,6 @@ class SpyroAHTWorld(World):
         self.options.locked_chests_goal.value = slot_data['locked_chests_goal']
         self.options.elders_goal.value = slot_data['elders_goal']
         self.options.minigames_goal.value = slot_data['minigames_goal']
-        self.options.minigames_goal_count.value = slot_data['minigames_goal_count']
         self.options.exclude_chest_items.value = slot_data['exclude_chest_items']
 
         self.options.open_world_mode.value = slot_data['open_world_mode']
@@ -487,8 +505,9 @@ class SpyroAHTWorld(World):
                     option.value.add(rand_choice)
                     available_choices.remove(rand_choice)
                     rand_count -= 1
+                self.log(f"\"Random\" was requested for {error_text_1}. Random choice(s): {", ".join(option.value)}.", LoggingLevel.MEDIUM)
                     
-    def check_eggs_and_gems(self, option: NamedRange, name: str, maximum: int, count: int, error: bool):
+    def check_eggs_and_gems(self, option: Range, name: str, maximum: int, count: int, error: bool):
         bad_condition = option.value > maximum and error
         if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
             self.log(f"Minor Warning: {name} was set higher than {maximum}, but {count} from chests are excluded from goals via exclude_chest_items. Fixing by lowering {name} by {count}.", LoggingLevel.WARNING)
@@ -551,7 +570,6 @@ class SpyroAHTWorld(World):
         
         blink_exclusions, other_exclusions = self.setup_gem_logic()  # needs regions to be set up already
         self.setup_shop_prices(blink_exclusions, other_exclusions)  # needs knowledge of blink and other exclusions from setup_gem_logic
-        self.handle_goaling()  # needs regions to be set up already
         
     def setup_gem_logic(self) -> tuple[int, int]:
         self.log("Checking if gem logic needs to be set up.", LoggingLevel.LOW)
@@ -603,97 +621,6 @@ class SpyroAHTWorld(World):
             else:  # 0 = unordered, meaning equal pricing
                 for _ in range(self.options.shop_item_count.value - 1): self.shop_costs.append(int(base_price))
             self.log(f"Shop costs are: {", ".join(str(cost) for cost in self.shop_costs)}.", LoggingLevel.MEDIUM)
-
-    def handle_goaling(self):
-        self.log("Processing goal choices.", LoggingLevel.LOW)
-        victory_cons = defaultdict(tuple[str])
-        enabled_goals = []
-
-        goal_info = [
-            ["Gnasty Gnorc", BOSS_IDS[0:2]], ["Ineptune", BOSS_IDS[2:4]], ["Red", BOSS_IDS[4:6]], ["Mecha-Red", [BOSS_IDS[6]]],
-            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS], ["Fireworks", FIREWORK_IDS],
-            ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS], ["Elder Tomas", [ELDER_ABILITY_IDS[0]]],
-            ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
-            ["Sgt. Byrd", BYRD_IDS], ["Blink", BLINK_IDS], ["Turret", TURRET_IDS], ["Sparx", SPARX_IDS]
-        ]
-        # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
-        if self.options.exclude_chest_items.value >= 2:  # 2 = exclude light gems, 3 = exclude both
-            goal_info[5][1] = goal_info[5][1][:-15]
-        if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
-            goal_info[6][1] = goal_info[6][1][:-16]
-        amounts = {
-            "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value,
-            "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
-            "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value,
-            "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Sgt. Byrd": self.options.minigames_goal_count.value,
-            "Blink": self.options.minigames_goal_count.value, "Turret": self.options.minigames_goal_count.value, "Sparx": self.options.minigames_goal_count.value
-        }
-        lookup_methods = [
-            "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune" in self.options.boss_goal.value, "Red" in self.options.boss_goal.value,
-            "Mecha-Red" in self.options.boss_goal.value, amounts["Dark Gems"] > 0, amounts["Light Gems"] > 0, amounts["Dragon Eggs"] > 0, amounts["Fireworks"] > 0,
-            amounts["Shop Items"] > 0, amounts["Locked Chests"] > 0, "Elder Tomas" in self.options.elders_goal.value, "Elder Magnus" in self.options.elders_goal.value,
-            "Elder Titan" in self.options.elders_goal.value, "Elder Astor" in self.options.elders_goal.value, "Sgt. Byrd" in self.options.minigames_goal.value,
-            "Blink" in self.options.minigames_goal.value, "Turret" in self.options.minigames_goal.value, "Sparx" in self.options.minigames_goal.value
-        ]
-        for counter, (goal_name, id_list) in enumerate(goal_info):
-            ind_count = 1
-            if not lookup_methods[counter]:
-                continue
-            for loc_id in id_list:
-                loc_name = self.location_id_to_name[loc_id]
-                loc = self.get_location(loc_name)
-                loc.parent_region.add_event(f"{loc.name} Victory{ind_count}", f"VictoryCon{goal_name.replace(" ", "")}{ind_count}", rule=loc.access_rule, show_in_spoiler=False)
-                victory_cons[goal_name] += (f"VictoryCon{goal_name.replace(" ", "")}{ind_count}",)
-                self.goals_dict[goal_name].append(loc_id)
-                self.log(f"Added VictoryCon{goal_name.replace(" ", "")}{ind_count} event for {loc.name}.", LoggingLevel.MAXIMUM)
-                ind_count += 1
-                if goal_name not in enabled_goals: enabled_goals.append(goal_name)
-            self.log(f"Set up {ind_count - 1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
-        if len(enabled_goals) == 0 and self.options.auto_corrections.value == 2:
-            self.log(
-                "No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.",
-                LoggingLevel.WARNING)
-            loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
-            loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
-            victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
-            enabled_goals.append("Mecha-Red")
-
-        self.log(f"Final goal list: {", ".join(enabled_goals)}.", LoggingLevel.MEDIUM)
-
-        def check_for_goal(state: CollectionState) -> bool:
-            for goal in enabled_goals:
-                events = victory_cons[goal]
-                amount = amounts[goal]
-                if state.has_from_list(events, self.player, amount):
-                    continue
-                else:
-                    return False
-            return True
-
-        self.multiworld.completion_condition[self.player] = lambda state: check_for_goal(state)
-
-    def setup_filler_list(self) -> tuple[dict[str, list], list[str]]:
-        """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
-        all_filler_items = [item for item in self.item_data if item["group"] == "Filler"]
-        enabled_filler_items: dict[str, list[str]] = {}
-        shinies = []
-        
-        for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
-            if category in self.options.filler_items.value:
-                enabled_filler_items[category] = []
-        
-        for filler_item in all_filler_items:
-            if filler_item["name"] == "Gem Pack" and "Gem Packs" in enabled_filler_items.keys():
-                enabled_filler_items["Gem Packs"].append(filler_item["name"])
-            elif filler_item["name"] == "Dragon Egg" and "Dragon Eggs" in enabled_filler_items.keys():
-                enabled_filler_items["Dragon Eggs"].append(filler_item["name"])
-            elif "Bomb" in filler_item["name"] and "Breath Bombs" in enabled_filler_items.keys():
-                enabled_filler_items["Breath Bombs"].append(filler_item["name"])
-            elif filler_item.get("type", "") == "Shinies" and "Shinies" in enabled_filler_items.keys():
-                enabled_filler_items["Shinies"].append(filler_item["name"])
-                shinies.append(filler_item["name"])
-        
-        return enabled_filler_items, shinies
     
     def create_items(self) -> None:
         aht_items = []
@@ -835,6 +762,29 @@ class SpyroAHTWorld(World):
             aht_items.append(self.create_item(choice))
     
         self.multiworld.itempool.extend(aht_items)
+
+    def setup_filler_list(self) -> tuple[dict[str, list], list[str]]:
+        """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
+        all_filler_items = [item for item in self.item_data if item["group"] == "Filler"]
+        enabled_filler_items: dict[str, list[str]] = {}
+        shinies = []
+
+        for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
+            if category in self.options.filler_items.value:
+                enabled_filler_items[category] = []
+
+        for filler_item in all_filler_items:
+            if filler_item["name"] == "Gem Pack" and "Gem Packs" in enabled_filler_items.keys():
+                enabled_filler_items["Gem Packs"].append(filler_item["name"])
+            elif filler_item["name"] == "Dragon Egg" and "Dragon Eggs" in enabled_filler_items.keys():
+                enabled_filler_items["Dragon Eggs"].append(filler_item["name"])
+            elif "Bomb" in filler_item["name"] and "Breath Bombs" in enabled_filler_items.keys():
+                enabled_filler_items["Breath Bombs"].append(filler_item["name"])
+            elif filler_item.get("type", "") == "Shinies" and "Shinies" in enabled_filler_items.keys():
+                enabled_filler_items["Shinies"].append(filler_item["name"])
+                shinies.append(filler_item["name"])
+
+        return enabled_filler_items, shinies
   
     def set_rules(self) -> None:
         self.log("Setting up location rules.", LoggingLevel.LOW)
@@ -845,6 +795,77 @@ class SpyroAHTWorld(World):
                 except KeyError:
                     continue
                 self.set_rule(loc, self.rule_from_dict(l['access_rule']))
+
+        self.handle_goaling()  # must be done here because setting up the victorycon events requires location rules to be set up first
+    
+    def handle_goaling(self):
+        self.log("Processing goal choices.", LoggingLevel.LOW)
+        victory_cons = defaultdict(tuple[str])
+        enabled_goals = []
+
+        goal_info = [
+            ["Gnasty Gnorc", BOSS_IDS[0:2]], ["Ineptune", BOSS_IDS[2:4]], ["Red", BOSS_IDS[4:6]], ["Mecha-Red", [BOSS_IDS[6]]],
+            ["Dark Gems", DARK_GEM_IDS], ["Light Gems", LIGHT_GEM_IDS], ["Dragon Eggs", DRAGON_EGG_IDS], ["Fireworks", FIREWORK_IDS],
+            ["Shop Items", SHOP_ITEM_IDS[:self.options.shop_item_count.value]], ["Locked Chests", LOCKED_CHEST_IDS], ["Elder Tomas", [ELDER_ABILITY_IDS[0]]],
+            ["Elder Magnus", [ELDER_ABILITY_IDS[1]]], ["Elder Titan", [ELDER_ABILITY_IDS[2]]], ["Elder Astor", [ELDER_ABILITY_IDS[3]]],
+            ["Blink", BLINK_IDS], ["Sgt. Byrd", BYRD_IDS], ["Sparx", SPARX_IDS], ["Turret", TURRET_IDS]
+        ]
+        # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
+        if self.options.exclude_chest_items.value >= 2:  # 2 = exclude light gems, 3 = exclude both
+            goal_info[5][1] = goal_info[5][1][:-15]
+        if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
+            goal_info[6][1] = goal_info[6][1][:-16]
+        amounts = {
+            "Gnasty Gnorc": 2, "Ineptune": 2, "Red": 2, "Mecha-Red": 1, "Dark Gems": self.options.dark_gems_goal.value,
+            "Light Gems": self.options.light_gems_goal.value, "Dragon Eggs": self.options.dragon_eggs_goal.value,
+            "Fireworks": self.options.fireworks_goal.value, "Shop Items": self.options.shop_items_goal.value, "Locked Chests": self.options.locked_chests_goal.value,
+            "Elder Tomas": 1, "Elder Magnus": 1, "Elder Titan": 1, "Elder Astor": 1, "Blink": self.options.minigames_goal.value["Blink"],
+            "Sgt. Byrd": self.options.minigames_goal.value["Sgt. Byrd"], "Sparx": self.options.minigames_goal.value["Sparx"], "Turret": self.options.minigames_goal.value["Turret"]
+        }
+        lookup_methods = [
+            "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune" in self.options.boss_goal.value, "Red" in self.options.boss_goal.value,
+            "Mecha-Red" in self.options.boss_goal.value, amounts["Dark Gems"] > 0, amounts["Light Gems"] > 0, amounts["Dragon Eggs"] > 0, amounts["Fireworks"] > 0,
+            amounts["Shop Items"] > 0, amounts["Locked Chests"] > 0, "Elder Tomas" in self.options.elders_goal.value, "Elder Magnus" in self.options.elders_goal.value,
+            "Elder Titan" in self.options.elders_goal.value, "Elder Astor" in self.options.elders_goal.value, self.options.minigames_goal["Blink"] > 0,
+            self.options.minigames_goal.value["Sgt. Byrd"] > 0, self.options.minigames_goal.value["Sparx"] > 0, self.options.minigames_goal.value["Turret"] > 0
+        ]
+        for counter, (goal_name, id_list) in enumerate(goal_info):
+            ind_count = 1
+            if not lookup_methods[counter]:
+                continue
+            for loc_id in id_list:
+                loc_name = self.location_id_to_name[loc_id]
+                loc = self.get_location(loc_name)
+                loc.parent_region.add_event(f"{loc.name} Victory{ind_count}", f"VictoryCon{goal_name.replace(" ", "")}{ind_count}", rule=loc.access_rule, show_in_spoiler=False)
+                victory_cons[goal_name] += (f"VictoryCon{goal_name.replace(" ", "")}{ind_count}",)
+                self.goals_dict[goal_name].append(loc_id)
+                self.log(f"Added VictoryCon{goal_name.replace(" ", "")}{ind_count} event for {loc.name}.", LoggingLevel.MAXIMUM)
+                ind_count += 1
+                if goal_name not in enabled_goals: enabled_goals.append(goal_name)
+            self.log(f"Set up {ind_count - 1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
+        bad_condition = len(enabled_goals) == 0
+        if bad_condition and self.options.auto_corrections.value == 2:  # fix_major exclusive
+            self.log("No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.", LoggingLevel.WARNING)
+            loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
+            loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
+            victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
+            enabled_goals.append("Mecha-Red")
+        elif bad_condition:
+            raise OptionError("No enabled goals were detected. Seeds must have at least 1 goal. Fix this, or set auto_corrections to fix_major to have this automatically fixed.")
+        enabled_with_amounts = [f"{goal} ({amounts[goal]} checks)" for goal in enabled_goals]
+        self.log(f"Final goal list: {", ".join(enabled_with_amounts)}.", LoggingLevel.MEDIUM)
+
+        def check_for_goal(state: CollectionState) -> bool:
+            for goal in enabled_goals:
+                events = victory_cons[goal]
+                amount = amounts[goal]
+                if state.has_from_list(events, self.player, amount):
+                    continue
+                else:
+                    return False
+            return True
+
+        self.multiworld.completion_condition[self.player] = lambda state: check_for_goal(state)
     
     def fill_slot_data(self):
         self.log("Filling slot data.", LoggingLevel.LOW)
@@ -865,7 +886,6 @@ class SpyroAHTWorld(World):
             "locked_chests_goal": self.options.locked_chests_goal.value,
             "elders_goal": self.options.elders_goal.value,
             "minigames_goal": self.options.minigames_goal.value,
-            "minigames_goal_count": self.options.minigames_goal_count.value,
             "exclude_chest_items": self.options.exclude_chest_items.value,
             
             "open_world_mode": self.options.open_world_mode.value,

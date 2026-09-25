@@ -632,11 +632,11 @@ REGION FVEntry1: entry area. very little here
 		would have DJ and supercharge
 
 REGION FVRedChamber: red fight
-	FVEntry1 -> FVRedChamber | And(Has('Double Jump'), BossLairRule(2))
+	FVEntry1 -> FVRedChamber | And(HasAll('Double Jump', 'Water Breath'), HasAny('Fire Breath', 'Electric Breath', 'Charge'), BossLairRule(2))
 		would have boss lair and DJ
 
-	LOCATION FVRedChamber | FV: Ice Breath from Red | 705 | Has('Water Breath')
-	LOCATION FVRedChamber | FV: Defeat Red | 706 | Has('Water Breath')
+	LOCATION FVRedChamber | FV: Ice Breath from Red | 705 | True_()
+	LOCATION FVRedChamber | FV: Defeat Red | 706 | True_()
 
 REGION FVElectricGate: past Phil's electric gate
 	FVEntry1 -> FVElectricGate | Has('Electric Breath')
