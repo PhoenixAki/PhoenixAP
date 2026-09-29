@@ -610,8 +610,8 @@ REGION SRToxicRise: rising statue room. include stuff before it in toxic swim st
 		could have nothing
 	SRToxicRise -> ShopPads | True_()
 
-	LOCATION SRToxicRise | SR: Firework in rising statue room | 414 | HasAll('Fire Breath', 'Double Jump')
-	LOCATION SRToxicRise | SR: Dragon Egg in Locked Chest in rising statue room | 844 | And(LockedChestRule('Sunken Ruins'), Has('Double Jump'))
+	LOCATION SRToxicRise | SR: Firework in rising statue room | 414 | HasAll('Fire Breath', 'Double Jump', 'Electric Breath')
+	LOCATION SRToxicRise | SR: Dragon Egg in Locked Chest in rising statue room | 844 | And(LockedChestRule('Sunken Ruins'), Has('Double Jump', 'Electric Breath'))
 	LOCATION SRToxicRise | SR: Dark Gem on rising statue | 120 | HasAll('Electric Breath', 'Double Jump', 'Glide', 'Pole Spin')
 
 REGION SRReturnToStart: area after toxic rise
@@ -1240,7 +1240,7 @@ REGION RLNorthEast4: past lasers you have to DJ over
 		could have nothing
 	RLNorthEast4 -> ShopPads | True_()
 
-	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | Has('Double Jump')
+	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge')))
 
 REGION RLNorthWest1: up through double piston room
 	RLCenter -> RLNorthWest1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))

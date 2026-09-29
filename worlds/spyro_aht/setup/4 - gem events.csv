@@ -249,10 +249,9 @@ SRToxicRise,46,on the ground before rising statue room,True_()
 SRToxicRise,25,[enemy] mer-gnorc before rising statue room,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 SRToxicRise,50,dark shard before rising statue room,"HasAny('Double Jump', 'Charge')"
 SRToxicRise,30,headbash chest before rising statue room,Has('Double Jump')
-SRToxicRise,1500,armored chests via firework on perimeter,"HasAll('Double Jump', 'Fire Breath')"
-SRToxicRise,50,baskets on perimeter,Has('Double Jump')
-SRToxicRise,50,dark shard before needing dj,"And(HasAll('Electric Breath', 'Pole Spin', 'Glide'), HasAny('Charge', 'Double Jump'))"
-SRToxicRise,50,dark shard after needing dj,"HasAll('Electric Breath', 'Pole Spin', 'Glide', 'Double Jump')"
+SRToxicRise,1500,armored chests via firework on perimeter,"HasAll('Double Jump', 'Fire Breath', 'Electric Breath')"
+SRToxicRise,50,baskets on perimeter,"Has('Double Jump', 'Electric Breath')"
+SRToxicRise,100,dark shards in rising statue room,"HasAll('Electric Breath', 'Pole Spin', 'Glide', 'Double Jump')"
 SRReturnToStart,250,[enemy] mer-gnorcs/orange crabs/blue crab,True_()
 SRReturnToStart,342,metal chests/dark shards/on the ground/baskets,True_()
 Frostbite Village,,,

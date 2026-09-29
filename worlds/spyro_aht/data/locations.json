@@ -9917,6 +9917,7 @@
                     "args": {
                         "item_names": [
                             "Double Jump",
+                            "Electric Breath",
                             "Fire Breath"
                         ]
                     }
@@ -9945,7 +9946,7 @@
                             "filtered_resolution": false,
                             "args": {
                                 "item_name": "Double Jump",
-                                "count": 1
+                                "count": "Electric Breath"
                             }
                         }
                     ]
@@ -10040,6 +10041,7 @@
                     "args": {
                         "item_names": [
                             "Double Jump",
+                            "Electric Breath",
                             "Fire Breath"
                         ]
                     }
@@ -10055,48 +10057,13 @@
                     "filtered_resolution": false,
                     "args": {
                         "item_name": "Double Jump",
-                        "count": 1
+                        "count": "Electric Breath"
                     }
                 }
             },
             {
-                "name": "50 Gems (dark shard before needing dj)",
-                "gem_amount": 50,
-                "options": [],
-                "access_rule": {
-                    "rule": "And",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "HasAll",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Electric Breath",
-                                    "Glide",
-                                    "Pole Spin"
-                                ]
-                            }
-                        },
-                        {
-                            "rule": "HasAny",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Double Jump"
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "50 Gems (dark shard after needing dj)",
-                "gem_amount": 50,
+                "name": "100 Gems (dark shards in rising statue room)",
+                "gem_amount": 100,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -19820,13 +19787,47 @@
                 "id": 138,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Or",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Electric Breath",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Charge",
+                                            "Ice Breath"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             }
         ],
