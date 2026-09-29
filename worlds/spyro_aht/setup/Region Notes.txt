@@ -611,7 +611,7 @@ REGION SRToxicRise: rising statue room. include stuff before it in toxic swim st
 	SRToxicRise -> ShopPads | True_()
 
 	LOCATION SRToxicRise | SR: Firework in rising statue room | 414 | HasAll('Fire Breath', 'Double Jump', 'Electric Breath')
-	LOCATION SRToxicRise | SR: Dragon Egg in Locked Chest in rising statue room | 844 | And(LockedChestRule('Sunken Ruins'), Has('Double Jump', 'Electric Breath'))
+	LOCATION SRToxicRise | SR: Dragon Egg in Locked Chest in rising statue room | 844 | And(LockedChestRule('Sunken Ruins'), HasAll('Double Jump', 'Electric Breath'))
 	LOCATION SRToxicRise | SR: Dark Gem on rising statue | 120 | HasAll('Electric Breath', 'Double Jump', 'Glide', 'Pole Spin')
 
 REGION SRReturnToStart: area after toxic rise

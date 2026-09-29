@@ -244,7 +244,7 @@ SRToxicRise | 25 Gems ([enemy] mer-gnorc before rising statue room) | HasAny('Fi
 SRToxicRise | 50 Gems (dark shard before rising statue room) | HasAny('Double Jump', 'Charge')
 SRToxicRise | 30 Gems (headbash chest before rising statue room) | Has('Double Jump')
 SRToxicRise | 1500 Gems (armored chests via firework on perimeter) | HasAll('Double Jump', 'Fire Breath', 'Electric Breath')
-SRToxicRise | 50 Gems (baskets on perimeter) | Has('Double Jump', 'Electric Breath')
+SRToxicRise | 50 Gems (baskets on perimeter) | HasAll('Double Jump', 'Electric Breath')
 SRToxicRise | 100 Gems (dark shards in rising statue room) | HasAll('Electric Breath', 'Pole Spin', 'Glide', 'Double Jump')
 SRReturnToStart | 250 Gems ([enemy] mer-gnorcs/orange crabs/blue crab) | True_()
 SRReturnToStart | 342 Gems (metal chests/dark shards/on the ground/baskets) | True_()

@@ -9941,12 +9941,14 @@
                             }
                         },
                         {
-                            "rule": "Has",
+                            "rule": "HasAll",
                             "options": [],
                             "filtered_resolution": false,
                             "args": {
-                                "item_name": "Double Jump",
-                                "count": "Electric Breath"
+                                "item_names": [
+                                    "Double Jump",
+                                    "Electric Breath"
+                                ]
                             }
                         }
                     ]
@@ -10052,12 +10054,14 @@
                 "gem_amount": 50,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "HasAll",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {
-                        "item_name": "Double Jump",
-                        "count": "Electric Breath"
+                        "item_names": [
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
                     }
                 }
             },
