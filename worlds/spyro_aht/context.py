@@ -468,7 +468,6 @@ class SpyroAHTContext(SuperContext):
                 case 0x19:
                     await self.emu_client.enable_butterfly_jar()
                 case 0x1A:
-                    #await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.DoubleGems, True)
                     await self.emu_client.toggle_double_gems(True)
                 case 0x1B:
                     await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Shockwave, True)

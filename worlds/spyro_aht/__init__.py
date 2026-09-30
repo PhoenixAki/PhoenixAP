@@ -11,7 +11,7 @@ import orjson
 
 import Utils
 from BaseClasses import Item, ItemClassification, MultiWorld, Region, CollectionState
-from Options import OptionError, OptionSet, NamedRange, Choice, Range
+from Options import OptionError, OptionSet, Choice, Range
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
