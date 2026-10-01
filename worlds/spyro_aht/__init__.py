@@ -198,7 +198,6 @@ class SpyroAHTWorld(World):
         name = self.collect_item(state, item)
         if name:
             if "Unlock" not in item.name:
-                state.add_item(name, self.player)
                 if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
                     gem_amount = int(item.name.split(" ")[0])
                     if "Blink minigames" in item.name:
@@ -207,6 +206,8 @@ class SpyroAHTWorld(World):
                         state.add_item("Non-Blink Enemies", item.player, count=gem_amount)
                     else:
                         state.add_item("Other Gems", item.player, count=gem_amount)
+                else:
+                    state.add_item(name, self.player)
             else:  # handle shop unlocks separately
                 choice = self.options.open_world_mode.value
                 if choice == 2:  # randomized
@@ -245,7 +246,6 @@ class SpyroAHTWorld(World):
         name = self.collect_item(state, item, True)
         if name:
             if "Unlock" not in item.name:
-                state.remove_item(name, self.player)
                 if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
                     gem_amount = int(item.name.split(" ")[0])
                     if "Blink minigames" in item.name:
@@ -254,6 +254,8 @@ class SpyroAHTWorld(World):
                         state.remove_item("Non-Blink Enemies", item.player, count=gem_amount)
                     else:
                         state.remove_item("Other Gems", item.player, count=gem_amount)
+                else:
+                    state.remove_item(name, self.player)
             else:  # handle shop unlocks separately
                 choice = self.options.open_world_mode.value
                 if choice == 2:  # randomized
@@ -693,7 +695,7 @@ class SpyroAHTWorld(World):
                 self.log(f"Placing {realm} Access Card into start inventory.", LoggingLevel.HIGH)
                 self.push_precollected(self.create_item(f"{realm} Access Card", "start inventory"))
             elif self.options.open_world_mode.value == 0:  # non-starting realm access cards only exist if non-open world
-                self.multiworld.itempool.append(self.create_item(f"{realm} Access Card"))
+                aht_items.append(self.create_item(f"{realm} Access Card"))
         self.log(f"Starting realm list: {", ".join(self.options.starting_realms.value)}.", LoggingLevel.MEDIUM)
         
         # Shop Unlocks (including pre-collecting ones in starting realms, depending on settings)
@@ -746,8 +748,10 @@ class SpyroAHTWorld(World):
         
         output = "none" if len(self.options.trap_items.value) == 0 else ", ".join(self.options.trap_items.value)
         self.log(f"Enabled trap items: {output}.", LoggingLevel.MEDIUM)
+        trap_choices = list(self.options.trap_items.value)
+        trap_choices.sort()  # non-determinism fix
         for _ in range(trap_number):
-            choice = self.random.choice(list(self.options.trap_items.value))
+            choice = self.random.choice(trap_choices)
             aht_items.append(self.create_item(choice))
 
         # shinies have extra logic to force variety in the choices before duplicating

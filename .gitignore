@@ -7,6 +7,7 @@ worlds/spyro_aht/setup/test-locations.json
 worlds/spyro_aht/setup/Item & Location Stats.txt
 fuzz_output/
 meta.yaml
+determinism.py
 
 *_Spoiler.txt
 *.bmbp
