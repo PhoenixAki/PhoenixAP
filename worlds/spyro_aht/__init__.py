@@ -1032,7 +1032,7 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
             blink_gems = state.count("Blink Gems", self.player)
             non_blink_enemies = state.count("Non-Blink Enemies", self.player)
             other = state.count("Other Gems", self.player)
-            in_logic_gems = ((blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling) // 100)
+            in_logic_gems = ((blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling)) // 100
             return in_logic_gems >= self.item_cost
     
 

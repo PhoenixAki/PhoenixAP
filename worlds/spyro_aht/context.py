@@ -122,7 +122,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         enabled = []
         for goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]:
             if goal in self.ctx.slot_data["goals_dict"].keys():
-                amount = self.ctx.slot_data["minigames_goal_count"]
+                amount = self.ctx.slot_data["minigames_goal"][goal]
                 enabled.append(f"{goal} ({amount} required)")
         output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
         self.output(f"Enabled Minigame Goals: {output}.")
@@ -243,7 +243,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
             # get amounts
             if goal in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]: amount = 1
             elif "Elder" in goal: amount = 1
-            elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.ctx.slot_data["minigames_goal_count"]
+            elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.ctx.slot_data["minigames_goal"][goal]
             else: amount = self.ctx.slot_data[option_name]
             # adjust id lists
             if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2: id_list = id_list[:-15]
@@ -731,7 +731,7 @@ class SpyroAHTContext(SuperContext):
         # find how many ids need to be checked
         if goal in ["Gnasty Gnorc", "Ineptune", "Red"]: amount = 2
         elif "Elder" in goal or goal == "Mecha-Red": amount = 1
-        elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.slot_data["minigames_goal_count"]
+        elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.slot_data["minigames_goal"][goal]
         else: amount = self.slot_data[option_name]
         for goal_id in loc_id_list:
             if goal_id in self.checked_locations:

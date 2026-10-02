@@ -549,7 +549,7 @@ class EasyBosses(OptionSet):
 
 class TimeSavers(OptionDict):
     """Choose which time-saving quality of life patches are enabled. For each, enter "on", "off", or "random".
-    Skip Cutscenes: enables skipping most cutscenes with the Y. button.
+    Skip Cutscenes: enables skipping most cutscenes with the Y button.
     Skip Elevators: enables skipping long elevator waits with loading screen.
     Teleport Across Realms: enables teleporting across realms using normal shop pads."""
     display_name = "Time Savers"
