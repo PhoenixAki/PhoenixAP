@@ -384,8 +384,8 @@ class DoubleGems(Choice):
     """This option is used when shop_randomization is enabled. It lets you enable or disable the permanent Double Gems item.
     Gem logic does not account for double gems, so if left enabled, you will collect gems faster than expected by logic."""
     display_name = "Double Gems"
-    option_enabled = 0
-    option_disabled = 1
+    option_disabled = 0
+    option_enabled = 1
     default = 0
 
 ###############GATE & GADGET COSTS###############

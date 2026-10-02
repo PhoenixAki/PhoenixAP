@@ -619,7 +619,7 @@ class SpyroAHTWorld(World):
         # 4 Shop Items
         if self.options.shop_randomization.value == 1:
             for shop_item in ["Health Unit+", "Butterfly Jar", "Double Gems", "Shockwave"]:
-                if shop_item == "Double Gems" and self.options.double_gems.value == 1:  # bit backwards. 0 = enabled, 1 = disabled
+                if shop_item == "Double Gems" and self.options.double_gems.value == 0:
                     self.log("Skipping creating Double Gems as double_gems is disabled.", LoggingLevel.HIGH)
                     continue
                 else: aht_items.append(self.create_item(shop_item))

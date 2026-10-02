@@ -181,7 +181,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
             # shop prices
             self.output(f"This means your shop prices are {self.ctx.slot_data['shop_costs']}.")
             # double gems
-            output = "disable" if self.ctx.slot_data['double_gems'] else "enable"
+            output = "enable" if self.ctx.slot_data['double_gems'] else "disable"
             self.output(f"You chose to {output} the Double Gems item.")
             
         self.output("---------------GATE AND GADGET COSTS---------------")
