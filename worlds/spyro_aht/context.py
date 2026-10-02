@@ -526,6 +526,14 @@ class SpyroAHTContext(SuperContext):
                     if total < item_counts["Gem Tax"]:
                         await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
                         await self.emu_client.gem_tax()
+                case 0x54:  # bounce trap
+                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 4)
+                    print(f"total is {total}")
+                    if total < item_counts["Bounce"]:
+                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 4, total + 1)
+                        print(f"total is now {total + 1}")
+                        self.emu_client.trap_queue.put_nowait("Bounce")
+                        print(f"bounce queued.")
                 case 0x64 | 0x65 | 0x66 | 0x67 | 0x68 | 0x69 | 0x6A | 0x6B | 0x6C | 0x6D | 0x6E | 0x6F | 0x70 | 0x71 | 0x72 | 0x73 | 0x74 | 0x75 \
                 | 0x76 | 0x77 | 0x78 | 0x79 | 0x7A | 0x7B | 0x7C | 0x7D | 0x7E | 0x7F | 0x80 | 0x81 | 0x82 | 0x83 | 0x84 | 0x85 | 0x86 | 0x87 | 0x88:
                     await self._unlock_shop(item.item, "Randomized")
@@ -774,7 +782,7 @@ class SpyroAHTContext(SuperContext):
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:
-            logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT IN THE THREAD", exc_info=True)
+            logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT TO DEVS", exc_info=True)
     
     async def _send_deathlink(self):
         death_id = await self.emu_client.export_deathlink()

@@ -388,6 +388,12 @@
         "group": "Traps"
     },
     {
+        "name": "Bounce",
+        "id": 84,
+        "classification": 4,
+        "group": "Traps"
+    },
+    {
         "name": "Dragon Village - Village Depot Shop Unlock",
         "id": 100,
         "classification": 1,

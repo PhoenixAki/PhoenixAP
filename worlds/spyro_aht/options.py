@@ -231,8 +231,8 @@ class FillerItems(OptionSet):
 
 class TrapItems(OptionSet):
     """Choose which trap items (neutral-to-negative effect) to enable.
-    Spam Call + Reverse Controls will be queued and triggered sequentially. Any trap received while offline
-    will trigger (or get queued) upon next client reconnection.
+    Spam Call, Reverse Controls, and Bounce will be queued and triggered sequentially. Any trap received while
+    offline will trigger (or get queued) upon next client reconnection.
 
     Spam Call: A random line of Moneybags dialog + his shop music will play in-game for trap_length seconds.
     Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.
@@ -240,15 +240,16 @@ class TrapItems(OptionSet):
       Currently, this does not take away health from the minigame version of Sparx.
     Gem Tax: Takes away a random amount of gems (500-1000).
       It is advised to disable gem tax if randomizing the shop, as gem logic does not account for them.
+    Bounce: The player character's model will bounce for trap_length seconds. This can affect aiming with first-person camera.
     
-    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax"]"""
+    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce"]"""
     display_name = "Trap Items"
-    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax")
+    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce")
     default = frozenset()
 
 
 class TrapLength(Range):
-    """The Spam Call and Reverse Controls traps can run for a customizable number of seconds, which you can choose here."""
+    """Spam Call, Reverse Controls, and Bounce can run for a customizable number of seconds, which you can choose here."""
     display_name = "Trap Length"
     range_start = 1
     range_end = 60
@@ -520,13 +521,13 @@ class ShopPadProximityActivation(Toggle):
 
 class AutoHinting(OptionDict):
     """Choose whether to enable a few different hinting-related options. For each, enter "on", "off", or "random".
-    Minigame rewards are hinted upon talking to its NPC. Boss rewards are hinted upon opening their lair.
+    Boss rewards are hinted upon opening their lair. Minigame rewards are hinted upon talking to its NPC.
     Shop items are hinted upon save file creation."""
     display_name = "Auto Hinting"
     valid_keys = ("Minigames", "Bosses", "Shop Items")
     default = {
-        "Minigames": "off",
         "Bosses": "off",
+        "Minigames": "off",
         "Shop Items": "off"
     }
     
