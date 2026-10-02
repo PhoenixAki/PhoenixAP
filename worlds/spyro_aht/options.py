@@ -201,7 +201,7 @@ class VanillaMinigameRewards(OptionSet):
     Valid options: ["Sgt. Byrd", "Blink", "Turret", "Sparx"]"""
     display_name = "Vanilla Minigame Rewards"
     valid_keys = ("Sgt. Byrd", "Blink", "Turret", "Sparx")
-    default = frozenset()
+    default = {}
     
     
 class TrapPercentage(Range):
@@ -215,7 +215,7 @@ class TrapPercentage(Range):
 
 
 class FillerItems(OptionSet):
-    """This option lets you choose which categories of filler (neutral-to-positive effect) items are enabled.
+    """Choose which categories of filler (neutral-to-positive effect) items to enable.
 
     Dragon Eggs: These are considered filler due to having no impact on game progression.
     Breath Bombs: Fire, Electric, Water, and Ice Bombs. Bombs are only usable if you have their respective breath unlocked.
@@ -230,7 +230,7 @@ class FillerItems(OptionSet):
 
 
 class TrapItems(OptionSet):
-    """This option lets you choose which trap items (neutral-to-negative effect) are enabled.
+    """Choose which trap items (neutral-to-negative effect) to enable.
     Spam Call + Reverse Controls will be queued and triggered sequentially. Any trap received while offline
     will trigger (or get queued) upon next client reconnection.
 
@@ -516,29 +516,24 @@ class ShopPadProximityActivation(Toggle):
     back to once you interact with them. This will result in each affected shop pad's unlock item becoming effectively an empty filler item."""
     display_name = "Shop Pad Proximity Activation"
     default = 0
+
+
+class AutoHinting(OptionDict):
+    """Choose whether to enable a few different hinting-related options. For each, enter "on", "off", or "random".
+    Minigame rewards are hinted upon talking to its NPC. Boss rewards are hinted upon opening their lair.
+    Shop items are hinted upon save file creation."""
+    display_name = "Auto Hinting"
+    valid_keys = ("Minigames", "Bosses", "Shop Items")
+    default = {
+        "Minigames": "off",
+        "Bosses": "off",
+        "Shop Items": "off"
+    }
     
     
-class HintMinigameRewards(Toggle):
-    """Whether to auto-hint a mini-game's rewards when talking to its NPC."""
-    display_name = "Hint Mini Game Rewards"
-    default = 0
-
-
-class HintBossRewards(Toggle):
-    """Whether to auto-hint a boss's rewards when their lair is opened."""
-    display_name = "Hint Boss Rewards"
-    default = 0
-
-
-class HintShopItems(Toggle):
-    """Whether to auto-hint randomized shop items upon starting your save file."""
-    display_name = "Hint Shop Items"
-    default = 0
-
-
 class HideShopItemNames(Toggle):
     """Whether to hide the name of each randomized shop item (player name is still shown). This adds a mystery element to
-    what item you'll get, at risk of wasting your gems on fillers/traps. Hinted shop checks will still show their item in the hint."""
+    what item you'll get, at risk of wasting your gems on fillers/traps. Hinted shop items will display as normal."""
     display_name = "Hide Shop Item Names"
     default = 0
     
@@ -551,23 +546,18 @@ class EasyBosses(OptionSet):
     default = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red")
 
 
-class SkipCutscenes(Toggle):
-    """Allows for skipping most cutscenes with the Y button."""
-    display_name = "Auto Skip Cutscenes"
-    default = 1
-
-
-class SkipElevators(Toggle):
-    """Replaces the long elevator waits to Cloudy Domain, Sunken Ruins and Magma Falls, with loading screens."""
-    display_name = "Skip Elevators"
-    default = 1
-
-
-class TeleportAcrossRealms(Toggle):
-    """Allows for teleporting to unlocked shop pads in any realm, from any realm. For example, you could
-    teleport directly from Dragonfly Falls to Dark Mine without needing to use a hub realm teleporter."""
-    display_name = "Teleport Across Realms"
-    default = 1
+class TimeSavers(OptionDict):
+    """Choose which time-saving quality of life patches are enabled. For each, enter "on", "off", or "random".
+    Skip Cutscenes: enables skipping most cutscenes with the Y. button.
+    Skip Elevators: enables skipping long elevator waits with loading screen.
+    Teleport Across Realms: enables teleporting across realms using normal shop pads."""
+    display_name = "Time Savers"
+    valid_keys = ("Skip Cutscenes", "Skip Elevators", "Teleport Across Realms")
+    default = {
+        "Skip Cutscenes": "on",
+        "Skip Elevators": "on",
+        "Teleport Across Realms": "on"
+    }
 
 
 @dataclass
@@ -624,14 +614,10 @@ class SpyroAHTOptions(PerGameCommonOptions):
     
     pause_menu_patch: PauseMenuPatch
     shop_pad_proximity_activation: ShopPadProximityActivation
-    hint_minigame_rewards: HintMinigameRewards
-    hint_boss_rewards: HintBossRewards
-    hint_shop_items: HintShopItems
+    auto_hinting: AutoHinting
     hide_shop_item_names: HideShopItemNames
     easy_bosses: EasyBosses
-    skip_cutscenes: SkipCutscenes
-    skip_elevators: SkipElevators
-    teleport_across_realms: TeleportAcrossRealms
+    time_savers: TimeSavers
     
     
 spyro_options_groups = [
@@ -660,10 +646,6 @@ spyro_options_groups = [
         RandomizeGadgetCosts, GadgetCostMin, GadgetCostMax
     ]),
     OptionGroup("QUALITY OF LIFE", [
-        PauseMenuPatch, ShopPadProximityActivation,
-        HintMinigameRewards, HintBossRewards, HintShopItems, HideShopItemNames,
-        EasyBosses,
-        SkipCutscenes, SkipElevators,
-        TeleportAcrossRealms
+        PauseMenuPatch, ShopPadProximityActivation, AutoHinting, HideShopItemNames, EasyBosses, TimeSavers
     ])
 ]

@@ -208,9 +208,9 @@ class SpyroAHTCommands(ClientCommandProcessor):
             output = "re-enable" if self.ctx.slot_data["shop_pad_proximity_activation"] else "disable"
             self.output(f"You chose to {output} shop pad proximity activation.")
         # auto-hinting
-        output = "will" if self.ctx.slot_data["hint_boss_rewards"] else "won't"
-        output_2 = "will" if self.ctx.slot_data["hint_minigame_rewards"] else "won't"
-        output_3 = "will" if self.ctx.slot_data["hint_shop_items"] else "won't"
+        output = "will" if self.ctx.slot_data["auto_hinting"]["Bosses"] == "on" else "won't"
+        output_2 = "will" if self.ctx.slot_data["auto_hinting"]["Minigames"] == "on" else "won't"
+        output_3 = "will" if self.ctx.slot_data["auto_hinting"]["Shop Items"] == "on" else "won't"
         self.output(f"Boss rewards {output} be hinted, minigame rewards {output_2} be hinted, and randomized shop items {output_3} be hinted.")
         # hide shop item names
         output = "hidden" if self.ctx.slot_data["hide_shop_item_names"] else "not hidden"
@@ -221,11 +221,11 @@ class SpyroAHTCommands(ClientCommandProcessor):
             output += f"{boss} easy, " if boss in self.ctx.slot_data["easy_bosses"] else f"{boss} normal, "
         self.output(f"{output[:-2]}.")
         # skip cutscenes & elevators
-        output = "can" if self.ctx.slot_data["skip_cutscenes"] else "can't"
-        output_2 = "can" if self.ctx.slot_data["skip_elevators"] else "can't"
+        output = "can" if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == "on" else "can't"
+        output_2 = "can" if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on" else "can't"
         self.output(f"Cutscenes {output} be skipped and elevators {output_2} be skipped.")
         # teleport across realms
-        output = "can" if self.ctx.slot_data['teleport_across_realms'] else "can't"
+        output = "can" if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == "on" else "can't"
         self.output(f"You {output} teleport across realms.")
 
         return True
@@ -653,19 +653,19 @@ class SpyroAHTContext(SuperContext):
     
     async def _location_scouts(self):
         locations = set()
-        if self.slot_data['hint_minigame_rewards']:
+        if self.slot_data['auto_hinting']["Minigames"] == "on":
             for obj, loc in consts.MINIGAME_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
                     locations.update(loc)
         
-        if self.slot_data['hint_boss_rewards']:
+        if self.slot_data['auto_hinting']["Bosses"] == "on":
             for obj, loc in consts.BOSS_LAIR_OPEN_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
                     locations.update(loc)
         
-        if self.slot_data['hint_shop_items'] and not self.shop_hinted:
+        if self.slot_data['auto_hinting']["Shop Items"] == "on" and not self.shop_hinted:
             locations.update(consts.SHOP_ITEM_IDS[:self.slot_data['shop_item_count']])
             self.shop_hinted = True
                 

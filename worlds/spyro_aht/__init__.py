@@ -11,7 +11,7 @@ import orjson
 
 import Utils
 from BaseClasses import Item, ItemClassification, MultiWorld, Region, CollectionState
-from Options import OptionError, OptionSet, Choice, Range
+from Options import OptionError, OptionSet, Choice, Range, OptionDict
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
@@ -284,13 +284,16 @@ class SpyroAHTWorld(World):
             self._apply_slot_data(passthrough[self.game])
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", LoggingLevel.LOW)
+        
+        self.check_dicts(self.options.auto_hinting)
+        self.check_dicts(self.options.time_savers)
             
-        bad_condition = self.options.teleport_across_realms.value == 0 and self.options.open_world_mode.value != 0
+        bad_condition = self.options.time_savers.value["Teleport Across Realms"] == "off" and self.options.open_world_mode.value != 0
         if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
-            self.log("Minor Warning: teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling teleport_across_realms.", LoggingLevel.WARNING)
-            self.options.teleport_across_realms.value = 1
+            self.log("Minor Warning: time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling it.", LoggingLevel.WARNING)
+            self.options.time_savers.value["Teleport Across Realms"] = "on"
         elif bad_condition:
-            raise OptionError("teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
+            raise OptionError("time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value  # "none" alongside breath choices
         if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
@@ -316,7 +319,7 @@ class SpyroAHTWorld(World):
         self.check_lists(self.options.boss_goal, "bosses")
         self.check_lists(self.options.elders_goal, "elders")
         
-        # minigames goal
+        # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
         for key in self.options.minigames_goal.valid_keys:
             choice = self.options.minigames_goal.value[key]
             bad_condition = choice in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
@@ -456,6 +459,26 @@ class SpyroAHTWorld(World):
 
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
+
+    def check_dicts(self, option: OptionDict):
+        for key in option.valid_keys:
+            try:
+                val = option.value[key]
+            except KeyError:  # if they don't include it at all, assume off
+                # self.log(f"Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Assuming a value of \"off\" (this occurs regardless of auto_corrections.", LoggingLevel.WARNING)
+                option.value[key] = "off"
+            if isinstance(option.value[key], str): option.value[key] = option.value[key].lower()
+            bad_condition = option.value[key] not in ["off", "on", "random"]
+            if bad_condition and self.options.auto_corrections.value >= 1:
+                self.log( f"Minor Warning: {option.display_name} setting \"{key}\" was given an invalid entry. Must be \"off\" or \"on\". Fixing by setting it to off.", LoggingLevel.WARNING)
+                option.value[key] = "off"
+            elif bad_condition:
+                raise OptionError(f"{option.display_name} setting \"{key}\" was given an invalid entry. Must be \"off\" or \"on\". Fix this, or set auto_corrections to at least fix_minor.")
+            
+            if option.value[key] == "random":
+                option.value[key] = "on" if self.random.randint(0, 1) == 1 else "off"
+                output = "enabled" if option.value[key] == "on" else "disabled"
+                self.log(f"\"Random\" was requested for {option.display_name}. It was {output}.", LoggingLevel.MEDIUM)
                 
     def check_breaths_and_realms(self, option: OptionSet, choices: list, error_txt: str):
         if len(option.value) == 0:
@@ -601,7 +624,8 @@ class SpyroAHTWorld(World):
             other = (105357 - other_exclusions) * self.options.other_gems.value
             gem_total = (blink + non_blink_enemies + other) // 100
             base_price = gem_total / (self.options.shop_item_count.value - 1)
-            self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
+            self.log(f"blink_gems is {self.options.blink_gems.value}, so Blink total is {blink/100}. non_blink_enemies is {self.options.non_blink_enemies.value}, so non-blink total is {non_blink_enemies/100}. other_gems is {self.options.other_gems.value}, so other gems total is {other/100}.", LoggingLevel.HIGH)
+            self.log(f"Base shop price is {base_price}.", LoggingLevel.HIGH)
             self.shop_costs.append(0)
     
             if self.options.shop_logic.value == 1:  # 1 = ordered, meaning incrementing prices
@@ -916,14 +940,10 @@ class SpyroAHTWorld(World):
 
             "pause_menu_patch": self.options.pause_menu_patch.value,
             "shop_pad_proximity_activation": self.options.shop_pad_proximity_activation.value,
-            "hint_minigame_rewards": self.options.hint_minigame_rewards.value,
-            "hint_boss_rewards": self.options.hint_boss_rewards.value,
-            "hint_shop_items": self.options.hint_shop_items.value,
+            "auto_hinting": self.options.auto_hinting.value,
             "hide_shop_item_names": self.options.hide_shop_item_names.value,
             "easy_bosses": self.options.easy_bosses.value,
-            "skip_cutscenes": self.options.skip_cutscenes.value,
-            "skip_elevators": self.options.skip_elevators.value,
-            "teleport_across_realms": self.options.teleport_across_realms.value,
+            "time_savers": self.options.time_savers.value,
         }
         
         return slot_data

@@ -134,10 +134,10 @@ SPARX_IDS = [315, 217, 331, 238, 341, 254, 356, 275]
 DEATHLINK_MESSAGES = [
     "{name} died.", "{name} ended their tail.", "{name} was fed to the fish.", "{name} forgot their wings.",
     "{name} did a jig and then blew up.", "{name} became a dragon fossil.", "{name} became a purple pancake.",
-    "{name} became grape ice cream.", "{name} spend one of their 9 lives.", "{name} failed to land on their feet.",
+    "{name} became grape ice cream.", "{name} spent one of their 9 lives.", "{name} failed to land on their feet.",
     "{name} discovered why cats hate water.", "{name} became roadkill.", "{name} blinked out of existence.",
     "{name} went in too deep.", "{name} touched the Earth's mantle.", "{name} discovered the dangers of cave diving.",
-    "{name} caved in.", "{name} died in a reality-defying fashion.", "{name} failed a water landing.",
+    "{name} caved in.", "{name} died.", "{name} failed a water landing.",
     "{name} became roasted chicken.", "{name}'s parachute failed.", "{name} ended the Bug's Life.",
     "{name} dropped the ball.", "{name} let Fredneck starve.", "{name} was a terrible godfather.",
     "{name} was put on ice.", "{name} was overrun."
