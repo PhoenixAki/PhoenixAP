@@ -213,25 +213,19 @@ class SpyroAHTWorld(World):
                 if choice == 2:  # randomized
                     state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
                 elif choice == 3 or choice == 4:  # progressive and reverse progressive
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:  # regular progressive or reverse progressive item
-                        adjusted_name = item.name.replace("Progressive ", "")
-                        level = adjusted_name.split(" - ")[0]
-                        shops = LEVEL_SHOP_LOOKUP[level].copy()
-                        if choice == 4: shops.reverse()
-                        for shop in shops:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.add_item(f"{level} - {shop}", self.player)
-                                break
+                    adjusted_name = item.name.replace("Progressive ", "")
+                    level = adjusted_name.split(" - ")[0]
+                    shops = LEVEL_SHOP_LOOKUP[level].copy()
+                    if choice == 4: shops.reverse()
+                    for shop in shops:
+                        if not state.has(f"{level} - {shop}", self.player):
+                            state.add_item(f"{level} - {shop}", self.player)
+                            break
                 elif choice == 5:  # full levels
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:
-                        level = item.name.split(" - ")[0]
-                        for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.add_item(f"{level} - {shop}", self.player)
+                    level = item.name.split(" - ")[0]
+                    for shop in LEVEL_SHOP_LOOKUP[level]:
+                        if not state.has(f"{level} - {shop}", self.player):
+                            state.add_item(f"{level} - {shop}", self.player)
                 elif choice == 6:  # full realms
                     realm = item.name.split(" - ")[0]
                     for level in REALM_LEVEL_LOOKUP[realm]:
@@ -261,30 +255,24 @@ class SpyroAHTWorld(World):
                 if choice == 2:  # randomized
                     state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
                 elif choice == 3 or choice == 4:  # progressive and reverse progressive
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:  # regular progressive or reverse progressive item
-                        adjusted_name = item.name.replace("Progressive ", "")
-                        level = adjusted_name.split(" - ")[0]
-                        shops = LEVEL_SHOP_LOOKUP[level].copy()
-                        if choice == 4: shops.reverse()
-                        for shop in shops:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.remove_item(f"{level} - {shop}", self.player)
-                                break
+                    adjusted_name = item.name.replace("Progressive ", "")
+                    level = adjusted_name.split(" - ")[0]
+                    shops = LEVEL_SHOP_LOOKUP[level].copy()
+                    if choice == 3: shops.reverse()  # go in reverse for progressive or normal for reverse progressive, since this is locking shops
+                    for shop in shops:
+                        if state.has(f"{level} - {shop}", self.player):
+                            state.remove_item(f"{level} - {shop}", self.player)
+                            break
                 elif choice == 5:  # full levels
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:
                         level = item.name.split(" - ")[0]
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
+                            if state.has(f"{level} - {shop}", self.player):
                                 state.remove_item(f"{level} - {shop}", self.player)
                 elif choice == 6:  # full realms
                     realm = item.name.split(" - ")[0]
                     for level in REALM_LEVEL_LOOKUP[realm]:
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
+                            if state.has(f"{level} - {shop}", self.player):
                                 state.remove_item(f"{level} - {shop}", self.player)
             return True
         return False
@@ -608,10 +596,10 @@ class SpyroAHTWorld(World):
         # shop costs determined by multiple options. Doing after gem events in case of exclusions
         self.log("Setting up shop prices.", LoggingLevel.LOW)
         if self.options.shop_randomization.value == 1:
-            blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
-            non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
-            other = (105357 - other_exclusions) * self.options.other_gems.value / 100
-            gem_total = blink + non_blink_enemies + other
+            blink = (20203 - blink_exclusions) * self.options.blink_gems.value
+            non_blink_enemies = 16353 * self.options.non_blink_enemies.value
+            other = (105357 - other_exclusions) * self.options.other_gems.value
+            gem_total = (blink + non_blink_enemies + other // 100)
             base_price = gem_total / (self.options.shop_item_count.value - 1)
             self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
             self.shop_costs.append(0)
@@ -1006,9 +994,9 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
     
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        blink_scaling = world.options.blink_gems.value / 100
-        non_blink_enemy_scaling = world.options.non_blink_enemies.value / 100
-        other_scaling = world.options.other_gems.value / 100
+        blink_scaling = world.options.blink_gems.value
+        non_blink_enemy_scaling = world.options.non_blink_enemies.value
+        other_scaling = world.options.other_gems.value
         # cost is the cost itself if shop is ordered (shop logic == 1). Otherwise, emulate that logic by summing the cost of items so far
         cost = world.shop_costs[self.index] if world.options.shop_logic.value == 1 else sum(world.shop_costs[:self.index+1])
         return self.Resolved(cost, blink_scaling, non_blink_enemy_scaling, other_scaling, player=world.player)
@@ -1024,7 +1012,7 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
             blink_gems = state.count("Blink Gems", self.player)
             non_blink_enemies = state.count("Non-Blink Enemies", self.player)
             other = state.count("Other Gems", self.player)
-            in_logic_gems = (blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling)
+            in_logic_gems = ((blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling) // 100)
             return in_logic_gems >= self.item_cost
     
 
