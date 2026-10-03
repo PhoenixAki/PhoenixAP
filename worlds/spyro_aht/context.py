@@ -83,8 +83,8 @@ class SpyroAHTCommands(ClientCommandProcessor):
         convert = {1: "none", 2: "low", 3: "medium", 4: "high", 5: "maximum"}
         self.output(f"You set your logging level to {convert[self.ctx.slot_data['logging_level']]}.")
         # auto corrections
-        convert = {0: "halt on", 1: "auto fix"}
-        self.output(f"You chose to {convert[self.ctx.slot_data['auto_corrections']]} generation errors.")
+        convert = {0: "halt", 1: "chaos", 2: "fix_minor", 3: "fix_major"}
+        self.output(f"auto_corrections is set to {convert[self.ctx.slot_data['auto_corrections']]}.")
         
         self.output("---------------GOAL---------------")
         # 4 boss goals

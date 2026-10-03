@@ -51,6 +51,7 @@ class AutoCorrections(Choice):
     fireworks_goal on but having firework_checks disabled) are fixed by fix_minor.
     
     halt: Generation will be strictly halted upon any sort of YAML issue.
+    chaos: The generator will not halt or make changes, even if there is a known problem or high likelihood of generation failing.
     fix_minor: Only issues deemed minor will be fixed (such as the above example with fireworks_goal).
     fix_major: All issues will be fixed, even if it has a major impact (such as changing your starting realm to avoid an impossible start).
     
@@ -59,9 +60,10 @@ class AutoCorrections(Choice):
     https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1.2-%E2%80%90-List-of-auto_corrections-Fixes"""
     display_name = "Auto Corrections"
     option_halt = 0
-    option_fix_minor = 1
-    option_fix_major = 2
-    default = 1
+    option_chaos = 1
+    option_fix_minor = 2
+    option_fix_major = 3
+    default = 2
 
 ###############GOAL###############
 class BossGoals(OptionSet):
