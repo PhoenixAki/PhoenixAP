@@ -535,18 +535,31 @@ class SpyroAHTWorld(World):
             self.random.shuffle(costs)
             return costs
         elif option.value == 1:  # randomized
-            cost_min, cost_max = opt_min.value, opt_max.value
             rand_count = 3 if cost_type == "gadget" else 4
-            bad_condition = opt_min > opt_max
+            bad_condition = opt_min.value > opt_max.value
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: {opt_min.display_name} of {cost_min} is greater than {cost_max}. Fixing by swapping them.", LoggingLevel.WARNING)
-                cost_min, cost_max = cost_max, cost_min
+                self.log(f"Minor Warning: {opt_min.display_name} of {opt_min.value} is greater than {opt_max.value}. Fixing by swapping them.", LoggingLevel.WARNING)
+                opt_min.value, opt_max.value = opt_max.value, opt_min.value
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"{opt_min.display_name} of {cost_min} is greater than {cost_max}. Fix this, or set auto_corrections to at least fix_minor.")
-            return [self.random.randint(cost_min, cost_max) for _ in range(rand_count)]
+                raise OptionError(f"{opt_min.display_name} of {opt_min.value} is greater than {opt_max.value}. Fix this, or set auto_corrections to at least fix_minor.")
+            
+            self.check_high_costs(opt_min)
+            self.check_high_costs(opt_max)
+            
+            return [self.random.randint(opt_min.value, opt_max.value) for _ in range(rand_count)]
         else:
             self.log("Something has gone TERRIBLY wrong if you are seeing this log message. Report to devs ASAP.", LoggingLevel.WARNING)
             return [0]  # something has gone VERY wrong, this should never happen and is only here to shush Python warnings
+    
+    def check_high_costs(self, range_option: Range):
+        if range_option.display_name in ["Boss Lair Door Cost Minimum", "Boss Lair Door Cost Maximum"]:
+            return
+        bad_condition = range_option.value > (range_option.range_end * 0.9) and self.options.open_world_mode.value == 0
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+            self.log(f"Minor Warning: {range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fixing by lowering {range_option.value} to {int(range_option.range_end * 0.9)}.", LoggingLevel.WARNING)
+            range_option.value = int(range_option.range_end * 0.9)
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+            raise OptionError(f"{range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fix this, or set auto_corrections to at least fix_minor.")
         
     def create_regions(self):
         self.log("Setting up regions and locations.", LoggingLevel.LOW)
