@@ -133,9 +133,9 @@ class EldersGoal(OptionSet):
     """Adds a goal requirement to talk to a number of elder dragons. You can enter "Random" to have a random selection
     of elders chosen, even if you also choose a few elders explicitly alongside "Random".
     
-    Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]"""
+    Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Random"]"""
     display_name = "Elders Goal"
-    valid_keys = ("Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor")
+    valid_keys = ("Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Random")
     default = frozenset()
 
 
