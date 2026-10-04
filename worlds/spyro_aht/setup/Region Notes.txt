@@ -1211,7 +1211,7 @@ REGION RLMechaRed: mecha red fight
 	RLSouthWest -> RLMechaRed | BossLairRule(3)
 		would have boss lair rule
 
-	LOCATION RLMechaRed | RL: Defeat Mecha-Red | 707 | HasAll('Double Jump', 'Fire Breath', 'Electric Breath')
+	LOCATION RLMechaRed | RL: Defeat Mecha-Red | 707 | HasAll('Double Jump', 'Fire Breath', 'Electric Breath', 'Charge')
 
 REGION RLNorthEast1: room with electric platform. include stuff above it
 	RLCenter -> RLNorthEast1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
