@@ -55,7 +55,7 @@ class DolphinClient(GenericClient):
                     dolphin_memory_engine.write_bytes(self.addresses.n_TEXT_BUFFER, (msg + "\0").encode("utf_16_be"))
                     dolphin_memory_engine.write_word(self.addresses.n_TIMER, 5*60)
         except Exception:
-            logger.error("ERROR IN NOTIFICATION TASK, REPORT IN THREAD", exc_info=True)
+            logger.error("ERROR IN NOTIFICATION TASK, REPORT TO DEVS", exc_info=True)
     
     async def trap_task(self):
         from CommonClient import logger
@@ -64,14 +64,16 @@ class DolphinClient(GenericClient):
             while True:
                 await asyncio.sleep(0.5)
                 if await self.should_process_checks():
-                    await asyncio.sleep(self.trap_timer)
+                    await asyncio.sleep(5)
                     name = await self.trap_queue.get()
                     
                     dolphin_memory_engine.write_word(self.addresses.g_TRAP_DATA, 60*self.trap_timer)
                     if name == "Spam Call": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 1)
                     elif name == "Reverse Controls": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 2)
+                    elif name == "Bounce": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 3)
+                    await asyncio.sleep(self.trap_timer - 5)
         except Exception:
-            logger.error("ERROR IN TRAP TASK, REPORT IN THREAD", exc_info=True)
+            logger.error("ERROR IN TRAP TASK, REPORT TO DEVS", exc_info=True)
 
     async def connect(self):
         if not dolphin_memory_engine.is_hooked():
@@ -215,9 +217,12 @@ class DolphinClient(GenericClient):
         return False
 
     async def apply_patch(self):
-        dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, self.ctx.slot_data['skip_cutscenes'])
+        if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == "on":
+            dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, 1)
+        if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on":
+            dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, 1)
+            
         dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_POPUPS, 1)
-        dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, self.ctx.slot_data['skip_elevators'])
         dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(self.ctx._seed) & 0xffffffff))
         dolphin_memory_engine.write_byte(self.addresses.p_USE_KEY_RINGS, self.ctx.slot_data['key_rings'])
         dolphin_memory_engine.write_byte(self.addresses.p_FIREWORKS_ARE_RANDOMIZED, self.ctx.slot_data['firework_checks'])
@@ -280,7 +285,7 @@ class DolphinClient(GenericClient):
                         bosses[3] = True
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_EASY_MODE, struct.pack(">????", *bosses))
             
-        if self.ctx.slot_data['teleport_across_realms']:
+        if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == "on":
             dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
             
         if self.ctx.slot_data['open_world_mode'] == 1:

@@ -26,7 +26,7 @@ class DeathLinkAmnesty(Range):
 
 ###############GENERATION SETTINGS###############
 class LoggingLevel(Choice):
-    """This option lets you decide how much Spyro AHT generation information should be logged.
+    """Choose how much Spyro AHT generation information should be logged.
     The log will contain messages from all levels up to, and including, your choice. For example, "medium" will log low
     and medium messages, but not high or maximum messages. **Warning messages stemming from YAML issues are always logged.**
     
@@ -46,11 +46,12 @@ class LoggingLevel(Choice):
     
 
 class AutoCorrections(Choice):
-    """This option decides the behavior of the generator if YAML issues are encountered. It is recommended to leave this
+    """Chooses the logging behavior of the generator if YAML issues are encountered. It is recommended to leave this
     set to fix_minor, especially if intending to randomize multiple options. Clashes stemming from this (such as having
     fireworks_goal on but having firework_checks disabled) are fixed by fix_minor.
     
     halt: Generation will be strictly halted upon any sort of YAML issue.
+    chaos: The generator will not halt or make changes, even if there is a known problem or high likelihood of generation failing.
     fix_minor: Only issues deemed minor will be fixed (such as the above example with fireworks_goal).
     fix_major: All issues will be fixed, even if it has a major impact (such as changing your starting realm to avoid an impossible start).
     
@@ -59,17 +60,18 @@ class AutoCorrections(Choice):
     https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1.2-%E2%80%90-List-of-auto_corrections-Fixes"""
     display_name = "Auto Corrections"
     option_halt = 0
-    option_fix_minor = 1
-    option_fix_major = 2
-    default = 1
+    option_chaos = 1
+    option_fix_minor = 2
+    option_fix_major = 3
+    default = 2
 
 ###############GOAL###############
 class BossGoals(OptionSet):
-    """This option lets you add a requirement to defeat a number of bosses to your goal. You can enter "Random" to have
-    a random selection of bosses chosen, even if you also choose a few bosses explicitly alongside "Random".
+    """Adds a goal requirement to defeat a number of boss(es). You can enter "Random" to have a random selection
+    of bosses chosen, even if you also choose a few bosses explicitly alongside "Random".
     
-    Note that this + all other goals are based on AHT checks. In specific circumstances, this can result in AHT registering
-    goals unexpectedly early. See the below project wiki FAQ post for more info.
+    Note that this + all other goals are based on AHT checks. In specific circumstances, this can result in AHT
+    registering goals unexpectedly early. See the below project wiki FAQ post for more info.
     https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1-%E2%80%90-Setup-Guide-&-FAQ#i-goaled-early-what-gives 
     
     Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
@@ -79,7 +81,7 @@ class BossGoals(OptionSet):
 
 
 class DarkGemsGoal(Range):
-    """This option lets you add a requirement to complete a number of Dark Gem checks to your goal."""
+    """Adds a goal requirement to complete a number of Dark Gem checks."""
     display_name = "Dark Gems Goal"
     range_start = 0
     range_end = 40
@@ -87,7 +89,7 @@ class DarkGemsGoal(Range):
     
 
 class LightGemsGoal(Range):
-    """This option lets you add a requirement to complete a number of Light Gem checks to your goal."""
+    """Adds a goal requirement to complete a number of Light Gem checks."""
     display_name = "Light Gems Goal"
     range_start = 0
     range_end = 100
@@ -95,7 +97,7 @@ class LightGemsGoal(Range):
     
 
 class DragonEggsGoal(Range):
-    """This option lets you add a requirement to complete a number of Dragon Egg checks to your goal."""
+    """Adds a goal requirement to complete a number of Dragon Egg checks."""
     display_name = "Dragon Eggs Goal"
     range_start = 0
     range_end = 80
@@ -103,8 +105,7 @@ class DragonEggsGoal(Range):
     
 
 class FireworksGoal(Range):
-    """This option lets you add a requirement to complete a number of firework checks to your goal.
-    This requires firework_checks to be enabled.""" 
+    """Adds a goal requirement to complete a number of firework checks. firework_checks must be enabled.""" 
     display_name = "Fireworks Goal"
     range_start = 0
     range_end = 22
@@ -112,8 +113,8 @@ class FireworksGoal(Range):
     
 
 class ShopItemsGoal(Range):
-    """This option lets you add a requirement to purchase a number of randomized shop items to your goal.
-    This goal requires shop_randomization to be enabled. Keep in mind that the first randomized shop item is always free."""
+    """Adds a goal requirement to purchase a number of randomized shop items. shop_randomization must be enabled.
+    Keep in mind that the first randomized shop item is always free."""
     display_name = "Shop Items Goal"
     range_start = 0
     range_end = 56
@@ -121,7 +122,7 @@ class ShopItemsGoal(Range):
     
 
 class LockedChestsGoal(Range):
-    """This option lets you add a requirement of opening a number of locked chests to your goal."""
+    """Adds a goal requirement to open a number of locked chests."""
     display_name = "Locked Chests Goal"
     range_start = 0
     range_end = 52
@@ -129,20 +130,20 @@ class LockedChestsGoal(Range):
 
 
 class EldersGoal(OptionSet):
-    """This option lets you add a requirement of talking to a number of elder dragons to your goal. You can enter "Random"
-    to have a random selection of elders chosen, even if you also choose a few elders explicitly alongside "Random".
+    """Adds a goal requirement to talk to a number of elder dragons. You can enter "Random" to have a random selection
+    of elders chosen, even if you also choose a few elders explicitly alongside "Random".
     
-    Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]"""
+    Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Random"]"""
     display_name = "Elders Goal"
-    valid_keys = ("Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor")
+    valid_keys = ("Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Random")
     default = frozenset()
 
 
 class MinigamesGoal(OptionDict):
-    """This option lets add minigame requirements to your goal. Next to each type, you can enter any of the following:
-    - 0-8: you will need to complete this many of that minigame to goal.
+    """Adds a goal requirement to complete minigames. Next to each, you can enter any of the following:
+    - 0-8: complete this many to goal.
     - random-on: picks a random number from 1-8.
-    - random-off: 50% chance of a 0, 50% chance of a number 1-8."""
+    - random-off: 1/2 chance of 0, 1/2 chance of 1-8."""
     display_name = "Minigames Goal"
     valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
     default = {
@@ -154,9 +155,8 @@ class MinigamesGoal(OptionDict):
     
 
 class ExcludeChestItems(Choice):
-    """dragon_eggs_goal and light_gems_goal include locked chests which contain Dragon Eggs/Light Gems as valid ways to
-    make goal progress. This option lets you limit dragon_eggs_goal and light_gems_goal to only count those which don't
-    come from locked chests. Useful if wanting to have less direct requirement on chests for this seed."""
+    """The checks for dragon_eggs_goal and light_gems_goal include locked chests which contain Dragon Eggs/Light Gems.
+    This option lets you limit them to only Dragon Eggs and Light Gems from non-chest sources."""
     display_name = "Exclude Chest Items"
     option_disabled = 0
     option_exclude_eggs = 1
@@ -166,17 +166,17 @@ class ExcludeChestItems(Choice):
     
 ###############CHECKS AND ITEMS###############
 class OpenWorldMode(Choice):
-    """In the vanilla game, you can only teleport to a remote shop pad once you have physically reached it.
-    open_world_mode lets you choose from a variety of ways to have shop pads become unlocked by Archipelago items.
-    Any choice besides 'vanilla' requires enabling teleport_across_realms to prevent potential softlock scenarios.
+    """In vanilla AHT, you can only teleport to a remote shop pad once you have physically reached it.
+    open_world_mode lets you choose from a variety of new ways to unlock shop pads through Archipelago items.
+    Any choice besides 'vanilla' requires enabling "Teleport Across Realms" in time_savers to prevent potential softlock scenarios.
     
-    vanilla: Shop pads are only unlocked by physically reaching them.
+    vanilla: Vanilla game behavior.
     full: All shop pads are unlocked from the start of the seed.
-    randomized: Shop pads unlock through individual AP items e.g. "Dark Mine - Miner's Drop Shop Unlock".
+    randomized: Shop pads unlock individually e.g. "Dark Mine - Miner's Drop Shop Unlock".
     progressive_levels: Shop pads unlock per-level in vanilla game order e.g. "Progressive Crocovile Swamp Shop Unlock". 
     reverse_progressive_levels: Same as progressive_levels, but backwards vanilla order.
-    full_level: All shop pads in a level will unlock at once through AP items. e.g. "Sunken Ruins - Shop Unlock".
-    full_realm: All shop pads in a realm will unlock at once through AP items. e.g. "Icy Wilderness - Shop Unlock"."""
+    full_level: All shop pads in a level will unlock at once e.g. "Sunken Ruins - Shop Unlock".
+    full_realm: All shop pads in a realm will unlock at once e.g. "Icy Wilderness - Shop Unlock"."""
     display_name = "Open World Mode"
     option_vanilla = 0
     option_full = 1
@@ -195,33 +195,29 @@ class FireworkChecks(Toggle):
 
 
 class VanillaMinigameRewards(OptionSet):
-    """This option lets you decide if you want any type of minigame to reward
-    their vanilla Dragon Eggs and Light Gems instead of having randomized rewards.
+    """Places Dragon Egg and Light Gem rewards into minigame checks.
     
     Valid options: ["Sgt. Byrd", "Blink", "Turret", "Sparx"]"""
     display_name = "Vanilla Minigame Rewards"
     valid_keys = ("Sgt. Byrd", "Blink", "Turret", "Sparx")
-    default = frozenset()
+    default = {}
     
     
 class TrapPercentage(Range):
-    """This option decides how much of the junk item pool will contain traps, as a percentage out of 100.
-    The resulting number of traps will always be rounded down, unless it is between 0-1, in which case it's rounded up.
-    For example, if your seed needs 23 junk items, and you set trap_percentage to 50%, you would get 11 traps and 12 fillers.
-    If you instead set trap_percentage to 4%, you would have 1 trap and 22 fillers."""
+    """Decides how much of the junk (fillers + traps) item pool will be traps, as a percentage out of 100."""
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
 
 
 class FillerItems(OptionSet):
-    """This option lets you choose which categories of filler (neutral-to-positive effect) items are enabled.
+    """Choose which categories of filler (neutral-to-positive effect) items to enable.
 
-    Dragon Eggs: These are considered filler due to having no impact on game progression.
-    Breath Bombs: Fire, Electric, Water, and Ice Bombs. Bombs are only usable if you have their respective breath unlocked.
-    Gem Packs: Gives a random amount of gems (400-600 or 800-1200 if you have double gems).
-      It is advised to disable gem packs if randomizing the shop, as gem logic does not account for them.
-    Shinies: Items which do nothing, but have humorous names referencing things in the game and series.
+    Dragon Eggs: These are filler due to having no logical impact.
+    Breath Bombs: Fire, Electric, Water, and Ice Bombs. Only usable if their respective breath is unlocked.
+    Gem Packs: Gives a random amount of gems (400-600, 800-1200 if you have double gems).
+        It is advised to disable these if using shop_randomization, as shop logic does not account for gem packs.
+    Shinies: Items which do nothing, but have humorous names referencing AHT or other games/series.
     
     Valid options: ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]"""
     display_name = "Filler Items"
@@ -230,25 +226,24 @@ class FillerItems(OptionSet):
 
 
 class TrapItems(OptionSet):
-    """This option lets you choose which trap items (neutral-to-negative effect) are enabled.
-    Spam Call + Reverse Controls will be queued and triggered sequentially. Any trap received while offline
-    will trigger (or get queued) upon next client reconnection.
+    """Choose which trap (neutral-to-negative effect) items to enable. Spam Call, Reverse Controls, and Bounce are
+    queued and triggered sequentially. Traps received while offline will get processed upon next client reconnection.
 
-    Spam Call: A random line of Moneybags dialog + his shop music will play in-game for trap_length seconds.
+    Spam Call: Random lines of Moneybags dialog + shop music will play for trap_length seconds.
     Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.
-    Damage Sparx: You will take 1 hit of damage. If Sparx is gone, nothing happens (as in, this will never kill you).
-      Currently, this does not take away health from the minigame version of Sparx.
+    Damage Sparx: Take 1 hit of damage. Does nothing if Sparxless or if in a Sparx minigame.
     Gem Tax: Takes away a random amount of gems (500-1000).
-      It is advised to disable gem tax if randomizing the shop, as gem logic does not account for them.
+      It is advised to disable these if using shop_randomization, as shop logic does not account for gem taxes.
+    Bounce: The player character's model will bounce for trap_length seconds. Can negatively affect first-person camera aiming.
     
-    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax"]"""
+    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce"]"""
     display_name = "Trap Items"
-    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax")
+    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce")
     default = frozenset()
 
 
 class TrapLength(Range):
-    """The Spam Call and Reverse Controls traps can run for a customizable number of seconds, which you can choose here."""
+    """Determines how long Spam Call, Reverse Controls, and Bounce run for, in seconds."""
     display_name = "Trap Length"
     range_start = 1
     range_end = 60
@@ -258,8 +253,8 @@ class TrapLength(Range):
 class StartingBreaths(OptionSet):
     """Choose which breath(s) you want to start with.
     
-    If multiple breaths are listed, one will go into "Starter Checks: Breath", and the rest will go into your start inventory.
-    "None" will start you with no breath, meaning "Starter Checks: Breath" will have a random item determined by Archipelago.
+    If multiple are listed, one will go into "Starter Checks: Breath", and the rest will go into your start inventory.
+    "None" will place a random Archipelago item into "Starter Checks: Breath".
     If the list is left empty, 1 random breath will be chosen.
     
     Valid Options: ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "None"]"""
@@ -279,13 +274,13 @@ class MovementRandomization(OptionSet):
 
 
 class StartingRealms(OptionSet):
-    """Choose which realm(s) you will start with realm access cards for. 
+    """Choose which realm(s) to start with realm access cards for. 
     
     If the list is left empty, 1 random realm will be chosen.
     If using full open_world_mode, you will start with all 4 access cards.
-    If using non-full open_world_mode, non-starting realms will be unlocked via their "Depot" shop unlocks, instead of access cards.
+    If using non-full open_world_mode, non-starting realms are unlocked via shop unlocks instead of access cards.
         
-    Starting in Icy Wilderness with shop_randomization odd and no movement abilities randomized is disallowed due to restrictive starts.
+    Starting with only Icy Wilderness, shop_randomization off, and movement_randomization empty is disallowed due to impossible starts.
     
     Valid Options: ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"]"""
     display_name = "Starting Realms"
@@ -294,29 +289,28 @@ class StartingRealms(OptionSet):
     
 ###############SHOP SETTINGS###############
 class ShopRandomization(Toggle):
-    """Determines whether to randomize Moneybags' shop. If not randomized, it will function identically to the vanilla game. 
+    """Choose whether to randomize Moneybags' shop. If not randomized, it will function identically to the vanilla game. 
 
     If randomized, vanilla game shop items will be replaced with items from Archipelago. This has a few consequences:
-        - Double Gems, if enabled, is permanent once received, as is the Butterfly Jar (it replenishes on death if depleted).
-        - There is no limit to how many lockpicks you can hold at once. Same with ammo for breath bombs.
-        - Shop item prices will be the same everywhere i.e. remote shop pads will not upcharge you."""
+        - Double Gems, if enabled, is permanent once received, as is the Butterfly Jar (it replenishes on death).
+        - There is no limit to how many lockpicks or breath bombs you can hold at once.
+        - Remote shop pads will not upcharge you for items."""
     display_name = "Shop Randomization"
     default = 0
     
 
 class KeyRings(Toggle):
-    """This option decides whether you can purchase lockpicks or key rings, which are keys that open all locked chests in a level.
+    """Choose whether your shop will have lockpicks or key rings which open all locked chests in a level.
     
-    If shop_randomization is off, they will be placed in the shop, and locked chests will be in logic as soon as you have access to them.
-    If shop_randomization is on, they will be placed into the world by Archipelago. Locked chests will be in logic as you collect each
-      level's key ring, or once you collect all 52 lockpicks."""
+    If shop_randomization is off, they will be placed in the shop. Chests will be in logic as soon as you have access to them.
+    If shop_randomization is on, they will be placed into the world by Archipelago. Chests will be in logic as you collect each
+      key ring, or once you collect all 52 lockpicks."""
     display_name = "Key Rings"
     default = 0
 
 
 class ShopItemCount(Range):
-    """This option decides how many shop items you will have, if shop_randomization is on. The shop must have a minimum
-    of 2 items to enable the gem logic system to function properly."""
+    """Determines how many shop items checks you will have, if shop_randomization is on."""
     display_name = "Shop Item Count"
     range_start = 2
     range_end = 56
@@ -324,29 +318,24 @@ class ShopItemCount(Range):
 
 
 class ShopLogic(Choice):
-    """When the shop is randomized, a series of "gem logic" rules tracks how many gems you have access to at all times.
-    The generator uses these rules to determine how to logically spread out shop item purchases in one of 2 ways, determined by this option.
+    """When using shop_randomization, how many gems you have access to is tracked. This is used to logically spread out shop item purchases.
+    The formula below is used to calculate a "base shop price", and your choice here determines item prices using that.
+    The first item is always free, to prevent restrictive starts (Moneybags offers it as a loss-leader).
     
-    unordered: shop items will all have the same price. You can buy them in whatever order you wish, but the generator assumes
-      you will buy the items in order left -> right. This makes it possible to buy them in the "wrong" order which may require farming extra gems.
-    ordered: shop items will instead display as "Unlocked at X Gems". Once you have X gems, the item will be free to purchase.
-      Prices will steadily increase to enforce a specific order of unlocking the items, removing the risk of getting logically softlocked.
-    
-    Either way, the formula below is used to calculate your "base shop price", and your choice here determines the final prices.
-    The first shop item is always free. If you don't fancy doing the math, you can tweak test seed(s) until you're happy with the prices.
-    
-    ********************************FORMULA INFO (for the math nerds)********************************
+    unordered: items will have equal prices and can be bought in any order. Logic assumes you will buy them in order left -> right.
+    ordered: items will be free, but get unlocked at a steadily increasing amount of gems, which enforces the logical order.
+     
+    ***********************************FORMULA (for the math nerds)***********************************
     blink_gems_total = (20,203 - exclusions) * blink_gems%
     non_blink_enemies_total = 16,353 * non_blink_enemies%
     other_gems_total = (105,357 - exclusions) * other_gems%
-      If an individual minigame check is added to exclude_locations, the gems inside will be left out of the above
-      calculations so you aren't logically expected to get those gems. Works for Blink, Byrd, and Sparx minigames.
+      If a minigame check is added to exclude_locations, its gems are excluded from logic.
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
     base_shop_price = gem_total / (shop_item_count - 1)
 
     If shop_logic is unordered, shop items will all cost base_shop_price, rounded down as needed.
     If shop_logic is ordered, shop items will cost base_shop_price * 1, base_shop_price * 2, etc., rounded down as needed.
-    *************************************************************************************************"""
+    **************************************************************************************************"""
     display_name = "Shop Logic"
     option_unordered = 0
     option_ordered = 1
@@ -354,8 +343,8 @@ class ShopLogic(Choice):
     
 
 class BlinkGems(Range):
-    """This option is used when shop_randomization is enabled. It lets you decide what % of gems from Blink minigames you want to
-    be expected to collect. For example, a value of 50 means being expected to collect approximately 50% of such gems."""
+    """Decides what % of gems from Blink minigames you want to be expected to collect, if shop_randomization is enabled.
+    For example, a value of 50 means being expected to collect approximately 50% of such gems."""
     display_name = "Blink Gems"
     range_start = 0
     range_end = 100
@@ -363,8 +352,8 @@ class BlinkGems(Range):
 
 
 class NonBlinkEnemies(Range):
-    """This option is used when shop_randomization is enabled. It lets you decide what % of gems from enemies you want
-    to be expected to collect. This only applies to enemies in Spyro & Hunter levels."""
+    """Decides what % of gems from enemies you want to be expected to collect, if shop_randomization is enabled.
+    Only applies to enemies in Spyro & Hunter levels."""
     display_name = "Non-Blink Enemies"
     range_start = 0
     range_end = 100
@@ -372,8 +361,8 @@ class NonBlinkEnemies(Range):
 
 
 class OtherGems(Range):
-    """This option is used when shop_randomization is enabled. It lets you decide what % of gems you want to be expected
-    to collect from breakable containers, gems on the ground, and Sgt. Byrd + Sparx minigames."""
+    """Decides what % of gems you want to be expected to collect from gems on the ground, breakable containers, and
+    Sgt. Byrd + Sparx minigames, if shop_randomization is enabled."""
     display_name = "Other Gems"
     range_start = 0
     range_end = 100
@@ -381,11 +370,11 @@ class OtherGems(Range):
     
     
 class DoubleGems(Choice):
-    """This option is used when shop_randomization is enabled. It lets you enable or disable the permanent Double Gems item.
-    Gem logic does not account for double gems, so if left enabled, you will collect gems faster than expected by logic."""
+    """Enables or disables the Double Gems item, if shop_randomization is enabled. It is advised to keep this disabled if so,
+    as shop logic does not account for gems received through Double Gems."""
     display_name = "Double Gems"
-    option_enabled = 0
-    option_disabled = 1
+    option_disabled = 0
+    option_enabled = 1
     default = 0
 
 ###############GATE & GADGET COSTS###############
@@ -420,12 +409,11 @@ class BossLairDoorCostMax(Range):
 
 class BossLairForcing(Choice):
     """This option decides if the generator should force boss lair(s) to have the most expensive Dark Gem costs.
-    Such forcing takes place *after* costs have been decided through the above 3 options.
+    Forcing takes place after costs have been decided through the above 3 options.
     
     unchanged: Leaves boss lair costs untouched.
     gnasty_gnorc/ineptune/red/mecha_red: Swaps that boss's cost with the highest cost.
-    automatic: Swaps all goal boss costs so that they are collectively the highest.
-    """
+    automatic: Swaps all goal boss costs so that they are collectively the highest."""
     display_name = "Boss Lair Forcing"
     option_unchanged = 0
     option_gnasty_gnorc = 1
@@ -441,6 +429,7 @@ class RandomizeLightGemDoorCosts(Choice):
 
     default: Each door has their vanilla cost (20/45/70/95).
     randomized: Randomly pick costs in the range defined by light_gem_door_cost_min and light_gem_door_cost_max.
+      Randomized costs can't exceed 90 if open world mode is set to vanilla.
     shuffle: Each door has their vanilla cost shuffled with the others (still 20/45/70/95 but in a random order)."""
     display_name = "Randomize Light Gem Door Cost"
     option_default = 0
@@ -470,6 +459,7 @@ class RandomizeGadgetCosts(Choice):
 
     default: Each gadget has their vanilla cost (8/24/40).
     randomized: Randomly picks costs in the range defined by gadget_cost_min and gadget_cost_max.
+      Randomized costs can't exceed 90 if open world mode is set to vanilla.
     shuffle: Each gadget has their vanilla cost shuffled with the others (still 8/24/40 but in a random order)."""
     display_name = "Randomize Gadget Cost"
     option_default = 0
@@ -495,12 +485,11 @@ class GadgetCostMax(Range):
     
 ###############QUALITY OF LIFE###############
 class PauseMenuPatch(Choice):
-    """The pause menu has 2 patches you can choose between which can help with escaping situations where you're stuck.
-    Take note that each one has logic implications if using open_world_mode.
+    """Decides which of 2 pause menu patches you can choose between which can help with escaping situations where you're stuck.
     
-    open_shop: pressing Y will open the shop display without needing to go to a shop physically. If using non-full open_world_mode,
-      this will auto-unlock your starting realm's "Depot" shop to prevent potential softlock scenarios.
-    teleport_to_hub: pressing and holding Y will bring you to the current realm's realm teleporter. If using non-full open_world_mode,
+    open_shop: pressing Y will open the shop if you are Spyro. If using non-full open_world_mode, this will auto-unlock
+      your starting realm's "Depot" shop to prevent potential softlock scenarios.
+    teleport_to_hub: holding Y will bring you to the current realm's realm teleporter. If using non-full open_world_mode,
       this will be considered a valid alternative way to logically access a realm's hub level."""
     display_name = "Pause Menu Patch"
     option_open_shop = 0
@@ -510,65 +499,51 @@ class PauseMenuPatch(Choice):
 
 class ShopPadProximityActivation(Toggle):
     """When using non-full open_world_mode, shop pads only unlock via their unlock items. This can lead to situations where you
-    can physically reach a shop pad but be unable to teleport back to it after, adding walking time on revisits.
-    
-    This option lets you re-enable proximity-based activation of shop pads. If enabled, any shop that you physically reach can be teleported
-    back to once you interact with them. This will result in each affected shop pad's unlock item becoming effectively an empty filler item."""
+    can physically reach a shop pad but be unable to teleport back to it after, adding walking time on revisits. Enabling this
+    allows you to teleport to any shop you've interacted with, even if you don't have its unlock item yet."""
     display_name = "Shop Pad Proximity Activation"
     default = 0
+
+
+class AutoHinting(OptionDict):
+    """Toggles automatic hinting for boss rewards (upon opening their lair), minigames (upon talking to NPCs), and shop
+    items (upon creating the save file). For each, you can enter "on", "off", or "random"."""
+    display_name = "Auto Hinting"
+    valid_keys = ("Bosses", "Minigames", "Shop Items")
+    default = {
+        "Bosses": "off",
+        "Minigames": "off",
+        "Shop Items": "off"
+    }
     
     
-class HintMinigameRewards(Toggle):
-    """Whether to auto-hint a mini-game's rewards when talking to its NPC."""
-    display_name = "Hint Mini Game Rewards"
-    default = 0
-
-
-class HintBossRewards(Toggle):
-    """Whether to auto-hint a boss's rewards when their lair is opened."""
-    display_name = "Hint Boss Rewards"
-    default = 0
-
-
-class HintShopItems(Toggle):
-    """Whether to auto-hint randomized shop items upon starting your save file."""
-    display_name = "Hint Shop Items"
-    default = 0
-
-
 class HideShopItemNames(Toggle):
-    """Whether to hide the name of each randomized shop item (player name is still shown). This adds a mystery element to
-    what item you'll get, at risk of wasting your gems on fillers/traps. Hinted shop checks will still show their item in the hint."""
+    """Hides the name of randomized shop items (player name is still shown). Hinted shop items will display as normal."""
     display_name = "Hide Shop Item Names"
     default = 0
     
 
 class EasyBosses(OptionSet):
-    """Toggles 'easy mode' for each boss, making them take triple damage to significantly shorten fights.
+    """Bosses listed below will take triple damage, significantly shortening fights.
+    
     Valid options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]"""
     display_name = "Easy Bosses"
     valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red")
     default = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red")
 
 
-class SkipCutscenes(Toggle):
-    """Allows for skipping most cutscenes with the Y button."""
-    display_name = "Auto Skip Cutscenes"
-    default = 1
-
-
-class SkipElevators(Toggle):
-    """Replaces the long elevator waits to Cloudy Domain, Sunken Ruins and Magma Falls, with loading screens."""
-    display_name = "Skip Elevators"
-    default = 1
-
-
-class TeleportAcrossRealms(Toggle):
-    """Allows for teleporting to unlocked shop pads in any realm, from any realm. For example, you could
-    teleport directly from Dragonfly Falls to Dark Mine without needing to use a hub realm teleporter."""
-    display_name = "Teleport Across Realms"
-    default = 1
-
+class TimeSavers(OptionDict):
+    """Choose which time-saving quality of life patches are enabled. For each, enter "on", "off", or "random".
+    Skip Cutscenes: enables skipping most cutscenes with the Y button.
+    Skip Elevators: enables skipping long elevator waits with loading screen.
+    Teleport Across Realms: enables teleporting across realms using normal shop pads."""
+    display_name = "Time Savers"
+    valid_keys = ("Skip Cutscenes", "Skip Elevators", "Teleport Across Realms")
+    default = {
+        "Skip Cutscenes": "on",
+        "Skip Elevators": "on",
+        "Teleport Across Realms": "on"
+    }
 
 @dataclass
 class SpyroAHTOptions(PerGameCommonOptions):
@@ -624,14 +599,10 @@ class SpyroAHTOptions(PerGameCommonOptions):
     
     pause_menu_patch: PauseMenuPatch
     shop_pad_proximity_activation: ShopPadProximityActivation
-    hint_minigame_rewards: HintMinigameRewards
-    hint_boss_rewards: HintBossRewards
-    hint_shop_items: HintShopItems
+    auto_hinting: AutoHinting
     hide_shop_item_names: HideShopItemNames
     easy_bosses: EasyBosses
-    skip_cutscenes: SkipCutscenes
-    skip_elevators: SkipElevators
-    teleport_across_realms: TeleportAcrossRealms
+    time_savers: TimeSavers
     
     
 spyro_options_groups = [
@@ -660,10 +631,6 @@ spyro_options_groups = [
         RandomizeGadgetCosts, GadgetCostMin, GadgetCostMax
     ]),
     OptionGroup("QUALITY OF LIFE", [
-        PauseMenuPatch, ShopPadProximityActivation,
-        HintMinigameRewards, HintBossRewards, HintShopItems, HideShopItemNames,
-        EasyBosses,
-        SkipCutscenes, SkipElevators,
-        TeleportAcrossRealms
+        PauseMenuPatch, ShopPadProximityActivation, AutoHinting, HideShopItemNames, EasyBosses, TimeSavers
     ])
 ]

@@ -11,7 +11,7 @@ import orjson
 
 import Utils
 from BaseClasses import Item, ItemClassification, MultiWorld, Region, CollectionState
-from Options import OptionError, OptionSet, NamedRange, Choice, Range
+from Options import OptionError, OptionSet, Choice, Range, OptionDict
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
@@ -174,9 +174,9 @@ class SpyroAHTWorld(World):
         if self.options.logging_level.value >= level:
             logging.info(f"[Spyro AHT] LOG-{level.name}: {message}")
     
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
-        self.log(f"Created item {name} with classification {self.classifications[name]} and ID {self.item_name_to_id[name]}.", LoggingLevel.MAXIMUM)
+        self.log(f"Created item {name} with classification {self.classifications[name]} and ID {self.item_name_to_id[name]}, placed into {placement}.", LoggingLevel.MAXIMUM)
         return Item(name, self.classifications[name], self.item_name_to_id[name], self.player)
     
     def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
@@ -198,7 +198,6 @@ class SpyroAHTWorld(World):
         name = self.collect_item(state, item)
         if name:
             if "Unlock" not in item.name:
-                state.add_item(name, self.player)
                 if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
                     gem_amount = int(item.name.split(" ")[0])
                     if "Blink minigames" in item.name:
@@ -207,30 +206,26 @@ class SpyroAHTWorld(World):
                         state.add_item("Non-Blink Enemies", item.player, count=gem_amount)
                     else:
                         state.add_item("Other Gems", item.player, count=gem_amount)
+                else:
+                    state.add_item(name, self.player)
             else:  # handle shop unlocks separately
                 choice = self.options.open_world_mode.value
                 if choice == 2:  # randomized
                     state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
                 elif choice == 3 or choice == 4:  # progressive and reverse progressive
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:  # regular progressive or reverse progressive item
-                        adjusted_name = item.name.replace("Progressive ", "")
-                        level = adjusted_name.split(" - ")[0]
-                        shops = LEVEL_SHOP_LOOKUP[level].copy()
-                        if choice == 4: shops.reverse()
-                        for shop in shops:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.add_item(f"{level} - {shop}", self.player)
-                                break
+                    adjusted_name = item.name.replace("Progressive ", "")
+                    level = adjusted_name.split(" - ")[0]
+                    shops = LEVEL_SHOP_LOOKUP[level].copy()
+                    if choice == 4: shops.reverse()
+                    for shop in shops:
+                        if not state.has(f"{level} - {shop}", self.player):
+                            state.add_item(f"{level} - {shop}", self.player)
+                            break
                 elif choice == 5:  # full levels
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:
-                        level = item.name.split(" - ")[0]
-                        for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.add_item(f"{level} - {shop}", self.player)
+                    level = item.name.split(" - ")[0]
+                    for shop in LEVEL_SHOP_LOOKUP[level]:
+                        if not state.has(f"{level} - {shop}", self.player):
+                            state.add_item(f"{level} - {shop}", self.player)
                 elif choice == 6:  # full realms
                     realm = item.name.split(" - ")[0]
                     for level in REALM_LEVEL_LOOKUP[realm]:
@@ -245,7 +240,6 @@ class SpyroAHTWorld(World):
         name = self.collect_item(state, item, True)
         if name:
             if "Unlock" not in item.name:
-                state.remove_item(name, self.player)
                 if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
                     gem_amount = int(item.name.split(" ")[0])
                     if "Blink minigames" in item.name:
@@ -254,35 +248,31 @@ class SpyroAHTWorld(World):
                         state.remove_item("Non-Blink Enemies", item.player, count=gem_amount)
                     else:
                         state.remove_item("Other Gems", item.player, count=gem_amount)
+                else:
+                    state.remove_item(name, self.player)
             else:  # handle shop unlocks separately
                 choice = self.options.open_world_mode.value
                 if choice == 2:  # randomized
                     state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
                 elif choice == 3 or choice == 4:  # progressive and reverse progressive
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:  # regular progressive or reverse progressive item
-                        adjusted_name = item.name.replace("Progressive ", "")
-                        level = adjusted_name.split(" - ")[0]
-                        shops = LEVEL_SHOP_LOOKUP[level].copy()
-                        if choice == 4: shops.reverse()
-                        for shop in shops:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.remove_item(f"{level} - {shop}", self.player)
-                                break
+                    adjusted_name = item.name.replace("Progressive ", "")
+                    level = adjusted_name.split(" - ")[0]
+                    shops = LEVEL_SHOP_LOOKUP[level].copy()
+                    if choice == 3: shops.reverse()  # go in reverse for progressive or normal for reverse progressive, since this is locking shops
+                    for shop in shops:
+                        if state.has(f"{level} - {shop}", self.player):
+                            state.remove_item(f"{level} - {shop}", self.player)
+                            break
                 elif choice == 5:  # full levels
-                    if "Depot" in item.name:  # a manually-unlocked starting realm shop. always collected before the rest
-                        state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
-                    else:
                         level = item.name.split(" - ")[0]
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
+                            if state.has(f"{level} - {shop}", self.player):
                                 state.remove_item(f"{level} - {shop}", self.player)
                 elif choice == 6:  # full realms
                     realm = item.name.split(" - ")[0]
                     for level in REALM_LEVEL_LOOKUP[realm]:
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
+                            if state.has(f"{level} - {shop}", self.player):
                                 state.remove_item(f"{level} - {shop}", self.player)
             return True
         return False
@@ -295,52 +285,55 @@ class SpyroAHTWorld(World):
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", LoggingLevel.LOW)
         
-        if self.options.open_world_mode.value != 1 and self.options.starting_realms.value == {"Icy Wilderness"}:
-            if self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
-                if self.options.auto_corrections == 2:  # fix_major specific
-                    self.log("Major Warning: Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
-                    self.options.starting_realms.value = {"Icy Wilderness"}
-                else:
-                    raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
+        self.check_dicts(self.options.auto_hinting)
+        self.check_dicts(self.options.time_savers)
             
-        bad_condition = self.options.teleport_across_realms.value == 0 and self.options.open_world_mode.value != 0
-        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
-            self.log("Minor Warning: teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling teleport_across_realms.", LoggingLevel.WARNING)
-            self.options.teleport_across_realms.value = 1
-        elif bad_condition:
-            raise OptionError("teleport_across_realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
+        bad_condition = self.options.time_savers.value["Teleport Across Realms"] == "off" and self.options.open_world_mode.value != 0
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+            self.log("Minor Warning: time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling it.", LoggingLevel.WARNING)
+            self.options.time_savers.value["Teleport Across Realms"] = "on"
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+            raise OptionError("time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value  # "none" alongside breath choices
-        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log("Minor Warning: Starting breath list cannot contain breaths and \"None\". Fixing by removing the \"None\".", LoggingLevel.WARNING)
             self.options.starting_breaths.value.remove("None")
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("Starting breath list cannot contain breaths and \"None\". Fix this, or set auto_corrections to at least fix_minor.")
         
         self.check_breaths_and_realms(self.options.starting_breaths, ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"], "breath")
         self.check_breaths_and_realms(self.options.starting_realms, ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"], "realm")
         
+        if self.options.open_world_mode.value != 1 and self.options.starting_realms.value == {"Icy Wilderness"}:
+            if self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
+                if self.options.auto_corrections == 3:  # fix_major specific
+                    self.log("Major Warning: Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fixing by changing starting realm to Dragon Kingdom.", LoggingLevel.WARNING)
+                    self.options.starting_realms.value = {"Dragon Kingdom"}
+                elif self.options.auto_corrections.value == 0:  # halt
+                    raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
+        
         if self.options.trap_percentage.value < 100: self.check_filler_and_traps(self.options.filler_items, "Filler", "Shinies")
         if self.options.trap_percentage.value > 0: self.check_filler_and_traps(self.options.trap_items, "Trap", "Spam Call")
         
-        self.check_lists(self.options.boss_goal, "boss_goal", "bosses")
-        self.check_lists(self.options.elders_goal, "elders_goal", "elders")
+        self.check_lists(self.options.boss_goal, "bosses")
+        self.check_lists(self.options.elders_goal, "elders")
         
-        # minigames goal
+        # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
         for key in self.options.minigames_goal.valid_keys:
             choice = self.options.minigames_goal.value[key]
             bad_condition = choice in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
-            if bad_condition and self.options.auto_corrections.value >= 1:
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
                 self.log(f"Minor Warning: \"{choice}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fixing by auto-converting \"{choice}\" to {int(choice)}.", LoggingLevel.WARNING)
                 self.options.minigames_goal.value[key] = int(choice)
-            elif bad_condition:
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"Minor Warning: \"{choice}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fix this, or set auto_corrections to at least fix_minor.")
             
             bad_condition = self.options.minigames_goal.value[key] not in [0, 1, 2, 3, 4, 5, 6, 7, 8, "random-on", "random-off"]
-            if bad_condition and self.options.auto_corrections.value >= 1:
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
                 self.log(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fixing by setting {key} to 0.", LoggingLevel.WARNING)
                 self.options.minigames_goal.value[key] = 0
-            elif bad_condition:
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fix this, or set auto_corrections to at least fix_minor.")
             
             # if here, it's a safe value. 0-8 is ignored and processed in handle_goaling. Just need to figure out random choice here
@@ -358,27 +351,27 @@ class SpyroAHTWorld(World):
         
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
-        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log("Minor Warning: Fireworks was enabled as a goal, but firework_checks is disabled. Fixing by enabling firework_checks.", LoggingLevel.WARNING)
             self.options.firework_checks.value = 1
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("Fireworks was enabled as a goal, but firework_checks is disabled. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = self.options.shop_items_goal.value > 0 and self.options.shop_randomization.value == 0
-        if bad_condition and self.options.auto_corrections.value == 1:  # fix_minor specific
+        if bad_condition and self.options.auto_corrections.value == 2:  # fix_minor specific
             self.log("Minor Warning: shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fixing by disabling shop_items_goal.", LoggingLevel.WARNING)
             self.options.shop_items_goal.value = 0
-        elif bad_condition and self.options.auto_corrections.value == 2:  # fix_major specific
+        elif bad_condition and self.options.auto_corrections.value == 3:  # fix_major specific
             self.log("Major Warning: shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fixing by enabling shop_randomization.", LoggingLevel.WARNING)
             self.options.shop_randomization.value = 1
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fix this, or set auto_corrections to at least fix_minor.")
         
         bad_condition = self.options.shop_items_goal.value > self.options.shop_item_count.value
-        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log("Minor Warning: shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fixing by lowering shop_items_goal to match shop_item_count.", LoggingLevel.WARNING)
             self.options.shop_items_goal.value = self.options.shop_item_count.value
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fix this, or set auto_corrections to at least fix_minor.")
 
         self.check_eggs_and_gems(self.options.light_gems_goal, "light_gems_goal", 85, 15, self.options.exclude_chest_items >= 2)
@@ -391,7 +384,6 @@ class SpyroAHTWorld(World):
         self.boss_lairs = self.setup_costs(self.options.randomize_boss_lair_door_costs, self.options.boss_lair_door_cost_min, self.options.boss_lair_door_cost_max, self.boss_lairs, "boss lair")
         
         # boss lair forcing
-        self.log(f"Checking if boss lair costs need forcing via boss_lair_forcing.", LoggingLevel.LOW)
         lookup = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]
         forcing = self.options.boss_lair_forcing.value
         if forcing != 0:
@@ -467,6 +459,26 @@ class SpyroAHTWorld(World):
 
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
+
+    def check_dicts(self, option: OptionDict):
+        for key in option.valid_keys:
+            try:
+                val = option.value[key]
+            except KeyError:  # if they don't include it at all, assume off
+                # self.log(f"Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Assuming a value of \"off\" (this occurs regardless of auto_corrections.", LoggingLevel.WARNING)
+                option.value[key] = "off"
+            if isinstance(option.value[key], str): option.value[key] = option.value[key].lower()
+            bad_condition = option.value[key] not in ["off", "on", "random"]
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log( f"Minor Warning: {option.display_name} setting \"{key}\" was given an invalid entry. Must be \"off\" or \"on\". Fixing by setting it to off.", LoggingLevel.WARNING)
+                option.value[key] = "off"
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"{option.display_name} setting \"{key}\" was given an invalid entry. Must be \"off\" or \"on\". Fix this, or set auto_corrections to at least fix_minor.")
+            
+            if option.value[key] == "random":
+                option.value[key] = "on" if self.random.randint(0, 1) == 1 else "off"
+                output = "enabled" if option.value[key] == "on" else "disabled"
+                self.log(f"\"Random\" was requested for {option.display_name}. It was {output}.", LoggingLevel.MEDIUM)
                 
     def check_breaths_and_realms(self, option: OptionSet, choices: list, error_txt: str):
         if len(option.value) == 0:
@@ -476,13 +488,13 @@ class SpyroAHTWorld(World):
         
     def check_filler_and_traps(self, option: OptionSet, error_txt_1: str, error_txt_2: str):
         bad_condition = len(option.value) == 0  # empty list
-        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log(f"Minor Warning: {error_txt_1} item list cannot be empty when {error_txt_1.lower()}s are enabled. Fixing by adding \"{error_txt_2}\".", LoggingLevel.WARNING)
             option.value.add(error_txt_2)
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError(f"{error_txt_1} item list cannot be empty when {error_txt_1.lower()}s are enabled. Fix this, or set auto_corrections to at least fix_minor.")
     
-    def check_lists(self, option: OptionSet, error_text_1: str, error_text_2: str):
+    def check_lists(self, option: OptionSet, error_text: str):
         if "Random" in option.value:  # 3 cases to deal with here, all relate to having Random in the list
             choices = [choice for choice in option.valid_keys if choice in option.value and choice != "Random"]
             rand_count = 0
@@ -491,11 +503,11 @@ class SpyroAHTWorld(World):
             elif 1 <= len(choices) <= 3:  # there's other things in the list
                 rand_count = self.random.randint(1, 4 - len(choices))
             elif len(choices) == 4:
-                if self.options.auto_corrections >= 1:  # fix_minor
-                    self.log(f"Minor Warning: \"Random\" was entered into {error_text_1}, but all 4 {error_text_2} were chosen alongside it. Fixing by removing the \"Random\".", LoggingLevel.WARNING)
+                if self.options.auto_corrections >= 2:  # fix_minor
+                    self.log(f"Minor Warning: \"Random\" was entered into {option.display_name}, but all 4 {error_text} were chosen alongside it. Fixing by removing the \"Random\".", LoggingLevel.WARNING)
                     option.value.remove("Random")
-                else:
-                    raise OptionError(f"\"Random\" was entered into {error_text_1}, but all 4 {error_text_2} were chosen alongside it. Fix this, or set auto_corrections to at least fix_minor.")
+                elif self.options.auto_corrections.value == 0:  # halt
+                    raise OptionError(f"\"Random\" was entered into {option.display_name}, but all 4 {error_text} were chosen alongside it. Fix this, or set auto_corrections to at least fix_minor.")
 
             if rand_count > 0:
                 option.value.remove("Random")
@@ -505,14 +517,14 @@ class SpyroAHTWorld(World):
                     option.value.add(rand_choice)
                     available_choices.remove(rand_choice)
                     rand_count -= 1
-                self.log(f"\"Random\" was requested for {error_text_1}. Random choice(s): {", ".join(option.value)}.", LoggingLevel.MEDIUM)
+                self.log(f"\"Random\" was requested for {option.display_name}. Goals are now: {", ".join(option.value)}.", LoggingLevel.MEDIUM)
                     
     def check_eggs_and_gems(self, option: Range, name: str, maximum: int, count: int, error: bool):
         bad_condition = option.value > maximum and error
-        if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log(f"Minor Warning: {name} was set higher than {maximum}, but {count} from chests are excluded from goals via exclude_chest_items. Fixing by lowering {name} by {count}.", LoggingLevel.WARNING)
             option.value -= count
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError(f"{name} was set higher than {maximum}, but {count} from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
     
     def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str) -> list[int]:  # returns costs
@@ -523,18 +535,31 @@ class SpyroAHTWorld(World):
             self.random.shuffle(costs)
             return costs
         elif option.value == 1:  # randomized
-            cost_min, cost_max = opt_min.value, opt_max.value
             rand_count = 3 if cost_type == "gadget" else 4
-            bad_condition = opt_min > opt_max
-            if bad_condition and self.options.auto_corrections.value >= 1:  # fix_minor
-                self.log(f"Minor Warning: {opt_min.display_name} of {cost_min} is greater than {cost_max}. Fixing by swapping them.", LoggingLevel.WARNING)
-                cost_min, cost_max = cost_max, cost_min
-            elif bad_condition:
-                raise OptionError(f"{opt_min.display_name} of {cost_min} is greater than {cost_max}. Fix this, or set auto_corrections to at least fix_minor.")
-            return [self.random.randint(cost_min, cost_max) for _ in range(rand_count)]
+            bad_condition = opt_min.value > opt_max.value
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: {opt_min.display_name} of {opt_min.value} is greater than {opt_max.value}. Fixing by swapping them.", LoggingLevel.WARNING)
+                opt_min.value, opt_max.value = opt_max.value, opt_min.value
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"{opt_min.display_name} of {opt_min.value} is greater than {opt_max.value}. Fix this, or set auto_corrections to at least fix_minor.")
+            
+            self.check_high_costs(opt_min)
+            self.check_high_costs(opt_max)
+            
+            return [self.random.randint(opt_min.value, opt_max.value) for _ in range(rand_count)]
         else:
             self.log("Something has gone TERRIBLY wrong if you are seeing this log message. Report to devs ASAP.", LoggingLevel.WARNING)
             return [0]  # something has gone VERY wrong, this should never happen and is only here to shush Python warnings
+    
+    def check_high_costs(self, range_option: Range):
+        if range_option.display_name in ["Boss Lair Door Cost Minimum", "Boss Lair Door Cost Maximum"]:
+            return
+        bad_condition = range_option.value > (range_option.range_end * 0.9) and self.options.open_world_mode.value == 0
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+            self.log(f"Minor Warning: {range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fixing by lowering {range_option.value} to {int(range_option.range_end * 0.9)}.", LoggingLevel.WARNING)
+            range_option.value = int(range_option.range_end * 0.9)
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+            raise OptionError(f"{range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fix this, or set auto_corrections to at least fix_minor.")
         
     def create_regions(self):
         self.log("Setting up regions and locations.", LoggingLevel.LOW)
@@ -572,7 +597,6 @@ class SpyroAHTWorld(World):
         self.setup_shop_prices(blink_exclusions, other_exclusions)  # needs knowledge of blink and other exclusions from setup_gem_logic
         
     def setup_gem_logic(self) -> tuple[int, int]:
-        self.log("Checking if gem logic needs to be set up.", LoggingLevel.LOW)
         blink_exclusions, other_exclusions = 0, 0
         if self.options.shop_randomization.value == 1:
             self.log("Setting up gem logic events.", LoggingLevel.LOW)
@@ -608,12 +632,13 @@ class SpyroAHTWorld(World):
         # shop costs determined by multiple options. Doing after gem events in case of exclusions
         self.log("Setting up shop prices.", LoggingLevel.LOW)
         if self.options.shop_randomization.value == 1:
-            blink = (20203 - blink_exclusions) * self.options.blink_gems.value / 100
-            non_blink_enemies = 16353 * self.options.non_blink_enemies.value / 100
-            other = (105357 - other_exclusions) * self.options.other_gems.value / 100
-            gem_total = blink + non_blink_enemies + other
+            blink = (20203 - blink_exclusions) * self.options.blink_gems.value
+            non_blink_enemies = 16353 * self.options.non_blink_enemies.value
+            other = (105357 - other_exclusions) * self.options.other_gems.value
+            gem_total = (blink + non_blink_enemies + other) // 100
             base_price = gem_total / (self.options.shop_item_count.value - 1)
-            self.log(f"blink_gems is {blink}, non_blink_enemies is {non_blink_enemies}, and other_gems is {other}. Base shop price is {base_price}.", LoggingLevel.MEDIUM)
+            self.log(f"blink_gems is {self.options.blink_gems.value}, so Blink total is {blink/100}. non_blink_enemies is {self.options.non_blink_enemies.value}, so non-blink total is {non_blink_enemies/100}. other_gems is {self.options.other_gems.value}, so other gems total is {other/100}.", LoggingLevel.HIGH)
+            self.log(f"Base shop price is {base_price}.", LoggingLevel.HIGH)
             self.shop_costs.append(0)
     
             if self.options.shop_logic.value == 1:  # 1 = ordered, meaning incrementing prices
@@ -631,7 +656,7 @@ class SpyroAHTWorld(World):
         # 4 Shop Items
         if self.options.shop_randomization.value == 1:
             for shop_item in ["Health Unit+", "Butterfly Jar", "Double Gems", "Shockwave"]:
-                if shop_item == "Double Gems" and self.options.double_gems.value == 1:  # bit backwards. 0 = enabled, 1 = disabled
+                if shop_item == "Double Gems" and self.options.double_gems.value == 0:
                     self.log("Skipping creating Double Gems as double_gems is disabled.", LoggingLevel.HIGH)
                     continue
                 else: aht_items.append(self.create_item(shop_item))
@@ -642,11 +667,11 @@ class SpyroAHTWorld(World):
         for breath in ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"]:
             if breath in self.options.starting_breaths.value and not starter_placed:
                 self.log(f"Placing {breath} into Starter Checks: Breath.", LoggingLevel.HIGH)
-                self.get_location("Starter Checks: Breath").place_locked_item(self.create_item(breath))
+                self.get_location("Starter Checks: Breath").place_locked_item(self.create_item(breath, "Starter Checks: Breath"))
                 starter_placed = True
             elif breath in self.options.starting_breaths.value:
                 self.log(f"Placing {breath} into start inventory.", LoggingLevel.HIGH)
-                self.push_precollected(self.create_item(breath))
+                self.push_precollected(self.create_item(breath, "start inventory"))
             else:
                 aht_items.append(self.create_item(breath))
         output = "none" if "None" in self.options.starting_breaths.value else ", ".join(self.options.starting_breaths.value)
@@ -657,7 +682,7 @@ class SpyroAHTWorld(World):
         for movement in ["Glide", "Swim", "Charge"]:
             if movement not in self.options.movement_randomization.value:
                 self.log(f"Placing {movement} into Starter Checks: {movement}.", LoggingLevel.HIGH)
-                self.get_location(f"Starter Checks: {movement}").place_locked_item(self.create_item(movement))
+                self.get_location(f"Starter Checks: {movement}").place_locked_item(self.create_item(movement, f"Starter Checks: {movement}"))
             else:
                 aht_items.append(self.create_item(movement))
         
@@ -669,14 +694,13 @@ class SpyroAHTWorld(World):
         for _ in range(100-make_less_lgs):
             aht_items.append(self.create_item("Light Gem"))
         
-        self.log("Checking if any minigames need vanilla rewards forced.", LoggingLevel.LOW)
         if len(self.options.vanilla_minigame_rewards.value) != 0:
             self.log(f"Minigame types which will have vanilla rewards forced: {", ".join(self.options.vanilla_minigame_rewards.value)}.", LoggingLevel.MEDIUM)
             npc_names = ["Sgt. Byrd"] * 8 + ["Blink"] * 8 + ["Sparx"] * 8 + ["Turret"] * 8
             for npc, minigame_loc in zip(npc_names, minigame_locs):
                 if npc in self.options.vanilla_minigame_rewards.value:
                     item = "Dragon Egg" if "Dragon Egg" in minigame_loc else "Light Gem"
-                    self.get_location(minigame_loc).place_locked_item(self.create_item(item))
+                    self.get_location(minigame_loc).place_locked_item(self.create_item(item, minigame_loc))
         
         # Key Rings & Lockpicks
         if self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1:
@@ -694,9 +718,9 @@ class SpyroAHTWorld(World):
                 self.options.starting_realms.value.add(realm)
             if realm in self.options.starting_realms.value:
                 self.log(f"Placing {realm} Access Card into start inventory.", LoggingLevel.HIGH)
-                self.push_precollected(self.create_item(f"{realm} Access Card"))
+                self.push_precollected(self.create_item(f"{realm} Access Card", "start inventory"))
             elif self.options.open_world_mode.value == 0:  # non-starting realm access cards only exist if non-open world
-                self.multiworld.itempool.append(self.create_item(f"{realm} Access Card"))
+                aht_items.append(self.create_item(f"{realm} Access Card"))
         self.log(f"Starting realm list: {", ".join(self.options.starting_realms.value)}.", LoggingLevel.MEDIUM)
         
         # Shop Unlocks (including pre-collecting ones in starting realms, depending on settings)
@@ -705,20 +729,29 @@ class SpyroAHTWorld(World):
                 realm = LEVEL_TO_REALM[shop.split(" - ")[0]]
                 if self.options.pause_menu_patch.value == 0 and "Depot" in shop and realm in self.options.starting_realms.value:
                     self.log(f"Placing {shop} Shop Unlock into start inventory due to being in a starting realm.", LoggingLevel.HIGH)
-                    self.push_precollected(self.create_item(f"{shop} Shop Unlock"))
+                    self.push_precollected(self.create_item(f"{shop} Shop Unlock", "start inventory"))
                 else:
                     aht_items.append(self.create_item(f"{shop} Shop Unlock"))
         elif self.options.open_world_mode.value in [3, 4]:  # 3 = progressive, 4 = reverse progressive
             for level in LEVEL_TO_REALM.keys():
-                if level in ["Dragon Village", "Stormy Beach"]: count = 1
-                elif level in ["Crocovile Swamp", "Dragonfly Falls", "Coastal Remains", "Cloudy Domain", "Sunken Ruins", "Frostbite Village", "Molten Mount", "Magma Falls", "Dark Mine"]: count = 3
+                if level == "Gloomy Glacier": count = 0
+                elif level in ["Dragon Village", "Stormy Beach"]: count = 1
                 elif level in ["Ice Citadel", "Red's Laboratory"]: count = 4
-                else: count = 0  # gloomy glacier
+                else: count = 3  # all others
                 
-                if self.options.pause_menu_patch.value == 0 and LEVEL_TO_REALM[level] in self.options.starting_realms.value and count > 0:
-                    self.log(f"Placing 1 Progressive {level} - Shop Unlock into start inventory due to being in a starting realm.", LoggingLevel.HIGH)
-                    self.push_precollected(self.create_item(f"Progressive {level} - Shop Unlock"))
-                    count -= 1
+                if self.options.pause_menu_patch.value == 0 and LEVEL_TO_REALM[level] in self.options.starting_realms.value:
+                    reduce = 0
+                    if self.options.open_world_mode.value == 3:  # progressive
+                        if level in ["Dragon Village", "Coastal Remains", "Frostbite Village", "Stormy Beach"]: reduce = 1
+                    elif self.options.open_world_mode.value == 4:  # reverse progressive
+                        if level in ["Dragon Village", "Stormy Beach"]: reduce = 1
+                        elif level in ["Coastal Remains", "Frostbite Village"]: reduce = 3
+                    
+                    if reduce > 0:
+                        self.log(f"Placing {reduce} Progressive {level} - Shop Unlock into start inventory due to being in a starting realm.", LoggingLevel.HIGH)
+                        for _ in range(reduce):
+                            self.push_precollected(self.create_item(f"Progressive {level} - Shop Unlock", "start inventory"))
+                        count -= reduce
                 
                 for _ in range(count):
                     aht_items.append(self.create_item(f"Progressive {level} - Shop Unlock"))
@@ -740,9 +773,10 @@ class SpyroAHTWorld(World):
         
         output = "none" if len(self.options.trap_items.value) == 0 else ", ".join(self.options.trap_items.value)
         self.log(f"Enabled trap items: {output}.", LoggingLevel.MEDIUM)
+        trap_choices = list(self.options.trap_items.value)
+        trap_choices.sort()  # non-determinism fix
         for _ in range(trap_number):
-            choice = self.random.choice(list(self.options.trap_items.value))
-            self.log(f"Created trap item {choice}.", LoggingLevel.MAXIMUM)
+            choice = self.random.choice(trap_choices)
             aht_items.append(self.create_item(choice))
 
         # shinies have extra logic to force variety in the choices before duplicating
@@ -758,7 +792,6 @@ class SpyroAHTWorld(World):
                 while choice not in unchosen_shinies:
                     choice = self.random.choice(unchosen_shinies)
                 unchosen_shinies.remove(choice)
-            self.log(f"Created filler item {choice}.", LoggingLevel.MAXIMUM)
             aht_items.append(self.create_item(choice))
     
         self.multiworld.itempool.extend(aht_items)
@@ -844,13 +877,13 @@ class SpyroAHTWorld(World):
                 if goal_name not in enabled_goals: enabled_goals.append(goal_name)
             self.log(f"Set up {ind_count - 1} goal events for goal \"{goal_name}\".", LoggingLevel.HIGH)
         bad_condition = len(enabled_goals) == 0
-        if bad_condition and self.options.auto_corrections.value == 2:  # fix_major exclusive
+        if bad_condition and self.options.auto_corrections.value == 3:  # fix_major exclusive
             self.log("No enabled goals were detected. Seeds must have at least 1 goal. Fixing by enabling Mecha-Red as a goal.", LoggingLevel.WARNING)
             loc = self.get_location(self.location_id_to_name[BOSS_IDS[-1]])
             loc.parent_region.add_event(f"{loc.name} Victory1", "VictoryConMecha-Red1", rule=loc.access_rule, show_in_spoiler=False)
             victory_cons["Mecha-Red"] += ("VictoryConMecha-Red1",)
             enabled_goals.append("Mecha-Red")
-        elif bad_condition:
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("No enabled goals were detected. Seeds must have at least 1 goal. Fix this, or set auto_corrections to fix_major to have this automatically fixed.")
         enabled_with_amounts = [f"{goal} ({amounts[goal]} checks)" for goal in enabled_goals]
         self.log(f"Final goal list: {", ".join(enabled_with_amounts)}.", LoggingLevel.MEDIUM)
@@ -920,14 +953,10 @@ class SpyroAHTWorld(World):
 
             "pause_menu_patch": self.options.pause_menu_patch.value,
             "shop_pad_proximity_activation": self.options.shop_pad_proximity_activation.value,
-            "hint_minigame_rewards": self.options.hint_minigame_rewards.value,
-            "hint_boss_rewards": self.options.hint_boss_rewards.value,
-            "hint_shop_items": self.options.hint_shop_items.value,
+            "auto_hinting": self.options.auto_hinting.value,
             "hide_shop_item_names": self.options.hide_shop_item_names.value,
             "easy_bosses": self.options.easy_bosses.value,
-            "skip_cutscenes": self.options.skip_cutscenes.value,
-            "skip_elevators": self.options.skip_elevators.value,
-            "teleport_across_realms": self.options.teleport_across_realms.value,
+            "time_savers": self.options.time_savers.value,
         }
         
         return slot_data
@@ -998,9 +1027,9 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
     
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        blink_scaling = world.options.blink_gems.value / 100
-        non_blink_enemy_scaling = world.options.non_blink_enemies.value / 100
-        other_scaling = world.options.other_gems.value / 100
+        blink_scaling = world.options.blink_gems.value
+        non_blink_enemy_scaling = world.options.non_blink_enemies.value
+        other_scaling = world.options.other_gems.value
         # cost is the cost itself if shop is ordered (shop logic == 1). Otherwise, emulate that logic by summing the cost of items so far
         cost = world.shop_costs[self.index] if world.options.shop_logic.value == 1 else sum(world.shop_costs[:self.index+1])
         return self.Resolved(cost, blink_scaling, non_blink_enemy_scaling, other_scaling, player=world.player)
@@ -1016,7 +1045,7 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
             blink_gems = state.count("Blink Gems", self.player)
             non_blink_enemies = state.count("Non-Blink Enemies", self.player)
             other = state.count("Other Gems", self.player)
-            in_logic_gems = (blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling)
+            in_logic_gems = ((blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling)) // 100
             return in_logic_gems >= self.item_cost
     
 
@@ -1051,7 +1080,7 @@ class RealmAccessRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
                 items.append(f"{level} - {shop}")
             else:
                 # "teleport to hub" pause menu cares about *any* shop in that realm
-                for level in REALM_LEVEL_LOOKUP[self.access_card.replace(" Access Card", "")]:
+                for level in realm_levels:
                     for shop in LEVEL_SHOP_LOOKUP[level]:
                         items.append(f"{level} - {shop}")
         

@@ -83,8 +83,8 @@ class SpyroAHTCommands(ClientCommandProcessor):
         convert = {1: "none", 2: "low", 3: "medium", 4: "high", 5: "maximum"}
         self.output(f"You set your logging level to {convert[self.ctx.slot_data['logging_level']]}.")
         # auto corrections
-        convert = {0: "halt on", 1: "auto fix"}
-        self.output(f"You chose to {convert[self.ctx.slot_data['auto_corrections']]} generation errors.")
+        convert = {0: "halt", 1: "chaos", 2: "fix_minor", 3: "fix_major"}
+        self.output(f"auto_corrections is set to {convert[self.ctx.slot_data['auto_corrections']]}.")
         
         self.output("---------------GOAL---------------")
         # 4 boss goals
@@ -122,7 +122,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         enabled = []
         for goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]:
             if goal in self.ctx.slot_data["goals_dict"].keys():
-                amount = self.ctx.slot_data["minigames_goal_count"]
+                amount = self.ctx.slot_data["minigames_goal"][goal]
                 enabled.append(f"{goal} ({amount} required)")
         output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
         self.output(f"Enabled Minigame Goals: {output}.")
@@ -181,7 +181,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
             # shop prices
             self.output(f"This means your shop prices are {self.ctx.slot_data['shop_costs']}.")
             # double gems
-            output = "disable" if self.ctx.slot_data['double_gems'] else "enable"
+            output = "enable" if self.ctx.slot_data['double_gems'] else "disable"
             self.output(f"You chose to {output} the Double Gems item.")
             
         self.output("---------------GATE AND GADGET COSTS---------------")
@@ -208,9 +208,9 @@ class SpyroAHTCommands(ClientCommandProcessor):
             output = "re-enable" if self.ctx.slot_data["shop_pad_proximity_activation"] else "disable"
             self.output(f"You chose to {output} shop pad proximity activation.")
         # auto-hinting
-        output = "will" if self.ctx.slot_data["hint_boss_rewards"] else "won't"
-        output_2 = "will" if self.ctx.slot_data["hint_minigame_rewards"] else "won't"
-        output_3 = "will" if self.ctx.slot_data["hint_shop_items"] else "won't"
+        output = "will" if self.ctx.slot_data["auto_hinting"]["Bosses"] == "on" else "won't"
+        output_2 = "will" if self.ctx.slot_data["auto_hinting"]["Minigames"] == "on" else "won't"
+        output_3 = "will" if self.ctx.slot_data["auto_hinting"]["Shop Items"] == "on" else "won't"
         self.output(f"Boss rewards {output} be hinted, minigame rewards {output_2} be hinted, and randomized shop items {output_3} be hinted.")
         # hide shop item names
         output = "hidden" if self.ctx.slot_data["hide_shop_item_names"] else "not hidden"
@@ -221,11 +221,11 @@ class SpyroAHTCommands(ClientCommandProcessor):
             output += f"{boss} easy, " if boss in self.ctx.slot_data["easy_bosses"] else f"{boss} normal, "
         self.output(f"{output[:-2]}.")
         # skip cutscenes & elevators
-        output = "can" if self.ctx.slot_data["skip_cutscenes"] else "can't"
-        output_2 = "can" if self.ctx.slot_data["skip_elevators"] else "can't"
+        output = "can" if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == "on" else "can't"
+        output_2 = "can" if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on" else "can't"
         self.output(f"Cutscenes {output} be skipped and elevators {output_2} be skipped.")
         # teleport across realms
-        output = "can" if self.ctx.slot_data['teleport_across_realms'] else "can't"
+        output = "can" if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == "on" else "can't"
         self.output(f"You {output} teleport across realms.")
 
         return True
@@ -243,7 +243,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
             # get amounts
             if goal in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]: amount = 1
             elif "Elder" in goal: amount = 1
-            elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.ctx.slot_data["minigames_goal_count"]
+            elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.ctx.slot_data["minigames_goal"][goal]
             else: amount = self.ctx.slot_data[option_name]
             # adjust id lists
             if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2: id_list = id_list[:-15]
@@ -468,7 +468,6 @@ class SpyroAHTContext(SuperContext):
                 case 0x19:
                     await self.emu_client.enable_butterfly_jar()
                 case 0x1A:
-                    #await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.DoubleGems, True)
                     await self.emu_client.toggle_double_gems(True)
                 case 0x1B:
                     await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Shockwave, True)
@@ -527,6 +526,14 @@ class SpyroAHTContext(SuperContext):
                     if total < item_counts["Gem Tax"]:
                         await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
                         await self.emu_client.gem_tax()
+                case 0x54:  # bounce trap
+                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 4)
+                    print(f"total is {total}")
+                    if total < item_counts["Bounce"]:
+                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 4, total + 1)
+                        print(f"total is now {total + 1}")
+                        self.emu_client.trap_queue.put_nowait("Bounce")
+                        print(f"bounce queued.")
                 case 0x64 | 0x65 | 0x66 | 0x67 | 0x68 | 0x69 | 0x6A | 0x6B | 0x6C | 0x6D | 0x6E | 0x6F | 0x70 | 0x71 | 0x72 | 0x73 | 0x74 | 0x75 \
                 | 0x76 | 0x77 | 0x78 | 0x79 | 0x7A | 0x7B | 0x7C | 0x7D | 0x7E | 0x7F | 0x80 | 0x81 | 0x82 | 0x83 | 0x84 | 0x85 | 0x86 | 0x87 | 0x88:
                     await self._unlock_shop(item.item, "Randomized")
@@ -654,19 +661,19 @@ class SpyroAHTContext(SuperContext):
     
     async def _location_scouts(self):
         locations = set()
-        if self.slot_data['hint_minigame_rewards']:
+        if self.slot_data['auto_hinting']["Minigames"] == "on":
             for obj, loc in consts.MINIGAME_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
                     locations.update(loc)
         
-        if self.slot_data['hint_boss_rewards']:
+        if self.slot_data['auto_hinting']["Bosses"] == "on":
             for obj, loc in consts.BOSS_LAIR_OPEN_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
                     locations.update(loc)
         
-        if self.slot_data['hint_shop_items'] and not self.shop_hinted:
+        if self.slot_data['auto_hinting']["Shop Items"] == "on" and not self.shop_hinted:
             locations.update(consts.SHOP_ITEM_IDS[:self.slot_data['shop_item_count']])
             self.shop_hinted = True
                 
@@ -724,7 +731,7 @@ class SpyroAHTContext(SuperContext):
         # find how many ids need to be checked
         if goal in ["Gnasty Gnorc", "Ineptune", "Red"]: amount = 2
         elif "Elder" in goal or goal == "Mecha-Red": amount = 1
-        elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.slot_data["minigames_goal_count"]
+        elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.slot_data["minigames_goal"][goal]
         else: amount = self.slot_data[option_name]
         for goal_id in loc_id_list:
             if goal_id in self.checked_locations:
@@ -775,7 +782,7 @@ class SpyroAHTContext(SuperContext):
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:
-            logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT IN THE THREAD", exc_info=True)
+            logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT TO DEVS", exc_info=True)
     
     async def _send_deathlink(self):
         death_id = await self.emu_client.export_deathlink()
