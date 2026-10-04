@@ -429,6 +429,7 @@ class RandomizeLightGemDoorCosts(Choice):
 
     default: Each door has their vanilla cost (20/45/70/95).
     randomized: Randomly pick costs in the range defined by light_gem_door_cost_min and light_gem_door_cost_max.
+      Randomized costs can't exceed 90 if open world mode is set to vanilla.
     shuffle: Each door has their vanilla cost shuffled with the others (still 20/45/70/95 but in a random order)."""
     display_name = "Randomize Light Gem Door Cost"
     option_default = 0
@@ -458,6 +459,7 @@ class RandomizeGadgetCosts(Choice):
 
     default: Each gadget has their vanilla cost (8/24/40).
     randomized: Randomly picks costs in the range defined by gadget_cost_min and gadget_cost_max.
+      Randomized costs can't exceed 90 if open world mode is set to vanilla.
     shuffle: Each gadget has their vanilla cost shuffled with the others (still 8/24/40 but in a random order)."""
     display_name = "Randomize Gadget Cost"
     option_default = 0
