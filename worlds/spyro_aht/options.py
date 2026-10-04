@@ -77,7 +77,7 @@ class BossGoals(OptionSet):
     Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
     display_name = "Boss Goals"
     valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random")
-    default = ["Mecha-Red"]
+    default = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]
 
 
 class DarkGemsGoal(Range):
@@ -396,7 +396,7 @@ class BossLairDoorCostMin(Range):
     display_name = "Boss Lair Door Cost Minimum"
     range_start = 1
     range_end = 40
-    default = 1
+    default = 10
 
 
 class BossLairDoorCostMax(Range):
@@ -443,7 +443,7 @@ class LightGemDoorCostMin(Range):
     display_name = "Minimum Light Gem Door Cost"
     range_start = 1
     range_end = 100
-    default = 1
+    default = 20
 
 
 class LightGemDoorCostMax(Range):
@@ -451,7 +451,7 @@ class LightGemDoorCostMax(Range):
     display_name = "Maximum Light Gem Door Cost"
     range_start = 1
     range_end = 100
-    default = 100
+    default = 95
 
 
 class RandomizeGadgetCosts(Choice):
@@ -502,7 +502,7 @@ class ShopPadProximityActivation(Toggle):
     can physically reach a shop pad but be unable to teleport back to it after, adding walking time on revisits. Enabling this
     allows you to teleport to any shop you've interacted with, even if you don't have its unlock item yet."""
     display_name = "Shop Pad Proximity Activation"
-    default = 0
+    default = 1
 
 
 class AutoHinting(OptionDict):
@@ -540,9 +540,9 @@ class TimeSavers(OptionDict):
     display_name = "Time Savers"
     valid_keys = ("Skip Cutscenes", "Skip Elevators", "Teleport Across Realms")
     default = {
-        "Skip Cutscenes": "on",
-        "Skip Elevators": "on",
-        "Teleport Across Realms": "on"
+        "Skip Cutscenes": "off",
+        "Skip Elevators": "off",
+        "Teleport Across Realms": "off"
     }
 
 @dataclass
