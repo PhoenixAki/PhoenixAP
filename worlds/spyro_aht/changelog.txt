@@ -1,35 +1,58 @@
+Changelog is abbreviated at times to save space. GitHub release pages always have unabbreviated changelogs.
+
+2.2.1
+- Client updated to point to mod version 20.1, which fixes a frequent overlapping text problem on the pause menu.
+- Added client command /toggle_notifications.
+- Removed a few accidentally-left-in debug statements from the client.
+
 2.2.0 (PAL support, redesigned shop & goal systems, traps, and more)
-- Added support for PAL GC version of game.
-- Shop system redesigned to use `shop_logic` instead of `gem_logic`.
-  - `shop_logic = ordered` works identically to `gem_logic = true`.
-  - `shop_logic = unordered` is a replacement for `gem_logic = false` which assumes the player will buy items in order, but won't restrict them from doing otherwise.
-  - Also, added `shop_item_count` for customizing how many shop items there are.
-* Logging system redesigned to be a single choice of level of detail. Warning messages from YAML issues are now always logged.
-* The goal system has been expanded (customizing how many checks per goal, new minigame and elder goals, reworked `/check_goal`)
-* `auto_corrections` expanded to `fix_minor` and `fix_major`. Minor fixes are things that are relatively inconsequential, major have a more notable impact on the seed.
-* Added support for 4 traps (Spam Call, Reverse Controls, Gem Tax, and Damage Sparx).
-- Refactored/organized significant chunks of the codebase to be more smartly designed, particularly the item creation process.
-- Client commands have slightly better error checking now. Also added `/costs` as a convenience command that outputs various costs separately from `/list_options`.
-- Made an updated logic spreadsheet which lists every region and location access rule.
-- Map icons now render as red = unreachable, yellow = reachable, green = checked.
-- Every location was renamed to be less verbose, and they have a new ID mapping system which makes some features *way* easier to code.
-- Partially undid the custom sorting of locations in the tracker page. Locations are now sorted first in order of vanilla game levels, then alphabetically by logical region, then alphabetically by location.
-- Added "Sent <item> to <player>" notifications in-game. None of us have any idea why they weren't there already, either...also added a small Easter egg when you receive a specific type of item from yourself :slight_smile:
-- Added 270 Stormy Beach gems to gem logic that were missed.
-- `hint_boss_rewards` now hints all boss locations, not just the breath rewards.
-- Added location groups for Light Gem doors and gadgets.
-- Fixed an inconsequential logic bug in Magma Falls Bottom.
+- Features:
+    * Added PAL GameCube support.
+    * Moderate redesign of the randomized shop system (renaming gem_logic to shop_logic and adding shop_item_count).
+    * Expanded goal system to allow customization of each one, as well as minigames_goal and elders_goal.
+    * auto_corrections expanded to halt, fix_minor, fix_major, and chaos.
+    * Added trap support, with 5 initially supported (Spam Call, Bounce, Reverse Controls, Damage Sparx, and Gem Tax).
+    * You can now teleport across the orbiting platform sections in Cloudy Domain with a button prompt.
+    
+- Logic:
+    * Added a logical requirement for the critters in Red's boss fight.
+    * The rising statue room in Sunken Ruins now requires Electric Breath to get to anything, instead of only Double Jump.
+    * RL: Dark Gem in Northeast now requires the ability to kill the huge robo-gnorcs guarding it.
+    * Fixed a rare math precision error that could make the final shop item never be in logic.
+    * Made a reference spreadsheet (https://tinyurl.com/ahtapsheet) which lists every region and location access rule, to help with troubleshooting.
+    
+- Fixes/Tweaks:
+    * auto_corrections will now fix or halt if you attempt to generate a seed with no goal, or if you randomize Light Gem door or Gadget costs to be above 90 while open_world_mode is vanilla.
+    * Fixed a goal bug that hurt Go Mode accuracy and harmed the quality of calculated playthroughs.
+    * Map icons now render as red = unreachable, yellow = reachable, and green = checked.
+    * The pause menu's gem information no longer includes out-of-logic gems (those from Gem Packs/Taxes and Double Gems).
+    * Fixed multiple bugs with how shop unlock items are created and handled logically.
+    * Added location groups for Light Gem doors and gadgets.
+    * In-game notifications now include item sends, and a small Easter egg when you receive specific items from yourself.
+    * hint_boss_rewards now hints all boss locations, not just the breath rewards.
+    * logging_level is now a single choice of level of detail.
+    * The pause menu's item list now correctly identifies Pole Spin, and "Health Unit+" is no longer missing from it.
+    * Gem count in minigames is no longer separate from your full count, meaning you don't need to finish a minigame to get its gems.
+    
+- Miscellaneous:
+    * Significantly refactored chunks of the codebase to be better designed and easier to maintain.
+    * Added client commands /costs.
+    * Nearly every location has been renamed for less verbosity.
+    * "Generics" filler items are now "Shinies".
+    * Added 270 gems from Stormy Beach to the gem logic system that were missed.
+    * Condensed a few YAML options for simplicity.
+    * Locations are now sorted on the tracker page in order of vanilla game levels, then alphabetically by logical region, then alphabetically by location.
 
 2.1.0 (various misc. things)
-- Fixed `vanilla_minigame_rewards` not working for turret minigames.
+- Fixed vanilla_minigame_rewards not working for turret minigames.
 - Fixed a missing glide requirement in Dragonfly Falls connecting the end of the level back to the start.
 - Improved error handling in /check_goal.
 - Removed glide requirement from the locked chest in the entry area of Dragonfly Falls.
-- Added `automatic` setting to `boss_lair_forcing` which forces all goal bosses (if any are part of goal) to have collectively the highest cost(s).
+- Added automatic setting to boss_lair_forcing which forces all goal bosses (if any are part of goal) to have collectively the highest cost(s).
 - Expanded location groups to include per-level and per-realm groups for Dark Gems, Dragon Eggs, Light Gems, Fireworks, and Locked Chests. Some other misc. groups added as well (such as "Starter Checks").
-- Tweaked `movement_randomization` to allow for individual toggling of each ability, instead of it being all or nothing.
-- Renamed `starting_breath` -> `starting_breaths` and redesigned it to allow for starting with multiple breaths, none, or a random one if list is empty.
-- `starting_realms` was made to match the above behavior i.e. random starting breath if list is empty. Neither requires `auto_corrections` to be set to `fix`.
+- Tweaked movement_randomization to allow for individual toggling of each ability, instead of it being all or nothing.
+- Renamed starting_breath -> starting_breaths and redesigned it to allow for starting with multiple breaths, none, or a random one if list is empty.
+- starting_realms was made to match the above behavior i.e. random starting breath if list is empty. Neither requires auto_corrections to be set to fix.
 - "Generics" filler item selection process improved to be more uniform. Each will be picked once each before doubling any up, and same for tripling, quadrupling, etc.
 
 2.0.2 (notification hotfix)
@@ -48,7 +71,7 @@
 2.0.0 (this is a lot)
 - Project things:
 	- Primary project developer has switched from Maya (XuaThaGrate) to Phoenix (PhoenixAki) as of 2.0. Hello hi that's me ^.^
-	- Module renamed from `spyro-aht` to `spyro_aht`.
+	- Module renamed from spyro-aht to spyro_aht.
 	- Added brand-new wiki containing any and all information pertaining to AHT AP.
 	- Added an open-source license to the project. In short, "do what you want with the code but don't sell it or profit off of it."
 
@@ -225,10 +248,10 @@ GameCube Alpha 4 (0.2.1)
 
 GameCube Alpha 3 (0.2.0):
 - Added randomization of the Elders abilities
-- Added YAML options to randomize ``Swim``, ``Charge`` and ``Glide``
-  - ``Swim`` refers to being able to swim underwater, paddling on the surface is not affected
+- Added YAML options to randomize Swim, Charge and Glide
+  - Swim refers to being able to swim underwater, paddling on the surface is not affected
 - Added starting breath YAML option
-  - ``default`` grants Fire Breath, ``random`` grants a random one of the 4 breaths, and ``none`` removes your starting breath
+  - default grants Fire Breath, random grants a random one of the 4 breaths, and none removes your starting breath
 - Added randomization of Junk chests (locked chests that contain gems or power ups)
 - Added YAML option to enable all realm teleportation
   - Enabling this completely changes the logic in many regions (specifically about Double Jump)

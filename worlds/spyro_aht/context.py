@@ -253,7 +253,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
             count = 0
             for goal_id in id_list:
                 count += goal_id in self.ctx.checked_locations  # += 1 if true, otherwise 0
-            # check for copmleted status
+            # check for completed status
             if count >= amount: completed_goals.append(goal)
             else: incomplete_goals.append(f"{goal} ({amount-count} checks left)")
         # output while being cautious of empty lists
@@ -281,6 +281,26 @@ class SpyroAHTCommands(ClientCommandProcessor):
         data = self.ctx.slot_data["gadget_costs"]
         self.output(f"Gadget Costs: Ball requires {data[0]} Light Gems, invincibility requires {data[1]} Light Gems, and supercharge requires {data[2]} Light Gems.")
         return True
+    
+    async def _cmd_toggle_notifications(self, argument) -> bool:
+        """Toggles displaying 2 types of in-game notifications.
+        Useful if you only want certain types of notifications.
+        This command does not remove any already-queued notifications.
+        1) "/toggle_notifications hints" toggles showing hints notifications
+        2) "/toggle_notifications self_sent" toggles notifications for items you send to yourself (such as when playing a solo seed)."""
+        
+        if argument not in ["hints", "self_sent"]:
+            self.output(f"{argument} is not a valid argument. Must be either \"hints\" or \"self_sent\".")
+            return True
+        
+        if argument == "hints":
+            self.output(f"Toggling hint notifications from {self.ctx.hint_notifs} to {not self.ctx.hint_notifs}.")
+            self.ctx.hint_notifs = not self.ctx.hint_notifs
+            return True
+        else:
+            self.output(f"Toggling self sent notifications from {self.ctx.self_sent_notifs} to {not self.ctx.self_sent_notifs}.")
+            self.ctx.self_sent_notifs = not self.ctx.self_sent_notifs
+            return True
         
 
 class SpyroAHTContext(SuperContext):
@@ -302,6 +322,10 @@ class SpyroAHTContext(SuperContext):
         
         # these cut back on repetitively scanning to-be-hinted locations after they've been hinted already
         self.shop_hinted = False
+        
+        # notification flags
+        self.self_sent_notifs = True
+        self.hint_notifs = True
         
         # used for checking goal components
         self.goal_stuff_setup = False
@@ -382,6 +406,8 @@ class SpyroAHTContext(SuperContext):
                             elif item.player == self.slot: sender = "yourself"
                             else: sender = self.player_names[item.player]
                             item_name = self.item_names.lookup_in_slot(item.item, self.slot)
+                            if item.player == self.slot and not self.self_sent_notifs:  # don't send "received <item> from youself" notifs if flag is off
+                                return
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {item_name} from {sender}'))
                         elif args['receiving'] != self.slot and item.player == self.slot:
                             receiver_id = args['receiving']
@@ -390,13 +416,13 @@ class SpyroAHTContext(SuperContext):
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {item_name} to {receiver_name}"))
                     case 'Hint':
                         if args['found']: return
-                        if args['receiving'] == self.slot:
+                        if args['receiving'] == self.slot and self.hint_notifs:  # don't send hint notifs if flag is off
                             item = args['item']
                             player = "your" if item.player == self.slot else f"{self.player_names[item.player]}'s"
                             location = self.location_names.lookup_in_slot(item.location, item.player)
                             msg = f"[Hint] Your {self.item_names.lookup_in_slot(item.item, self.slot)} is at {player} {location}"
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
-                        elif args['item'].player == self.slot:
+                        elif args['item'].player == self.slot and self.hint_notifs:  # don't send hint notifs if flag is off
                             item = args['item']
                             location = self.location_names.lookup_in_slot(item.location, self.slot)
                             player = self.player_names[args['receiving']]
@@ -528,12 +554,9 @@ class SpyroAHTContext(SuperContext):
                         await self.emu_client.gem_tax()
                 case 0x54:  # bounce trap
                     total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 4)
-                    print(f"total is {total}")
                     if total < item_counts["Bounce"]:
                         await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 4, total + 1)
-                        print(f"total is now {total + 1}")
                         self.emu_client.trap_queue.put_nowait("Bounce")
-                        print(f"bounce queued.")
                 case 0x64 | 0x65 | 0x66 | 0x67 | 0x68 | 0x69 | 0x6A | 0x6B | 0x6C | 0x6D | 0x6E | 0x6F | 0x70 | 0x71 | 0x72 | 0x73 | 0x74 | 0x75 \
                 | 0x76 | 0x77 | 0x78 | 0x79 | 0x7A | 0x7B | 0x7C | 0x7D | 0x7E | 0x7F | 0x80 | 0x81 | 0x82 | 0x83 | 0x84 | 0x85 | 0x86 | 0x87 | 0x88:
                     await self._unlock_shop(item.item, "Randomized")
