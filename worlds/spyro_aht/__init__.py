@@ -158,7 +158,6 @@ class SpyroAHTWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.multiworld.early_items[self.player]["Double Jump"] = 1
 
         self.light_gem_doors = [70, 20, 95, 45]
         self.boss_lairs = [10, 20, 30, 40]
@@ -188,8 +187,11 @@ class SpyroAHTWorld(World):
     def get_filler_item_name(self):
         """Override of World.get_filler_item_name which returns a random filler item name.
         Used whenever start_inventory_from_pool is used."""
-        items = self.random.choice(list(self.filler_items.values()))
-        random_choice = self.random.choice(items)
+        if self.filler_items == {}:
+            random_choice = "Dragon Egg"
+        else:
+            items = self.random.choice(list(self.filler_items.values()))
+            random_choice = self.random.choice(items)
         self.log(f"Replacing a start_inventory_from_pool item with \"{random_choice}\".", LoggingLevel.HIGH)
         return random_choice
             
@@ -652,6 +654,7 @@ class SpyroAHTWorld(World):
         # 4 Elder Abilities
         for ability in ["Double Jump", "Pole Spin", "Wing Shield", "Wall Kick"]:
             aht_items.append(self.create_item(ability))
+        self.multiworld.early_items[self.player]["Double Jump"] = 1
         
         # 4 Shop Items
         if self.options.shop_randomization.value == 1:
