@@ -79,16 +79,16 @@ class DolphinClient(GenericClient):
         if not dolphin_memory_engine.is_hooked():
             from CommonClient import logger
             dolphin_memory_engine.hook()
-            game_id = dolphin_memory_engine.read_bytes(0x80000000, 6)
+            game_id = dolphin_memory_engine.read_bytes(0x80000000, 6).decode()
 
-            if game_id == b'G5SE7D':
+            if game_id == consts.GAME_ID_NTSC:
                 logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. NTSC game detected.")
                 self.addresses = addresses.G5SE7D()
-            elif game_id == b'G5SP7D':
+            elif game_id == consts.GAME_ID_PAL:
                 logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. PAL game detected.")
                 self.addresses = addresses.G5SP7D()
             else:
-                logger.error("WARNING: Invalid or unsupported game ID.")
+                logger.error(f"WARNING: Invalid or unsupported game ID of {game_id}.")
                 return False
 
             mod_version_major, mod_version_minor = self.retrieve_mod_version()

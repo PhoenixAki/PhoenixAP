@@ -33,6 +33,9 @@ DRAGON_EGG = 0xA
 COLOUR_WHITE = (0x80, 0x80, 0x80, 0x80)
 COLOUR_RED = (0x80, 0x20, 0x20, 0x80)
 
+GAME_ID_NTSC = "G5SE7D"
+GAME_ID_PAL = "G5SP7D"
+
 # (AP location ID, bitfield offset)
 LOCATIONS_BITFIELD: dict[int, int] = {
     # Dark Gems 101-140

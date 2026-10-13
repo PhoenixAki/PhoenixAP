@@ -907,7 +907,7 @@ class SpyroAHTWorld(World):
                     loc = self.get_location(location['name'])
                 except KeyError:
                     continue
-                self.set_rule(location, self.rule_from_dict(location['access_rule']))
+                self.set_rule(loc, self.rule_from_dict(location['access_rule']))
 
         # this does goal events
         for goal_event, location_name in self.goal_events.items():
