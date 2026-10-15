@@ -99,7 +99,9 @@ class DolphinClient(GenericClient):
             if mod_version_major == consts.MOD_MAJOR and mod_version_minor < consts.MOD_MINOR:
                 logger.warn(f"NOTICE: Mod minor version {mod_version_minor} is compatible with AHT AP {consts.CLIENT_VERSION_STR}, but there is at least one new minor version available which may contain new features or bugfixes. Update at your leisure.")
             else:
-                logger.info(f"Game mod version {mod_version_major}.{mod_version_minor} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")    
+                logger.info(f"Game mod version {mod_version_major}.{mod_version_minor} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")   
+        else:
+            logger.warn("NOTICE: Dolphin memory engine was already hooked. This may cause issues!")
         self.ready.set()
     
     async def disconnect(self):
