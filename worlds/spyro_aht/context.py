@@ -134,11 +134,11 @@ class SpyroAHTCommands(ClientCommandProcessor):
         # firework checks
         output = "enabled" if self.ctx.slot_data["firework_checks"] else "disabled"
         self.output(f"Firework checks are {output}.")
-        # vanilla minigame rewards
+        # minigame checks
         output = ""
-        for minigame_type in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]:
-            output += f"{minigame_type} rewards are {'vanilla' if minigame_type in self.ctx.slot_data['vanilla_minigame_rewards'] else 'randomized'}, "
-        self.output(f"Minigames: {output[:-2]}.")
+        for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
+            output += f"{minigame_type} is set to {self.ctx.slot_data['minigame_checks'][minigame_type]}, "
+        self.output(f"Minigame Checks: {output[:-2]}.")
         # filler items
         output = ""
         for minigame_type in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
