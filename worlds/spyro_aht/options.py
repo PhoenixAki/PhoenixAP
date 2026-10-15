@@ -194,13 +194,23 @@ class FireworkChecks(Toggle):
     default = 0
 
 
-class VanillaMinigameRewards(OptionSet):
-    """Places Dragon Egg and Light Gem rewards into minigame checks.
+class MinigameChecks(OptionDict):
+    """Customize whether each minigame will be fully enabled, enabled with only Dragon Egg challenges,
+    or disabled. For each minigame, enter one of:
     
-    Valid options: ["Sgt. Byrd", "Blink", "Turret", "Sparx"]"""
-    display_name = "Vanilla Minigame Rewards"
-    valid_keys = ("Sgt. Byrd", "Blink", "Turret", "Sparx")
-    default = {}
+    "normal": Keeps vanilla behavior for this minigame.
+    "easy": Disables the Light Gem challenges for this minigame.
+    "disabled": Fully disables this minigame. Its NPCs will not spawn at all in-game.
+      If turret minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
+    "random": Random choice between normal, easy, and disabled."""
+    display_name = "Minigame Checks"
+    valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
+    default = {
+        "Blink": "normal",
+        "Sgt. Byrd": "normal",
+        "Sparx": "normal",
+        "Turret": "normal"
+    }
     
     
 class TrapPercentage(Range):
@@ -567,7 +577,7 @@ class SpyroAHTOptions(PerGameCommonOptions):
     
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
-    vanilla_minigame_rewards: VanillaMinigameRewards
+    minigame_checks: MinigameChecks
     trap_percentage: TrapPercentage
     filler_items: FillerItems
     trap_items: TrapItems
@@ -617,7 +627,7 @@ spyro_options_groups = [
         LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal
     ]),
     OptionGroup("CHECKS AND ITEMS", [
-        OpenWorldMode, FireworkChecks, VanillaMinigameRewards, TrapPercentage, FillerItems, TrapItems, TrapLength
+        OpenWorldMode, FireworkChecks, MinigameChecks, TrapPercentage, FillerItems, TrapItems, TrapLength
     ]),
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms

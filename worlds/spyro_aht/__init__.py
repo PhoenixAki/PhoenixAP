@@ -135,9 +135,7 @@ class SpyroAHTWeb(WebWorld):
     option_groups = spyro_options_groups
 
 class SpyroAHTWorld(World):
-    """
-    Spyro: A Hero's Tail is a 3D platformer and collect-a-thon released in 2004 for the Xbox, Playstation 2 and GameCube.
-    """
+    """Spyro: A Hero's Tail is a 3D platformer and collect-a-thon released in 2004 for the Xbox, Playstation 2 and GameCube."""
     ###############WORLD SETUP & INITIALIZATION###############
     game = "Spyro: A Hero's Tail"
     origin_region_name = "START"
@@ -324,13 +322,15 @@ class SpyroAHTWorld(World):
         
         # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
         for key in self.options.minigames_goal.valid_keys:
-            choice = self.options.minigames_goal.value[key]
-            bad_condition = choice in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+            bad_condition = self.options.minigames_goal.value[key] in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: \"{choice}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fixing by auto-converting \"{choice}\" to {int(choice)}.", LoggingLevel.WARNING)
-                self.options.minigames_goal.value[key] = int(choice)
+                self.log(f"Minor Warning: \"{self.options.minigames_goal.value[key]}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fixing by auto-converting to a number.", LoggingLevel.WARNING)
+                self.options.minigames_goal.value[key] = int(self.options.minigames_goal.value[key])
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Minor Warning: \"{choice}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fix this, or set auto_corrections to at least fix_minor.")
+                raise OptionError(f"Minor Warning: \"{self.options.minigames_goal.value[key]}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fix this, or set auto_corrections to at least fix_minor.")
+            
+            # force lowercase if it's a str before comparing to random-on/random-off
+            if isinstance(self.options.minigames_goal.value[key], str): self.options.minigames_goal.value[key] = self.options.minigames_goal.value[key].lower()
             
             bad_condition = self.options.minigames_goal.value[key] not in [0, 1, 2, 3, 4, 5, 6, 7, 8, "random-on", "random-off"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -352,6 +352,21 @@ class SpyroAHTWorld(World):
                     self.options.minigames_goal.value[key] = 0
                     self.log(f"\"random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", LoggingLevel.MEDIUM)
         
+        # minigame checks. Unlike minigames goal, valid entries are processed later, this is just error checking
+        for key in self.options.minigame_checks.valid_keys:
+            if isinstance(self.options.minigame_checks.value[key], str): self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].lower()
+            
+            bad_condition = self.options.minigame_checks.value[key] not in ["normal", "easy", "disabled", "random"]
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fixing by setting {key} to normal.", LoggingLevel.WARNING)
+                self.options.minigame_checks.value[key] = "normal"
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fix this, or set auto_corrections to at least fix_minor.")
+            
+            if self.options.minigame_checks.value[key] == "random":
+                self.options.minigame_checks.value[key] = self.random.choice(["normal", "easy", "disabled"])
+                self.log(f"\"random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", LoggingLevel.MEDIUM)
+            
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -437,7 +452,7 @@ class SpyroAHTWorld(World):
 
         self.options.open_world_mode.value = slot_data['open_world_mode']
         self.options.firework_checks.value = slot_data['firework_checks']
-        self.options.vanilla_minigame_rewards.value = slot_data['vanilla_minigame_rewards']
+        self.options.minigame_checks.value = slot_data['minigame_checks']
         self.options.trap_percentage.value = slot_data['trap_percentage']
         self.options.filler_items.value = slot_data['filler_items']
         self.options.trap_items.value = slot_data['trap_items']
@@ -581,15 +596,19 @@ class SpyroAHTWorld(World):
             new_locations = {}
             for location_data in region_data['locations']:
                 add = True
-                for options in location_data.get('options', ()):
-                    option = getattr(self.options, options['option'])
-                    match options.get('operator', 'eq'):
-                        case 'eq': add = add and option.value == options['value']
-                        case 'ne': add = add and option.value != options['value']
-                        case 'gt': add = add and option.value > options['value']
-                        case 'ge': add = add and option.value >= options['value']
-                        case 'lt': add = add and option.value < options['value']
-                        case 'le': add = add and option.value <= options['value']
+                for opt in location_data.get('options', ()):
+                    option = getattr(self.options, opt['option'])
+                    if option.display_name == "Minigame Checks":
+                        add = option.value[opt['npc']] in opt['value']  # true if the player's choice is in the list from JSON data
+                    else:
+                        match opt.get('operator', 'eq'):
+                            case 'eq': add = add and option.value == opt['value']
+                            case 'ne': add = add and option.value != opt['value']
+                            case 'gt': add = add and option.value > opt['value']
+                            case 'ge': add = add and option.value >= opt['value']
+                            case 'lt': add = add and option.value < opt['value']
+                            case 'le': add = add and option.value <= opt['value']
+                    
                 if add:
                     new_locations[location_data['name']] = location_data['id']
                     self.log(f"Added location {location_data['name']} with id {location_data['id']} to region {region_data['name']}.", LoggingLevel.MAXIMUM)
@@ -768,18 +787,8 @@ class SpyroAHTWorld(World):
         # Dark Gems & Light Gems
         for _ in range(40):
             aht_items.append(self.create_item("Dark Gem"))
-            
-        make_less_lgs = len(self.options.vanilla_minigame_rewards.value) * 4
-        for _ in range(100-make_less_lgs):
+        for _ in range(100):
             aht_items.append(self.create_item("Light Gem"))
-        
-        if len(self.options.vanilla_minigame_rewards.value) != 0:
-            self.log(f"Minigame types which will have vanilla rewards forced: {", ".join(self.options.vanilla_minigame_rewards.value)}.", LoggingLevel.MEDIUM)
-            npc_names = ["Sgt. Byrd"] * 8 + ["Blink"] * 8 + ["Sparx"] * 8 + ["Turret"] * 8
-            for npc, minigame_loc in zip(npc_names, minigame_locs):
-                if npc in self.options.vanilla_minigame_rewards.value:
-                    item = "Dragon Egg" if "Dragon Egg" in minigame_loc else "Light Gem"
-                    self.get_location(minigame_loc).place_locked_item(self.create_item(item, minigame_loc))
         
         # Key Rings & Lockpicks
         if self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1:
@@ -936,7 +945,7 @@ class SpyroAHTWorld(World):
             
             "open_world_mode": self.options.open_world_mode.value,
             "firework_checks": self.options.firework_checks.value,
-            "vanilla_minigame_rewards": self.options.vanilla_minigame_rewards.value,
+            "minigame_checks": self.options.minigame_checks.value,
             "trap_percentage": self.options.trap_percentage.value,
             "filler_items": self.options.filler_items.value,
             "trap_items": self.options.trap_items.value,

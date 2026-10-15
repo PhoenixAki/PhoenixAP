@@ -1924,7 +1924,16 @@
             {
                 "name": "DV: Dragon Egg from Sgt. Byrd",
                 "id": 302,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -1935,7 +1944,15 @@
             {
                 "name": "DV: Light Gem from Sgt. Byrd",
                 "id": 201,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -3485,7 +3502,16 @@
             {
                 "name": "CS: Dragon Egg from Blink",
                 "id": 309,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -3496,7 +3522,15 @@
             {
                 "name": "CS: Light Gem from Blink",
                 "id": 210,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -3958,7 +3992,16 @@
             {
                 "name": "CS: Dragon Egg from Fredneck",
                 "id": 311,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -3969,7 +4012,15 @@
             {
                 "name": "CS: Light Gem from Fredneck",
                 "id": 212,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -5055,7 +5106,16 @@
             {
                 "name": "DF: Dragon Egg from Sparx",
                 "id": 315,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -5066,7 +5126,15 @@
             {
                 "name": "DF: Light Gem from Sparx",
                 "id": 217,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -5622,7 +5690,16 @@
             {
                 "name": "CR: Dragon Egg from Turtle Mother",
                 "id": 318,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "Has",
                     "options": [],
@@ -5636,7 +5713,15 @@
             {
                 "name": "CR: Light Gem from Turtle Mother",
                 "id": 221,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "Has",
                     "options": [],
@@ -7001,7 +7086,16 @@
             {
                 "name": "CR: Dragon Egg from Blink",
                 "id": 323,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -7012,7 +7106,15 @@
             {
                 "name": "CR: Light Gem from Blink",
                 "id": 228,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -8362,7 +8464,16 @@
             {
                 "name": "CD: Dragon Egg from Sgt. Byrd",
                 "id": 328,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -8373,7 +8484,15 @@
             {
                 "name": "CD: Light Gem from Sgt. Byrd",
                 "id": 234,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -9304,7 +9423,16 @@
             {
                 "name": "SR: Dragon Egg from Sparx",
                 "id": 331,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -9315,7 +9443,15 @@
             {
                 "name": "SR: Light Gem from Sparx",
                 "id": 238,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -10327,7 +10463,16 @@
             {
                 "name": "FV: Dragon Egg from Peggy",
                 "id": 333,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -10338,7 +10483,15 @@
             {
                 "name": "FV: Light Gem from Peggy",
                 "id": 242,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -10538,7 +10691,16 @@
             {
                 "name": "FV: Dragon Egg from Blink",
                 "id": 335,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -10549,7 +10711,15 @@
             {
                 "name": "FV: Light Gem from Blink",
                 "id": 243,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -12054,7 +12224,16 @@
             {
                 "name": "GG: Dragon Egg from Sparx",
                 "id": 341,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -12065,7 +12244,15 @@
             {
                 "name": "GG: Light Gem from Sparx",
                 "id": 254,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -12902,7 +13089,16 @@
             {
                 "name": "IC: Dragon Egg from Sgt. Byrd",
                 "id": 342,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -12913,7 +13109,15 @@
             {
                 "name": "IC: Light Gem from Sgt. Byrd",
                 "id": 260,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -14369,7 +14573,16 @@
             {
                 "name": "SB: Dragon Egg from Wally",
                 "id": 349,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -14380,7 +14593,15 @@
             {
                 "name": "SB: Light Gem from Wally",
                 "id": 266,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Turret",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -15014,7 +15235,16 @@
             {
                 "name": "MM: Dragon Egg from Sgt. Byrd",
                 "id": 352,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -15025,7 +15255,15 @@
             {
                 "name": "MM: Light Gem from Sgt. Byrd",
                 "id": 267,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sgt. Byrd",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -17556,7 +17794,16 @@
             {
                 "name": "MFb: Dragon Egg from Sparx",
                 "id": 356,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -17567,7 +17814,15 @@
             {
                 "name": "MFb: Light Gem from Sparx",
                 "id": 275,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Sparx",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -18451,7 +18706,16 @@
             {
                 "name": "DM: Dragon Egg from Blink",
                 "id": 359,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal",
+                            "easy"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
@@ -18462,7 +18726,15 @@
             {
                 "name": "DM: Light Gem from Blink",
                 "id": 278,
-                "options": [],
+                "options": [
+                    {
+                        "option": "minigame_checks",
+                        "npc": "Blink",
+                        "value": [
+                            "normal"
+                        ]
+                    }
+                ],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],

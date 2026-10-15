@@ -2,6 +2,7 @@ import json
 
 # These are imported so that eval() can recognize them as types below
 from rule_builder.rules import Rule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion
+from worlds.spyro_aht.data.consts import BLINK_IDS, BYRD_IDS, SPARX_IDS, TURRET_IDS
 from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
 
@@ -43,6 +44,7 @@ file_in = open("3 - locations.txt", "r")
 for line in file_in:
     line = line.strip()
     region, loc_name, loc_id, loc_rule = line.split(" | ")
+    loc_id = int(loc_id)
     options = []  # default, overridden below if an optionable location is encountered
     evaluated_rule: Rule = eval(loc_rule)
 
@@ -61,10 +63,23 @@ for line in file_in:
             "option": "firework_checks",
             "value": 1
         }]
+    elif loc_id in [*BLINK_IDS, *BYRD_IDS, *SPARX_IDS, *TURRET_IDS]:
+        if loc_id in BLINK_IDS: npc = "Blink"
+        elif loc_id in BYRD_IDS: npc = "Sgt. Byrd"
+        elif loc_id in SPARX_IDS: npc = "Sparx"
+        else: npc = "Turret"
+        
+        # normal or easy if dragon egg (id in the 300's). only normal for light gems (id in the 200's)
+        values = ["normal", "easy"] if loc_id // 100 == 3 else ["normal"]
+        options = [{
+            "option": "minigame_checks",
+            "npc": npc,
+            "value": values
+        }]
 
     regions[region]["locations"].append({
         "name": loc_name,
-        "id": int(loc_id),
+        "id": loc_id,
         "options": options,
         "access_rule": evaluated_rule.to_dict()
     })

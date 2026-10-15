@@ -221,6 +221,12 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, 1)
         if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on":
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, 1)
+        
+        convert_config = {"normal": 0, "easy": 1, "disabled": 2}
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_BLINK_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Blink']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SGTBYRD_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sgt. Byrd']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SPARX_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sparx']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_TURRET_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Turret']])
             
         dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_POPUPS, 1)
         dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(self.ctx._seed) & 0xffffffff))
@@ -254,20 +260,20 @@ class DolphinClient(GenericClient):
         dolphin_memory_engine.write_byte(self.addresses.p_INVINCIBILITY_COST, i)
         dolphin_memory_engine.write_byte(self.addresses.p_SUPERCHARGE_COST, s)
 
-        convert = {"Dragon Kingdom": 0, "Lost Cities": 1, "Icy Wilderness": 2, "Volcanic Isle": 3}
+        convert_realm = {"Dragon Kingdom": 0, "Lost Cities": 1, "Icy Wilderness": 2, "Volcanic Isle": 3}
         realm_access = [False, False, False, False]
         for realm in self.ctx.slot_data['starting_realms']:
-            realm_access[convert[realm]] = True
+            realm_access[convert_realm[realm]] = True
 
-        dolphin_memory_engine.write_byte(self.addresses.p_STARTING_REALM, convert[self.ctx.slot_data['starting_realms'][0]])
+        dolphin_memory_engine.write_byte(self.addresses.p_STARTING_REALM, convert_realm[self.ctx.slot_data['starting_realms'][0]])
         dolphin_memory_engine.write_bytes(self.addresses.p_REALM_ACCESS, struct.pack(">????", *realm_access))
 
         if self.ctx.slot_data['open_world_mode'] > 1 and self.ctx.slot_data['pause_menu_patch'] == 0:
             # non-full open world with "open shop" pause menu needs to have starting realm depot shops forcibly unlocked
-            convert = {0: "Dragon Village - Village Depot", 1: "Coastal Remains - Coastal Depot", 2: "Frostbite Village - Frosty Depot", 3: "Stormy Beach - Stormy Depot"}
+            convert_open_world = {0: "Dragon Village - Village Depot", 1: "Coastal Remains - Coastal Depot", 2: "Frostbite Village - Frosty Depot", 3: "Stormy Beach - Stormy Depot"}
             for index, realm in enumerate(realm_access):
                 if realm:  # if this is a starting realm
-                    shop_name = convert[index]
+                    shop_name = convert_open_world[index]
                     self.ctx.unlocked_shops.append(shop_name)
                     await self.ctx._unlock_starting_realm_shop(shop_name)
         
