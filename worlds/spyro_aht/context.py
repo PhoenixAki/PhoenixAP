@@ -430,6 +430,8 @@ class SpyroAHTContext(SuperContext):
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
     
     async def start_emu_client(self):
+        if self.emu_client != None:
+            await self.emu_client.disconnect()
         self.emu_client = DolphinClient(self, logger)
         await self.emu_client.connect()
         await self.emu_client.apply_patch()
