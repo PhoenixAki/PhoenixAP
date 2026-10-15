@@ -1,0 +1,2194 @@
+{
+    "START": {
+        "name": "START",
+        "entrances": [],
+        "locations": []
+    },
+    "Warp1": {
+        "name": "Warp1",
+        "entrances": [
+            {
+                "name": "START -> Warp1",
+                "access_rule": {
+                    "rule": "WarpAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "warp_num": 1
+                    }
+                }
+            }
+        ],
+        "locations": []
+    },
+    "ToadVillage": {
+        "name": "ToadVillage",
+        "entrances": [
+            {
+                "name": "Warp1 -> ToadVillage",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Toad Village"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Toad Village: Crystal",
+                "id": 1,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Toad Village: Box Gem",
+                "id": 2,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Toad Village: Sapphire Relic",
+                "id": 3,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Toad Village: Gold Relic",
+                "id": 4,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Toad Village: Platinum Relic",
+                "id": 5,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "UnderPressure": {
+        "name": "UnderPressure",
+        "entrances": [
+            {
+                "name": "Warp1 -> UnderPressure",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Under Pressure"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Under Pressure: Crystal",
+                "id": 6,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Under Pressure: Box Gem",
+                "id": 7,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Under Pressure: Sapphire Relic",
+                "id": 8,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Under Pressure: Gold Relic",
+                "id": 9,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Under Pressure: Platinum Relic",
+                "id": 10,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "OrientExpress": {
+        "name": "OrientExpress",
+        "entrances": [
+            {
+                "name": "Warp1 -> OrientExpress",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Orient Express"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Orient Express: Crystal",
+                "id": 11,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orient Express: Box Gem",
+                "id": 12,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orient Express: Sapphire Relic",
+                "id": 13,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orient Express: Gold Relic",
+                "id": 14,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orient Express: Platinum Relic",
+                "id": 15,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "BoneYard": {
+        "name": "BoneYard",
+        "entrances": [
+            {
+                "name": "Warp1 -> BoneYard",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Bone Yard"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Bone Yard: Crystal",
+                "id": 16,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bone Yard: Box Gem",
+                "id": 17,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bone Yard: Red Gem Path Gem",
+                "id": 18,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bone Yard: Sapphire Relic",
+                "id": 19,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bone Yard: Gold Relic",
+                "id": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bone Yard: Platinum Relic",
+                "id": 21,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "MakinWaves": {
+        "name": "MakinWaves",
+        "entrances": [
+            {
+                "name": "Warp1 -> MakinWaves",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Makin' Waves"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Makin' Waves: Crystal",
+                "id": 22,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Makin' Waves: Box Gem",
+                "id": 23,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Makin' Waves: Sapphire Relic",
+                "id": 24,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Makin' Waves: Gold Relic",
+                "id": 25,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Makin' Waves: Platinum Relic",
+                "id": 26,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "TinyTiger": {
+        "name": "TinyTiger",
+        "entrances": [
+            {
+                "name": "Warp1 -> TinyTiger",
+                "access_rule": {
+                    "rule": "BossAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "boss_num": 1
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Defeat Tiny Tiger",
+                "id": 27,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Warp2": {
+        "name": "Warp2",
+        "entrances": [
+            {
+                "name": "START -> Warp2",
+                "access_rule": {
+                    "rule": "WarpAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "warp_num": 2
+                    }
+                }
+            }
+        ],
+        "locations": []
+    },
+    "GeeWiz": {
+        "name": "GeeWiz",
+        "entrances": [
+            {
+                "name": "Warp2 -> GeeWiz",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Gee Wiz"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Gee Wiz: Crystal",
+                "id": 28,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gee Wiz: Box Gem",
+                "id": 29,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gee Wiz: Sapphire Relic",
+                "id": 30,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gee Wiz: Gold Relic",
+                "id": 31,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gee Wiz: Platinum Relic",
+                "id": 32,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Hang'emHigh": {
+        "name": "Hang'emHigh",
+        "entrances": [
+            {
+                "name": "Warp2 -> Hang'emHigh",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Hang'em High"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Hang'em High: Crystal",
+                "id": 33,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hang'em High: Box Gem",
+                "id": 34,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hang'em High: Yellow Gem",
+                "id": 35,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hang'em High: Gold Relic",
+                "id": 37,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hang'em High: Sapphire Relic",
+                "id": 36,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hang'em High: Platinum Relic",
+                "id": 38,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "HogRide": {
+        "name": "HogRide",
+        "entrances": [
+            {
+                "name": "Warp2 -> HogRide",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Hog Ride"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Hog Ride: Crystal",
+                "id": 39,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hog Ride: Box Gem",
+                "id": 40,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hog Ride: Sapphire Relic",
+                "id": 41,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hog Ride: Gold Relic",
+                "id": 42,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Hog Ride: Platinum Relic",
+                "id": 43,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "TombTime": {
+        "name": "TombTime",
+        "entrances": [
+            {
+                "name": "Warp2 -> TombTime",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Tomb Time"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Tomb Time: Crystal",
+                "id": 44,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Time: Box Gem",
+                "id": 45,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Time: Purple Gem Path Gem",
+                "id": 46,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Time: Sapphire Relic",
+                "id": 47,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Time: Gold Relic",
+                "id": 48,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Time: Platinum Relic",
+                "id": 49,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "MidnightRun": {
+        "name": "MidnightRun",
+        "entrances": [
+            {
+                "name": "Warp2 -> MidnightRun",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Midnight Run"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Midnight Run: Crystal",
+                "id": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Midnight Run: Box Gem",
+                "id": 51,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Midnight Run: Sapphire Relic",
+                "id": 52,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Midnight Run: Gold Relic",
+                "id": 53,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Midnight Run: Platinum Relic",
+                "id": 54,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Dingodile": {
+        "name": "Dingodile",
+        "entrances": [
+            {
+                "name": "Warp2 -> Dingodile",
+                "access_rule": {
+                    "rule": "BossAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "boss_num": 2
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Defeat Dingodile",
+                "id": 55,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Warp3": {
+        "name": "Warp3",
+        "entrances": [
+            {
+                "name": "START -> Warp3",
+                "access_rule": {
+                    "rule": "WarpAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "warp_num": 3
+                    }
+                }
+            }
+        ],
+        "locations": []
+    },
+    "DinoMight": {
+        "name": "DinoMight",
+        "entrances": [
+            {
+                "name": "Warp3 -> DinoMight",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Dino Might"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Dino Might: Crystal",
+                "id": 56,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Dino Might: Box Gem",
+                "id": 57,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Dino Might: Yellow Gem Path Gem",
+                "id": 58,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Dino Might: Sapphire Relic",
+                "id": 59,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Dino Might: Gold Relic",
+                "id": 60,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Dino Might: Platinum Relic",
+                "id": 61,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "DeepTrouble": {
+        "name": "DeepTrouble",
+        "entrances": [
+            {
+                "name": "Warp3 -> DeepTrouble",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Deep Trouble"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Deep Trouble: Crystal",
+                "id": 62,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Deep Trouble: Box Gem",
+                "id": 63,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Deep Trouble: Red Gem",
+                "id": 64,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Deep Trouble: Sapphire Relic",
+                "id": 65,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Deep Trouble: Gold Relic",
+                "id": 66,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Deep Trouble: Platinum Relic",
+                "id": 67,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "HighTime": {
+        "name": "HighTime",
+        "entrances": [
+            {
+                "name": "Warp3 -> HighTime",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "High Time"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "High Time: Crystal",
+                "id": 68,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "High Time: Box Gem",
+                "id": 69,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "High Time: Purple Gem",
+                "id": 70,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "High Time: Sapphire Relic",
+                "id": 71,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "High Time: Gold Relic",
+                "id": 72,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "High Time: Platinum Relic",
+                "id": 73,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "RoadCrash": {
+        "name": "RoadCrash",
+        "entrances": [
+            {
+                "name": "Warp3 -> RoadCrash",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Road Crash"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Road Crash: Crystal",
+                "id": 74,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Road Crash: Box Gem",
+                "id": 75,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Road Crash: Sapphire Relic",
+                "id": 76,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Road Crash: Gold Relic",
+                "id": 77,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Road Crash: Platinum Relic",
+                "id": 78,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "DoubleHeader": {
+        "name": "DoubleHeader",
+        "entrances": [
+            {
+                "name": "Warp3 -> DoubleHeader",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Double Header"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Double Header: Crystal",
+                "id": 79,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Double Header: Box Gem",
+                "id": 80,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Double Header: Sapphire Relic",
+                "id": 81,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Double Header: Gold Relic",
+                "id": 82,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Double Header: Platinum Relic",
+                "id": 83,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "NTropy": {
+        "name": "NTropy",
+        "entrances": [
+            {
+                "name": "Warp3 -> NTropy",
+                "access_rule": {
+                    "rule": "BossAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "boss_num": 3
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Defeat N. Tropy",
+                "id": 84,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Warp4": {
+        "name": "Warp4",
+        "entrances": [
+            {
+                "name": "START -> Warp4",
+                "access_rule": {
+                    "rule": "WarpAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "warp_num": 4
+                    }
+                }
+            }
+        ],
+        "locations": []
+    },
+    "Sphynxinator": {
+        "name": "Sphynxinator",
+        "entrances": [
+            {
+                "name": "Warp4 -> Sphynxinator",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Sphynxinator"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Sphynxinator: Crystal",
+                "id": 85,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Sphynxinator: Box Gem",
+                "id": 86,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Sphynxinator: Blue Gem Path Gem",
+                "id": 87,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Sphynxinator: Sapphire Relic",
+                "id": 88,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Sphynxinator: Gold Relic",
+                "id": 89,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Sphynxinator: Platinum Relic",
+                "id": 90,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "ByeByeBlimps": {
+        "name": "ByeByeBlimps",
+        "entrances": [
+            {
+                "name": "Warp4 -> ByeByeBlimps",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Bye Bye Blimps"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Bye Bye Blimps: Crystal",
+                "id": 91,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bye Bye Blimps: Box Gem",
+                "id": 92,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bye Bye Blimps: Sapphire Relic",
+                "id": 93,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bye Bye Blimps: Gold Relic",
+                "id": 94,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bye Bye Blimps: Platinum Relic",
+                "id": 95,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "TellNoTales": {
+        "name": "TellNoTales",
+        "entrances": [
+            {
+                "name": "Warp4 -> TellNoTales",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Tell No Tales"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Tell No Tales: Crystal",
+                "id": 96,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tell No Tales: Box Gem",
+                "id": 97,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tell No Tales: Sapphire Relic",
+                "id": 98,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tell No Tales: Gold Relic",
+                "id": 99,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tell No Tales: Platinum Relic",
+                "id": 100,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "FutureFrenzy": {
+        "name": "FutureFrenzy",
+        "entrances": [
+            {
+                "name": "Warp4 -> FutureFrenzy",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Future Frenzy"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Future Frenzy: Crystal",
+                "id": 101,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Future Frenzy: Box Gem",
+                "id": 102,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Future Frenzy: Secret Entrance Path Gem",
+                "id": 103,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Future Frenzy: Sapphire Relic",
+                "id": 104,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Future Frenzy: Gold Relic",
+                "id": 105,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Future Frenzy: Platinum Relic",
+                "id": 106,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "TombWader": {
+        "name": "TombWader",
+        "entrances": [
+            {
+                "name": "Warp4 -> TombWader",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Tomb Wader"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Tomb Wader: Crystal",
+                "id": 107,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Wader: Box Gem",
+                "id": 108,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Wader: Blue Gem",
+                "id": 109,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Wader: Sapphire Relic",
+                "id": 110,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Wader: Gold Relic",
+                "id": 111,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Tomb Wader: Platinum Relic",
+                "id": 112,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "NGin": {
+        "name": "NGin",
+        "entrances": [
+            {
+                "name": "Warp4 -> NGin",
+                "access_rule": {
+                    "rule": "BossAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "boss_num": 4
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Defeat NGin",
+                "id": 113,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Warp5": {
+        "name": "Warp5",
+        "entrances": [
+            {
+                "name": "START -> Warp5",
+                "access_rule": {
+                    "rule": "WarpAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "warp_num": 5
+                    }
+                }
+            }
+        ],
+        "locations": []
+    },
+    "GoneTomorrow": {
+        "name": "GoneTomorrow",
+        "entrances": [
+            {
+                "name": "Warp5 -> GoneTomorrow",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Gone Tomorrow"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Gone Tomorrow: Crystal",
+                "id": 114,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gone Tomorrow: Box Gem",
+                "id": 115,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gone Tomorrow: Green Gem Path Gem",
+                "id": 116,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gone Tomorrow: Sapphire Relic",
+                "id": 117,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gone Tomorrow: Gold Relic",
+                "id": 118,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Gone Tomorrow: Platinum Relic",
+                "id": 119,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "OrangeAsphalt": {
+        "name": "OrangeAsphalt",
+        "entrances": [
+            {
+                "name": "Warp5 -> OrangeAsphalt",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Orange Asphalt"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Orange Asphalt: Crystal",
+                "id": 120,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orange Asphalt: Box Gem",
+                "id": 121,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orange Asphalt: Sapphire Relic",
+                "id": 122,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orange Asphalt: Gold Relic",
+                "id": 123,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Orange Asphalt: Platinum Relic",
+                "id": 124,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "FlamingPassion": {
+        "name": "FlamingPassion",
+        "entrances": [
+            {
+                "name": "Warp5 -> FlamingPassion",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Flaming Passion"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Flaming Passion: Crystal",
+                "id": 125,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Flaming Passion: Box Gem",
+                "id": 126,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Flaming Passion: Green Gem",
+                "id": 127,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Flaming Passion: Sapphire Relic",
+                "id": 128,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Flaming Passion: Gold Relic",
+                "id": 129,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Flaming Passion: Platinum Relic",
+                "id": 130,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "MadBombers": {
+        "name": "MadBombers",
+        "entrances": [
+            {
+                "name": "Warp5 -> MadBombers",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Mad Bombers"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Mad Bombers: Crystal",
+                "id": 131,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Mad Bombers: Box Gem",
+                "id": 132,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Mad Bombers: Sapphire Relic",
+                "id": 133,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Mad Bombers: Gold Relic",
+                "id": 134,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Mad Bombers: Platinum Relic",
+                "id": 135,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "BugLite": {
+        "name": "BugLite",
+        "entrances": [
+            {
+                "name": "Warp5 -> BugLite",
+                "access_rule": {
+                    "rule": "LevelAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level_name": "Bug Lite"
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Bug Lite: Crystal",
+                "id": 136,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bug Lite: Box Gem",
+                "id": 137,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bug Lite: 5 Colored Gem Path",
+                "id": 138,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bug Lite: Sapphire Relic",
+                "id": 139,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bug Lite: Gold Relic",
+                "id": 140,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "Bug Lite: Platinum Relic",
+                "id": 141,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "Cortex": {
+        "name": "Cortex",
+        "entrances": [
+            {
+                "name": "Warp5 -> Cortex",
+                "access_rule": {
+                    "rule": "BossAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "boss_num": 5
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "Defeat Cortex",
+                "id": 142,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    }
+}

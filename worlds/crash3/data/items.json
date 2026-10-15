@@ -1,0 +1,128 @@
+[
+  {
+    "name": "Crystal",
+    "id": 1,
+    "classification": 1,
+    "group": "Collectibles"
+  },
+  {
+    "name": "Clear Gem",
+    "id": 2,
+    "classification": 2,
+    "group": "Gems"
+  },
+  {
+    "name": "Blue Gem",
+    "id": 3,
+    "classification": 2,
+    "group": "Gems"
+  },
+  {
+    "name": "Green Gem",
+    "id": 4,
+    "classification": 2,
+    "group": "Gems"
+  },
+  {
+    "name": "Purple Gem",
+    "id": 5,
+    "classification": 2,
+    "group": "Gems"
+  },
+  {
+    "name": "Yellow Gem",
+    "id": 6,
+    "classification": 2,
+    "group": "Gems"
+  },
+  {
+    "name": "Red Gem",
+    "id": 7,
+    "classification": 2,
+    "group": "Gems"
+  },
+  {
+    "name": "Super Body Slam",
+    "id": 8,
+    "classification": 2,
+    "group": "Abilities"
+  },
+  {
+    "name": "Double Jump",
+    "id": 9,
+    "classification": 2,
+    "group": "Abilities"
+  },
+  {
+    "name": "Tornado Spin",
+    "id": 10,
+    "classification": 2,
+    "group": "Abilities"
+  },
+  {
+    "name": "Bazooka",
+    "id": 11,
+    "classification": 2,
+    "group": "Abilities"
+  },
+  {
+    "name": "Running Shoes",
+    "id": 12,
+    "classification": 2,
+    "group": "Abilities"
+  },
+  {
+    "name": "1 Wumpa",
+    "id": 13,
+    "classification": 0,
+    "group": "Filler"
+  },
+  {
+    "name": "1 Life",
+    "id": 14,
+    "classification": 0,
+    "group": "Filler"
+  },
+  {
+    "name": "Lose 1 Wumpa",
+    "id": 15,
+    "classification": 4,
+    "group": "Traps"
+  },
+  {
+    "name": "Lose 1 Life",
+    "id": 16,
+    "classification": 4,
+    "group": "Traps"
+  },
+  {
+    "name": "Warp 1 Unlock",
+    "id": 17,
+    "classification": 1,
+    "group": "Warp Unlocks"
+  },
+  {
+    "name": "Warp 2 Unlock",
+    "id": 18,
+    "classification": 1,
+    "group": "Warp Unlocks"
+  },
+  {
+    "name": "Warp 3 Unlock",
+    "id": 19,
+    "classification": 1,
+    "group": "Warp Unlocks"
+  },
+  {
+    "name": "Warp 4 Unlock",
+    "id": 20,
+    "classification": 1,
+    "group": "Warp Unlocks"
+  },
+  {
+    "name": "Warp 5 Unlock",
+    "id": 21,
+    "classification": 1,
+    "group": "Warp Unlocks"
+  }
+]

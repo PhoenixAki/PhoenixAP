@@ -2,6 +2,8 @@
 .vscode
 fuzz.py
 meta.yaml
+determinism.py
+fuzz_output/
 
 *_Spoiler.txt
 *.bmbp

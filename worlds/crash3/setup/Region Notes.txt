@@ -1,0 +1,288 @@
+REGION START
+
+Warp 1
+------
+REGION Warp1: wrapper region for warp 1 levels
+    START -> Warp1 | WarpAccessRule(1)
+    
+REGION ToadVillage
+    Warp1 -> ToadVillage | LevelAccessRule('Toad Village')
+    
+    LOCATION ToadVillage | Toad Village: Crystal | 1 | True_()
+    LOCATION ToadVillage | Toad Village: Box Gem | 2 | True_()
+    LOCATION ToadVillage | Toad Village: Sapphire Relic | 3 | True_()
+    LOCATION ToadVillage | Toad Village: Gold Relic | 4 | True_()
+    LOCATION ToadVillage | Toad Village: Platinum Relic | 5 | True_()
+
+REGION UnderPressure
+    Warp1 -> UnderPressure | LevelAccessRule('Under Pressure')
+    
+    LOCATION UnderPressure | Under Pressure: Crystal | 6 | True_()
+    LOCATION UnderPressure | Under Pressure: Box Gem | 7 | True_()
+    LOCATION UnderPressure | Under Pressure: Sapphire Relic | 8 | True_()
+    LOCATION UnderPressure | Under Pressure: Gold Relic | 9 | True_()
+    LOCATION UnderPressure | Under Pressure: Platinum Relic | 10 | True_()
+
+REGION OrientExpress
+    Warp1 -> OrientExpress | LevelAccessRule('Orient Express')
+    
+    LOCATION OrientExpress | Orient Express: Crystal | 11 | True_()
+    LOCATION OrientExpress | Orient Express: Box Gem | 12 | True_()
+    LOCATION OrientExpress | Orient Express: Sapphire Relic | 13 | True_()
+    LOCATION OrientExpress | Orient Express: Gold Relic | 14 | True_()
+    LOCATION OrientExpress | Orient Express: Platinum Relic | 15 | True_()
+
+REGION BoneYard
+    Warp1 -> BoneYard | LevelAccessRule('Bone Yard')
+    
+    LOCATION BoneYard | Bone Yard: Crystal | 16 | True_()
+    LOCATION BoneYard | Bone Yard: Box Gem | 17 | True_()
+    LOCATION BoneYard | Bone Yard: Red Gem Path Gem | 18 | True_()
+    LOCATION BoneYard | Bone Yard: Sapphire Relic | 19 | True_()
+    LOCATION BoneYard | Bone Yard: Gold Relic | 20 | True_()
+    LOCATION BoneYard | Bone Yard: Platinum Relic | 21 | True_()
+
+REGION MakinWaves
+    Warp1 -> MakinWaves | LevelAccessRule('Makin\' Waves')
+    
+    LOCATION MakinWaves | Makin' Waves: Crystal | 22 | True_()
+    LOCATION MakinWaves | Makin' Waves: Box Gem | 23 | True_()
+    LOCATION MakinWaves | Makin' Waves: Sapphire Relic | 24 | True_()
+    LOCATION MakinWaves | Makin' Waves: Gold Relic | 25 | True_()
+    LOCATION MakinWaves | Makin' Waves: Platinum Relic | 26 | True_()
+
+REGION TinyTiger
+    Warp1 -> TinyTiger | BossAccessRule(1)
+    
+    LOCATION TinyTiger | Defeat Tiny Tiger | 27 | True_()
+
+Warp 2
+------
+REGION Warp2: wrapper region for warp 2 levels
+    START -> Warp2 | WarpAccessRule(2)
+    
+REGION GeeWiz
+    Warp2 -> GeeWiz | LevelAccessRule('Gee Wiz')
+    
+    LOCATION GeeWiz | Gee Wiz: Crystal | 28 | True_()
+    LOCATION GeeWiz | Gee Wiz: Box Gem | 29 | True_()
+    LOCATION GeeWiz | Gee Wiz: Sapphire Relic | 30 | True_()
+    LOCATION GeeWiz | Gee Wiz: Gold Relic | 31 | True_()
+    LOCATION GeeWiz | Gee Wiz: Platinum Relic | 32 | True_()
+
+REGION Hang'emHigh
+    Warp2 -> Hang'emHigh | LevelAccessRule('Hang\'em High')
+    
+    LOCATION Hang'emHigh | Hang'em High: Crystal | 33 | True_()
+    LOCATION Hang'emHigh | Hang'em High: Box Gem | 34 | True_()
+    LOCATION Hang'emHigh | Hang'em High: Yellow Gem | 35 | True_()
+    LOCATION Hang'emHigh | Hang'em High: Gold Relic | 37 | True_()
+    LOCATION Hang'emHigh | Hang'em High: Sapphire Relic | 36 | True_()
+    LOCATION Hang'emHigh | Hang'em High: Platinum Relic | 38 | True_()
+
+REGION HogRide
+    Warp2 -> HogRide | LevelAccessRule('Hog Ride')
+    
+    LOCATION HogRide | Hog Ride: Crystal | 39 | True_()
+    LOCATION HogRide | Hog Ride: Box Gem | 40 | True_()
+    LOCATION HogRide | Hog Ride: Sapphire Relic | 41 | True_()
+    LOCATION HogRide | Hog Ride: Gold Relic | 42 | True_()
+    LOCATION HogRide | Hog Ride: Platinum Relic | 43 | True_()
+
+REGION TombTime
+    Warp2 -> TombTime | LevelAccessRule('Tomb Time')
+    
+    LOCATION TombTime | Tomb Time: Crystal | 44 | True_()
+    LOCATION TombTime | Tomb Time: Box Gem | 45 | True_()
+    LOCATION TombTime | Tomb Time: Purple Gem Path Gem | 46 | True_()
+    LOCATION TombTime | Tomb Time: Sapphire Relic | 47 | True_()
+    LOCATION TombTime | Tomb Time: Gold Relic | 48 | True_()
+    LOCATION TombTime | Tomb Time: Platinum Relic | 49 | True_()
+
+REGION MidnightRun
+    Warp2 -> MidnightRun | LevelAccessRule('Midnight Run')
+    
+    LOCATION MidnightRun | Midnight Run: Crystal | 50 | True_()
+    LOCATION MidnightRun | Midnight Run: Box Gem | 51 | True_()
+    LOCATION MidnightRun | Midnight Run: Sapphire Relic | 52 | True_()
+    LOCATION MidnightRun | Midnight Run: Gold Relic | 53 | True_()
+    LOCATION MidnightRun | Midnight Run: Platinum Relic | 54 | True_()
+
+REGION Dingodile
+    Warp2 -> Dingodile | BossAccessRule(2)
+    
+    LOCATION Dingodile | Defeat Dingodile | 55 | True_()
+
+Warp 3
+------
+REGION Warp3: wrapper region for warp 3 levels
+    START -> Warp3 | WarpAccessRule(3)
+    
+REGION DinoMight
+    Warp3 -> DinoMight | LevelAccessRule('Dino Might')
+    
+    LOCATION DinoMight | Dino Might: Crystal | 56 | True_()
+    LOCATION DinoMight | Dino Might: Box Gem | 57 | True_()
+    LOCATION DinoMight | Dino Might: Yellow Gem Path Gem | 58 | True_()
+    LOCATION DinoMight | Dino Might: Sapphire Relic | 59 | True_()
+    LOCATION DinoMight | Dino Might: Gold Relic | 60 | True_()
+    LOCATION DinoMight | Dino Might: Platinum Relic | 61 | True_()
+
+REGION DeepTrouble
+    Warp3 -> DeepTrouble | LevelAccessRule('Deep Trouble')
+    
+    LOCATION DeepTrouble | Deep Trouble: Crystal | 62 | True_()
+    LOCATION DeepTrouble | Deep Trouble: Box Gem | 63 | True_()
+    LOCATION DeepTrouble | Deep Trouble: Red Gem | 64 | True_()
+    LOCATION DeepTrouble | Deep Trouble: Sapphire Relic | 65 | True_()
+    LOCATION DeepTrouble | Deep Trouble: Gold Relic | 66 | True_()
+    LOCATION DeepTrouble | Deep Trouble: Platinum Relic | 67 | True_()
+
+REGION HighTime
+    Warp3 -> HighTime | LevelAccessRule('High Time')
+    
+    LOCATION HighTime | High Time: Crystal | 68 | True_()
+    LOCATION HighTime | High Time: Box Gem | 69 | True_()
+    LOCATION HighTime | High Time: Purple Gem | 70 | True_()
+    LOCATION HighTime | High Time: Sapphire Relic | 71 | True_()
+    LOCATION HighTime | High Time: Gold Relic | 72 | True_()
+    LOCATION HighTime | High Time: Platinum Relic | 73 | True_()
+
+REGION RoadCrash
+    Warp3 -> RoadCrash | LevelAccessRule('Road Crash')
+    
+    LOCATION RoadCrash | Road Crash: Crystal | 74 | True_()
+    LOCATION RoadCrash | Road Crash: Box Gem | 75 | True_()
+    LOCATION RoadCrash | Road Crash: Sapphire Relic | 76 | True_()
+    LOCATION RoadCrash | Road Crash: Gold Relic | 77 | True_()
+    LOCATION RoadCrash | Road Crash: Platinum Relic | 78 | True_()
+
+REGION DoubleHeader
+    Warp3 -> DoubleHeader | LevelAccessRule('Double Header')
+    
+    LOCATION DoubleHeader | Double Header: Crystal | 79 | True_()
+    LOCATION DoubleHeader | Double Header: Box Gem | 80 | True_()
+    LOCATION DoubleHeader | Double Header: Sapphire Relic | 81 | True_()
+    LOCATION DoubleHeader | Double Header: Gold Relic | 82 | True_()
+    LOCATION DoubleHeader | Double Header: Platinum Relic | 83 | True_()
+
+REGION NTropy
+    Warp3 -> NTropy | BossAccessRule(3)
+    
+    LOCATION NTropy | Defeat N. Tropy | 84 | True_()
+
+Warp 4
+------
+REGION Warp4: wrapper region for warp 4 levels
+    START -> Warp4 | WarpAccessRule(4)
+
+REGION Sphynxinator
+    Warp4 -> Sphynxinator | LevelAccessRule('Sphynxinator')
+    
+    LOCATION Sphynxinator | Sphynxinator: Crystal | 85 | True_()
+    LOCATION Sphynxinator | Sphynxinator: Box Gem | 86 | True_()
+    LOCATION Sphynxinator | Sphynxinator: Blue Gem Path Gem | 87 | True_()
+    LOCATION Sphynxinator | Sphynxinator: Sapphire Relic | 88 | True_()
+    LOCATION Sphynxinator | Sphynxinator: Gold Relic | 89 | True_()
+    LOCATION Sphynxinator | Sphynxinator: Platinum Relic | 90 | True_()
+
+REGION ByeByeBlimps
+    Warp4 -> ByeByeBlimps | LevelAccessRule('Bye Bye Blimps')
+    
+    LOCATION ByeByeBlimps | Bye Bye Blimps: Crystal | 91 | True_()
+    LOCATION ByeByeBlimps | Bye Bye Blimps: Box Gem | 92 | True_()
+    LOCATION ByeByeBlimps | Bye Bye Blimps: Sapphire Relic | 93 | True_()
+    LOCATION ByeByeBlimps | Bye Bye Blimps: Gold Relic | 94 | True_()
+    LOCATION ByeByeBlimps | Bye Bye Blimps: Platinum Relic | 95 | True_()
+
+REGION TellNoTales
+    Warp4 -> TellNoTales | LevelAccessRule('Tell No Tales')
+    
+    LOCATION TellNoTales | Tell No Tales: Crystal | 96 | True_()
+    LOCATION TellNoTales | Tell No Tales: Box Gem | 97 | True_()
+    LOCATION TellNoTales | Tell No Tales: Sapphire Relic | 98 | True_()
+    LOCATION TellNoTales | Tell No Tales: Gold Relic | 99 | True_()
+    LOCATION TellNoTales | Tell No Tales: Platinum Relic | 100 | True_()
+
+REGION FutureFrenzy
+    Warp4 -> FutureFrenzy | LevelAccessRule('Future Frenzy')
+    
+    LOCATION FutureFrenzy | Future Frenzy: Crystal | 101 | True_()
+    LOCATION FutureFrenzy | Future Frenzy: Box Gem | 102 | True_()
+    LOCATION FutureFrenzy | Future Frenzy: Secret Entrance Path Gem | 103 | True_()
+    LOCATION FutureFrenzy | Future Frenzy: Sapphire Relic | 104 | True_()
+    LOCATION FutureFrenzy | Future Frenzy: Gold Relic | 105 | True_()
+    LOCATION FutureFrenzy | Future Frenzy: Platinum Relic | 106 | True_()
+
+REGION TombWader
+    Warp4 -> TombWader | LevelAccessRule('Tomb Wader')
+    
+    LOCATION TombWader | Tomb Wader: Crystal | 107 | True_()
+    LOCATION TombWader | Tomb Wader: Box Gem | 108 | True_()
+    LOCATION TombWader | Tomb Wader: Blue Gem | 109 | True_()
+    LOCATION TombWader | Tomb Wader: Sapphire Relic | 110 | True_()
+    LOCATION TombWader | Tomb Wader: Gold Relic | 111 | True_()
+    LOCATION TombWader | Tomb Wader: Platinum Relic | 112 | True_()
+
+REGION NGin
+    Warp4 -> NGin | BossAccessRule(4)
+    
+    LOCATION NGin | Defeat NGin | 113 | True_()
+
+Warp 5
+------
+REGION Warp5: wrapper region for warp 5 levels
+    START -> Warp5 | WarpAccessRule(5)
+
+REGION GoneTomorrow
+    Warp5 -> GoneTomorrow | LevelAccessRule('Gone Tomorrow')
+    
+    LOCATION GoneTomorrow | Gone Tomorrow: Crystal | 114 | True_()
+    LOCATION GoneTomorrow | Gone Tomorrow: Box Gem | 115 | True_()
+    LOCATION GoneTomorrow | Gone Tomorrow: Green Gem Path Gem | 116 | True_()
+    LOCATION GoneTomorrow | Gone Tomorrow: Sapphire Relic | 117 | True_()
+    LOCATION GoneTomorrow | Gone Tomorrow: Gold Relic | 118 | True_()
+    LOCATION GoneTomorrow | Gone Tomorrow: Platinum Relic | 119 | True_()
+
+REGION OrangeAsphalt
+    Warp5 -> OrangeAsphalt | LevelAccessRule('Orange Asphalt')
+    
+    LOCATION OrangeAsphalt | Orange Asphalt: Crystal | 120 | True_()
+    LOCATION OrangeAsphalt | Orange Asphalt: Box Gem | 121 | True_()
+    LOCATION OrangeAsphalt | Orange Asphalt: Sapphire Relic | 122 | True_()
+    LOCATION OrangeAsphalt | Orange Asphalt: Gold Relic | 123 | True_()
+    LOCATION OrangeAsphalt | Orange Asphalt: Platinum Relic | 124 | True_()
+
+REGION FlamingPassion
+    Warp5 -> FlamingPassion | LevelAccessRule('Flaming Passion')
+    
+    LOCATION FlamingPassion | Flaming Passion: Crystal | 125 | True_()
+    LOCATION FlamingPassion | Flaming Passion: Box Gem | 126 | True_()
+    LOCATION FlamingPassion | Flaming Passion: Green Gem | 127 | True_()
+    LOCATION FlamingPassion | Flaming Passion: Sapphire Relic | 128 | True_()
+    LOCATION FlamingPassion | Flaming Passion: Gold Relic | 129 | True_()
+    LOCATION FlamingPassion | Flaming Passion: Platinum Relic | 130 | True_()
+
+REGION MadBombers
+    Warp5 -> MadBombers | LevelAccessRule('Mad Bombers')
+    
+    LOCATION MadBombers | Mad Bombers: Crystal | 131 | True_()
+    LOCATION MadBombers | Mad Bombers: Box Gem | 132 | True_()
+    LOCATION MadBombers | Mad Bombers: Sapphire Relic | 133 | True_()
+    LOCATION MadBombers | Mad Bombers: Gold Relic | 134 | True_()
+    LOCATION MadBombers | Mad Bombers: Platinum Relic | 135 | True_()
+
+REGION BugLite
+    Warp5 -> BugLite | LevelAccessRule('Bug Lite')
+    
+    LOCATION BugLite | Bug Lite: Crystal | 136 | True_()
+    LOCATION BugLite | Bug Lite: Box Gem | 137 | True_()
+    LOCATION BugLite | Bug Lite: 5 Colored Gem Path | 138 | True_()
+    LOCATION BugLite | Bug Lite: Sapphire Relic | 139 | True_()
+    LOCATION BugLite | Bug Lite: Gold Relic | 140 | True_()
+    LOCATION BugLite | Bug Lite: Platinum Relic | 141 | True_()
+
+REGION Cortex
+    Warp5 -> Cortex | BossAccessRule(5)
+    
+    LOCATION Cortex | Defeat Cortex | 142 | True_()
