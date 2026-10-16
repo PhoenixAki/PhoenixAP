@@ -550,9 +550,9 @@ class TimeSavers(OptionDict):
     display_name = "Time Savers"
     valid_keys = ("Skip Cutscenes", "Skip Elevators", "Teleport Across Realms")
     default = {
-        "Skip Cutscenes": "off",
-        "Skip Elevators": "off",
-        "Teleport Across Realms": "off"
+        "Skip Cutscenes": "on",
+        "Skip Elevators": "on",
+        "Teleport Across Realms": "on"
     }
 
 @dataclass
