@@ -254,6 +254,9 @@ class SpyroAHTCommands(ClientCommandProcessor):
             if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2: id_list = id_list[:-15]
             if goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] in [1, 3]: id_list = id_list[:-16]
             if goal == "Shop Items": id_list = id_list[:self.ctx.slot_data["shop_item_count"]]
+            for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
+                if goal == minigame_type and self.ctx.slot_data["minigame_checks"][minigame_type] == "disabled": id_list = []
+                if goal == minigame_type and self.ctx.slot_data["minigame_checks"][minigame_type] == "easy": id_list = id_list[::2]
             # tally it up
             count = 0
             for goal_id in id_list:
@@ -640,7 +643,7 @@ class SpyroAHTContext(SuperContext):
             if idx in self._checked_boss_doors: continue
             if dark >= cost:
                 self._checked_boss_doors.add(idx)
-                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG"
+                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG CHECKING BOSS LAIR DOOR COSTS"
                 match idx:
                     case 0:
                         msg = consts.COLOUR_WHITE, "You have enough Dark Gems for Gnasty's Lair!"
@@ -657,7 +660,7 @@ class SpyroAHTContext(SuperContext):
             if idx in self._checked_gem_doors: continue
             if light >= cost:
                 self._checked_gem_doors.add(idx)
-                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG"
+                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG CHECKING LIGHT GEM DOOR COSTS"
                 match idx:
                     case 0:
                         msg = consts.COLOUR_WHITE, "You have enough Light Gems for the door in Dragonfly Falls!"
@@ -673,7 +676,7 @@ class SpyroAHTContext(SuperContext):
             if idx in self._checked_gadgets: continue
             if light >= cost:
                 self._checked_gadgets.add(idx)
-                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG"
+                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG CHECKING GADGET COSTS"
                 match idx:
                     case 0:
                         msg = consts.COLOUR_WHITE, "You have enough Light Gems for the Ball Gadget!"
@@ -735,13 +738,16 @@ class SpyroAHTContext(SuperContext):
         last_one = (self.goal_tally == self.goal_target - 1)  # marks if check_goal_component should acknowledge being last goal or not
         for goal in self.goals_dict:
             finished_index, option_name, id_list = self.convert_goal_info[goal]
-            # adjust id lists as needed. variable shop item amounts as well as exclude_chest_items for light gems and dragon eggs
+            # adjust id lists as needed. variable shop item amounts, exclude_chest_items, and minigame_checks
             if goal == "Shop Items":
                 id_list = id_list[:self.slot_data['shop_item_count']]
             if goal == "Light Gems" and self.slot_data["exclude_chest_items"] >= 2:  # 2 = just light gems, 3 = both
                 id_list = id_list[:-15]
             if goal == "Dragon Eggs" and self.slot_data["exclude_chest_items"] in [1, 3]:  # 1 = just eggs, 3 = both
                 id_list = id_list[:-16]
+            for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
+                if goal == minigame_type and self.slot_data["minigame_checks"] == "disabled": id_list = []
+                if goal == minigame_type and self.slot_data["minigame_checks"] == "easy": id_list = id_list[::2]
             
             if not self.finished_goals[finished_index]:
                 done, new_output = await self.check_goal_component(goal, id_list, option_name, last_one)
@@ -750,7 +756,7 @@ class SpyroAHTContext(SuperContext):
             
         # tally goes +1 when a goal component is met. If that value matches however many goals there are, we're done!
         if self.goal_tally == self.goal_target:
-            logger.info(f"All goals are complete, nice work! The client should recognize your full goal status momentarily.")
+            logger.info(f"All goals are complete, nice work!")
             await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             return True
         else:

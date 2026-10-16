@@ -372,7 +372,6 @@ class SpyroAHTWorld(World):
             self.check_minigame_goal_values(key, "easy", 4)
             self.check_minigame_goal_values(key, "disabled", 0)
             
-            
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -547,7 +546,7 @@ class SpyroAHTWorld(World):
                 self.log(f"\"Random\" was requested for {option.display_name}. Goals are now: {", ".join(option.value)}.", LoggingLevel.MEDIUM)
     
     def check_minigame_goal_values(self, npc: str, setting: str, max_amount: int):
-        bad_condition = self.options.minigame_checks[npc] == setting and self.options.minigames_goal[npc] > 4
+        bad_condition = self.options.minigame_checks[npc] == setting and self.options.minigames_goal[npc] > max_amount
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log(f"Minor Warning: {npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting}. Fixing by lowering goal to {max_amount}.", LoggingLevel.WARNING)
             self.options.minigames_goal.value[npc] = max_amount
