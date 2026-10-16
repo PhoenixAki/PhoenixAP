@@ -319,6 +319,22 @@ class SpyroAHTWorld(World):
         
         self.check_lists(self.options.boss_goal, "bosses")
         self.check_lists(self.options.elders_goal, "elders")
+
+        # minigame checks
+        for key in self.options.minigame_checks.valid_keys:
+            if isinstance(self.options.minigame_checks.value[key], str):
+                self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].lower()
+
+            bad_condition = self.options.minigame_checks.value[key] not in ["normal", "easy", "disabled", "random"]
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fixing by setting {key} to normal.", LoggingLevel.WARNING)
+                self.options.minigame_checks.value[key] = "normal"
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fix this, or set auto_corrections to at least fix_minor.")
+
+            if self.options.minigame_checks.value[key] == "random":
+                self.options.minigame_checks.value[key] = self.random.choice(["normal", "easy", "disabled"])
+                self.log(f"\"random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", LoggingLevel.MEDIUM)
         
         # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
         for key in self.options.minigames_goal.valid_keys:
@@ -339,7 +355,7 @@ class SpyroAHTWorld(World):
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fix this, or set auto_corrections to at least fix_minor.")
             
-            # if here, it's a safe value. 0-8 is ignored and processed in handle_goaling. Just need to figure out random choice here
+            # handle random if needed
             if self.options.minigames_goal.value[key] == "random-on":
                 self.options.minigames_goal.value[key] = self.random.randint(1, 8)
                 self.log(f"\"random-on\" was requested for {key} for minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", LoggingLevel.MEDIUM)
@@ -351,21 +367,11 @@ class SpyroAHTWorld(World):
                 elif coin_flip == 0:
                     self.options.minigames_goal.value[key] = 0
                     self.log(f"\"random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", LoggingLevel.MEDIUM)
-        
-        # minigame checks. Unlike minigames goal, valid entries are processed later, this is just error checking
-        for key in self.options.minigame_checks.valid_keys:
-            if isinstance(self.options.minigame_checks.value[key], str): self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].lower()
             
-            bad_condition = self.options.minigame_checks.value[key] not in ["normal", "easy", "disabled", "random"]
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fixing by setting {key} to normal.", LoggingLevel.WARNING)
-                self.options.minigame_checks.value[key] = "normal"
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fix this, or set auto_corrections to at least fix_minor.")
+            # if here, it's safely a number. Need error checking in case it's set too high (i.e. if this minigame is partially or fully disabled)
+            self.check_minigame_goal_values(key, "easy", 4)
+            self.check_minigame_goal_values(key, "disabled", 0)
             
-            if self.options.minigame_checks.value[key] == "random":
-                self.options.minigame_checks.value[key] = self.random.choice(["normal", "easy", "disabled"])
-                self.log(f"\"random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", LoggingLevel.MEDIUM)
             
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
@@ -385,16 +391,19 @@ class SpyroAHTWorld(World):
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("shop_items_goal was enabled as a goal, but shop_randomization is disabled. Fix this, or set auto_corrections to at least fix_minor.")
         
+        # might have too high shop item goal for how many shop items there are
         bad_condition = self.options.shop_items_goal.value > self.options.shop_item_count.value
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log("Minor Warning: shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fixing by lowering shop_items_goal to match shop_item_count.", LoggingLevel.WARNING)
             self.options.shop_items_goal.value = self.options.shop_item_count.value
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fix this, or set auto_corrections to at least fix_minor.")
-
+        
+        # light gem and dragon eggs goals need checking for being set too high while having some excluded from chests
         self.check_eggs_and_gems(self.options.light_gems_goal, "light_gems_goal", 85, 15, self.options.exclude_chest_items >= 2)
         self.check_eggs_and_gems(self.options.dragon_eggs_goal, "dragon_eggs_goal", 64, 16, self.options.exclude_chest_items.value in [1, 3])
         
+        # setup costs
         self.gadget_costs = self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
         self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.gadget_costs)}.", LoggingLevel.MEDIUM)
         self.light_gem_doors = self.setup_costs(self.options.randomize_light_gem_door_costs, self.options.light_gem_door_cost_min, self.options.light_gem_door_cost_max, self.light_gem_doors, "Light Gem door")
@@ -536,6 +545,14 @@ class SpyroAHTWorld(World):
                     available_choices.remove(rand_choice)
                     rand_count -= 1
                 self.log(f"\"Random\" was requested for {option.display_name}. Goals are now: {", ".join(option.value)}.", LoggingLevel.MEDIUM)
+    
+    def check_minigame_goal_values(self, npc: str, setting: str, max_amount: int):
+        bad_condition = self.options.minigame_checks[npc] == setting and self.options.minigames_goal[npc] > 4
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+            self.log(f"Minor Warning: {npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting}. Fixing by lowering goal to {max_amount}.", LoggingLevel.WARNING)
+            self.options.minigames_goal.value[npc] = max_amount
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+            raise OptionError(f"Minor Warning: {npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting}. Fix this, or set auto_corrections to at least fix_minor.")
                     
     def check_eggs_and_gems(self, option: Range, name: str, maximum: int, count: int, error: bool):
         bad_condition = option.value > maximum and error
@@ -598,8 +615,9 @@ class SpyroAHTWorld(World):
                 add = True
                 for opt in location_data.get('options', ()):
                     option = getattr(self.options, opt['option'])
+                    # opt['value'] is either ['normal'] or ['easy', 'normal'] depending on if light gem or dragon egg location
                     if option.display_name == "Minigame Checks":
-                        add = option.value[opt['npc']] in opt['value']  # true if the player's choice is in the list from JSON data
+                        add = option.value[opt['npc']] in opt['value']
                     else:
                         match opt.get('operator', 'eq'):
                             case 'eq': add = add and option.value == opt['value']
@@ -629,21 +647,24 @@ class SpyroAHTWorld(World):
                     exclusion = False
                     for key in convert.keys():
                         if key in gem_event['name']:
-                            if "Byrd minigames" in gem_event['name'] and minigame_locs[convert[key]] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]]} was excluded.", LoggingLevel.HIGH)
-                                other_exclusions += int(gem_event['gem_amount'])
-                                exclusion = True
-                                break
-                            elif "Blink minigames" in gem_event['name'] and minigame_locs[convert[key] + 8] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {minigame_locs[convert[key] + 8]} was excluded.", LoggingLevel.HIGH)
-                                blink_exclusions += int(gem_event['gem_amount'])
-                                exclusion = True
-                                break
-                            elif "Sparx minigames" in gem_event['name'] and minigame_locs[convert[key] + 16] in self.options.exclude_locations.value:
-                                self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {minigame_locs[convert[key] + 16]} was excluded.", LoggingLevel.HIGH)
-                                other_exclusions += int(gem_event['gem_amount'])
-                                exclusion = True
-                                break
+                            if "Byrd minigames" in gem_event['name']:
+                                if minigame_locs[convert[key]] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sgt. Byrd"] == "disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sgt. Byrd"] != "normal"):
+                                    self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {minigame_locs[convert[key]]} was excluded or disabled via minigame_checks.", LoggingLevel.HIGH)
+                                    other_exclusions += int(gem_event['gem_amount'])
+                                    exclusion = True
+                                    break
+                            elif "Blink minigames" in gem_event['name']:
+                                if minigame_locs[convert[key] + 8] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Blink"] == "disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Blink"] != "normal"):
+                                    self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {minigame_locs[convert[key] + 8]} was excluded or disabled via minigame_checks.", LoggingLevel.HIGH)
+                                    blink_exclusions += int(gem_event['gem_amount'])
+                                    exclusion = True
+                                    break
+                            elif "Sparx minigames" in gem_event['name']:
+                                if minigame_locs[convert[key] + 16] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sparx"] == "disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sparx"] != "normal"):
+                                    self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {minigame_locs[convert[key] + 16]} was excluded or disabled via minigame_checks.", LoggingLevel.HIGH)
+                                    other_exclusions += int(gem_event['gem_amount'])
+                                    exclusion = True
+                                    break
                     if not exclusion:
                         location_name = f"{reg}: {gem_event['name']}"
                         self.get_region(reg).add_event(location_name, gem_event['name'], rule=self.rule_from_dict(gem_event["access_rule"]), show_in_spoiler=False)
@@ -691,6 +712,12 @@ class SpyroAHTWorld(World):
             goal_info["Light Gems"]["ids"] = goal_info["Light Gems"]["ids"][:-15]
         if self.options.exclude_chest_items.value in [1, 3]:  # 1 = exclude eggs, 3 = exclude both
             goal_info["Dragon Eggs"]["ids"] = goal_info["Dragon Eggs"]["ids"][:-16]
+        
+        # exclude IDs of any disabled minigames
+        for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
+            value = self.options.minigame_checks.value[minigame_type]
+            if value == "disabled": goal_info[minigame_type]["ids"] = []
+            elif value == "easy": goal_info[minigame_type]["ids"] = goal_info[minigame_type]["ids"][::2]  # removes lg checks
 
         enabled_tests = {
             "Gnasty Gnorc": "Gnasty Gnorc" in self.options.boss_goal.value, "Ineptune": "Ineptune" in self.options.boss_goal.value,

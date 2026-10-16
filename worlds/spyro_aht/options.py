@@ -198,11 +198,11 @@ class MinigameChecks(OptionDict):
     """Customize whether each minigame will be fully enabled, enabled with only Dragon Egg challenges,
     or disabled. For each minigame, enter one of:
     
-    "normal": Keeps vanilla behavior for this minigame.
-    "easy": Disables the Light Gem challenges for this minigame.
-    "disabled": Fully disables this minigame. Its NPCs will not spawn at all in-game.
+    normal: Keeps vanilla behavior for this minigame.
+    easy: Disables the Light Gem challenges for this minigame.
+    disabled: Fully disables this minigame. Its NPCs will not spawn at all in-game.
       If turret minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
-    "random": Random choice between normal, easy, and disabled."""
+    random: Random choice between normal, easy, and disabled."""
     display_name = "Minigame Checks"
     valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
     default = {
@@ -339,7 +339,6 @@ class ShopLogic(Choice):
     blink_gems_total = (20,203 - exclusions) * blink_gems%
     non_blink_enemies_total = 16,353 * non_blink_enemies%
     other_gems_total = (105,357 - exclusions) * other_gems%
-      If a minigame check is added to exclude_locations, its gems are excluded from logic.
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
     base_shop_price = gem_total / (shop_item_count - 1)
 
@@ -354,7 +353,8 @@ class ShopLogic(Choice):
 
 class BlinkGems(Range):
     """Decides what % of gems from Blink minigames you want to be expected to collect, if shop_randomization is enabled.
-    For example, a value of 50 means being expected to collect approximately 50% of such gems."""
+    For example, a value of 50 means being expected to collect approximately 50% of such gems.
+    Any Blink minigames that are added to exclude_locations, or disabled via minigame_checks, are omitted from this."""
     display_name = "Blink Gems"
     range_start = 0
     range_end = 100
@@ -372,7 +372,8 @@ class NonBlinkEnemies(Range):
 
 class OtherGems(Range):
     """Decides what % of gems you want to be expected to collect from gems on the ground, breakable containers, and
-    Sgt. Byrd + Sparx minigames, if shop_randomization is enabled."""
+    Sgt. Byrd + Sparx minigames, if shop_randomization is enabled.
+    Any Sgt. Byrd and Sparx minigames that are added to exclude_locations, or disabled via minigame_checks, are omitted from this."""
     display_name = "Other Gems"
     range_start = 0
     range_end = 100
