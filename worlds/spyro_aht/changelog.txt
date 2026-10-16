@@ -1,5 +1,11 @@
 Changelog is abbreviated at times to save space. GitHub release pages always have unabbreviated changelogs.
 
+2.2.2
+- Fixed an error that would occur (new to v2.2) if connecting to a room that uses a password. The underlying reason for the error relates to a quirk in how the client initializes that seems to have been there since AHT AP started, but it only became problematic due to some changes in v2.2.
+- Also, added game mod version 20.2, which has 2 small tweaks:
+  - Removed the "You've collected everything" message the game displays when reaching 100%. This message would sometimes get spammed if you use Dragon Eggs as filler items and get sent too many of them.
+  - The Bounce trap now synchronizes with the BPM (beats per minute) of the currently playing music track. The bounces themselves won't line up perfectly with the track, but he will bounce at the same frequency.
+
 2.2.1
 - Client updated to point to mod version 20.1, which fixes a frequent overlapping text problem on the pause menu.
 - Added client command /toggle_notifications.
