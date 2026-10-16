@@ -18,6 +18,7 @@ from NetUtils import ClientStatus, NetworkItem
 
 from .client import GenericClient, DolphinClient
 from .data import consts
+from . import SpyroAHTOptions as options
 
 
 class SpyroAHTCommands(ClientCommandProcessor):
@@ -212,9 +213,13 @@ class SpyroAHTCommands(ClientCommandProcessor):
         output_2 = "will" if self.ctx.slot_data["auto_hinting"]["Minigames"] == "on" else "won't"
         output_3 = "will" if self.ctx.slot_data["auto_hinting"]["Shop Items"] == "on" else "won't"
         self.output(f"Boss rewards {output} be hinted, minigame rewards {output_2} be hinted, and randomized shop items {output_3} be hinted.")
-        # hide shop item names
-        output = "hidden" if self.ctx.slot_data["hide_shop_item_names"] else "not hidden"
-        self.output(f"Your shop item names are {output}.")
+        # disguise shop items
+        if self.ctx.slot_data["shop_randomization"] == 1:
+            output = ""
+            for key in options.disguise_shop_items.valid_keys:
+                output_2 = "hidden" if key in self.ctx.slot_data["disguise_shop_items"] else "unhidden"
+                output += f"{key}s are {output_2}, "
+            self.output(f"Randomized shop item disguising: {output[:-2]}.")
         # easy bosses
         output = "Boss Difficulty: "
         for boss in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]:

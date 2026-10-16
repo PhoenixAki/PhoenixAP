@@ -31,7 +31,7 @@ class LoggingLevel(Choice):
     and medium messages, but not high or maximum messages. **Warning messages stemming from YAML issues are always logged.**
     
     None: No additional logging beyond warnings.
-    Low: Logs notable generation steps, such as "Checking if any minigames need vanilla rewards forced."
+    Low: Logs notable generation steps, such as "Checking for common YAML option/setting issues".
     Medium: Logs useful debugging information, such as listing your randomized shop prices. This is the default because
       the information in these messages can be very helpful when making bug reports.
     High: Logs messages with extra generation logic, such as "Fire Breath has been placed into Starter Checks: Breath."
@@ -527,10 +527,19 @@ class AutoHinting(OptionDict):
     }
     
     
-class HideShopItemNames(Toggle):
-    """Hides the name of randomized shop items (player name is still shown). Hinted shop items will display as normal."""
-    display_name = "Hide Shop Item Names"
-    default = 0
+class DisguiseShopItems(OptionSet):
+    """When the shop is randomized, items show as "<player name>'s <item  name>". By default, they use the lockpick model,
+    but this is overridden in some cases, such as key rings using the keychain model. This option lets you disguise your
+    randomized shop items in a few ways, to add more mystery to your purchases. Hinting still works even if disguised.
+    
+    Player: Replaced player names with ???.
+    Item: Replaces item names with ???.
+    Model: All items will use the lockpick model.
+     
+    Valid options: ["Player", "Item", "Model"]"""
+    valid_keys = ("Player", "Item", "Model")
+    display_name = "Disguise Shop Items"
+    default = frozenset()
     
 
 class EasyBosses(OptionSet):
@@ -610,7 +619,7 @@ class SpyroAHTOptions(PerGameCommonOptions):
     pause_menu_patch: PauseMenuPatch
     shop_pad_proximity_activation: ShopPadProximityActivation
     auto_hinting: AutoHinting
-    hide_shop_item_names: HideShopItemNames
+    disguise_shop_items: DisguiseShopItems
     easy_bosses: EasyBosses
     time_savers: TimeSavers
     
@@ -641,6 +650,6 @@ spyro_options_groups = [
         RandomizeGadgetCosts, GadgetCostMin, GadgetCostMax
     ]),
     OptionGroup("QUALITY OF LIFE", [
-        PauseMenuPatch, ShopPadProximityActivation, AutoHinting, HideShopItemNames, EasyBosses, TimeSavers
+        PauseMenuPatch, ShopPadProximityActivation, AutoHinting, DisguiseShopItems, EasyBosses, TimeSavers
     ])
 ]

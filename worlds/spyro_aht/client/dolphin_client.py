@@ -338,7 +338,11 @@ class DolphinClient(GenericClient):
             
             remote_price = price if self.ctx.slot_data["shop_randomization"] else (price * 1.25)
             large_prices = self.ctx.slot_data["shop_randomization"] == 1 and self.ctx.slot_data["shop_logic"] == 1  # large prices are only a concern if shop logic is ordered
-            name = "???" if self.ctx.slot_data["hide_shop_item_names"] else name
+            
+            if "Player" in self.ctx.slot_data["disguise_shop_items"]: player = "???"
+            if "Item" in self.ctx.slot_data["disguise_shop_items"]: name = "???"
+            if "Model" in self.ctx.slot_data["disguise_shop_items"]: model = consts.ShopItemModel.Lockpick
+            
             i = consts.XLSShoppingItem(model, consts.TextEntry(idx, f"{player}'s {name}"), (price, remote_price), large_prices)
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (idx + 1)), i.to_bytes('big'))
             dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * idx), i.text.to_bytes('big'))

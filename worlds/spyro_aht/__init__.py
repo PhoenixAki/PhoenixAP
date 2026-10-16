@@ -976,7 +976,7 @@ class SpyroAHTWorld(World):
             "pause_menu_patch": self.options.pause_menu_patch.value,
             "shop_pad_proximity_activation": self.options.shop_pad_proximity_activation.value,
             "auto_hinting": self.options.auto_hinting.value,
-            "hide_shop_item_names": self.options.hide_shop_item_names.value,
+            "disguise_shop_items": self.options.disguise_shop_items.value,
             "easy_bosses": self.options.easy_bosses.value,
             "time_savers": self.options.time_savers.value,
         }
