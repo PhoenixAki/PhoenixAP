@@ -10,14 +10,14 @@ from typing import Any, override
 import orjson
 
 import Utils
-from BaseClasses import Item, ItemClassification, MultiWorld, Region, CollectionState
+from BaseClasses import Item, MultiWorld, Region, CollectionState, ItemClassification
 from Options import OptionError, OptionSet, Choice, Range, OptionDict
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
 from .data.consts import LEVEL_SHOP_LOOKUP, REALM_LEVEL_LOOKUP, REALM_LEVEL_LISTS, LoggingLevel, BOSS_IDS, DARK_GEM_IDS, \
     LIGHT_GEM_IDS, DRAGON_EGG_IDS, FIREWORK_IDS, SHOP_ITEM_IDS, LOCKED_CHEST_IDS, ELDER_ABILITY_IDS, BYRD_IDS, \
-    BLINK_IDS, TURRET_IDS, SPARX_IDS, SHOP_PAD_LIST, LEVEL_TO_REALM
+    BLINK_IDS, TURRET_IDS, SPARX_IDS, SHOP_PAD_LIST, LEVEL_TO_REALM, ITEM_INFO, ITEM_GROUP_IDS
 from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
@@ -49,11 +49,13 @@ def _load_file(file: str) -> Any:
     return orjson.loads(pkgutil.get_data(__name__, "data/" + file).decode("utf-8")) # type: ignore
 
 
-def create_item_groups(item_data) -> dict[str, set[str]]:
+def create_item_groups() -> dict[str, set[str]]:
     item_groups = defaultdict(set)
-    for item in item_data:
-        item_groups[item['group']].add(item['name'])
-        
+    for name, data in ITEM_INFO.items():
+        for group, id_list in ITEM_GROUP_IDS.items():  # id_lists are all 2 elements: start of id range and end of id range
+            if id_list[0] <= data[0] <= id_list[1]:
+                item_groups[group].add(name)
+            
     return item_groups
 
 
@@ -144,9 +146,8 @@ class SpyroAHTWorld(World):
     options: SpyroAHTOptions
     web = SpyroAHTWeb()
     
-    item_data = _load_file("items.json")
-    item_name_to_id = {i['name']: i['id'] for i in item_data}
-    item_name_groups = create_item_groups(item_data)
+    item_name_to_id = {item: data[0] for (item, data) in ITEM_INFO.items()}
+    item_name_groups = create_item_groups()
     
     location_data = _load_file("locations.json")
     location_name_to_id = _location_name_to_id(location_data)
@@ -160,7 +161,6 @@ class SpyroAHTWorld(World):
         self.light_gem_doors = [70, 20, 95, 45]
         self.boss_lairs = [10, 20, 30, 40]
         self.gadget_costs = [8, 24, 40]  # ball, invincibility, supercharge
-        self.classifications = {i['name']: ItemClassification(i['classification']) for i in self.item_data}
         self.shop_costs = []
         self.filler_items: dict[str, list[str]] = {}
         self.goals_dict: dict[str, list[int]] = defaultdict(list[int])  # dict of enabled goal name -> list of location ids. Sent to client via slot data
@@ -174,8 +174,9 @@ class SpyroAHTWorld(World):
     
     def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
-        self.log(f"Created item {name} with classification {self.classifications[name]} and ID {self.item_name_to_id[name]}, placed into {placement}.", LoggingLevel.MAXIMUM)
-        return Item(name, self.classifications[name], self.item_name_to_id[name], self.player)
+        classifications = {0: "filler", 1: "progression", 2: "useful", 4: "trap", 25: "progression deprioritized skip balancing"}
+        self.log(f"Created item {name} for player {self.player} with classification {classifications[ITEM_INFO[name][1]]} and ID {self.item_name_to_id[name]}, placed into the {placement}.", LoggingLevel.MAXIMUM)
+        return Item(name, ITEM_INFO[name][1], self.item_name_to_id[name], self.player)
     
     def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
         """Sorts AHT locations in UT based on vanilla game level order -> alphabetical by region -> alphabetical by location."""
@@ -912,24 +913,25 @@ class SpyroAHTWorld(World):
 
     def setup_filler_list(self) -> tuple[dict[str, list], list[str]]:
         """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
-        all_filler_items = [item for item in self.item_data if item["group"] == "Filler"]
         enabled_filler_items: dict[str, list[str]] = {}
         shinies = []
 
         for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
             if category in self.options.filler_items.value:
                 enabled_filler_items[category] = []
-
-        for filler_item in all_filler_items:
-            if filler_item["name"] == "Gem Pack" and "Gem Packs" in enabled_filler_items.keys():
-                enabled_filler_items["Gem Packs"].append(filler_item["name"])
-            elif filler_item["name"] == "Dragon Egg" and "Dragon Eggs" in enabled_filler_items.keys():
-                enabled_filler_items["Dragon Eggs"].append(filler_item["name"])
-            elif "Bomb" in filler_item["name"] and "Breath Bombs" in enabled_filler_items.keys():
-                enabled_filler_items["Breath Bombs"].append(filler_item["name"])
-            elif filler_item.get("type", "") == "Shinies" and "Shinies" in enabled_filler_items.keys():
-                enabled_filler_items["Shinies"].append(filler_item["name"])
-                shinies.append(filler_item["name"])
+        
+        for name, (item_id, classification) in ITEM_INFO.items():
+            if classification != ItemClassification.filler:
+                continue
+            if name == "Gem Pack" and "Gem Packs" in enabled_filler_items.keys():
+                enabled_filler_items["Gem Packs"].append(name)
+            elif name == "Dragon Egg" and "Dragon Eggs" in enabled_filler_items.keys():
+                enabled_filler_items["Dragon Eggs"].append(name)
+            elif "Bomb" in name and "Breath Bombs" in enabled_filler_items.keys():
+                enabled_filler_items["Breath Bombs"].append(name)
+            elif ITEM_GROUP_IDS["Filler"][0] <= item_id <= ITEM_GROUP_IDS["Filler"][1] and "Shinies" in enabled_filler_items.keys():
+                enabled_filler_items["Shinies"].append(name)
+                shinies.append(name)
 
         return enabled_filler_items, shinies
   
