@@ -543,7 +543,7 @@ class SpyroAHTContext(SuperContext):
                 address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
                 await self._set_keyring_or_shop(bit, address)
             elif consts.ITEM_GROUP_IDS["Access Cards"][0] <= item.item <= consts.ITEM_GROUP_IDS["Access Cards"][1]:
-                await self.emu_client.allow_realm_access(item.item)
+                await self.emu_client.allow_realm_access(item.item - consts.ITEM_GROUP_IDS["Access Cards"][0])
             elif item.item == consts.ITEM_INFO["Spam Call"][0]:
                 total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS)
                 if total < item_counts["Spam Call"]:
