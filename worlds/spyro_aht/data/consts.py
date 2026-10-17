@@ -139,7 +139,7 @@ SPARX_IDS = [315, 217, 331, 238, 341, 254, 356, 275]
 # just to shorten references to these below
 filler, prog, useful, trap, prog_dep_skip = ItemClassification.filler, ItemClassification.progression, ItemClassification.useful, ItemClassification.trap, ItemClassification.progression_deprioritized_skip_balancing
 
-ITEM_INFO = {  # "Name": (id, classification)
+ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     # elder abilities
     "Double Jump": (1, prog), "Pole Spin": (2, prog), "Wing Shield": (3, prog), "Wall Kick": (4, prog),
     # breaths
@@ -148,7 +148,7 @@ ITEM_INFO = {  # "Name": (id, classification)
     "Swim": (9, prog), "Glide": (10, prog), "Charge": (11, prog),
     # key rings
     "Dragon Village Key Ring": (12, prog), "Crocovile Swamp Key Ring": (13, prog), "Dragonfly Falls Key Ring": (14, prog),
-    "Coastal Remains Key Ring": (13, prog), "Cloudy Domain Key Ring": (14, prog), "Sunken Ruins Key Ring": (15, prog),
+    "Coastal Remains Key Ring": (13, prog), "Sunken Ruins Key Ring": (14, prog), "Cloudy Domain Key Ring": (15, prog),
     "Frostbite Village Key Ring": (16, prog), "Ice Citadel Key Ring": (17, prog),
     "Stormy Beach Key Ring": (18, prog), "Molten Mount Key Ring": (19, prog), "Magma Falls Key Ring": (20, prog),
     "Dark Mine Key Ring": (21, prog), "Red's Laboratory Key Ring": (22, prog),
@@ -164,8 +164,8 @@ ITEM_INFO = {  # "Name": (id, classification)
     "Crocovile Swamp - Perilous Pyramid Shop Unlock": (38, prog), "Crocovile Swamp - Forgotten Temple Shop Unlock": (39, prog), "Crocovile Swamp - Elder's Tree Shop Unlock": (40, prog),
     "Dragonfly Falls - Steep Canyon Shop Unlock": (41, prog), "Dragonfly Falls - Tropical Cove Shop Unlock": (42, prog), "Dragonfly Falls - Secret Area Shop Unlock": (43, prog),
     "Coastal Remains - Coastal Depot Shop Unlock": (44, prog), "Coastal Remains - Domain Doorstep Shop Unlock": (45, prog), "Coastal Remains - Waterfall Walkway Shop Unlock": (46, prog),
-    "Cloudy Domain - Elevator Top Shop Unlock": (47, prog), "Cloudy Domain - Elder's Homestead": (48, prog), "Cloudy Domain - Tallest Tower Shop Unlock": (49, prog),
-    "Sunken Ruins - Atlantian Entryway Shop Unlock": (50, prog), "Sunken Ruins - The Depths Shop Unlock": (51, prog), "Sunken Ruins - Toxic Rise Shop Unlock": (52, prog),
+    "Sunken Ruins - Atlantian Entryway Shop Unlock": (47, prog), "Sunken Ruins - The Depths Shop Unlock": (48, prog), "Sunken Ruins - Toxic Rise Shop Unlock": (49, prog),
+    "Cloudy Domain - Elevator Top Shop Unlock": (50, prog), "Cloudy Domain - Elder's Homestead": (51, prog), "Cloudy Domain - Tallest Tower Shop Unlock": (52, prog),
     "Frostbite Village - Frosty Depot Shop Unlock": (53, prog), "Frostbite Village - Icy Camp Shop Unlock": (54, prog), "Frostbite Villgae - Eskimole Village Shop Unlock": (55, prog),
     "Ice Citadel - Cool Courtyard Shop Unlock": (56, prog), "Ice Citadel - Supercharge Central Shop Unlock": (57, prog), "Ice Citadel - Royal Chamber Shop Unlock": (58, prog), "Ice Citadel - Drawbridge Drop-off Shop Unlock": (59, prog),
     "Stormy Beach - Stormy Depot Shop Unlock": (60, prog),
@@ -176,13 +176,13 @@ ITEM_INFO = {  # "Name": (id, classification)
     "Red's Laboratory - Pre-production Shop Unlock": (72, prog), "Red's Laboratory - Laser Leaps Shop Unlock": (73, prog),
     # progressive shop unlocks
     "Progressive Dragon Village Shop Unlock": (74, prog), "Progressive Crocovile Swamp Shop Unlock": (75, prog), "Progressive Dragonfly Falls Shop Unlock": (76, prog),
-    "Progressive Coastal Remains Shop Unlock": (77, prog), "Progressive Cloudy Domain Shop Unlock": (78, prog), "Progressive Sunken Ruins Shop Unlock": (79, prog),
+    "Progressive Coastal Remains Shop Unlock": (77, prog), "Progressive Sunken Ruins Shop Unlock": (78, prog), "Progressive Cloudy Domain Shop Unlock": (79, prog),
     "Progressive Frostbite Village Shop Unlock": (80, prog), "Progressive Ice Citadel Shop Unlock": (81, prog),
     "Progressive Stormy Beach Shop Unlock": (82, prog), "Progressive Molten Mount Shop Unlock": (83, prog), "Progressive Magma Falls Shop Unlock": (84, prog),
     "Progressive Dark Mine Shop Unlock": (85, prog), "Progressive Red's Laboratory Shop Unlock": (86, prog),
     # level shop unlocks
     "Dragon Village - Shop Unlock": (87, prog), "Crocovile Swamp - Shop Unlock": (88, prog), "Dragonfly Falls - Shop Unlock": (89, prog),
-    "Coastal Remains - Shop Unlock": (90, prog), "Cloudy Domain - Shop Unlock": (91, prog), "Sunken Ruins - Shop Unlock": (92, prog),
+    "Coastal Remains - Shop Unlock": (90, prog), "Sunken Ruins - Shop Unlock": (91, prog), "Cloudy Domain - Shop Unlock": (92, prog),
     "Frostbite Village - Shop Unlock": (93, prog), "Ice Citadel - Shop Unlock": (94, prog),
     "Stormy Beach - Shop Unlock": (95, prog), "Molten Mount - Shop Unlock": (96, prog), "Magma Falls - Shop Unlock": (97, prog),
     "Dark Mine - Shop Unlock": (98, prog), "Red's Laboratory - Shop Unlock": (99, prog),
@@ -249,8 +249,8 @@ LEVEL_SHOP_LOOKUP = {
     "Crocovile Swamp": ["Perilous Pyramid", "Forgotten Temple", "Elder's Tree"],
     "Dragonfly Falls": ["Steep Canyon", "Tropical Cove", "Secret Area"],
     "Coastal Remains": ["Coastal Depot", "Domain Doorstep", "Waterfall Walkway"],
-    "Cloudy Domain": ["Elevator Top", "Elder's Homestead", "Tallest Tower"],
     "Sunken Ruins": ["Atlantian Entryway", "The Depths", "Toxic Rise"],
+    "Cloudy Domain": ["Elevator Top", "Elder's Homestead", "Tallest Tower"],
     "Frostbite Village": ["Frosty Depot", "Icy Camp", "Eskimole Village"],
     "Ice Citadel": ["Cool Courtyard", "Supercharge Central", "Royal Chamber", "Drawbridge Drop-off"],
     "Stormy Beach": ["Stormy Depot"],
@@ -263,7 +263,7 @@ LEVEL_SHOP_LOOKUP = {
 # simplifies finding all the shops for a given realm. Look up realm here -> look up each level from that realm's list in LEVEL_SHOP_LOOKUP
 REALM_LEVEL_LOOKUP = {
     "Dragon Kingdom": ["Dragon Village", "Crocovile Swamp", "Dragonfly Falls"],
-    "Lost Cities": ["Coastal Remains", "Cloudy Domain", "Sunken Ruins"],
+    "Lost Cities": ["Coastal Remains", "Sunken Ruins", "Cloudy Domain"],
     "Icy Wilderness": ["Frostbite Village", "Ice Citadel"],
     "Volcanic Isle": ["Stormy Beach", "Molten Mount", "Magma Falls", "Dark Mine", "Red's Laboratory"]
 }
@@ -271,7 +271,7 @@ REALM_LEVEL_LOOKUP = {
 # used when generating location groups. Differs from REALM_LEVEL_LOOKUP in that it includes GG and separates MFt and MFb
 REALM_LEVEL_LISTS = {
     "Dragon Kingdom": ["Dragon Village", "Crocovile Swamp", "Dragonfly Falls"],
-    "Lost Cities": ["Coastal Remains", "Cloudy Domain", "Sunken Ruins"],
+    "Lost Cities": ["Coastal Remains", "Sunken Ruins", "Cloudy Domain"],
     "Icy Wilderness": ["Frostbite Village", "Gloomy Glacier", "Ice Citadel"],
     "Volcanic Isle": ["Stormy Beach", "Molten Mount", "Magma Falls Top", "Magma Falls Bottom", "Dark Mine", "Red's Laboratory"]
 }

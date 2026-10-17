@@ -410,11 +410,11 @@ class SpyroAHTContext(SuperContext):
                         # self.slot = # of currently connected AHT player
                         item = args['item']
                         if args['receiving'] == self.slot:
-                            if item.item in [80, 83]: sender = "Moneybags"
+                            if item.item == consts.ITEM_INFO["Spam Call"][0] or item.item == consts.ITEM_INFO["Gem Tax"][0]: sender = "Moneybags" 
                             elif item.player == self.slot: sender = "yourself"
                             else: sender = self.player_names[item.player]
                             item_name = self.item_names.lookup_in_slot(item.item, self.slot)
-                            if item.player == self.slot and not self.self_sent_notifs:  # don't send "received <item> from youself" notifs if flag is off
+                            if item.player == self.slot and not self.self_sent_notifs:  # don't send "received <item> from yourself" notifs if flag is off
                                 return
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {item_name} from {sender}'))
                         elif args['receiving'] != self.slot and item.player == self.slot:
@@ -452,132 +452,131 @@ class SpyroAHTContext(SuperContext):
         for item in self.items_received:
             if item in self._handled_items: continue
             self._handled_items.add(item)
-            match item.item:
-                case 0xB:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Swim, True)
-                case 0xC:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Glide, True)
-                case 0xD:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Charge, True)
-                case 0x1:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.DoubleJump, True)
-                case 0x2:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.PoleSpin, True)
-                case 0x3:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WingShield, True)
-                case 0x4:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WallKick, True)
-                case 0xE:
-                    if not await self.emu_client.has_any_breath():
-                        await self.emu_client.set_breath(consts.BREATH_FIRE)
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.FireBreath, True)
-                case 0x5:
-                    if not await self.emu_client.has_any_breath():
-                        await self.emu_client.set_breath(consts.BREATH_ELECTRIC)
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.ElectricBreath, True)
-                case 0x6:
-                    if not await self.emu_client.has_any_breath():
-                        await self.emu_client.set_breath(consts.BREATH_WATER)
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WaterBreath, True)
-                case 0x7:
-                    if not await self.emu_client.has_any_breath():
-                        await self.emu_client.set_breath(consts.BREATH_ICE)
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.IceBreath, True)
-                case 0x8:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
-                    if count < item_counts["Dark Gem"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, count + 1)
-                case 0x9:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
-                    if count < item_counts["Light Gem"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, count + 1)
-                case 0xA:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
-                    if count < item_counts["Dragon Egg"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.DRAGON_EGG_COUNT, count + 1)
-                case 0x1C:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
-                    if count < item_counts["Lockpick"]:
-                        lc = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
-                        await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, count + 1)
-                        await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, lc + 1)
-                case 0xF:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.SparxHealthUpgrade, True)
-                case 0x19:
-                    await self.emu_client.enable_butterfly_jar()
-                case 0x1A:
-                    await self.emu_client.toggle_double_gems(True)
-                case 0x1B:
-                    await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Shockwave, True)
-                case 0x1D:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED)
-                    if count < item_counts["Gem Pack"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED, count + 1)
-                        await self.emu_client.add_gem_pack()
-                case 0x1E:
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED)
-                    if total < item_counts["Fire Bomb"]:
-                        count = await self.emu_client.get_item_count(self.emu_client.addresses.FIRE_BOMBS)
-                        await self.emu_client.set_item(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED, total + 1)
-                        await self.emu_client.set_item(self.emu_client.addresses.FIRE_BOMBS, count + 1)
-                case 0x1F:
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED)
-                    if total < item_counts["Electric Bomb"]:
-                        count = await self.emu_client.get_item_count(self.emu_client.addresses.ELECTRIC_BOMBS)
-                        await self.emu_client.set_item(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED, total + 1)
-                        await self.emu_client.set_item(self.emu_client.addresses.ELECTRIC_BOMBS, count + 1)
-                case 0x20:
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED)
-                    if total < item_counts["Water Bomb"]:
-                        count = await self.emu_client.get_item_count(self.emu_client.addresses.WATER_BOMBS)
-                        await self.emu_client.set_item(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED, total + 1)
-                        await self.emu_client.set_item(self.emu_client.addresses.WATER_BOMBS, count + 1)
-                case 0x21:
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED)
-                    if total < item_counts["Ice Bomb"]:
-                        count = await self.emu_client.get_item_count(self.emu_client.addresses.ICE_BOMBS)
-                        await self.emu_client.set_item(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED, total + 1)
-                        await self.emu_client.set_item(self.emu_client.addresses.ICE_BOMBS, count + 1)
-                case 0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B | 0x2C | 0x2D | 0x2E | 0x2F:
-                    bit = consts.KEY_RINGS.index(item.item)
-                    address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
-                    await self._set_keyring_or_shop(bit, address)
-                case 0x30 | 0x31 | 0x32 | 0x33: # access cards
-                    await self.emu_client.allow_realm_access(item.item)
-                case 0x50:  # spam call
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS)
-                    if total < item_counts["Spam Call"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS, total + 1)
-                        self.emu_client.trap_queue.put_nowait("Spam Call")
-                case 0x51:  # reverse controls
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 1)
-                    if total < item_counts["Reverse Controls"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 1, total + 1)
-                        self.emu_client.trap_queue.put_nowait("Reverse Controls")
-                case 0x52:  # damage sparx trap
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
-                    if total < item_counts["Damage Sparx"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 2, total + 1)
-                        await self.emu_client.damage_sparx(logger)
-                case 0x53:  # gem tax trap
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 3)
-                    if total < item_counts["Gem Tax"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
-                        await self.emu_client.gem_tax()
-                case 0x54:  # bounce trap
-                    total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 4)
-                    if total < item_counts["Bounce"]:
-                        await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 4, total + 1)
-                        self.emu_client.trap_queue.put_nowait("Bounce")
-                case 0x64 | 0x65 | 0x66 | 0x67 | 0x68 | 0x69 | 0x6A | 0x6B | 0x6C | 0x6D | 0x6E | 0x6F | 0x70 | 0x71 | 0x72 | 0x73 | 0x74 | 0x75 \
-                | 0x76 | 0x77 | 0x78 | 0x79 | 0x7A | 0x7B | 0x7C | 0x7D | 0x7E | 0x7F | 0x80 | 0x81 | 0x82 | 0x83 | 0x84 | 0x85 | 0x86 | 0x87 | 0x88:
-                    await self._unlock_shop(item.item, "Randomized")
-                case 0x89 | 0x8A | 0x8B | 0x8C | 0x8D | 0x8E | 0x8F | 0x90 | 0x91 | 0x92 | 0x93 | 0x94 | 0x95:
-                    await self._unlock_shop(item.item, "Progressive")
-                case 0x96 | 0x97 | 0x98 | 0x99 | 0x9A | 0x9B | 0x9C | 0x9D | 0x9E | 0x9F | 0xA0 | 0xA1 | 0xA2:
-                    await self._unlock_shop(item.item, "Level")
-                case 0xA3 | 0xA4 | 0xA5 | 0xA6:
-                    await self._unlock_shop(item.item, "Realm")
+            if item.item == consts.ITEM_INFO["Swim"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Swim, True)
+            elif item.item == consts.ITEM_INFO["Glide"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Glide, True)
+            elif item.item == consts.ITEM_INFO["Charge"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Charge, True)
+            elif item.item == consts.ITEM_INFO["Double Jump"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.DoubleJump, True)
+            elif item.item == consts.ITEM_INFO["Pole Spin"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.PoleSpin, True)
+            elif item.item == consts.ITEM_INFO["Wing Shield"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WingShield, True)
+            elif item.item == consts.ITEM_INFO["Wall Kick"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WallKick, True)
+            elif item.item == consts.ITEM_INFO["Fire Breath"][0]:
+                if not await self.emu_client.has_any_breath():
+                    await self.emu_client.set_breath(consts.BREATH_FIRE)
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.FireBreath, True)
+            elif item.item == consts.ITEM_INFO["Electric Breath"][0]:
+                if not await self.emu_client.has_any_breath():
+                    await self.emu_client.set_breath(consts.BREATH_ELECTRIC)
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.ElectricBreath, True)
+            elif item.item == consts.ITEM_INFO["Water Breath"][0]:
+                if not await self.emu_client.has_any_breath():
+                    await self.emu_client.set_breath(consts.BREATH_WATER)
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WaterBreath, True)
+            elif item.item == consts.ITEM_INFO["Ice Breath"][0]:
+                if not await self.emu_client.has_any_breath():
+                    await self.emu_client.set_breath(consts.BREATH_ICE)
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.IceBreath, True)
+            elif item.item == consts.ITEM_INFO["Dark Gem"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+                if count < item_counts["Dark Gem"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Light Gem"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+                if count < item_counts["Light Gem"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Dragon Egg"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
+                if count < item_counts["Dragon Egg"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.DRAGON_EGG_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Lockpick"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
+                if count < item_counts["Lockpick"]:
+                    lc = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, count + 1)
+                    await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, lc + 1)
+            elif item.item == consts.ITEM_INFO["Health Unit+"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.SparxHealthUpgrade, True)
+            elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
+                await self.emu_client.enable_butterfly_jar()
+            elif item.item == consts.ITEM_INFO["Double Gems"][0]:
+                await self.emu_client.toggle_double_gems(True)
+            elif item.item == consts.ITEM_INFO["Shockwave"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Shockwave, True)
+            elif item.item == consts.ITEM_INFO["Gem Pack"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED)
+                if count < item_counts["Gem Pack"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED, count + 1)
+                    await self.emu_client.add_gem_pack()
+            elif item.item == consts.ITEM_INFO["Fire Bomb"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED)
+                if total < item_counts["Fire Bomb"]:
+                    count = await self.emu_client.get_item_count(self.emu_client.addresses.FIRE_BOMBS)
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED, total + 1)
+                    await self.emu_client.set_item(self.emu_client.addresses.FIRE_BOMBS, count + 1)
+            elif item.item == consts.ITEM_INFO["Electric Bomb"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED)
+                if total < item_counts["Electric Bomb"]:
+                    count = await self.emu_client.get_item_count(self.emu_client.addresses.ELECTRIC_BOMBS)
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED, total + 1)
+                    await self.emu_client.set_item(self.emu_client.addresses.ELECTRIC_BOMBS, count + 1)
+            elif item.item == consts.ITEM_INFO["Water Bomb"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED)
+                if total < item_counts["Water Bomb"]:
+                    count = await self.emu_client.get_item_count(self.emu_client.addresses.WATER_BOMBS)
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED, total + 1)
+                    await self.emu_client.set_item(self.emu_client.addresses.WATER_BOMBS, count + 1)
+            elif item.item == consts.ITEM_INFO["Ice Bomb"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED)
+                if total < item_counts["Ice Bomb"]:
+                    count = await self.emu_client.get_item_count(self.emu_client.addresses.ICE_BOMBS)
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED, total + 1)
+                    await self.emu_client.set_item(self.emu_client.addresses.ICE_BOMBS, count + 1)
+            elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
+                key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1]+1))
+                bit = key_ring_id_list.index(item.item)
+                address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
+                await self._set_keyring_or_shop(bit, address)
+            elif consts.ITEM_GROUP_IDS["Access Cards"][0] <= item.item <= consts.ITEM_GROUP_IDS["Access Cards"][1]:
+                await self.emu_client.allow_realm_access(item.item)
+            elif item.item == consts.ITEM_INFO["Spam Call"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS)
+                if total < item_counts["Spam Call"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS, total + 1)
+                    self.emu_client.trap_queue.put_nowait("Spam Call")
+            elif item.item == consts.ITEM_INFO["Reverse Controls"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 1)
+                if total < item_counts["Reverse Controls"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 1, total + 1)
+                    self.emu_client.trap_queue.put_nowait("Reverse Controls")
+            elif item.item == consts.ITEM_INFO["Damage Sparx"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
+                if total < item_counts["Damage Sparx"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 2, total + 1)
+                    await self.emu_client.damage_sparx(logger)
+            elif item.item == consts.ITEM_INFO["Gem Tax"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 3)
+                if total < item_counts["Gem Tax"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
+                    await self.emu_client.gem_tax()
+            elif item.item == consts.ITEM_INFO["Bounce"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 4)
+                if total < item_counts["Bounce"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 4, total + 1)
+                    self.emu_client.trap_queue.put_nowait("Bounce")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0] <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+36:
+                await self._unlock_shop(item.item, "Randomized")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+37 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+49:
+                await self._unlock_shop(item.item, "Progressive")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+50 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+62:
+                await self._unlock_shop(item.item, "Level")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+63 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+66:
+                await self._unlock_shop(item.item, "Realm")
                 
     async def _unlock_shop(self, item_id, shop_type):
         if shop_type == "Randomized":
@@ -632,10 +631,10 @@ class SpyroAHTContext(SuperContext):
         await self.emu_client.set_item(address, data)
         
     async def check_hub_access(self, name: str):
-        if "Village Depot" in name: await self.emu_client.allow_realm_access(0x30)
-        elif "Coastal Depot" in name: await self.emu_client.allow_realm_access(0x31)
-        elif "Frosty Depot" in name: await self.emu_client.allow_realm_access(0x32)
-        elif "Stormy Depot" in name: await self.emu_client.allow_realm_access(0x33)
+        if "Village Depot" in name: await self.emu_client.allow_realm_access(0)
+        elif "Coastal Depot" in name: await self.emu_client.allow_realm_access(1)
+        elif "Frosty Depot" in name: await self.emu_client.allow_realm_access(2)
+        elif "Stormy Depot" in name: await self.emu_client.allow_realm_access(3)
 
     async def _check_doors(self):
         dark = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)

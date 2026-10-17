@@ -145,10 +145,8 @@ class DolphinClient(GenericClient):
 
     async def set_flag(self, address: int, flag: int, to: bool):
         flags = dolphin_memory_engine.read_word(address)
-        if to:
-            flags |= flag
-        else:
-            flags &= ~flag
+        if to: flags |= flag
+        else: flags &= ~flag
         dolphin_memory_engine.write_word(address, int(flags))
     
     async def get_flag(self, address: int, flag: int) -> bool:
@@ -190,8 +188,7 @@ class DolphinClient(GenericClient):
     async def add_gem_pack(self):
         value = random.randint(400, 600)
         double = dolphin_memory_engine.read_byte(self.addresses.g_INFINITE_DOUBLE_GEM)
-        if double:
-            value *= 2
+        if double: value *= 2
         count = dolphin_memory_engine.read_word(self.addresses.GEMS)
         dolphin_memory_engine.write_word(self.addresses.GEMS, count + value)
     
@@ -316,25 +313,24 @@ class DolphinClient(GenericClient):
             model = consts.ShopItemModel.Lockpick
             price = self.ctx.slot_data["shop_costs"][idx]
             if game.game == "Spyro: A Hero's Tail":
-                match item.item:
-                    case 0xE:
-                        model = consts.ShopItemModel.FireBomb
-                    case 0x5:
-                        model = consts.ShopItemModel.ElectricBomb
-                    case 0x6:
-                        model = consts.ShopItemModel.WaterBomb
-                    case 0x7:
-                        model = consts.ShopItemModel.IceBomb
-                    case 0xF:
-                        model = consts.ShopItemModel.HealthUpgrade
-                    case 0x19:
-                        model = consts.ShopItemModel.ButterflyJar
-                    case 0x1A:
-                        model = consts.ShopItemModel.DoubleGems
-                    case 0x1B:
-                        model = consts.ShopItemModel.Shockwave
-                    case 0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B | 0x2C | 0x2D | 0x2E | 0x2F:
-                        model = consts.ShopItemModel.Keychain
+                if item.item == consts.ITEM_INFO["Fire Breath"][0] or item.item == consts.ITEM_INFO["Fire Bomb"][0]:
+                    model = consts.ShopItemModel.FireBomb
+                elif item.item == consts.ITEM_INFO["Electric Breath"][0] or item.item == consts.ITEM_INFO["Electric Bomb"][0]:
+                    model = consts.ShopItemModel.ElectricBomb
+                elif item.item == consts.ITEM_INFO["Water Breath"][0] or item.item == consts.ITEM_INFO["Water Bomb"][0]:
+                    model = consts.ShopItemModel.WaterBomb
+                elif item.item == consts.ITEM_INFO["Ice Breath"][0] or item.item == consts.ITEM_INFO["Ice Bomb"][0]:
+                    model = consts.ShopItemModel.IceBomb
+                elif item.item == consts.ITEM_INFO["Health Unit+"][0]:
+                    model = consts.ShopItemModel.HealthUpgrade
+                elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
+                    model = consts.ShopItemModel.ButterflyJar
+                elif item.item == consts.ITEM_INFO["Double Gems"][0]:
+                    model = consts.ShopItemModel.DoubleGems
+                elif item.item == consts.ITEM_INFO["Shockwave"][0]:
+                    model = consts.ShopItemModel.Shockwave
+                elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
+                    model = consts.ShopItemModel.Keychain
             
             remote_price = price if self.ctx.slot_data["shop_randomization"] else (price * 1.25)
             large_prices = self.ctx.slot_data["shop_randomization"] == 1 and self.ctx.slot_data["shop_logic"] == 1  # large prices are only a concern if shop logic is ordered
@@ -358,7 +354,7 @@ class DolphinClient(GenericClient):
                     continue  # don't update if it doesn't have an icon
                     
                 if in_logic_ids_to_names[str(loc_id)] == "":
-                    continue  # skip if not in logic (no KeyError because defaultdict. Instead, "" comes back
+                    continue  # skip if not in logic. no KeyError because defaultdict. Instead, "" comes back
                 
                 index = consts.LOCATIONS_BITFIELD[loc_id]
                 addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
@@ -392,7 +388,7 @@ class DolphinClient(GenericClient):
     
     async def allow_realm_access(self, id: int):
         current: list[bool] = list(struct.unpack(">????", dolphin_memory_engine.read_bytes(self.addresses.g_REALM_ACCESS, 4)))
-        current[id - 0x30] = True
+        current[id] = True
         dolphin_memory_engine.write_bytes(self.addresses.g_REALM_ACCESS, struct.pack(">????", *current))
     
     async def toggle_double_gems(self, to: bool):
