@@ -1037,6 +1037,8 @@ REGION MFtWallKickUpper: after using wall kick in the room
 REGION MFtBallGadgetEntry: area next to ball gadget
 	MFtCenter -> MFtBallGadgetEntry | Has('Double Jump')
 		would have DJ and (water or ice)
+	MFtSouth -> MFtBallGadgetEntry | Has('Double Jump')
+	    would have DJ, this exists as a shortcut over the fire imp thus no requirement for (water or ice)
 	MFBallGadget -> MFtBallGadgetEntry | True_()
 		would have ball gadget
 

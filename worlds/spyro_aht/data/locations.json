@@ -17015,6 +17015,18 @@
                 }
             },
             {
+                "name": "MFtSouth -> MFtBallGadgetEntry",
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            },
+            {
                 "name": "MFBallGadget -> MFtBallGadgetEntry",
                 "access_rule": {
                     "rule": "True_",
