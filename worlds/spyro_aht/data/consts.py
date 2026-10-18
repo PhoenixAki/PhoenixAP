@@ -296,6 +296,13 @@ class AbilityFlags(IntFlag):
     Charge = 0x200000
     Swim = 0x400000
 
+ABILITY_MATCH = {
+    ITEM_INFO["Double Jump"][0]: AbilityFlags.DoubleJump, ITEM_INFO["Pole Spin"][0]: AbilityFlags.PoleSpin, ITEM_INFO["Wing Shield"][0]: AbilityFlags.WingShield,
+    ITEM_INFO["Wall Kick"][0]: AbilityFlags.WallKick, ITEM_INFO["Fire Breath"][0]: AbilityFlags.FireBreath, ITEM_INFO["Electric Breath"][0]: AbilityFlags.ElectricBreath,
+    ITEM_INFO["Water Breath"][0]: AbilityFlags.WaterBreath, ITEM_INFO["Ice Breath"][0]: AbilityFlags.IceBreath, ITEM_INFO["Swim"][0]: AbilityFlags.Swim,
+    ITEM_INFO["Glide"][0]: AbilityFlags.Glide, ITEM_INFO["Charge"][0]: AbilityFlags.Charge, ITEM_INFO["Health Unit+"][0]: AbilityFlags.SparxHealthUpgrade, ITEM_INFO["Shockwave"][0]: AbilityFlags.Shockwave
+}
+
 
 class ShopItemModel(IntEnum):
     Lockpick = 0x0200014c

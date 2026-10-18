@@ -452,62 +452,23 @@ class SpyroAHTContext(SuperContext):
         for item in self.items_received:
             if item in self._handled_items: continue
             self._handled_items.add(item)
-            if item.item == consts.ITEM_INFO["Swim"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Swim, True)
-            elif item.item == consts.ITEM_INFO["Glide"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Glide, True)
-            elif item.item == consts.ITEM_INFO["Charge"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Charge, True)
-            elif item.item == consts.ITEM_INFO["Double Jump"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.DoubleJump, True)
-            elif item.item == consts.ITEM_INFO["Pole Spin"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.PoleSpin, True)
-            elif item.item == consts.ITEM_INFO["Wing Shield"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WingShield, True)
-            elif item.item == consts.ITEM_INFO["Wall Kick"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WallKick, True)
-            elif item.item == consts.ITEM_INFO["Fire Breath"][0]:
-                if not await self.emu_client.has_any_breath():
-                    await self.emu_client.set_breath(consts.BREATH_FIRE)
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.FireBreath, True)
-            elif item.item == consts.ITEM_INFO["Electric Breath"][0]:
-                if not await self.emu_client.has_any_breath():
-                    await self.emu_client.set_breath(consts.BREATH_ELECTRIC)
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.ElectricBreath, True)
-            elif item.item == consts.ITEM_INFO["Water Breath"][0]:
-                if not await self.emu_client.has_any_breath():
-                    await self.emu_client.set_breath(consts.BREATH_WATER)
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.WaterBreath, True)
-            elif item.item == consts.ITEM_INFO["Ice Breath"][0]:
-                if not await self.emu_client.has_any_breath():
-                    await self.emu_client.set_breath(consts.BREATH_ICE)
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.IceBreath, True)
-            elif item.item == consts.ITEM_INFO["Dark Gem"][0]:
-                count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
-                if count < item_counts["Dark Gem"]:
-                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, count + 1)
-            elif item.item == consts.ITEM_INFO["Dark Gem Bundle"][0]:
-                amount_from_bundles = item_counts["Dark Gem Bundle"] * self.slot_data["item_bundles"]["Dark Gem"]
-                if amount_from_bundles > 40: amount_from_bundles = 40
-                
-                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
-                if amount_from_bundles > file_count:
-                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, amount_from_bundles)
-            elif item.item == consts.ITEM_INFO["Light Gem"][0]:
-                count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
-                if count < item_counts["Light Gem"]:
-                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, count + 1)
-            elif item.item == consts.ITEM_INFO["Light Gem Bundle"][0]:
-                amount_from_bundles = item_counts["Light Gem Bundle"] * self.slot_data["item_bundles"]["Light Gem"]
-                if amount_from_bundles > 100: amount_from_bundles = 100
-                
-                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
-                if amount_from_bundles > file_count:
-                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, amount_from_bundles)
-            elif item.item == consts.ITEM_INFO["Dragon Egg"][0]:
-                count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
-                if count < item_counts["Dragon Egg"]:
-                    await self.emu_client.set_item(self.emu_client.addresses.DRAGON_EGG_COUNT, count + 1)
+            if consts.ITEM_GROUP_IDS["Elder Abilities"][0] <= item.item <= consts.ITEM_GROUP_IDS["Abilities"][1]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
+                if not await self.emu_client.has_any_breath() and consts.ITEM_GROUP_IDS["Breaths"][0] <= item.item <= consts.ITEM_GROUP_IDS["Breaths"][1]:
+                    await self.emu_client.set_breath(item.item)
+            elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
+                key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1]+1))
+                bit = key_ring_id_list.index(item.item)
+                address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
+                await self._set_keyring_or_shop(bit, address)
+            elif consts.ITEM_GROUP_IDS["Access Cards"][0] <= item.item <= consts.ITEM_GROUP_IDS["Access Cards"][1]:
+                await self.emu_client.allow_realm_access(item.item - consts.ITEM_GROUP_IDS["Access Cards"][0])  # adjust to value from 0-3
+            elif item.item == consts.ITEM_INFO["Health Unit+"][0] or item.item == consts.ITEM_INFO["Shockwave"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
+            elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
+                await self.emu_client.enable_butterfly_jar()
+            elif item.item == consts.ITEM_INFO["Double Gems"][0]:
+                await self.emu_client.toggle_double_gems(True)
             elif item.item == consts.ITEM_INFO["Lockpick"][0]:
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
                 if count < item_counts["Lockpick"]:
@@ -518,66 +479,62 @@ class SpyroAHTContext(SuperContext):
                 amount_from_bundles = item_counts["Lockpick Bundle"] * self.slot_data["item_bundles"]["Lockpick"]
                 if amount_from_bundles > 52: amount_from_bundles = 52
                 file_count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
-                
                 if amount_from_bundles > file_count:
                     await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, amount_from_bundles)
                     difference = amount_from_bundles - file_count
                     curr_lockpick_amount = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
                     await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, curr_lockpick_amount + difference)
-            elif item.item == consts.ITEM_INFO["Health Unit+"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.SparxHealthUpgrade, True)
-            elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
-                await self.emu_client.enable_butterfly_jar()
-            elif item.item == consts.ITEM_INFO["Double Gems"][0]:
-                await self.emu_client.toggle_double_gems(True)
-            elif item.item == consts.ITEM_INFO["Shockwave"][0]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.Shockwave, True)
+            elif item.item == consts.ITEM_INFO["Dark Gem"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+                if count < item_counts["Dark Gem"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Dark Gem Bundle"][0]:
+                amount_from_bundles = item_counts["Dark Gem Bundle"] * self.slot_data["item_bundles"]["Dark Gem"]
+                if amount_from_bundles > 40: amount_from_bundles = 40
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, amount_from_bundles)
+            elif item.item == consts.ITEM_INFO["Light Gem"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+                if count < item_counts["Light Gem"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Light Gem Bundle"][0]:
+                amount_from_bundles = item_counts["Light Gem Bundle"] * self.slot_data["item_bundles"]["Light Gem"]
+                if amount_from_bundles > 100: amount_from_bundles = 100
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, amount_from_bundles)
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0] <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+36:
+                await self._unlock_shop(item.item, "Randomized")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+37 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+49:
+                await self._unlock_shop(item.item, "Progressive")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+50 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+62:
+                await self._unlock_shop(item.item, "Level")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+63 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][1]:
+                await self._unlock_shop(item.item, "Realm")
+            elif item.item == consts.ITEM_INFO["Dragon Egg"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
+                if count < item_counts["Dragon Egg"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.DRAGON_EGG_COUNT, count + 1)
             elif item.item == consts.ITEM_INFO["Gem Pack"][0]:
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED)
                 if count < item_counts["Gem Pack"]:
                     await self.emu_client.set_item(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED, count + 1)
                     await self.emu_client.add_gem_pack()
             elif item.item == consts.ITEM_INFO["Fire Bomb"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED)
-                if total < item_counts["Fire Bomb"]:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.FIRE_BOMBS)
-                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED, total + 1)
-                    await self.emu_client.set_item(self.emu_client.addresses.FIRE_BOMBS, count + 1)
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED, item_counts["Fire Bomb"], self.emu_client.addresses.FIRE_BOMBS)
             elif item.item == consts.ITEM_INFO["Electric Bomb"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED)
-                if total < item_counts["Electric Bomb"]:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.ELECTRIC_BOMBS)
-                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED, total + 1)
-                    await self.emu_client.set_item(self.emu_client.addresses.ELECTRIC_BOMBS, count + 1)
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED, item_counts["Electric Bomb"], self.emu_client.addresses.ELECTRIC_BOMBS)
             elif item.item == consts.ITEM_INFO["Water Bomb"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED)
-                if total < item_counts["Water Bomb"]:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.WATER_BOMBS)
-                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED, total + 1)
-                    await self.emu_client.set_item(self.emu_client.addresses.WATER_BOMBS, count + 1)
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED, item_counts["Water Bomb"], self.emu_client.addresses.WATER_BOMBS)
             elif item.item == consts.ITEM_INFO["Ice Bomb"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED)
-                if total < item_counts["Ice Bomb"]:
-                    count = await self.emu_client.get_item_count(self.emu_client.addresses.ICE_BOMBS)
-                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED, total + 1)
-                    await self.emu_client.set_item(self.emu_client.addresses.ICE_BOMBS, count + 1)
-            elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
-                key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1]+1))
-                bit = key_ring_id_list.index(item.item)
-                address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
-                await self._set_keyring_or_shop(bit, address)
-            elif consts.ITEM_GROUP_IDS["Access Cards"][0] <= item.item <= consts.ITEM_GROUP_IDS["Access Cards"][1]:
-                await self.emu_client.allow_realm_access(item.item - consts.ITEM_GROUP_IDS["Access Cards"][0])
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED, item_counts["Ice Bomb"], self.emu_client.addresses.ICE_BOMBS)
             elif item.item == consts.ITEM_INFO["Spam Call"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS)
-                if total < item_counts["Spam Call"]:
-                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS, total + 1)
-                    self.emu_client.trap_queue.put_nowait("Spam Call")
+                await self.queue_trap(self.emu_client.addresses.g_TRAP_COUNTERS, "Spam Call", item_counts["Spam Call"])
             elif item.item == consts.ITEM_INFO["Reverse Controls"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 1)
-                if total < item_counts["Reverse Controls"]:
-                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 1, total + 1)
-                    self.emu_client.trap_queue.put_nowait("Reverse Controls")
+                await self.queue_trap(self.emu_client.addresses.g_TRAP_COUNTERS+1, "Reverse Controls", item_counts["Reverse Controls"])
+            elif item.item == consts.ITEM_INFO["Bounce"][0]:
+                await self.queue_trap(self.emu_client.addresses.g_TRAP_COUNTERS+4, "Bounce", item_counts["Bounce"])
             elif item.item == consts.ITEM_INFO["Damage Sparx"][0]:
                 total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
                 if total < item_counts["Damage Sparx"]:
@@ -588,19 +545,19 @@ class SpyroAHTContext(SuperContext):
                 if total < item_counts["Gem Tax"]:
                     await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
                     await self.emu_client.gem_tax()
-            elif item.item == consts.ITEM_INFO["Bounce"][0]:
-                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 4)
-                if total < item_counts["Bounce"]:
-                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 4, total + 1)
-                    self.emu_client.trap_queue.put_nowait("Bounce")
-            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0] <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+36:
-                await self._unlock_shop(item.item, "Randomized")
-            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+37 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+49:
-                await self._unlock_shop(item.item, "Progressive")
-            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+50 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+62:
-                await self._unlock_shop(item.item, "Level")
-            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+63 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+66:
-                await self._unlock_shop(item.item, "Realm")
+    
+    async def add_breath_bomb(self, ammo_address, count, bomb_address):
+        total = await self.emu_client.get_item_count(ammo_address)
+        if total < count:
+            count = await self.emu_client.get_item_count(bomb_address)
+            await self.emu_client.set_item(ammo_address, total + 1)
+            await self.emu_client.set_item(bomb_address, count + 1)
+    
+    async def queue_trap(self, trap_address: int, name: str, count: int):
+        total = await self.emu_client.get_item_count(trap_address)
+        if total < count:
+            await self.emu_client.set_item(trap_address, total + 1)
+            self.emu_client.trap_queue.put_nowait(name)
                 
     async def _unlock_shop(self, item_id, shop_type):
         if shop_type == "Randomized":

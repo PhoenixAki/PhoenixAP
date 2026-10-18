@@ -171,7 +171,9 @@ class DolphinClient(GenericClient):
         return b & (0x800e0) != 0
 
     async def set_breath(self, breath_id: int):
-        dolphin_memory_engine.write_word(self.addresses.ACTIVE_BREATH, breath_id)
+        convert = {consts.ITEM_INFO["Fire Breath"][0]: consts.BREATH_FIRE, consts.ITEM_INFO["Electric Breath"][0]: consts.BREATH_ELECTRIC,
+                   consts.ITEM_INFO["Water Breath"][0]: consts.BREATH_WATER, consts.ITEM_INFO["Ice Breath"][0]: consts.BREATH_ICE}
+        dolphin_memory_engine.write_word(self.addresses.ACTIVE_BREATH, convert[breath_id])
     
     async def get_item_count(self, address: int) -> int:
         return dolphin_memory_engine.read_byte(address)
