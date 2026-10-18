@@ -501,6 +501,7 @@ class SpyroAHTWorld(World):
         self.options.open_world_mode.value = slot_data['open_world_mode']
         self.options.firework_checks.value = slot_data['firework_checks']
         self.options.minigame_checks.value = slot_data['minigame_checks']
+        self.options.item_bundles.value = slot_data['item_bundles']
         self.options.trap_percentage.value = slot_data['trap_percentage']
         self.options.filler_items.value = slot_data['filler_items']
         self.options.trap_items.value = slot_data['trap_items']
@@ -1028,6 +1029,7 @@ class SpyroAHTWorld(World):
             "open_world_mode": self.options.open_world_mode.value,
             "firework_checks": self.options.firework_checks.value,
             "minigame_checks": self.options.minigame_checks.value,
+            "item_bundles": self.options.item_bundles.value,
             "trap_percentage": self.options.trap_percentage.value,
             "filler_items": self.options.filler_items.value,
             "trap_items": self.options.trap_items.value,

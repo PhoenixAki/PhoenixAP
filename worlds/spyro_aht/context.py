@@ -486,10 +486,24 @@ class SpyroAHTContext(SuperContext):
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
                 if count < item_counts["Dark Gem"]:
                     await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Dark Gem Bundle"][0]:
+                amount_from_bundles = item_counts["Dark Gem Bundle"] * self.slot_data["item_bundles"]["Dark Gem"]
+                if amount_from_bundles > 40: amount_from_bundles = 40
+                
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, amount_from_bundles)
             elif item.item == consts.ITEM_INFO["Light Gem"][0]:
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
                 if count < item_counts["Light Gem"]:
                     await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Light Gem Bundle"][0]:
+                amount_from_bundles = item_counts["Light Gem Bundle"] * self.slot_data["item_bundles"]["Light Gem"]
+                if amount_from_bundles > 100: amount_from_bundles = 100
+                
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, amount_from_bundles)
             elif item.item == consts.ITEM_INFO["Dragon Egg"][0]:
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
                 if count < item_counts["Dragon Egg"]:
@@ -500,6 +514,16 @@ class SpyroAHTContext(SuperContext):
                     lc = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
                     await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, count + 1)
                     await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, lc + 1)
+            elif item.item == consts.ITEM_INFO["Lockpick Bundle"][0]:
+                amount_from_bundles = item_counts["Lockpick Bundle"] * self.slot_data["item_bundles"]["Lockpick"]
+                if amount_from_bundles > 52: amount_from_bundles = 52
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
+                
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, amount_from_bundles)
+                    difference = amount_from_bundles - file_count
+                    curr_lockpick_amount = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
+                    await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, curr_lockpick_amount + difference)
             elif item.item == consts.ITEM_INFO["Health Unit+"][0]:
                 await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.AbilityFlags.SparxHealthUpgrade, True)
             elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
