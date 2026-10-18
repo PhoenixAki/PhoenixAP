@@ -308,12 +308,12 @@ class DolphinClient(GenericClient):
         dolphin_memory_engine.write_byte(self.addresses.p_RANDOMIZE_SHOP, 1)
         dolphin_memory_engine.write_word(self.addresses.p_XLS_SHOP_ROWCOUNT, len(shop_items)+1)
 
-        for idx, item in enumerate(shop_items):
+        for item_num, item in enumerate(shop_items):
             player = self.ctx.player_names[item.player]
             name = self.ctx.item_names.lookup_in_slot(item.item, item.player)
             game = self.ctx.slot_info[item.player]
             model = consts.ShopItemModel.Lockpick
-            price = self.ctx.slot_data["shop_costs"][idx]
+            price = self.ctx.slot_data["shop_costs"][item_num]
             if game.game == "Spyro: A Hero's Tail":
                 if item.item == consts.ITEM_INFO["Fire Breath"][0] or item.item == consts.ITEM_INFO["Fire Bomb"][0]:
                     model = consts.ShopItemModel.FireBomb
@@ -340,10 +340,11 @@ class DolphinClient(GenericClient):
             if "Player" in self.ctx.slot_data["disguise_shop_items"]: player = "???"
             if "Item" in self.ctx.slot_data["disguise_shop_items"]: name = "???"
             if "Model" in self.ctx.slot_data["disguise_shop_items"]: model = consts.ShopItemModel.Lockpick
+            bought = consts.SHOP_ITEM_IDS[0]+item_num in self.ctx.checked_locations
             
-            i = consts.XLSShoppingItem(model, consts.TextEntry(idx, f"{player}'s {name}"), (price, remote_price), large_prices)
-            dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (idx + 1)), i.to_bytes('big'))
-            dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * idx), i.text.to_bytes('big'))
+            i = consts.XLSShoppingItem(model, consts.TextEntry(item_num, f"{player}'s {name}", bought), (price, remote_price), large_prices)
+            dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (item_num + 1)), i.to_bytes('big'))
+            dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * item_num), i.text.to_bytes('big'))
 
     async def update_tracker(self, in_logic_ids_to_names: dict[str, str]):
         # server_locations is list of all location ids for this slot, regardless of check status. combination of checked_locations and missing_locations

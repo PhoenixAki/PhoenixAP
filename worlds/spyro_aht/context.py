@@ -474,7 +474,7 @@ class SpyroAHTContext(SuperContext):
     async def start_emu_client(self):
         # bizarre issue where passworded seeds re-trigger parts of the emu and connection setup process
         # this ensures that if dolphin engine is hooked through that, to unhook it first before continuing as usual
-        if self.emu_client != None:
+        if self.emu_client is not None:
             await self.emu_client.disconnect()
         self.emu_client = DolphinClient(self, logger)
         await self.emu_client.connect()

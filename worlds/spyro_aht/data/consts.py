@@ -326,10 +326,10 @@ class ShopItemModel(IntEnum):
 class TextEntry:
     base = 0x28010000
 
-    def __init__(self, index: int, text: str):
+    def __init__(self, index: int, text: str, bought: bool):
         self.index = index
         self._text = text
-        self.been_bought = False
+        self.been_bought = bought
     
     @property
     def address(self):
