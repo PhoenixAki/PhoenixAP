@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup, StartInventoryPool, OptionDict
+from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup,StartInventoryPool, OptionDict, OptionCounter
 
 ###############DEATHLINK###############
 class DeathLink(Choice):
@@ -218,6 +218,21 @@ class TrapPercentage(Range):
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
+
+
+class ItemBundles(OptionCounter):
+    """Decides how many Dark Gems, Light Gems, and Lockpicks (if enabled) you will be sent at a time.
+    If set to higher than 1, the item will be replaced with "Bundle" items e.e. "Dark Gem" -> "Dark Gem Bundle".
+    Set to 0 to have a random bundle size chosen."""
+    display_name = "Item Bundles"
+    valid_keys = ("Dark Gem", "Light Gem", "Lockpick")
+    min = 0
+    max = 100
+    default = {
+        "Dark Gem": 1,
+        "Light Gem": 1,
+        "Lockpick": 1
+    }
 
 
 class FillerItems(OptionSet):
@@ -588,6 +603,7 @@ class SpyroAHTOptions(PerGameCommonOptions):
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
     minigame_checks: MinigameChecks
+    item_bundles: ItemBundles
     trap_percentage: TrapPercentage
     filler_items: FillerItems
     trap_items: TrapItems
@@ -637,7 +653,7 @@ spyro_options_groups = [
         LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal
     ]),
     OptionGroup("CHECKS AND ITEMS", [
-        OpenWorldMode, FireworkChecks, MinigameChecks, TrapPercentage, FillerItems, TrapItems, TrapLength
+        OpenWorldMode, FireworkChecks, MinigameChecks, ItemBundles, TrapPercentage, FillerItems, TrapItems, TrapLength
     ]),
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms

@@ -199,7 +199,20 @@ class SpyroAHTWorld(World):
         """Override of World.collect which additionally handles gem events and shop unlocks."""
         name = self.collect_item(state, item)
         if name:
-            if "Unlock" not in item.name:
+            if "Bundle" in item.name:
+                if "Dark Gem" in item.name: bundle_type = "Dark Gem"
+                elif "Light Gem" in item.name: bundle_type = "Light Gem"
+                else: bundle_type = "Lockpick"
+                convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+                bundle_size = self.options.item_bundles[bundle_type]
+                
+                if state.count(bundle_type, item.player) + bundle_size > convert[bundle_type]:
+                    to_add = convert[bundle_type] - state.count(bundle_type, item.player)
+                else:
+                    to_add = bundle_size
+                
+                state.add_item(bundle_type, item.player, to_add)
+            elif "Unlock" not in item.name:
                 if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
                     gem_amount = int(item.name.split(" ")[0])
                     if "Blink minigames" in item.name:
@@ -241,7 +254,23 @@ class SpyroAHTWorld(World):
         """Override of World.remove which additionally handles gem events and shop unlocks."""
         name = self.collect_item(state, item, True)
         if name:
-            if "Unlock" not in item.name:
+            if "Bundle" in item.name:
+                if "Dark Gem" in item.name: bundle_type = "Dark Gem"
+                elif "Light Gem" in item.name: bundle_type = "Light Gem"
+                else: bundle_type = "Lockpick"
+                convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+                bundle_size = self.options.item_bundles[bundle_type]
+                
+                if state.count(bundle_type, item.player) == convert[bundle_type]:
+                    if convert[bundle_type] % bundle_size != 0:
+                        max_from_bundles = math.floor(convert[bundle_type] / bundle_size) * bundle_size
+                        to_remove = convert[bundle_type] - max_from_bundles
+                    else: to_remove = bundle_size
+                else:
+                    to_remove = bundle_size
+
+                state.remove_item(bundle_type, item.player, to_remove)
+            elif "Unlock" not in item.name:
                 if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
                     gem_amount = int(item.name.split(" ")[0])
                     if "Blink minigames" in item.name:
@@ -399,9 +428,19 @@ class SpyroAHTWorld(World):
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("shop_items_goal was enabled as a goal, but is higher than shop_item_count. Fix this, or set auto_corrections to at least fix_minor.")
         
+        # item bundles
+        for key in self.options.item_bundles.valid_keys:
+            convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+            if self.options.item_bundles.value[key] == 0:
+                self.options.item_bundles.value[key] = self.random.randint(1, convert[key])
+                self.log(f"Random value was requested for {key} in item_bundles. {self.options.item_bundles.value[key]} was chosen.", LoggingLevel.MEDIUM)
+            
+            self.check_item_bundles(key, convert[key])
+        
         # light gem and dragon eggs goals need checking for being set too high while having some excluded from chests
         self.check_eggs_and_gems(self.options.light_gems_goal, "light_gems_goal", 85, 15, self.options.exclude_chest_items >= 2)
         self.check_eggs_and_gems(self.options.dragon_eggs_goal, "dragon_eggs_goal", 64, 16, self.options.exclude_chest_items.value in [1, 3])
+        # TODO: error handle minigame_checks lowering the maximum dragon egg and light gem goal values
         
         # setup costs
         self.gadget_costs = self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
@@ -561,6 +600,14 @@ class SpyroAHTWorld(World):
             option.value -= count
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError(f"{name} was set higher than {maximum}, but {count} from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
+    
+    def check_item_bundles(self, name: str, max: int):
+        bad_condition = self.options.item_bundles.value[name] > max
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+            self.log(f"Minor Warning: {name} had its bundle size set too high ({self.options.item_bundles.value[name]}). Fixing by lowering it to {max}.", LoggingLevel.WARNING)
+            self.options.item_bundles.value[name] = max
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+            raise OptionError(f"Minor Warning: {name} had its bundle size set too high ({self.options.item_bundles.value[name]}). Fix this, or set auto_corrections to at least fix_minor.")
     
     def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str) -> list[int]:  # returns costs
         self.log(f"Setting up and checking for issues with {cost_type} costs.", LoggingLevel.LOW)
@@ -811,19 +858,26 @@ class SpyroAHTWorld(World):
             else:
                 aht_items.append(self.create_item(movement))
         
-        # Dark Gems & Light Gems
-        for _ in range(40):
-            aht_items.append(self.create_item("Dark Gem"))
-        for _ in range(100):
-            aht_items.append(self.create_item("Light Gem"))
+        # Dark Gems, Light Gems, and Lockpicks (as well as item bundle logic)
+        convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+        for key in self.options.item_bundles.valid_keys:
+            if key == "Lockpick" and self.options.shop_randomization != 1 or (self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1):
+                continue
+            if self.options.item_bundles.value[key] == 1:  # singular items
+                for _ in range(convert[key]): aht_items.append(self.create_item(key))
+            else:  # bundles
+                maximum = convert[key]
+                if maximum % self.options.item_bundles.value[key] != 0:
+                    bundle_count = math.ceil(maximum / self.options.item_bundles.value[key])
+                else:
+                    bundle_count = maximum // self.options.item_bundles.value[key]
+                self.log(f"Creating {bundle_count} {key} bundles.", LoggingLevel.HIGH)
+                for _ in range(bundle_count): aht_items.append(self.create_item(f"{key} Bundle"))
         
-        # Key Rings & Lockpicks
+        # Key Rings (lockpicks handled above to benefit from the generalized loop)
         if self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1:
             for level in ["Dragon Village", "Crocovile Swamp", "Dragonfly Falls", "Coastal Remains", "Sunken Ruins", "Cloudy Domain", "Frostbite Village", "Gloomy Glacier", "Ice Citadel", "Stormy Beach", "Molten Mount", "Magma Falls", "Dark Mine", "Red's Laboratory"]:
                 aht_items.append(self.create_item(f"{level} Key Ring"))
-        elif self.options.shop_randomization.value == 1:
-            for _ in range(52):
-                aht_items.append(self.create_item("Lockpick"))
             
         # Starting Realms
         self.log("Setting up starting realms, access cards, and starting shop unlocks (if open world mode is enabled).", LoggingLevel.LOW)
