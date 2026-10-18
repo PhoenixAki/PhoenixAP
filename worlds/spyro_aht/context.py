@@ -322,6 +322,10 @@ class SpyroAHTCommands(ClientCommandProcessor):
         Can be toggled separately for incoming and outgoing deaths.
         1) "/toggle_deathlink incoming" toggles whether to process or ignore incoming deaths.
         2) "/toggle_deathlink outgoing" toggles whether to send deaths when you die enough times (per your amnesty value)."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
         if not self.ctx.slot_data["death_link"]:
             self.output("DeathLink is not enabled for this seed.")
             return True
