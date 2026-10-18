@@ -118,7 +118,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         for goal in ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]:
             if goal in self.ctx.slot_data["goals_dict"].keys(): enabled.append(goal)
         output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
-        self.output(f"Enabled Elder Titan Goals: {output}.")
+        self.output(f"Enabled Elder Goals: {output}.")
         # minigame goals
         enabled = []
         for goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]:
@@ -140,6 +140,13 @@ class SpyroAHTCommands(ClientCommandProcessor):
         for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
             output += f"{minigame_type} is set to {self.ctx.slot_data['minigame_checks'][minigame_type]}, "
         self.output(f"Minigame Checks: {output[:-2]}.")
+        # item bundles
+        output = ""
+        for bundle_type in ["Dark Gem", "Light Gem", "Lockpick"]:
+            if bundle_type == "Lockpick" and not self.ctx.slot_data['shop_randomization']:
+                continue
+            output += f"{bundle_type} bundle size of {self.ctx.slot_data['item_bundles'][bundle_type]}, "
+        self.output(f"Item Bundling: {output[:-2]}.")
         # filler items
         output = ""
         for minigame_type in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
@@ -309,6 +316,17 @@ class SpyroAHTCommands(ClientCommandProcessor):
             self.output(f"Toggling self sent notifications from {self.ctx.self_sent_notifs} to {not self.ctx.self_sent_notifs}.")
             self.ctx.self_sent_notifs = not self.ctx.self_sent_notifs
             return True
+    
+    async def _cmd_toggle_deathlink(self) -> bool:
+        """Toggles DeathLink, if enabled for this seed. If toggled off, the game will still track and report deaths according
+        to your amnesty value, but the client will not send deaths to others."""
+        if not self.ctx.slot_data["death_link"]:
+            self.output("DeathLink is not enabled for this seed.")
+            return True
+        
+        self.output(f"Toggling DeathLink from {self.ctx.deathlink_enabled} to {not self.ctx.deathlink_enabled}.")
+        self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
+        return True
         
 
 class SpyroAHTContext(SuperContext):
@@ -354,6 +372,7 @@ class SpyroAHTContext(SuperContext):
         self.emu_client: GenericClient = None # type: ignore
         self.emu_loop: asyncio.Task = None # type: ignore
         self.auth_ready = asyncio.Event()
+        self.deathlink_enabled = True
 
         self.slot_data = {}
         self._seed = ""
@@ -803,6 +822,8 @@ class SpyroAHTContext(SuperContext):
             logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT TO DEVS", exc_info=True)
     
     async def _send_deathlink(self):
+        if not self.deathlink_enabled:  # client-side toggling of deathlink
+            return
         death_id = await self.emu_client.export_deathlink()
         if death_id:
             if death_id < 0 or death_id > 27:
