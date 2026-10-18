@@ -317,15 +317,25 @@ class SpyroAHTCommands(ClientCommandProcessor):
             self.ctx.self_sent_notifs = not self.ctx.self_sent_notifs
             return True
     
-    async def _cmd_toggle_deathlink(self) -> bool:
-        """Toggles DeathLink, if enabled for this seed. If toggled off, the game will still track and report deaths according
-        to your amnesty value, but the client will not send deaths to others."""
+    async def _cmd_toggle_deathlink(self, argument: str) -> bool:
+        """Toggles DeathLink, if enabled for this seed.
+        Can be toggled separately for incoming and outgoing deaths.
+        1) "/toggle_deathlink incoming" toggles whether to process or ignore incoming deaths.
+        2) "/toggle_deathlink outgoing" toggles whether to send deaths when you die enough times (per your amnesty value)."""
         if not self.ctx.slot_data["death_link"]:
             self.output("DeathLink is not enabled for this seed.")
             return True
         
-        self.output(f"Toggling DeathLink from {self.ctx.deathlink_enabled} to {not self.ctx.deathlink_enabled}.")
-        self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
+        if argument not in ["incoming", "outgoing"]:
+            self.output("Invalid command format. Must be \"/toggle_deathlink incoming\" or \"/toggle_deathlink outgoing\".")
+            return True
+        
+        if argument == "outgoing":
+            self.output(f"Toggling DeathLink from {self.ctx.deathlink_outgoing} to {not self.ctx.deathlink_outgoing}.")
+            self.ctx.deathlink_outgoing = not self.ctx.deathlink_outgoing
+        elif argument == "incoming":
+            self.output(f"Toggling incoming DeathLink from {self.ctx.deathlink_incoming} to {not self.ctx.deathlink_incoming}.")
+            self.ctx.deathlink_incoming = not self.ctx.deathlink_incoming
         return True
         
 
@@ -372,7 +382,8 @@ class SpyroAHTContext(SuperContext):
         self.emu_client: GenericClient = None # type: ignore
         self.emu_loop: asyncio.Task = None # type: ignore
         self.auth_ready = asyncio.Event()
-        self.deathlink_enabled = True
+        self.deathlink_incoming = True
+        self.deathlink_outgoing = True
 
         self.slot_data = {}
         self._seed = ""
@@ -822,7 +833,7 @@ class SpyroAHTContext(SuperContext):
             logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT TO DEVS", exc_info=True)
     
     async def _send_deathlink(self):
-        if not self.deathlink_enabled:  # client-side toggling of deathlink
+        if not self.deathlink_outgoing:  # client-side toggling of deathlink
             return
         death_id = await self.emu_client.export_deathlink()
         if death_id:
@@ -835,6 +846,8 @@ class SpyroAHTContext(SuperContext):
         await self.emu_client.import_deathlink(self.slot_data['death_link'])
     
     def on_deathlink(self, data: dict) -> None:
+        if not self.deathlink_incoming:  # client-side toggling of deathlink
+            return
         Utils.async_start(self._receive_deathlink(data.get('cause') or f"{data['source']} died."))
 
     async def shutdown(self):
