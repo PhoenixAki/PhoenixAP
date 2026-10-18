@@ -346,24 +346,19 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * idx), i.text.to_bytes('big'))
 
     async def update_tracker(self, in_logic_ids_to_names: dict[str, str]):
-        from .. import loc_names_to_ids
         # server_locations is list of all location ids for this slot, regardless of check status. combination of checked_locations and missing_locations
         for loc_id in self.ctx.server_locations:
-            if loc_id in self.ctx.checked_locations:
-                continue  # don't update icon if already checked
-            else:
-                if loc_id not in consts.LOCATIONS_BITFIELD:
-                    continue  # don't update if it doesn't have an icon
-                    
-                if in_logic_ids_to_names[str(loc_id)] == "":
-                    continue  # skip if not in logic. no KeyError because defaultdict. Instead, "" comes back
-                
-                index = consts.LOCATIONS_BITFIELD[loc_id]
-                addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
-                bit = (index * 2) % 8
-                data = dolphin_memory_engine.read_byte(addr)
-                dolphin_memory_engine.write_byte(addr, data | (0b10 << bit))
-        return loc_names_to_ids
+            if loc_id not in consts.LOCATIONS_BITFIELD: continue  # skip if no icon
+            if loc_id not in self.ctx.checked_locations and in_logic_ids_to_names[str(loc_id)] == "": continue  # skip if not in logic and not checked
+            mask = 0b01 if loc_id in self.ctx.checked_locations else 0b10
+            await self.write_icon(consts.LOCATIONS_BITFIELD[loc_id], mask)
+    
+    async def write_icon(self, index: int, mask: int):
+        """Updates a map icon. The only part that is generalized is what mask is used (0b01 for collected bit, 0b10 for reachable bit)."""
+        addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
+        bit = (index * 2) % 8
+        data = dolphin_memory_engine.read_byte(addr)
+        dolphin_memory_engine.write_byte(addr, data | (mask << bit))
 
     async def update_pause_gems(self, events: list[str]):
         if not self.ctx.slot_data["shop_randomization"]:

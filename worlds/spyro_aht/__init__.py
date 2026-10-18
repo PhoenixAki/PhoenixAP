@@ -42,7 +42,7 @@ minigame_locs = [
 ]
 
 # used for UT custom sorting
-id_lookup = {"Starter Checks": "A", "Moneybags": "B", "DV": "C", "CS": "D", "DF": "E", "CR": "F", "CD": "G", "SR": "H", "FV": "I", "GG": "J", "IC": "K", "SB": "L", "MM": "M", "MFt": "N", "MFb": "O", "DM": "P", "RL": "Q"}
+id_lookup = {"Starter Checks": "A", "Moneybags": "B", "DV": "C", "CS": "D", "DF": "E", "CR": "F", "SR": "G", "CD": "H", "FV": "I", "GG": "J", "IC": "K", "SB": "L", "MM": "M", "MFt": "N", "MFb": "O", "DM": "P", "RL": "Q"}
 
 ###############WORLD CLASS HELPER FUNCTIONS###############
 def _load_file(file: str) -> Any:
