@@ -79,29 +79,11 @@ LOCATIONS_BITFIELD: dict[int, int] = {
     851: 171, 852: 87
 }
 
-KEY_RINGS = [0x22, 0x23, 0x24, 0x25, 0x27, 0x26, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F]
-
 MINIGAME_OBJECTIVES: dict[int, tuple[int, int]] = {
-    # byrd
-    0x44000017: (302, 201),
-    0x440000a7: (328, 234),
-    0x44000094: (342, 260),
-    0x440000d1: (352, 267),
-    # blink
-    0x44000013: (309, 210),
-    0x4400004b: (323, 228),
-    0x4400008f: (335, 243),
-    0x440000b6: (359, 278),
-    # turret
-    0x4400000c: (311, 212),
-    0x4400001a: (318, 221),
-    0x4400008a: (333, 242),
-    0x44000097: (349, 266),
-    # sparx
-    0x4400007b: (315, 217),
-    0x440000a5: (331, 238),    
-    0x440000aa: (341, 254),
-    0x440000bb: (356, 275)
+    0x44000017: (302, 201), 0x440000a7: (328, 234), 0x44000094: (342, 260), 0x440000d1: (352, 267),  # byrd
+    0x44000013: (309, 210), 0x4400004b: (323, 228), 0x4400008f: (335, 243), 0x440000b6: (359, 278),  # blink
+    0x4400000c: (311, 212), 0x4400001a: (318, 221), 0x4400008a: (333, 242), 0x44000097: (349, 266),  # turret
+    0x4400007b: (315, 217), 0x440000a5: (331, 238), 0x440000aa: (341, 254), 0x440000bb: (356, 275)  # sparx
 }
 
 #
@@ -143,67 +125,69 @@ ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     # elder abilities
     "Double Jump": (1, prog), "Pole Spin": (2, prog), "Wing Shield": (3, prog), "Wall Kick": (4, prog),
     # breaths
-    "Fire Breath": (5, prog), "Electric Breath": (6, prog), "Water Breath": (7, prog), "Ice Breath": (8, prog),
+    "Fire Breath": (10, prog), "Electric Breath": (11, prog), "Water Breath": (12, prog), "Ice Breath": (13, prog),
     # abilities
-    "Swim": (9, prog), "Glide": (10, prog), "Charge": (11, prog),
-    # key rings
-    "Dragon Village Key Ring": (12, prog), "Crocovile Swamp Key Ring": (13, prog), "Dragonfly Falls Key Ring": (14, prog),
-    "Coastal Remains Key Ring": (15, prog), "Sunken Ruins Key Ring": (16, prog), "Cloudy Domain Key Ring": (17, prog),
-    "Frostbite Village Key Ring": (18, prog), "Gloomy Glacier Key Ring": (19, prog), "Ice Citadel Key Ring": (20, prog),
-    "Stormy Beach Key Ring": (21, prog), "Molten Mount Key Ring": (22, prog), "Magma Falls Key Ring": (23, prog),
-    "Dark Mine Key Ring": (24, prog), "Red's Laboratory Key Ring": (25, prog),
+    "Swim": (20, prog), "Glide": (21, prog), "Charge": (22, prog),
+    # per-level key rings
+    "Dragon Village Key Ring": (30, prog), "Crocovile Swamp Key Ring": (31, prog), "Dragonfly Falls Key Ring": (32, prog),
+    "Coastal Remains Key Ring": (33, prog), "Sunken Ruins Key Ring": (34, prog), "Cloudy Domain Key Ring": (35, prog),
+    "Frostbite Village Key Ring": (36, prog), "Gloomy Glacier Key Ring": (37, prog), "Ice Citadel Key Ring": (38, prog),
+    "Stormy Beach Key Ring": (39, prog), "Molten Mount Key Ring": (40, prog), "Magma Falls Key Ring": (41, prog),
+    "Dark Mine Key Ring": (42, prog), "Red's Laboratory Key Ring": (43, prog),
+    # per-realm key rings
+    "Dragon Kingdom Key Ring": (44, prog), "Lost Cities Key Ring": (45, prog), "Icy Wilderness Key Ring": (46, prog), "Volcanic Isle Key Ring": (47, prog),
     # access cards
-    "Dragon Kingdom Access Card": (26, prog), "Lost Cities Access Card": (27, prog), "Icy Wilderness Access Card": (28, prog), "Volcanic Isle Access Card": (29, prog),
+    "Dragon Kingdom Access Card": (50, prog), "Lost Cities Access Card": (51, prog), "Icy Wilderness Access Card": (52, prog), "Volcanic Isle Access Card": (53, prog),
     # shop items
-    "Health Unit+": (30, useful), "Butterfly Jar": (31, useful), "Double Gems": (32, useful), "Shockwave": (33, useful),
-    "Lockpick": (34, prog_dep_skip), "Lockpick Bundle": (35, prog_dep_skip),
+    "Health Unit+": (60, useful), "Butterfly Jar": (61, useful), "Double Gems": (62, useful), "Shockwave": (63, useful),
+    "Lockpick": (64, prog_dep_skip), "Lockpick Bundle": (65, prog),
     # collectibles
-    "Dark Gem": (36, prog_dep_skip), "Dark Gem Bundle": (37, prog_dep_skip), "Light Gem": (38, prog_dep_skip), "Light Gem Bundle": (39, prog_dep_skip),
+    "Dark Gem": (85, prog_dep_skip), "Dark Gem Bundle": (86, prog), "Light Gem": (87, prog_dep_skip), "Light Gem Bundle": (88, prog),
     # individual shop unlocks
-    "Dragon Village - Village Depot Shop Unlock": (40, prog),
-    "Crocovile Swamp - Perilous Pyramid Shop Unlock": (41, prog), "Crocovile Swamp - Forgotten Temple Shop Unlock": (42, prog), "Crocovile Swamp - Elder's Tree Shop Unlock": (43, prog),
-    "Dragonfly Falls - Steep Canyon Shop Unlock": (44, prog), "Dragonfly Falls - Tropical Cove Shop Unlock": (45, prog), "Dragonfly Falls - Secret Area Shop Unlock": (46, prog),
-    "Coastal Remains - Coastal Depot Shop Unlock": (47, prog), "Coastal Remains - Domain Doorstep Shop Unlock": (48, prog), "Coastal Remains - Waterfall Walkway Shop Unlock": (49, prog),
-    "Sunken Ruins - Atlantian Entryway Shop Unlock": (50, prog), "Sunken Ruins - The Depths Shop Unlock": (51, prog), "Sunken Ruins - Toxic Rise Shop Unlock": (52, prog),
-    "Cloudy Domain - Elevator Top Shop Unlock": (53, prog), "Cloudy Domain - Elder's Homestead Shop Unlock": (54, prog), "Cloudy Domain - Tallest Tower Shop Unlock": (55, prog),
-    "Frostbite Village - Frosty Depot Shop Unlock": (56, prog), "Frostbite Village - Icy Camp Shop Unlock": (57, prog), "Frostbite Village - Eskimole Village Shop Unlock": (58, prog),
-    "Ice Citadel - Cool Courtyard Shop Unlock": (59, prog), "Ice Citadel - Supercharge Central Shop Unlock": (60, prog), "Ice Citadel - Royal Chamber Shop Unlock": (61, prog), "Ice Citadel - Drawbridge Drop-off Shop Unlock": (62, prog),
-    "Stormy Beach - Stormy Depot Shop Unlock": (63, prog),
-    "Molten Mount - Destroyed Village Shop Unlock": (64, prog), "Molten Mount - Collapsed Bridge Shop Unlock": (65, prog), "Molten Mount - Lumber Storage Shop Unlock": (66, prog),
-    "Magma Falls - Crackling Cave Shop Unlock": (67, prog), "Magma Falls - Chains of Lava Shop Unlock": (68, prog), "Magma Falls - Sparx Can Fly Shop Unlock": (69, prog),
-    "Dark Mine - Mine Mouth Shop Unlock": (70, prog), "Dark Mine - Hidden Depths Shop Unlock": (71, prog), "Dark Mine - Miner's Drop Shop Unlock": (72, prog),
-    "Red's Laboratory - Celestial Show Shop Unlock": (73, prog), "Red's Laboratory - Mechanical Mishaps Shop Unlock": (74, prog),
-    "Red's Laboratory - Pre-production Shop Unlock": (75, prog), "Red's Laboratory - Laser Leaps Shop Unlock": (76, prog),
+    "Dragon Village - Village Depot Shop Unlock": (95, prog),
+    "Crocovile Swamp - Perilous Pyramid Shop Unlock": (96, prog), "Crocovile Swamp - Forgotten Temple Shop Unlock": (97, prog), "Crocovile Swamp - Elder's Tree Shop Unlock": (98, prog),
+    "Dragonfly Falls - Steep Canyon Shop Unlock": (99, prog), "Dragonfly Falls - Tropical Cove Shop Unlock": (100, prog), "Dragonfly Falls - Secret Area Shop Unlock": (101, prog),
+    "Coastal Remains - Coastal Depot Shop Unlock": (102, prog), "Coastal Remains - Domain Doorstep Shop Unlock": (103, prog), "Coastal Remains - Waterfall Walkway Shop Unlock": (104, prog),
+    "Sunken Ruins - Atlantian Entryway Shop Unlock": (105, prog), "Sunken Ruins - The Depths Shop Unlock": (106, prog), "Sunken Ruins - Toxic Rise Shop Unlock": (107, prog),
+    "Cloudy Domain - Elevator Top Shop Unlock": (108, prog), "Cloudy Domain - Elder's Homestead Shop Unlock": (109, prog), "Cloudy Domain - Tallest Tower Shop Unlock": (110, prog),
+    "Frostbite Village - Frosty Depot Shop Unlock": (111, prog), "Frostbite Village - Icy Camp Shop Unlock": (112, prog), "Frostbite Village - Eskimole Village Shop Unlock": (113, prog),
+    "Ice Citadel - Cool Courtyard Shop Unlock": (114, prog), "Ice Citadel - Supercharge Central Shop Unlock": (115, prog), "Ice Citadel - Royal Chamber Shop Unlock": (116, prog), "Ice Citadel - Drawbridge Drop-off Shop Unlock": (117, prog),
+    "Stormy Beach - Stormy Depot Shop Unlock": (118, prog),
+    "Molten Mount - Destroyed Village Shop Unlock": (119, prog), "Molten Mount - Collapsed Bridge Shop Unlock": (120, prog), "Molten Mount - Lumber Storage Shop Unlock": (121, prog),
+    "Magma Falls - Crackling Cave Shop Unlock": (122, prog), "Magma Falls - Chains of Lava Shop Unlock": (123, prog), "Magma Falls - Sparx Can Fly Shop Unlock": (124, prog),
+    "Dark Mine - Mine Mouth Shop Unlock": (125, prog), "Dark Mine - Hidden Depths Shop Unlock": (126, prog), "Dark Mine - Miner's Drop Shop Unlock": (127, prog),
+    "Red's Laboratory - Celestial Show Shop Unlock": (128, prog), "Red's Laboratory - Mechanical Mishaps Shop Unlock": (129, prog),
+    "Red's Laboratory - Pre-production Shop Unlock": (130, prog), "Red's Laboratory - Laser Leaps Shop Unlock": (131, prog),
     # progressive shop unlocks
-    "Progressive Dragon Village - Shop Unlock": (77, prog), "Progressive Crocovile Swamp - Shop Unlock": (78, prog), "Progressive Dragonfly Falls - Shop Unlock": (79, prog),
-    "Progressive Coastal Remains - Shop Unlock": (80, prog), "Progressive Sunken Ruins - Shop Unlock": (81, prog), "Progressive Cloudy Domain - Shop Unlock": (82, prog),
-    "Progressive Frostbite Village - Shop Unlock": (83, prog), "Progressive Ice Citadel - Shop Unlock": (84, prog),
-    "Progressive Stormy Beach - Shop Unlock": (85, prog), "Progressive Molten Mount - Shop Unlock": (86, prog), "Progressive Magma Falls - Shop Unlock": (87, prog),
-    "Progressive Dark Mine - Shop Unlock": (88, prog), "Progressive Red's Laboratory - Shop Unlock": (89, prog),
+    "Progressive Dragon Village - Shop Unlock": (132, prog), "Progressive Crocovile Swamp - Shop Unlock": (133, prog), "Progressive Dragonfly Falls - Shop Unlock": (134, prog),
+    "Progressive Coastal Remains - Shop Unlock": (135, prog), "Progressive Sunken Ruins - Shop Unlock": (136, prog), "Progressive Cloudy Domain - Shop Unlock": (137, prog),
+    "Progressive Frostbite Village - Shop Unlock": (138, prog), "Progressive Ice Citadel - Shop Unlock": (139, prog),
+    "Progressive Stormy Beach - Shop Unlock": (140, prog), "Progressive Molten Mount - Shop Unlock": (141, prog), "Progressive Magma Falls - Shop Unlock": (142, prog),
+    "Progressive Dark Mine - Shop Unlock": (143, prog), "Progressive Red's Laboratory - Shop Unlock": (144, prog),
     # level shop unlocks
-    "Dragon Village - Shop Unlock": (90, prog), "Crocovile Swamp - Shop Unlock": (91, prog), "Dragonfly Falls - Shop Unlock": (92, prog),
-    "Coastal Remains - Shop Unlock": (93, prog), "Sunken Ruins - Shop Unlock": (94, prog), "Cloudy Domain - Shop Unlock": (95, prog),
-    "Frostbite Village - Shop Unlock": (96, prog), "Ice Citadel - Shop Unlock": (97, prog),
-    "Stormy Beach - Shop Unlock": (98, prog), "Molten Mount - Shop Unlock": (99, prog), "Magma Falls - Shop Unlock": (100, prog),
-    "Dark Mine - Shop Unlock": (101, prog), "Red's Laboratory - Shop Unlock": (102, prog),
+    "Dragon Village - Shop Unlock": (145, prog), "Crocovile Swamp - Shop Unlock": (146, prog), "Dragonfly Falls - Shop Unlock": (147, prog),
+    "Coastal Remains - Shop Unlock": (148, prog), "Sunken Ruins - Shop Unlock": (149, prog), "Cloudy Domain - Shop Unlock": (150, prog),
+    "Frostbite Village - Shop Unlock": (151, prog), "Ice Citadel - Shop Unlock": (152, prog),
+    "Stormy Beach - Shop Unlock": (153, prog), "Molten Mount - Shop Unlock": (154, prog), "Magma Falls - Shop Unlock": (155, prog),
+    "Dark Mine - Shop Unlock": (156, prog), "Red's Laboratory - Shop Unlock": (157, prog),
     # realm shop unlocks
-    "Dragon Kingdom - Shop Unlock": (103, prog), "Lost Cities - Shop Unlock": (104, prog), "Icy Wilderness - Shop Unlock": (105, prog), "Volcanic Isle - Shop Unlock": (106, prog),
+    "Dragon Kingdom - Shop Unlock": (158, prog), "Lost Cities - Shop Unlock": (159, prog), "Icy Wilderness - Shop Unlock": (160, prog), "Volcanic Isle - Shop Unlock": (161, prog),
     # non-shinies filler
-    "Dragon Egg": (107, filler), "Gem Pack": (108, filler),
-    "Fire Bomb": (109, filler), "Electric Bomb": (110, filler), "Water Bomb": (111, filler), "Ice Bomb": (112, filler),
-    # shinies filler (IDs are intentionally a bit away from non-shinies filler in case of adding more)
-    "Spare Jetpack for Sgt. Byrd": (125, filler), "New Goggles for Blink": (126, filler), "New Bow for Hunter": (127, filler),
-    "New Monocle for Moneybags": (128, filler), "A Cracked Gem": (129, filler), "Mouthwash for Inpetune": (130, filler),
-    "Anger Management Class for Red": (131, filler), "A Long Story from Elder Tomas": (132, filler), "1 Million Brain Cells": (133, filler),
-    "Treasure from the 10th Dimension": (134, filler), "Stress Ball for Gnasty Gnorc": (135, filler), "Portable Heater for the Ice Princess": (136, filler),
-    "Apartment Lease for Teena": (137, filler), "New Sneakers for Crash": (138, filler), "Green Eco for Jak": (139, filler), "Oil Change for Clank": (140, filler),
-    # traps (IDs are intentionally a bit away from shinies because of potential for adding new shinies down the road)
-    "Spam Call": (151, trap), "Reverse Controls": (152, trap), "Damage Sparx": (153, trap), "Gem Tax": (154, trap), "Bounce": (155, trap)
+    "Dragon Egg": (170, filler), "Gem Pack": (171, filler),
+    "Fire Bomb": (172, filler), "Electric Bomb": (173, filler), "Water Bomb": (174, filler), "Ice Bomb": (175, filler),
+    # shinies filler
+    "Spare Jetpack for Sgt. Byrd": (180, filler), "New Goggles for Blink": (181, filler), "New Bow for Hunter": (182, filler),
+    "New Monocle for Moneybags": (183, filler), "A Cracked Gem": (184, filler), "Mouthwash for Inpetune": (185, filler),
+    "Anger Management Class for Red": (186, filler), "A Long Story from Elder Tomas": (187, filler), "1 Million Brain Cells": (188, filler),
+    "Treasure from the 10th Dimension": (189, filler), "Stress Ball for Gnasty Gnorc": (190, filler), "Portable Heater for the Ice Princess": (191, filler),
+    "Apartment Lease for Teena": (192, filler), "New Sneakers for Crash": (193, filler), "Green Eco for Jak": (194, filler), "Oil Change for Clank": (195, filler),
+    # traps
+    "Spam Call": (200, trap), "Reverse Controls": (201, trap), "Damage Sparx": (202, trap), "Gem Tax": (203, trap), "Bounce": (204, trap)
 }
 
 ITEM_GROUP_IDS = {  # "Name": [start of id range, end of id range] INCLUSIVE
-    "Elder Abilities": [1, 4], "Breaths": [5, 8], "Abilities": [9, 11], "Key Rings": [12, 25], "Access Cards": [26, 29],
-    "Shop Items": [30, 35], "Collectibles": [36, 39], "Shop Unlocks": [40, 106], "Filler": [107, 140], "Traps": [151, 155] 
+    "Elder Abilities": [1, 4], "Breaths": [10, 13], "Abilities": [20, 22], "Key Rings": [30, 47], "Access Cards": [50, 53],
+    "Shop Items": [60, 65], "Collectibles": [85, 88], "Shop Unlocks": [95, 161], "Filler": [170, 195], "Traps": [200, 204] 
 }
 
 DEATHLINK_MESSAGES = [
