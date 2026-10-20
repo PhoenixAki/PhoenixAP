@@ -101,6 +101,25 @@ BOSS_DEFEATED_OBJECTIVES = [
     0x44000084  # Defeat Mecha-Red
 ]
 
+MINIGAME_LOCS = [
+        "DV: Dragon Egg from Sgt. Byrd", "DV: Light Gem from Sgt. Byrd",
+        "CD: Dragon Egg from Sgt. Byrd", "CD: Light Gem from Sgt. Byrd",
+        "IC: Dragon Egg from Sgt. Byrd", "IC: Light Gem from Sgt. Byrd",
+        "MM: Dragon Egg from Sgt. Byrd", "MM: Light Gem from Sgt. Byrd",
+        "CS: Dragon Egg from Blink", "CS: Light Gem from Blink",
+        "CR: Dragon Egg from Blink", "CR: Light Gem from Blink",
+        "FV: Dragon Egg from Blink", "FV: Light Gem from Blink",
+        "DM: Dragon Egg from Blink", "DM: Light Gem from Blink",
+        "DF: Dragon Egg from Sparx", "DF: Light Gem from Sparx",
+        "SR: Dragon Egg from Sparx", "SR: Light Gem from Sparx",
+        "GG: Dragon Egg from Sparx", "GG: Light Gem from Sparx",
+        "MFb: Dragon Egg from Sparx", "MFb: Light Gem from Sparx",
+        "CS: Dragon Egg from Fredneck", "CS: Light Gem from Fredneck",
+        "CR: Dragon Egg from Turtle Mother", "CR: Light Gem from Turtle Mother",
+        "FV: Dragon Egg from Peggy", "FV: Light Gem from Peggy",
+        "SB: Dragon Egg from Wally", "SB: Light Gem from Wally"
+]
+
 ###############LOCATION ID REFERENCE###############
 DARK_GEM_IDS = list(range(101, 141))  # IDs 101-140
 LIGHT_GEM_IDS = list(range(201, 286)) + list(range(822, 837))  # IDs 201-285 and 822-836

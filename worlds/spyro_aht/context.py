@@ -244,26 +244,15 @@ class SpyroAHTCommands(ClientCommandProcessor):
 
     async def _cmd_check_goal(self) -> bool:
         """Details completion progress on all enabled goals, including how many checks are left to do for each."""
-        if self.ctx.goals_dict == {}:
+        if len(self.ctx.slot_data) == 0:
             self.output("Command cannot be ran before entering your save file.")
             return True
         
         completed_goals, incomplete_goals = [], []
-        for goal in self.ctx.goals_dict.keys():
-            # have all enabled goals here. check status of each
-            _, option_name, id_list = self.ctx.convert_goal_info[goal]
-            # get amounts
-            if goal in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]: amount = 1
-            elif "Elder" in goal: amount = 1
-            elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.ctx.slot_data["minigames_goal"][goal]
-            else: amount = self.ctx.slot_data[option_name]
-            # adjust id lists
-            if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2: id_list = id_list[:-15]
-            if goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] in [1, 3]: id_list = id_list[:-16]
-            if goal == "Shop Items": id_list = id_list[:self.ctx.slot_data["shop_item_count"]]
-            for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
-                if goal == minigame_type and self.ctx.slot_data["minigame_checks"][minigame_type] == "disabled": id_list = []
-                if goal == minigame_type and self.ctx.slot_data["minigame_checks"][minigame_type] == "easy": id_list = id_list[::2]
+        for goal in self.ctx.slot_data["goals_dict"].keys():
+            # retrieve data from goals dict
+            id_list = self.ctx.slot_data["goals_dict"][goal]["ids"]
+            amount = self.ctx.slot_data["goals_dict"][goal]["amount"]
             # tally it up
             count = 0
             for goal_id in id_list:
@@ -367,19 +356,9 @@ class SpyroAHTContext(SuperContext):
         self.self_sent_notifs = True
         self.hint_notifs = True
         
-        # used for checking goal components
-        self.goal_stuff_setup = False
-        self.goals_dict: dict = {}
-        self.goal_tally, self.goal_target = 0, 0
-        self.finished_goals = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-        # this has a lot of info stuffed into it. goal name -> (finished_goals index, goal option name, id list)
-        self.convert_goal_info = {"Gnasty Gnorc": (0, "boss_goal", consts.BOSS_IDS[0:2]), "Ineptune": (1, "boss_goal", consts.BOSS_IDS[2:4]), "Red": (2, "boss_goal", consts.BOSS_IDS[4:6]), "Mecha-Red": (3, "boss_goal", [consts.BOSS_IDS[6]]),
-            "Dark Gems": (4, "dark_gems_goal", consts.DARK_GEM_IDS), "Light Gems": (5, "light_gems_goal", consts.LIGHT_GEM_IDS), "Dragon Eggs": (6, "dragon_eggs_goal", consts.DRAGON_EGG_IDS),
-            "Fireworks": (7, "fireworks_goal", consts.FIREWORK_IDS), "Shop Items": (8, "shop_items_goal", consts.SHOP_ITEM_IDS), "Locked Chests": (9, "locked_chests_goal", consts.LOCKED_CHEST_IDS),
-            "Elder Tomas": (10, "elders_goal", [consts.ELDER_ABILITY_IDS[0]]), "Elder Magnus": (11, "elders_goal", [consts.ELDER_ABILITY_IDS[1]]), "Elder Titan": (12, "elders_goal", [consts.ELDER_ABILITY_IDS[2]]),
-            "Elder Astor": (13, "elders_goal", [consts.ELDER_ABILITY_IDS[3]]), "Sgt. Byrd": (14, "minigames_goal", consts.BYRD_IDS), "Blink": (15, "minigames_goal", consts.BLINK_IDS),
-            "Turret": (16, "minigames_goal", consts.TURRET_IDS), "Sparx": (17, "minigames_goal", consts.SPARX_IDS)
-        }
+        # tracks goal completion so far. finished_goals replaces Falses with Trues as things complete. full_goal_list is used with .index to find a given goal's index
+        self.full_goal_list = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests", "Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Sgt. Byrd", "Blink", "Turret", "Sparx"]
+        self.finished_goals = [False]*len(self.full_goal_list)
         
         self.unlocked_shops = []
 
@@ -753,28 +732,15 @@ class SpyroAHTContext(SuperContext):
         from CommonClient import logger
         output = []
         
-        # self.finished_goals avoids re-checking goals that have already been found to be complete
-        last_one = (self.goal_tally == self.goal_target - 1)  # marks if check_goal_component should acknowledge being last goal or not
-        for goal in self.goals_dict:
-            finished_index, option_name, id_list = self.convert_goal_info[goal]
-            # adjust id lists as needed. variable shop item amounts, exclude_chest_items, and minigame_checks
-            if goal == "Shop Items":
-                id_list = id_list[:self.slot_data['shop_item_count']]
-            if goal == "Light Gems" and self.slot_data["exclude_chest_items"] >= 2:  # 2 = just light gems, 3 = both
-                id_list = id_list[:-15]
-            if goal == "Dragon Eggs" and self.slot_data["exclude_chest_items"] in [1, 3]:  # 1 = just eggs, 3 = both
-                id_list = id_list[:-16]
-            for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
-                if goal == minigame_type and self.slot_data["minigame_checks"] == "disabled": id_list = []
-                if goal == minigame_type and self.slot_data["minigame_checks"] == "easy": id_list = id_list[::2]
-            
-            if not self.finished_goals[finished_index]:
-                done, new_output = await self.check_goal_component(goal, id_list, option_name, last_one)
-                self.finished_goals[finished_index] = done
+        last_one = self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()) - 1  # marks if check_goal_component should acknowledge being last goal or not
+        for goal in self.slot_data["goals_dict"]:
+            if not self.finished_goals[self.full_goal_list.index(goal)]:
+                done, new_output = await self.check_goal_component(goal, last_one)
+                self.finished_goals[self.full_goal_list.index(goal)] = done
                 if new_output != "": output.append(new_output)
             
         # tally goes +1 when a goal component is met. If that value matches however many goals there are, we're done!
-        if self.goal_tally == self.goal_target:
+        if self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()):
             logger.info(f"All goals are complete, nice work!")
             await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             return True
@@ -783,19 +749,13 @@ class SpyroAHTContext(SuperContext):
                 logger.info(f"You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
             return False
 
-    async def check_goal_component(self, goal: str, loc_id_list: list[int], option_name: str, last_one: bool) -> tuple[bool, str]:
+    async def check_goal_component(self, goal: str, last_one: bool) -> tuple[bool, str]:
         count = 0
-        # find how many ids need to be checked
-        if goal in ["Gnasty Gnorc", "Ineptune", "Red"]: amount = 2
-        elif "Elder" in goal or goal == "Mecha-Red": amount = 1
-        elif goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]: amount = self.slot_data["minigames_goal"][goal]
-        else: amount = self.slot_data[option_name]
-        for goal_id in loc_id_list:
+        for goal_id in self.slot_data["goals_dict"][goal]["ids"]:
             if goal_id in self.checked_locations:
                 count += 1
         
-        if count >= amount:
-            self.goal_tally += 1
+        if count >= self.slot_data["goals_dict"][goal]["amount"]:
             return_text = "" if last_one else goal
             return True, return_text
             
@@ -820,12 +780,6 @@ class SpyroAHTContext(SuperContext):
                 self.watcher_event.clear()
 
                 if await self.emu_client.should_process_checks():
-                    # done here to ensure it's only all set up once connected
-                    if not self.goal_stuff_setup:
-                        self.goals_dict = self.slot_data['goals_dict']
-                        self.goal_target = len(self.goals_dict.keys())
-                        self.goal_stuff_setup = True
-                        
                     if self.slot_data["death_link"] > 0:
                         await self._send_deathlink()
                     await self._receive_items()
