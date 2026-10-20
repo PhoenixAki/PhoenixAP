@@ -190,6 +190,13 @@ ITEM_GROUP_IDS = {  # "Name": [start of id range, end of id range] INCLUSIVE
     "Shop Items": [60, 65], "Collectibles": [85, 88], "Shop Unlocks": [95, 161], "Filler": [170, 195], "Traps": [200, 204] 
 }
 
+REALM_KEY_RING_LOOKUP = {  # converts a realm key ring ID to a list of level key ring IDs
+    ITEM_INFO["Dragon Kingdom Key Ring"][0]: list(range(ITEM_GROUP_IDS["Key Rings"][0], ITEM_GROUP_IDS["Key Rings"][0]+3)),
+    ITEM_INFO["Lost Cities Key Ring"][0]: list(range(ITEM_GROUP_IDS["Key Rings"][0]+3, ITEM_GROUP_IDS["Key Rings"][0]+6)),
+    ITEM_INFO["Icy Wilderness Key Ring"][0]: list(range(ITEM_GROUP_IDS["Key Rings"][0]+6, ITEM_GROUP_IDS["Key Rings"][0]+9)),
+    ITEM_INFO["Volcanic Isle Key Ring"][0]: list(range(ITEM_GROUP_IDS["Key Rings"][0]+9, ITEM_GROUP_IDS["Key Rings"][0]+14))
+}
+
 DEATHLINK_MESSAGES = [
     "{name} died.", "{name} ended their tail.", "{name} was fed to the fish.", "{name} forgot their wings.",
     "{name} did a jig and then blew up.", "{name} became a dragon fossil.", "{name} became a purple pancake.",

@@ -196,115 +196,108 @@ class SpyroAHTWorld(World):
         return random_choice
             
     def collect(self, state: "CollectionState", item: "Item") -> bool:
-        """Override of World.collect which additionally handles gem events and shop unlocks."""
+        """Override of World.collect which additionally handles item bundles, shop unlocks, and gem events."""
         name = self.collect_item(state, item)
         if name:
-            if "Bundle" in item.name:
-                if "Dark Gem" in item.name: bundle_type = "Dark Gem"
-                elif "Light Gem" in item.name: bundle_type = "Light Gem"
-                else: bundle_type = "Lockpick"
+            if "Bundle" in name:
+                bundle_type = name.split(" Bundle")[0]
                 convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
                 bundle_size = self.options.item_bundles[bundle_type]
                 
-                if state.count(bundle_type, item.player) + bundle_size > convert[bundle_type]:
-                    to_add = convert[bundle_type] - state.count(bundle_type, item.player)
-                else:
-                    to_add = bundle_size
+                if state.count(bundle_type, item.player) + bundle_size > convert[bundle_type]:  # check if adding bundle_size would go over the maximum
+                    to_add = convert[bundle_type] - state.count(bundle_type, item.player)  # if so, clamp it down
+                else: to_add = bundle_size  # otherwise, add bundle_size
                 
                 state.add_item(bundle_type, item.player, to_add)
-            elif "Unlock" not in item.name:
-                if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
-                    gem_amount = int(item.name.split(" ")[0])
-                    if "Blink minigames" in item.name:
-                        state.add_item("Blink Gems", item.player, count=gem_amount)
-                    elif "[enemy]" in item.name:
-                        state.add_item("Non-Blink Enemies", item.player, count=gem_amount)
-                    else:
-                        state.add_item("Other Gems", item.player, count=gem_amount)
-                else:
-                    state.add_item(name, self.player)
-            else:  # handle shop unlocks separately
+            elif "Shop Unlock" in name:
                 choice = self.options.open_world_mode.value
                 if choice == 2:  # randomized
-                    state.add_item(item.name.replace(" Shop Unlock", ""), self.player)
+                    state.add_item(name.replace(" Shop Unlock", ""), item.player)
                 elif choice == 3 or choice == 4:  # progressive and reverse progressive
-                    adjusted_name = item.name.replace("Progressive ", "")
+                    adjusted_name = name.replace("Progressive ", "")
                     level = adjusted_name.split(" - ")[0]
                     shops = LEVEL_SHOP_LOOKUP[level].copy()
                     if choice == 4: shops.reverse()
                     for shop in shops:
-                        if not state.has(f"{level} - {shop}", self.player):
-                            state.add_item(f"{level} - {shop}", self.player)
+                        if not state.has(f"{level} - {shop}", item.player):
+                            state.add_item(f"{level} - {shop}", item.player)
                             break
                 elif choice == 5:  # full levels
-                    level = item.name.split(" - ")[0]
+                    level = name.split(" - ")[0]
                     for shop in LEVEL_SHOP_LOOKUP[level]:
-                        if not state.has(f"{level} - {shop}", self.player):
-                            state.add_item(f"{level} - {shop}", self.player)
+                        if not state.has(f"{level} - {shop}", item.player):
+                            state.add_item(f"{level} - {shop}", item.player)
                 elif choice == 6:  # full realms
-                    realm = item.name.split(" - ")[0]
+                    realm = name.split(" - ")[0]
                     for level in REALM_LEVEL_LOOKUP[realm]:
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if not state.has(f"{level} - {shop}", self.player):
-                                state.add_item(f"{level} - {shop}", self.player)
+                            if not state.has(f"{level} - {shop}", item.player):
+                                state.add_item(f"{level} - {shop}", item.player)
+            elif item.code is None and "VictoryCon" not in name:  # gem events
+                gem_amount = int(name.split(" ")[0])
+                if "Blink minigames" in name:
+                    state.add_item("Blink Gems", item.player, count=gem_amount)
+                elif "[enemy]" in name:
+                    state.add_item("Non-Blink Enemies", item.player, count=gem_amount)
+                else:
+                    state.add_item("Other Gems", item.player, count=gem_amount)
+            else:  # all other cases (normal prog items and goal events)
+                state.add_item(name, item.player)
             return True
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
-        """Override of World.remove which additionally handles gem events and shop unlocks."""
+        """Override of World.remove which additionally handles item bundles, realm key rings, shop unlocks, and gem events."""
         name = self.collect_item(state, item, True)
         if name:
-            if "Bundle" in item.name:
-                if "Dark Gem" in item.name: bundle_type = "Dark Gem"
-                elif "Light Gem" in item.name: bundle_type = "Light Gem"
-                else: bundle_type = "Lockpick"
+            if "Bundle" in name:
+                bundle_type = name.split(" Bundle")[0]
                 convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
                 bundle_size = self.options.item_bundles[bundle_type]
                 
-                if state.count(bundle_type, item.player) == convert[bundle_type]:
-                    if convert[bundle_type] % bundle_size != 0:
-                        max_from_bundles = math.floor(convert[bundle_type] / bundle_size) * bundle_size
-                        to_remove = convert[bundle_type] - max_from_bundles
-                    else: to_remove = bundle_size
+                if state.count(bundle_type, item.player) == convert[bundle_type]:  # check for being at max amount e.g. if Dark Gem count == 40
+                    if convert[bundle_type] % bundle_size != 0:  # check if bundle size evenly divides into the maximum
+                        max_from_bundles = math.floor(convert[bundle_type] / bundle_size) * bundle_size  # how many bundles of bundle_size fit?
+                        to_remove = convert[bundle_type] - max_from_bundles  # get the difference e.g. if Dark Gem bundle size is 7, there'd be 5 leftover after the 5th one
+                    else: to_remove = bundle_size  # if bundle size evenly divides into the maximum, remove that much
                 else:
                     to_remove = bundle_size
 
                 state.remove_item(bundle_type, item.player, to_remove)
-            elif "Unlock" not in item.name:
-                if "Gems" in item.name and "VictoryCon" not in item.name:  # gem events
-                    gem_amount = int(item.name.split(" ")[0])
-                    if "Blink minigames" in item.name:
-                        state.remove_item("Blink Gems", item.player, count=gem_amount)
-                    elif "[enemy]" in item.name:
-                        state.remove_item("Non-Blink Enemies", item.player, count=gem_amount)
-                    else:
-                        state.remove_item("Other Gems", item.player, count=gem_amount)
-                else:
-                    state.remove_item(name, self.player)
-            else:  # handle shop unlocks separately
+            elif "Shop Unlock" in name:
                 choice = self.options.open_world_mode.value
                 if choice == 2:  # randomized
-                    state.remove_item(item.name.replace(" Shop Unlock", ""), self.player)
+                    state.remove_item(name.replace(" Shop Unlock", ""), item.player)
                 elif choice == 3 or choice == 4:  # progressive and reverse progressive
-                    adjusted_name = item.name.replace("Progressive ", "")
+                    adjusted_name = name.replace("Progressive ", "")
                     level = adjusted_name.split(" - ")[0]
                     shops = LEVEL_SHOP_LOOKUP[level].copy()
                     if choice == 3: shops.reverse()  # go in reverse for progressive or normal for reverse progressive, since this is locking shops
                     for shop in shops:
-                        if state.has(f"{level} - {shop}", self.player):
-                            state.remove_item(f"{level} - {shop}", self.player)
+                        if state.has(f"{level} - {shop}", item.player):
+                            state.remove_item(f"{level} - {shop}", item.player)
                             break
                 elif choice == 5:  # full levels
-                        level = item.name.split(" - ")[0]
+                        level = name.split(" - ")[0]
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if state.has(f"{level} - {shop}", self.player):
-                                state.remove_item(f"{level} - {shop}", self.player)
+                            if state.has(f"{level} - {shop}", item.player):
+                                state.remove_item(f"{level} - {shop}", item.player)
                 elif choice == 6:  # full realms
-                    realm = item.name.split(" - ")[0]
+                    realm = name.split(" - ")[0]
                     for level in REALM_LEVEL_LOOKUP[realm]:
                         for shop in LEVEL_SHOP_LOOKUP[level]:
-                            if state.has(f"{level} - {shop}", self.player):
-                                state.remove_item(f"{level} - {shop}", self.player)
+                            if state.has(f"{level} - {shop}", item.player):
+                                state.remove_item(f"{level} - {shop}", item.player)
+            elif item.code is None and "VictoryCon" not in name:  # gem events
+                gem_amount = int(name.split(" ")[0])
+                if "Blink minigames" in name:
+                    state.remove_item("Blink Gems", item.player, count=gem_amount)
+                elif "[enemy]" in name:
+                    state.remove_item("Non-Blink Enemies", item.player, count=gem_amount)
+                else:
+                    state.remove_item("Other Gems", item.player, count=gem_amount)
+            else:  # all other cases (normal prog items and goal events)
+                state.remove_item(name, item.player)
             return True
         return False
     
@@ -512,7 +505,7 @@ class SpyroAHTWorld(World):
         self.options.starting_realms.value = slot_data['starting_realms']
 
         self.options.shop_randomization.value = slot_data['shop_randomization']
-        self.options.key_rings.value = slot_data['key_rings']
+        self.options.chest_keys.value = slot_data['chest_keys']
         self.options.shop_item_count.value = slot_data['shop_item_count']
         self.options.shop_logic.value = slot_data['shop_logic']
         self.options.blink_gems.value = slot_data['blink_gems']
@@ -532,7 +525,7 @@ class SpyroAHTWorld(World):
             try:
                 val = option.value[key]
             except KeyError:  # if they don't include it at all, assume off
-                # self.log(f"Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Assuming a value of \"off\" (this occurs regardless of auto_corrections.", LoggingLevel.WARNING)
+                self.log(f"Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Assuming a value of \"off\" (this occurs regardless of auto_corrections).", LoggingLevel.WARNING)
                 option.value[key] = "off"
             if isinstance(option.value[key], str): option.value[key] = option.value[key].lower()
             bad_condition = option.value[key] not in ["off", "on", "random"]
@@ -862,7 +855,7 @@ class SpyroAHTWorld(World):
         # Dark Gems, Light Gems, and Lockpicks (as well as item bundle logic)
         convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
         for key in self.options.item_bundles.valid_keys:
-            if key == "Lockpick" and self.options.shop_randomization != 1 or (self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1):
+            if key == "Lockpick" and (self.options.shop_randomization == 0 or (self.options.shop_randomization.value == 1 and self.options.chest_keys.value != 0)):
                 continue
             if self.options.item_bundles.value[key] == 1:  # singular items
                 for _ in range(convert[key]): aht_items.append(self.create_item(key))
@@ -875,10 +868,12 @@ class SpyroAHTWorld(World):
                 self.log(f"Creating {bundle_count} {key} bundles.", LoggingLevel.HIGH)
                 for _ in range(bundle_count): aht_items.append(self.create_item(f"{key} Bundle"))
         
-        # Key Rings (lockpicks handled above to benefit from the generalized loop)
-        if self.options.shop_randomization.value == 1 and self.options.key_rings.value == 1:
-            for level in ["Dragon Village", "Crocovile Swamp", "Dragonfly Falls", "Coastal Remains", "Sunken Ruins", "Cloudy Domain", "Frostbite Village", "Gloomy Glacier", "Ice Citadel", "Stormy Beach", "Molten Mount", "Magma Falls", "Dark Mine", "Red's Laboratory"]:
-                aht_items.append(self.create_item(f"{level} Key Ring"))
+        # Key Rings
+        if self.options.shop_randomization.value == 1:
+            if self.options.chest_keys.value == 1:  # 14 level key rings
+                for level in LEVEL_TO_REALM.keys(): aht_items.append(self.create_item(f"{level} Key Ring"))
+            elif self.options.chest_keys.value == 2:  # 4 realm key rings
+                for realm in REALM_LEVEL_LISTS.keys(): aht_items.append(self.create_item(f"{realm} Key Ring"))
             
         # Starting Realms
         self.log("Setting up starting realms, access cards, and starting shop unlocks (if open world mode is enabled).", LoggingLevel.LOW)
@@ -1040,7 +1035,7 @@ class SpyroAHTWorld(World):
             "starting_realms": self.options.starting_realms.value,
 
             "shop_randomization": self.options.shop_randomization.value,
-            "key_rings": self.options.key_rings.value,
+            "chest_keys": self.options.chest_keys.value,
             "shop_item_count": self.options.shop_item_count.value,
             "shop_logic": self.options.shop_logic.value,
             "blink_gems": self.options.blink_gems.value,
@@ -1117,12 +1112,10 @@ class LockedChestRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
 
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        if world.options.shop_randomization.value == 1:
-            if world.options.key_rings.value == 1:
-                if self.level == "Reds Laboratory": self.level = "Red's Laboratory"  # fixing from formatting in local data not having apostraphes
-                return Has(f"{self.level} Key Ring", 1).resolve(world)
-            else:
-                return Has(f"Lockpick", 52).resolve(world)
+        if world.options.shop_randomization.value == 1:  # 2 types of key rings + lockpicks are possible with shop randomization on
+            if world.options.chest_keys.value == 1: return Has(f"{self.level} Key Ring", 1).resolve(world)
+            elif world.options.chest_keys.value == 2: return Has(f"{LEVEL_TO_REALM[self.level]} Key Ring", 1).resolve(world)
+            else: return Has("Lockpick", 52).resolve(world)
         else:  # always true when shops are unrandomized
             return True_().resolve(world)
     

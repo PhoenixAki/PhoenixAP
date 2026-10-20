@@ -221,8 +221,9 @@ class TrapPercentage(Range):
 
 
 class ItemBundles(OptionCounter):
-    """Decides how many Dark Gems, Light Gems, and Lockpicks (if enabled) you will be sent at a time.
-    If set to higher than 1, the item will be replaced with "Bundle" items e.e. "Dark Gem" -> "Dark Gem Bundle".
+    """Decides how many Dark Gems, Light Gems, and Lockpicks (if enabled) you will be sent at a time. Each bundle will
+    be worth that many, with the final one being worth potentially less. For example, bundle size of 7 for
+    Dark Gems would result in 5 bundles worth 7 (35 total) and the final one worth 5 (40 total).
     Set to 0 to have a random bundle size chosen."""
     display_name = "Item Bundles"
     valid_keys = ("Dark Gem", "Light Gem", "Lockpick")
@@ -324,13 +325,17 @@ class ShopRandomization(Toggle):
     default = 0
     
 
-class KeyRings(Toggle):
-    """Choose whether your shop will have lockpicks or key rings which open all locked chests in a level.
+class ChestKeys(Choice):
+    """Choose how you want to open locked chests. The items will be placed in the shop if shop_randomization is disabled,
+    or placed into the world by Archipelago otherwise.
     
-    If shop_randomization is off, they will be placed in the shop. Chests will be in logic as soon as you have access to them.
-    If shop_randomization is on, they will be placed into the world by Archipelago. Chests will be in logic as you collect each
-      key ring, or once you collect all 52 lockpicks."""
-    display_name = "Key Rings"
+    lockpicks: lockpicks, which each open 1 chest. Note that chests don't come into logic until having all 52 lockpicks.
+    level_key_rings: 14 key rings, each opens all chests in that level e.g. "Dragon Village Key Ring"
+    realm_key_rings: 4 key rings, each opens all chests in that realm e.g. "Lost Cities Key Ring"""
+    display_name = "Chest Keys"
+    option_lockpicks = 0
+    option_level_key_rings = 1
+    option_realm_key_rings = 2
     default = 0
 
 
@@ -369,7 +374,7 @@ class ShopLogic(Choice):
 class BlinkGems(Range):
     """Decides what % of gems from Blink minigames you want to be expected to collect, if shop_randomization is enabled.
     For example, a value of 50 means being expected to collect approximately 50% of such gems.
-    Any Blink minigames that are added to exclude_locations, or disabled via minigame_checks, are omitted from this."""
+    Any Blink minigames that are added to exclude_locations, or disabled via minigame_checks, are omitted."""
     display_name = "Blink Gems"
     range_start = 0
     range_end = 100
@@ -388,7 +393,7 @@ class NonBlinkEnemies(Range):
 class OtherGems(Range):
     """Decides what % of gems you want to be expected to collect from gems on the ground, breakable containers, and
     Sgt. Byrd + Sparx minigames, if shop_randomization is enabled.
-    Any Sgt. Byrd and Sparx minigames that are added to exclude_locations, or disabled via minigame_checks, are omitted from this."""
+    Any Sgt. Byrd and Sparx minigames that are added to exclude_locations, or disabled via minigame_checks, are omitted."""
     display_name = "Other Gems"
     range_start = 0
     range_end = 100
@@ -614,7 +619,7 @@ class SpyroAHTOptions(PerGameCommonOptions):
     starting_realms: StartingRealms
     
     shop_randomization: ShopRandomization
-    key_rings: KeyRings
+    chest_keys: ChestKeys
     shop_item_count: ShopItemCount
     shop_logic: ShopLogic
     blink_gems: BlinkGems
@@ -659,7 +664,7 @@ spyro_options_groups = [
         StartingBreaths, MovementRandomization, StartingRealms
     ]),
     OptionGroup("SHOP SETTINGS", [
-        ShopRandomization, KeyRings, ShopItemCount, ShopLogic, BlinkGems, NonBlinkEnemies, OtherGems, DoubleGems
+        ShopRandomization, ChestKeys, ShopItemCount, ShopLogic, BlinkGems, NonBlinkEnemies, OtherGems, DoubleGems
     ]),
     OptionGroup("GATE & GADGET COSTS", [
         RandomizeBossLairDoorCosts, BossLairDoorCostMin, BossLairDoorCostMax, BossLairForcing,

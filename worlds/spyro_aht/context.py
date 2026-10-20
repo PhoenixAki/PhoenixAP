@@ -176,8 +176,8 @@ class SpyroAHTCommands(ClientCommandProcessor):
         self.output("---------------SHOP SETTINGS---------------")
         # shop items & key rings
         output = "randomized" if self.ctx.slot_data["shop_randomization"] == 1 else "not randomized"
-        output_2 = "enabled" if self.ctx.slot_data["key_rings"] == 1 else "not enabled"
-        self.output(f"Shop items are {output} and key rings are {output_2}.")
+        convert = {0: "lockpicks", 1: "per-level key rings", 2: "per-realm key rings"}
+        self.output(f"Shop items are {output} and you chose to unlock chests using {convert[self.ctx.slot_data['chest_keys']]}.")
         if self.ctx.slot_data["shop_randomization"]:
             # shop item count
             self.output(f"You chose to have {self.ctx.slot_data['shop_item_count']} shop items.")
@@ -491,10 +491,15 @@ class SpyroAHTContext(SuperContext):
                 if not await self.emu_client.has_any_breath() and consts.ITEM_GROUP_IDS["Breaths"][0] <= item.item <= consts.ITEM_GROUP_IDS["Breaths"][1]:
                     await self.emu_client.set_breath(item.item)
             elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
-                key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1]+1))
-                bit = key_ring_id_list.index(item.item)
-                address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
-                await self._set_keyring_or_shop(bit, address)
+                if item.item >= consts.ITEM_GROUP_IDS["Key Rings"][1]-4:  # if realm key ring, needs converting into list of level key rings
+                    ring_ids = consts.REALM_KEY_RING_LOOKUP[item.item]  # converts from realm key ring id -> list of level key ring ids
+                else: ring_ids = [item.item]  # already is a level key ring id
+                
+                for ring_id in ring_ids:
+                    key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1]-3))
+                    bit = key_ring_id_list.index(ring_id)
+                    address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
+                    await self._set_keyring_or_shop(bit, address)
             elif consts.ITEM_GROUP_IDS["Access Cards"][0] <= item.item <= consts.ITEM_GROUP_IDS["Access Cards"][1]:
                 await self.emu_client.allow_realm_access(item.item - consts.ITEM_GROUP_IDS["Access Cards"][0])  # adjust to value from 0-3
             elif item.item == consts.ITEM_INFO["Health Unit+"][0] or item.item == consts.ITEM_INFO["Shockwave"][0]:
