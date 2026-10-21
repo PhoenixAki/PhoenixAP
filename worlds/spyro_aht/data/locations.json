@@ -1929,7 +1929,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -1949,7 +1949,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -3507,7 +3507,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -3527,7 +3527,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -3997,7 +3997,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -4017,7 +4017,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -5111,7 +5111,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -5131,7 +5131,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -5695,7 +5695,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -5718,7 +5718,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -7091,7 +7091,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -7111,7 +7111,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -8469,7 +8469,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -8489,7 +8489,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -9428,7 +9428,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -9448,7 +9448,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -10468,7 +10468,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -10488,7 +10488,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -10696,7 +10696,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -10716,7 +10716,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -12229,7 +12229,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -12249,7 +12249,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -13094,7 +13094,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -13114,7 +13114,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -14578,7 +14578,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -14598,7 +14598,7 @@
                         "option": "minigame_checks",
                         "npc": "Turret",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -15240,7 +15240,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -15260,7 +15260,7 @@
                         "option": "minigame_checks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -17811,7 +17811,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -17831,7 +17831,7 @@
                         "option": "minigame_checks",
                         "npc": "Sparx",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],
@@ -18723,7 +18723,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal",
+                            "enabled",
                             "easy"
                         ]
                     }
@@ -18743,7 +18743,7 @@
                         "option": "minigame_checks",
                         "npc": "Blink",
                         "value": [
-                            "normal"
+                            "enabled"
                         ]
                     }
                 ],

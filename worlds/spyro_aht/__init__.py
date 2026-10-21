@@ -288,8 +288,8 @@ class SpyroAHTWorld(World):
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", consts.LoggingLevel.LOW)
         
-        self.check_dicts(self.options.auto_hinting)
-        self.check_dicts(self.options.time_savers)
+        self.check_qol_dicts(self.options.auto_hinting)
+        self.check_qol_dicts(self.options.time_savers)
             
         bad_condition = self.options.time_savers.value["Teleport Across Realms"] == "off" and self.options.open_world_mode.value != 0
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -324,6 +324,14 @@ class SpyroAHTWorld(World):
 
         # minigame checks
         for key in self.options.minigame_checks.valid_keys:
+            bad_condition = self.options.minigame_checks.value.get(key, "") == ""
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: minigame_checks setting \"{key}\" was omitted from YAML. Fixing by assuming a value of disabled.", consts.LoggingLevel.WARNING)
+                self.options.minigame_checks.value[key] = "disabled"
+                continue
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"minigame_checks setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
+                
             if isinstance(self.options.minigame_checks.value[key], str):
                 self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].lower()
 
@@ -340,6 +348,14 @@ class SpyroAHTWorld(World):
         
         # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
         for key in self.options.minigames_goal.valid_keys:
+            bad_condition = self.options.minigames_goal.value.get(key, "") == ""
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: minigames_goal setting \"{key}\" was omitted from YAML. Fixing by assuming a value of 0.", consts.LoggingLevel.WARNING)
+                self.options.minigames_goal.value[key] = 0
+                continue
+            elif bad_condition and self.options.auto_corrections.value == 0:  # fix_minor
+                raise OptionError(f"minigames_goal setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
+            
             bad_condition = self.options.minigames_goal.value[key] in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
                 self.log(f"Minor Warning: \"{self.options.minigames_goal.value[key]}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fixing by auto-converting to a number.", consts.LoggingLevel.WARNING)
@@ -498,13 +514,16 @@ class SpyroAHTWorld(World):
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
 
-    def check_dicts(self, option: OptionDict):
+    def check_qol_dicts(self, option: OptionDict):
         for key in option.valid_keys:
-            try:
-                val = option.value[key]
-            except KeyError:  # if they don't include it at all, assume off
-                self.log(f"Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Assuming a value of \"off\" (this occurs regardless of auto_corrections).", consts.LoggingLevel.WARNING)
+            bad_condition = option.value.get(key, "") == ""
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of \"off\".", consts.LoggingLevel.WARNING)
                 option.value[key] = "off"
+                continue
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"{option.display_name} setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
+            
             if isinstance(option.value[key], str): option.value[key] = option.value[key].lower()
             bad_condition = option.value[key] not in ["off", "on", "random"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -781,6 +800,7 @@ class SpyroAHTWorld(World):
             ind_count = 1
             if not enabled_tests[goal_name]:
                 continue
+            self.log(f"Beginning setup for goal {goal_name}.", consts.LoggingLevel.HIGH)
             self.goals_dict[goal_name] = {"ids": [], "amount": goal_info[goal_name]["count"]}  # set up format for this goal. This is all for the sake of the client
             for loc_id in data["ids"]:
                 loc_name = self.location_id_to_name[loc_id]

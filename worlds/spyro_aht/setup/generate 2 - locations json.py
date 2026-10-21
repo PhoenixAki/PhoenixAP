@@ -69,8 +69,8 @@ for line in file_in:
         elif loc_id in SPARX_IDS: npc = "Sparx"
         else: npc = "Turret"
         
-        # normal or easy if dragon egg (id in the 300's). only normal for light gems (id in the 200's)
-        values = ["normal", "easy"] if loc_id // 100 == 3 else ["normal"]
+        # enabled or easy if dragon egg (id in the 300's). only enabled for light gems (id in the 200's)
+        values = ["enabled", "easy"] if loc_id // 100 == 3 else ["enabled"]
         options = [{
             "option": "minigame_checks",
             "npc": npc,
