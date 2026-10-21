@@ -964,55 +964,23 @@ class SpyroAHTWorld(World):
         filler_number = junk_count - trap_number
         self.log(f"Number of fillers: {filler_number}. Number of traps: {trap_number}.", consts.LoggingLevel.HIGH)
         
-        output = "none" if len(self.options.trap_items.value) == 0 else ", ".join(self.options.trap_items.value)
-        self.log(f"Enabled trap items: {output}.", consts.LoggingLevel.MEDIUM)
-        trap_choices = list(self.options.trap_items.value)
-        trap_choices.sort()  # non-determinism fix
-        for _ in range(trap_number):
-            choice = self.random.choice(trap_choices)
-            aht_items.append(self.create_item(choice))
-
-        # shinies have extra logic to force variety in the choices before duplicating
-        self.filler_items, unchosen_shinies = self.setup_filler_list()
-        output = "none" if len(self.filler_items.keys()) == 0 else ", ".join(self.filler_items.keys()) 
-        self.log(f"Enabled filler categories: {output}.", consts.LoggingLevel.MEDIUM)
-        reset_shinies = copy.copy(unchosen_shinies)
-        for _ in range(filler_number):
-            category, items = self.random.choice(list(self.filler_items.items()))
-            choice = self.random.choice(items)
-            if category == "Shinies":
-                if len(unchosen_shinies) == 0: unchosen_shinies = copy.copy(reset_shinies)
-                while choice not in unchosen_shinies:
-                    choice = self.random.choice(unchosen_shinies)
-                unchosen_shinies.remove(choice)
-            aht_items.append(self.create_item(choice))
-    
+        aht_items.extend(self.choose_junk(self.options.filler_items, "Filler", filler_number))
+        aht_items.extend(self.choose_junk(self.options.trap_items, "Trap", trap_number))
+        
         self.multiworld.itempool.extend(aht_items)
 
-    def setup_filler_list(self) -> tuple[dict[str, list], list[str]]:
-        """Helper method which assembles a list of enabled filler item categories and the possible choices for each type."""
-        enabled_filler_items: dict[str, list[str]] = {}
-        shinies = []
+    def choose_junk(self, option: OptionSet, name: str, amount: int):
+        to_add = []
+        output = "none" if len(option.value) == 0 else ", ".join(option.value)
+        self.log(f"Enabled {name} items: {output}.", consts.LoggingLevel.MEDIUM)
+        choices = list(option.value)
+        choices.sort()  # avoids determinism from sets not being in a consistent order
+        for _ in range(amount):
+            choice = self.random.choice(choices)
+            if choice == "Shinies": choice = self.random.choice(consts.SHINIES_NAMES)  # shinies is a category
+            to_add.append(self.create_item(choice))
+        return to_add
 
-        for category in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
-            if category in self.options.filler_items.value:
-                enabled_filler_items[category] = []
-        
-        for name, (item_id, classification) in consts.ITEM_INFO.items():
-            if classification != ItemClassification.filler:
-                continue
-            if name == "Gem Pack" and "Gem Packs" in enabled_filler_items.keys():
-                enabled_filler_items["Gem Packs"].append(name)
-            elif name == "Dragon Egg" and "Dragon Eggs" in enabled_filler_items.keys():
-                enabled_filler_items["Dragon Eggs"].append(name)
-            elif "Bomb" in name and "Breath Bombs" in enabled_filler_items.keys():
-                enabled_filler_items["Breath Bombs"].append(name)
-            elif consts.ITEM_GROUP_IDS["Filler"][0] <= item_id <= consts.ITEM_GROUP_IDS["Filler"][1] and "Shinies" in enabled_filler_items.keys():
-                enabled_filler_items["Shinies"].append(name)
-                shinies.append(name)
-
-        return enabled_filler_items, shinies
-  
     def set_rules(self) -> None:
         self.log("Setting up location rules.", consts.LoggingLevel.LOW)
         # this does non-goal locations

@@ -237,18 +237,18 @@ class ItemBundles(OptionCounter):
 
 
 class FillerItems(OptionSet):
-    """Choose which categories of filler (neutral-to-positive effect) items to enable.
+    """Choose which filler (neutral-to-positive effect) items to enable.
 
-    Dragon Eggs: These are filler due to having no logical impact.
-    Breath Bombs: Fire, Electric, Water, and Ice Bombs. Only usable if their respective breath is unlocked.
-    Gem Packs: Gives a random amount of gems (400-600, 800-1200 if you have double gems).
-        It is advised to disable these if using shop_randomization, as shop logic does not account for gem packs.
-    Shinies: Items which do nothing, but have humorous names referencing AHT or other games/series.
+    Dragon Egg: These are filler due to having no logical impact.
+    Fire/Electric/Water/Ice Bomb: Only usable if their respective breath is unlocked.
+    Gem Pack: Gives a random amount of gems (400-600, 800-1200 if you have double gems).
+      It is advised to disable these if using shop_randomization, as shop logic does not account for gem packs.
+    Shinies: A set 16 items which do nothing, but have humorous names referencing AHT or other games/series. 
     
-    Valid options: ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]"""
+    Valid options: ["Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb", "Gem Pack", "Shinies"]"""
     display_name = "Filler Items"
-    valid_keys = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies")
-    default = ("Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies")
+    valid_keys = ("Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb", "Gem Pack", "Shinies")
+    default = ("Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb")
 
 
 class TrapItems(OptionSet):
