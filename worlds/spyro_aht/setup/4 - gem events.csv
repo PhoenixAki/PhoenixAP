@@ -573,13 +573,11 @@ RLNorthWest2,80,[enemy] armored middle robo-gnorcs,"And(Has('Charge'), HasAny('E
 RLNorthWest2,345,metal chests/headbash chests/and baskets using DJ,Has('Double Jump')
 RLNorthWest2,30,headbash chest after pole spin glide,"HasAll('Double Jump', 'Glide', 'Pole Spin')"
 RLNorthWest2,40,[enemy] small robo-gnorcs that spawn after dark gem,"And(HasAll('Double Jump', 'Glide', 'Pole Spin'), HasAny('Electric Breath', 'Charge'))"
-RLSouthEast1,20,[enemy] armored middle robo-gnorc,"HasAny('Electric Breath', 'Ice Breath')"
-RLSouthEast1,20,[enemy] small robo-gnorc,True_()
+RLSouthEast1,40,[enemy] armored middle robo-gnorc and small robo-gnorc,True_()
 RLSouthEast1,75,baskets,True_()
-RLSouthEast1,105,baskets behind lasers/headbash chest,Has('Double Jump')
+RLSouthEast1,105,baskets behind lasers + headbash chest,Has('Double Jump')
 RLSouthEast2,75,metal chests up high,True_()
-RLSouthEast2,20,[enemy] armored middle robo-gnorc up high,Has('Charge')
-RLSouthEast2,40,[enemy] huge robo-gnorcs up high,True_()
+RLSouthEast2,60,[enemy] armored middle robo-gnorc + huge robo-gnorcs up high,True_()
 RLSouthEast3,40,[enemy] armored middle robo-gnorc,"And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))"
 RLSouthEast3,60,[enemy] small robo-gnorcs,"HasAny('Electric Breath', 'Charge')"
 RLSouthEast3,30,headbash chest,Has('Double Jump')

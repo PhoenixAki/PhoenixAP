@@ -20500,13 +20500,31 @@
             {
                 "name": "RLCenter -> RLSouthEast1",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Electric Breath",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -20531,24 +20549,8 @@
         ],
         "gem_events": [
             {
-                "name": "20 Gems ([enemy] armored middle robo-gnorc)",
-                "gem_amount": 20,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAny",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Electric Breath",
-                            "Ice Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "20 Gems ([enemy] small robo-gnorc)",
-                "gem_amount": 20,
+                "name": "40 Gems ([enemy] armored middle robo-gnorc and small robo-gnorc)",
+                "gem_amount": 40,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -20569,7 +20571,7 @@
                 }
             },
             {
-                "name": "105 Gems (baskets behind lasers/headbash chest)",
+                "name": "105 Gems (baskets behind lasers + headbash chest)",
                 "gem_amount": 105,
                 "options": [],
                 "access_rule": {
@@ -20683,22 +20685,8 @@
                 }
             },
             {
-                "name": "20 Gems ([enemy] armored middle robo-gnorc up high)",
-                "gem_amount": 20,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
-                }
-            },
-            {
-                "name": "40 Gems ([enemy] huge robo-gnorcs up high)",
-                "gem_amount": 40,
+                "name": "60 Gems ([enemy] armored middle robo-gnorc + huge robo-gnorcs up high)",
+                "gem_amount": 60,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",

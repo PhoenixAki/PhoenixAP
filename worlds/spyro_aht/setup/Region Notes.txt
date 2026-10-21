@@ -1262,14 +1262,14 @@ REGION RLNorthWest2: upper part of double piston room and beyond
 	LOCATION RLNorthWest2 | RL: Dark Gem in northwest | 139 | HasAll('Double Jump', 'Glide', 'Pole Spin')
 
 REGION RLSouthEast1: room with exit up high
-	RLCenter -> RLSouthEast1 | Has('Charge')
-		would have charge
+	RLCenter -> RLSouthEast1 | And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))
+		would have charge and (electric or ice)
 
 	LOCATION RLSouthEast1 | RL: Light Gem atop southeast first room | 284 | HasAll('Double Jump', 'Pole Spin', 'Glide')
 
 REGION RLSouthEast2: laser room entry, includes upper area of room with exit up high
 	RLSouthEast1 -> RLSouthEast2 | And(HasAll('Double Jump', 'Pole Spin', 'Glide'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge')))
-		would have DJ and pole spin and glide and (electric or ice + charge)
+		would have DJ and pole spin and glide and charge and (electric or ice)
 	RLSouthEast3 -> RLSouthEast2 | Or(HasAny('Double Jump', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))
 		would have DJ or (electric or ice + charge)
 

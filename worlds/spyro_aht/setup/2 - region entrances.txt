@@ -268,7 +268,7 @@ RLCenter -> RLNorthWest1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Char
 RLNorthWest1 -> RLNorthWest2 | HasAll('Double Jump', 'Glide')
 ShopPads -> RLNorthWest2 | OpenWorldRule(['Red\'s Laboratory - Mechanical Mishaps'])
 RLNorthWest2 -> ShopPads | True_()
-RLCenter -> RLSouthEast1 | Has('Charge')
+RLCenter -> RLSouthEast1 | And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))
 RLSouthEast1 -> RLSouthEast2 | And(HasAll('Double Jump', 'Pole Spin', 'Glide'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge')))
 RLSouthEast3 -> RLSouthEast2 | Or(HasAny('Double Jump', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))
 RLSouthEast2 -> RLSouthEast3 | True_()
