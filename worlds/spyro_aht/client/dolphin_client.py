@@ -105,16 +105,19 @@ class DolphinClient(GenericClient):
         self.ready.set()
     
     async def disconnect(self):
-        dolphin_memory_engine.write_byte(self.addresses.p_PATCH_BEEN_WRITTEN_TO, 0)
         self._notification_task.cancel()
+        self._trap_task.cancel()
         if dolphin_memory_engine.is_hooked():
+            dolphin_memory_engine.write_byte(self.addresses.p_PATCH_BEEN_WRITTEN_TO, 0)
             dolphin_memory_engine.un_hook()
             self.ready.clear()
     
     async def should_process_checks(self) -> bool:
-        m_state = dolphin_memory_engine.read_word(self.addresses.IN_GAME)
-        m_pause = dolphin_memory_engine.read_byte(self.addresses.PAUSE)
-        return m_state == 3 and (m_pause & 0x80 == 0)
+        if dolphin_memory_engine.is_hooked():
+            m_state = dolphin_memory_engine.read_word(self.addresses.IN_GAME)
+            m_pause = dolphin_memory_engine.read_byte(self.addresses.PAUSE)
+            return m_state == 3 and (m_pause & 0x80 == 0)
+        else: return False
 
     async def scan_locations(self, slot_data: dict) -> set[int]:
         result: set[int] = set()
