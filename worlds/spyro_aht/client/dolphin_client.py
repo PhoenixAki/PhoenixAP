@@ -223,7 +223,7 @@ class DolphinClient(GenericClient):
         if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on":
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, 1)
         
-        convert_config = {"normal": 0, "easy": 1, "disabled": 2}
+        convert_config = {"enabled": 0, "easy": 1, "disabled": 2}
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_BLINK_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Blink']])
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SGTBYRD_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sgt. Byrd']])
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SPARX_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sparx']])

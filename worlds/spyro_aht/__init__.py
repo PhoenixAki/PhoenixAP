@@ -327,15 +327,15 @@ class SpyroAHTWorld(World):
             if isinstance(self.options.minigame_checks.value[key], str):
                 self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].lower()
 
-            bad_condition = self.options.minigame_checks.value[key] not in ["normal", "easy", "disabled", "random"]
+            bad_condition = self.options.minigame_checks.value[key] not in ["enabled", "easy", "disabled", "random"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fixing by setting {key} to normal.", consts.LoggingLevel.WARNING)
-                self.options.minigame_checks.value[key] = "normal"
+                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"enabled\", \"easy\", \"disabled\", or \"random\". Fixing by setting {key} to \"enabled\".", consts.LoggingLevel.WARNING)
+                self.options.minigame_checks.value[key] = "enabled"
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Invalid entry for {key} in minigame_checks. Must be \"normal\", \"easy\", \"disabled\", or \"random\". Fix this, or set auto_corrections to at least fix_minor.")
+                raise OptionError(f"Invalid entry for {key} in minigame_checks. Must be \"enabled\", \"easy\", \"disabled\", or \"random\". Fix this, or set auto_corrections to at least fix_minor.")
 
             if self.options.minigame_checks.value[key] == "random":
-                self.options.minigame_checks.value[key] = self.random.choice(["normal", "easy", "disabled"])
+                self.options.minigame_checks.value[key] = self.random.choice(["enabled", "easy", "disabled"])
                 self.log(f"\"random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
         
         # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
@@ -656,7 +656,7 @@ class SpyroAHTWorld(World):
                 add = True
                 for opt in location_data.get('options', ()):
                     option = getattr(self.options, opt['option'])
-                    # opt['value'] is either ['normal'] or ['easy', 'normal'] depending on if light gem or dragon egg location
+                    # opt['value'] is either ['enabled'] or ['easy', 'enabled'] depending on if light gem or dragon egg location
                     if option.display_name == "Minigame Checks":
                         add = option.value[opt['npc']] in opt['value']
                     else:

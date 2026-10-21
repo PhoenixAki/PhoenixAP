@@ -198,18 +198,18 @@ class MinigameChecks(OptionDict):
     """Customize whether each minigame will be fully enabled, enabled with only Dragon Egg challenges,
     or disabled. For each minigame, enter one of:
     
-    normal: Keeps vanilla behavior for this minigame.
+    enabled: Keeps vanilla behavior for this minigame.
     easy: Disables the Light Gem challenges for this minigame.
     disabled: Fully disables this minigame. Its NPCs will not spawn at all in-game.
       If turret minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
-    random: Random choice between normal, easy, and disabled."""
+    random: Random choice between enabled, easy, and disabled."""
     display_name = "Minigame Checks"
     valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
     default = {
-        "Blink": "normal",
-        "Sgt. Byrd": "normal",
-        "Sparx": "normal",
-        "Turret": "normal"
+        "Blink": "enabled",
+        "Sgt. Byrd": "enabled",
+        "Sparx": "enabled",
+        "Turret": "enabled"
     }
     
     
@@ -330,8 +330,8 @@ class ChestKeys(Choice):
     or placed into the world by Archipelago otherwise.
     
     lockpicks: lockpicks, which each open 1 chest. Note that chests don't come into logic until having all 52 lockpicks.
-    level_key_rings: 14 key rings, each opens all chests in that level e.g. "Dragon Village Key Ring"
-    realm_key_rings: 4 key rings, each opens all chests in that realm e.g. "Lost Cities Key Ring"""
+    level_key_rings: 14 key rings, each opens all chests in that level e.g. "Dragon Village Key Ring".
+    realm_key_rings: 4 key rings, each opens all chests in that realm e.g. "Lost Cities Key Ring"."""
     display_name = "Chest Keys"
     option_lockpicks = 0
     option_level_key_rings = 1
