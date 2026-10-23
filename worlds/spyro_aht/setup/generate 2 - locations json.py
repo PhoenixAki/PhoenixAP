@@ -1,7 +1,7 @@
 import json
 
 # These are imported so that eval() can recognize them as types below
-from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion, OptionFilter
+from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion
 from worlds.spyro_aht.data.consts import BLINK_IDS, BYRD_IDS, SPARX_IDS, TURRET_IDS
 from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
@@ -62,17 +62,17 @@ for line in file_in:
 
     if "Shop Item" in loc_name:
         options = [{
-            "option": "shop_randomization",
+            "option": "worlds.spyro_aht.options.ShopRandomization",
             "value": 1
         },
         {
-            "option": "shop_item_count",
+            "option": "worlds.spyro_aht.options.ShopItemCount",
             "operator": "ge",
             "value": int(loc_name[-2:])
         }]
     elif "Firework" in loc_name:
         options = [{
-            "option": "firework_checks",
+            "option": "worlds.spyro_aht.options.FireworkChecks",
             "value": 1
         }]
     elif loc_id in [*BLINK_IDS, *BYRD_IDS, *SPARX_IDS, *TURRET_IDS]:
@@ -84,7 +84,7 @@ for line in file_in:
         # enabled or easy if dragon egg (id in the 300's). only enabled for light gems (id in the 200's)
         values = ["enabled", "easy"] if loc_id // 100 == 3 else ["enabled"]
         options = [{
-            "option": "minigame_checks",
+            "option": "worlds.spyro_aht.options.MinigameChecks",
             "npc": npc,
             "value": values
         }]

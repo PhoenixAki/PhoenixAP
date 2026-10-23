@@ -11,11 +11,12 @@ import orjson
 import Utils
 from BaseClasses import Item, MultiWorld, Region, CollectionState
 from Options import OptionError, OptionSet, Choice, Range, OptionDict
+from rule_builder.options import OptionFilter
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
 from .data import consts
-from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups
+from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups, MinigameChecks
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
 
@@ -669,7 +670,7 @@ class SpyroAHTWorld(World):
             raise OptionError(f"{range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fix this, or set auto_corrections to at least fix_minor.")
         
     def create_regions(self):
-        self.log("Setting up regions and locations.", consts.LoggingLevel.LOW)
+        self.log("Creating regions and locations.", consts.LoggingLevel.LOW)
         self.multiworld.regions.extend(Region(r['name'], self.player, self.multiworld) for r in self.location_data.values())
         self.log("Regions created.", consts.LoggingLevel.HIGH)
         
@@ -685,23 +686,17 @@ class SpyroAHTWorld(World):
             new_locations = {}
             for location_data in region_data['locations']:
                 add = True
-                for opt in location_data.get('options', ()):
-                    option = getattr(self.options, opt['option'])
-                    # opt['value'] is either ['enabled'] or ['easy', 'enabled'] depending on if light gem or dragon egg location
-                    if option.display_name == "Minigame Checks":
-                        add = option.value[opt['npc']] in opt['value']
+                for option in location_data["options"]:
+                    if option["option"] == "worlds.spyro_aht.options.MinigameChecks":
+                        add = self.options.minigame_checks.value[option["npc"]] in option["value"]
                     else:
-                        match opt.get('operator', 'eq'):
-                            case 'eq': add = add and option.value == opt['value']
-                            case 'ne': add = add and option.value != opt['value']
-                            case 'gt': add = add and option.value > opt['value']
-                            case 'ge': add = add and option.value >= opt['value']
-                            case 'lt': add = add and option.value < opt['value']
-                            case 'le': add = add and option.value <= opt['value']
-                    
+                        add = OptionFilter.from_dict(option).check(self.options)  # check if options are right
+                    if not add:
+                        self.log(f"Skipping creating location {location_data['name']} as one or more of its options criteria were not met.", consts.LoggingLevel.HIGH)
+                        break  # as soon as any part of the options fails, it's gg
                 if add:
                     new_locations[location_data['name']] = location_data['id']
-                    self.log(f"Added location {location_data['name']} with id {location_data['id']} to region {region_data['name']}.", consts.LoggingLevel.MAXIMUM)
+                    self.log(f"Created location {location_data['name']} with id {location_data['id']} to region {region_data['name']}.", consts.LoggingLevel.MAXIMUM)
             self.get_region(region_data['name']).add_locations(new_locations)
         self.log("Locations created.", consts.LoggingLevel.HIGH)
         
@@ -998,13 +993,11 @@ class SpyroAHTWorld(World):
         # this does non-goal locations
         for region in self.location_data.values():
             for location in region['locations']:
-                try:
-                    loc = self.get_location(location['name'])
-                except KeyError:
-                    continue
+                try: loc = self.get_location(location['name'])
+                except KeyError: continue
                 self.set_rule(loc, self.rule_from_dict(location['access_rule']))
 
-        # this does goal events
+        # this does goal events, would be more straightforward to do in create_goal_events, but that fails a unit test
         for goal_event, location_name in self.goal_events.items():
             self.get_location(goal_event).access_rule = self.get_location(location_name).access_rule
     
