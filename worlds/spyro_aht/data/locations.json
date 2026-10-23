@@ -2057,13 +2057,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -2313,13 +2332,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -2478,13 +2516,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -2605,13 +2662,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -3006,13 +3082,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -3859,24 +3954,8 @@
         ],
         "locations": [
             {
-                "name": "CS: Dragon Egg in middle of Elder's tree",
-                "id": 310,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAny",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Glide"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "CS: Firework in middle of Elder's tree",
-                "id": 406,
+                "name": "CS: Firework atop Elder's tree",
+                "id": 407,
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
@@ -3884,7 +3963,7 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
@@ -3898,36 +3977,18 @@
                             }
                         },
                         {
-                            "rule": "HasAny",
-                            "options": [],
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Glide"
-                                ]
-                            }
+                            "args": {}
                         }
                     ]
-                }
-            },
-            {
-                "name": "CS: Firework atop Elder's tree",
-                "id": 407,
-                "options": [
-                    {
-                        "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
-                    }
-                ],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
                 }
             },
             {
@@ -3969,6 +4030,77 @@
                 }
             }
         ]
+    },
+    "CSElderTreeLedge": {
+        "name": "CSElderTreeLedge",
+        "entrances": [
+            {
+                "name": "CSAboveElder -> CSElderTreeLedge",
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Glide"
+                        ]
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "CS: Dragon Egg in middle of Elder's tree",
+                "id": 310,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "CS: Firework in middle of Elder's tree",
+                "id": 406,
+                "options": [
+                    {
+                        "option": "worlds.spyro_aht.options.FireworkChecks",
+                        "value": 1
+                    }
+                ],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ],
+        "gem_events": []
     },
     "CSFredneck": {
         "name": "CSFredneck",
@@ -7694,13 +7826,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -8127,13 +8278,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -8658,13 +8828,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -8882,75 +9071,6 @@
                 }
             },
             {
-                "name": "SR: Dragon Egg atop thermal room",
-                "id": 330,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "SR: Light Gem in Locked Chest atop thermal room",
-                "id": 828,
-                "options": [],
-                "access_rule": {
-                    "rule": "And",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "HasAll",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Double Jump",
-                                    "Glide"
-                                ]
-                            }
-                        },
-                        {
-                            "rule": "LockedChestRule",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "level": "Sunken Ruins"
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "SR: Firework atop thermal room",
-                "id": 411,
-                "options": [
-                    {
-                        "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
-                    }
-                ],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath",
-                            "Glide"
-                        ]
-                    }
-                }
-            },
-            {
                 "name": "SR: Light Gem in Locked Chest by Lily",
                 "id": 829,
                 "options": [],
@@ -9122,6 +9242,90 @@
                 }
             }
         ]
+    },
+    "SRAboveThermalRoom": {
+        "name": "SRAboveThermalRoom",
+        "entrances": [
+            {
+                "name": "SRSwim1 -> SRAboveThermalRoom",
+                "access_rule": {
+                    "rule": "HasAll",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Double Jump",
+                            "Glide"
+                        ]
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "SR: Dragon Egg atop thermal room",
+                "id": 330,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "SR: Light Gem in Locked Chest atop thermal room",
+                "id": 828,
+                "options": [],
+                "access_rule": {
+                    "rule": "LockedChestRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level": "Sunken Ruins"
+                    }
+                }
+            },
+            {
+                "name": "SR: Firework atop thermal room",
+                "id": 411,
+                "options": [
+                    {
+                        "option": "worlds.spyro_aht.options.FireworkChecks",
+                        "value": 1
+                    }
+                ],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ],
+        "gem_events": []
     },
     "SRSwim2": {
         "name": "SRSwim2",
@@ -9617,13 +9821,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -9972,13 +10195,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -10037,59 +10279,6 @@
             }
         ],
         "locations": [
-            {
-                "name": "SR: Firework in rising statue room",
-                "id": 414,
-                "options": [
-                    {
-                        "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
-                    }
-                ],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath",
-                            "Fire Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "SR: Dragon Egg in Locked Chest in rising statue room",
-                "id": 844,
-                "options": [],
-                "access_rule": {
-                    "rule": "And",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "LockedChestRule",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "level": "Sunken Ruins"
-                            }
-                        },
-                        {
-                            "rule": "HasAll",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Double Jump",
-                                    "Electric Breath"
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
             {
                 "name": "SR: Dark Gem on rising statue",
                 "id": 120,
@@ -10220,6 +10409,79 @@
                 }
             }
         ]
+    },
+    "SRToxicRisePerimeter": {
+        "name": "SRToxicRisePerimeter",
+        "entrances": [
+            {
+                "name": "SRToxicRise -> SRToxicRisePerimeter",
+                "access_rule": {
+                    "rule": "HasAll",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "SR: Firework in rising statue room",
+                "id": 414,
+                "options": [
+                    {
+                        "option": "worlds.spyro_aht.options.FireworkChecks",
+                        "value": 1
+                    }
+                ],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "SR: Dragon Egg in Locked Chest in rising statue room",
+                "id": 844,
+                "options": [],
+                "access_rule": {
+                    "rule": "LockedChestRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level": "Sunken Ruins"
+                    }
+                }
+            }
+        ],
+        "gem_events": []
     },
     "SRReturnToStart": {
         "name": "SRReturnToStart",
@@ -12713,13 +12975,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -14228,13 +14509,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -14273,13 +14573,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -14654,13 +14973,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -14872,13 +15210,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -16972,13 +17329,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -18528,13 +18904,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -19056,13 +19451,32 @@
                     }
                 ],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Fireworks with Idle Animation"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],

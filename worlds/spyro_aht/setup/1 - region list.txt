@@ -17,6 +17,7 @@ CSEast
 CSEastPoles
 CSTree
 CSAboveElder
+CSElderTreeLedge
 CSFredneck
 DFBallGadget
 DFEntry
@@ -51,6 +52,7 @@ CDTallestTowerUpper
 CDBallGadget
 SREntry
 SRSwim1
+SRAboveThermalRoom
 SRSwim2
 SRAfterSwim2
 SRDepthsEntry
@@ -60,6 +62,7 @@ SRToxicSwim1
 SRToxicSwim2
 SRToxicSwimAbove
 SRToxicRise
+SRToxicRisePerimeter
 SRReturnToStart
 FVEntry1
 FVRedChamber

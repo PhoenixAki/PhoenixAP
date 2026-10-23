@@ -2,13 +2,15 @@ import json
 
 # These are imported so that eval() can recognize them as types below
 from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion
-from worlds.spyro_aht.data.consts import BLINK_IDS, BYRD_IDS, SPARX_IDS, TURRET_IDS
+from worlds.spyro_aht.data.consts import BLINK_IDS, BYRD_IDS, SPARX_IDS, TURRET_IDS, TRICK_LEVELS
 from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
 
-# takes an entrance or location name and returns a trick name. Used to create OptionFilters
+# takes some key (mostly entrance/location names) and returns a trick name, used to create option filter dicts.
+# hardcoded to indices here to keep the trick names themselves in one place in consts
 trick_lookup = {
-    "ICElderRoom -> ICSuperchargeShop": "Ice Citadel - Glide Above Elder Astor" 
+    "ICElderRoom -> ICSuperchargeShop": TRICK_LEVELS["Easy"][0],
+    "Firework": TRICK_LEVELS["Other"][0]
 }
 
 regions = {}
@@ -57,8 +59,9 @@ for line in file_in:
     line = line.strip()
     region, loc_name, loc_id, loc_rule = line.split(" | ")
     loc_id = int(loc_id)
-    options = []  # default, overridden below if an optionable location is encountered
+    options = []
     evaluated_rule: Rule = eval(loc_rule)
+    dict_form = evaluated_rule.to_dict()
 
     if "Shop Item" in loc_name:
         options = [{
@@ -74,6 +77,11 @@ for line in file_in:
         options = [{
             "option": "worlds.spyro_aht.options.FireworkChecks",
             "value": 1
+        }]
+        dict_form["children"][1]["options"] = [{
+            "option": "worlds.spyro_aht.options.EnabledTricks",
+            "operator": "contains",
+            "value": trick_lookup["Firework"]
         }]
     elif loc_id in [*BLINK_IDS, *BYRD_IDS, *SPARX_IDS, *TURRET_IDS]:
         if loc_id in BLINK_IDS: npc = "Blink"
@@ -93,7 +101,7 @@ for line in file_in:
         "name": loc_name,
         "id": loc_id,
         "options": options,
-        "access_rule": evaluated_rule.to_dict()
+        "access_rule": dict_form
     })
 file_in.close()
 
