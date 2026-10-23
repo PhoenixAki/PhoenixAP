@@ -773,8 +773,9 @@ REGION ICElderRoom: elder's room, opened by killing armored huge gnorc in front
 	LOCATION ICElderRoom | IC: Wall Kick from Elder Astor | 604 | True_()
 
 REGION ICSuperchargeShop: supercharge area past Elder. include enemies and boiler to the east needing DJ
-	ICElderRoom -> ICSuperchargeShop | Has('Wall Kick')
-		would have DJ and water and charge and one of (fire, electric, ice) and wall kick
+	ICElderRoom -> ICSuperchargeShop | Or(Has('Wall Kick'), Has('Glide'))
+	    TRICK: Glide is for the "Glide Above Elder Astor" trick
+		would have DJ and water and charge and one of (fire, electric, ice) and one of (wall kick, glide)
 	ShopPads -> ICSuperchargeShop | OpenWorldRule(['Ice Citadel - Supercharge Central'])
 		could have nothing
 	ICSuperchargeShop -> ShopPads | True_()

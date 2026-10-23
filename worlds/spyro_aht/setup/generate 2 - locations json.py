@@ -1,10 +1,15 @@
 import json
 
 # These are imported so that eval() can recognize them as types below
-from rule_builder.rules import Rule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion
+from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion, OptionFilter
 from worlds.spyro_aht.data.consts import BLINK_IDS, BYRD_IDS, SPARX_IDS, TURRET_IDS
 from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
+
+# takes an entrance or location name and returns a trick name. Used to create OptionFilters
+trick_lookup = {
+    "ICElderRoom -> ICSuperchargeShop": "Ice Citadel - Glide Above Elder Astor" 
+}
 
 regions = {}
 ########################################################################################################################
@@ -31,10 +36,17 @@ for line in file_in:
     region_from, region_to = region_info.split(" -> ")
     
     evaluated_rule = eval(rule)
+    dict_form = evaluated_rule.to_dict()
+    if region_info in trick_lookup:  # only true if this is an Or rule with a trick
+        dict_form["children"][1]["options"] = [{
+            "option": "worlds.spyro_aht.options.EnabledTricks",
+            "operator": "contains",
+            "value": trick_lookup[region_info]
+        }]
     
     regions[region_to]["entrances"].append({
         "name": region_info,
-        "access_rule": evaluated_rule.to_dict()
+        "access_rule": dict_form
     })
 file_in.close()
 

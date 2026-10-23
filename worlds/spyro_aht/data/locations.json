@@ -13049,13 +13049,35 @@
             {
                 "name": "ICElderRoom -> ICSuperchargeShop",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Wall Kick",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Wall Kick",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "operator": "contains",
+                                    "value": "Ice Citadel - Glide Above Elder Astor"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             },
             {

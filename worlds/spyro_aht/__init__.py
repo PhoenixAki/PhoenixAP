@@ -1,5 +1,4 @@
 import asyncio
-import copy
 import logging
 import math
 import pkgutil
@@ -10,7 +9,7 @@ from typing import Any, override
 import orjson
 
 import Utils
-from BaseClasses import Item, MultiWorld, Region, CollectionState, ItemClassification
+from BaseClasses import Item, MultiWorld, Region, CollectionState
 from Options import OptionError, OptionSet, Choice, Range, OptionDict
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
 from worlds.AutoWorld import World, WebWorld
@@ -148,6 +147,7 @@ class SpyroAHTWorld(World):
     ###############HELPER METHODS + OVERRIDES###############
     def log(self, message, level: consts.LoggingLevel):
         """Logs messages from generation."""
+        # TODO: add player name to this output
         if self.options.logging_level.value >= level:
             logging.info(f"[Spyro AHT] LOG-{level.name}: {message}")
     
@@ -287,6 +287,17 @@ class SpyroAHTWorld(World):
             self._apply_slot_data(passthrough[self.game])
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", consts.LoggingLevel.LOW)
+        
+        # tricks, YAML verification handles most of this, but for simplicity, the preset names need to be unpacked here
+        for level, trick_list in consts.TRICK_LEVELS.items():
+            if level not in self.options.enabled_tricks.value: continue
+            else: self.options.enabled_tricks.value.remove(level)
+            self.log(f"enabled_tricks has preset {level} enabled. Adding all of its tricks to enabled_tricks now.", consts.LoggingLevel.HIGH)
+            for trick in trick_list:
+                if trick not in self.options.enabled_tricks.value:  # add tricks from preset, only if not already listed. Opted for no auto_corrections here
+                    self.options.enabled_tricks.value.add(trick)
+                else:
+                    self.log(f"{trick} from preset {level} was found already added to enabled_tricks. Skipping adding it from preset list.", consts.LoggingLevel.HIGH)
         
         self.check_qol_dicts(self.options.auto_hinting)
         self.check_qol_dicts(self.options.time_savers)
@@ -485,6 +496,7 @@ class SpyroAHTWorld(World):
         self.options.minigames_goal.value = slot_data['minigames_goal']
         self.options.exclude_chest_items.value = slot_data['exclude_chest_items']
 
+        self.options.enabled_tricks.value = slot_data['enabled_tricks']
         self.options.open_world_mode.value = slot_data['open_world_mode']
         self.options.firework_checks.value = slot_data['firework_checks']
         self.options.minigame_checks.value = slot_data['minigame_checks']
@@ -1017,6 +1029,7 @@ class SpyroAHTWorld(World):
             "minigames_goal": self.options.minigames_goal.value,
             "exclude_chest_items": self.options.exclude_chest_items.value,
             
+            "enabled_tricks": self.options.enabled_tricks.value,
             "open_world_mode": self.options.open_world_mode.value,
             "firework_checks": self.options.firework_checks.value,
             "minigame_checks": self.options.minigame_checks.value,

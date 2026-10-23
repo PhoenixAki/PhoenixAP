@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+import itertools
 
 from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup,StartInventoryPool, OptionDict, OptionCounter
+from .data import consts
 
 ###############DEATHLINK###############
 class DeathLink(Choice):
@@ -165,6 +167,18 @@ class ExcludeChestItems(Choice):
     default = 0
     
 ###############CHECKS AND ITEMS###############
+class EnabledTricks(OptionSet):
+    """Many things in AHT can be done using "tricks", which by default you aren't expected to do. This option lets you choose
+    to enable a series of tricks that, depending on the randomization, you may be expected to do. These tricks can be enabled
+    individually or through a few presets (Easy, Medium, Hard, Other) that bundle similarly difficult tricks together.
+    You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
+    
+    See here for a full list of tricks: https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-3.1-%E2%80%90-List-of-Tricks"""
+    display_name = "Enabled Tricks"
+    valid_keys = ("Easy", "Medium", "Hard", "Other", *itertools.chain(*consts.TRICK_LEVELS.values()))
+    default = frozenset()
+    
+    
 class OpenWorldMode(Choice):
     """In vanilla AHT, you can only teleport to a remote shop pad once you have physically reached it.
     open_world_mode lets you choose from a variety of new ways to unlock shop pads through Archipelago items.
@@ -605,6 +619,7 @@ class SpyroAHTOptions(PerGameCommonOptions):
     elders_goal: EldersGoal
     minigames_goal: MinigamesGoal
     
+    enabled_tricks: EnabledTricks
     open_world_mode: OpenWorldMode
     firework_checks: FireworkChecks
     minigame_checks: MinigameChecks
@@ -658,7 +673,7 @@ spyro_options_groups = [
         LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal
     ]),
     OptionGroup("CHECKS AND ITEMS", [
-        OpenWorldMode, FireworkChecks, MinigameChecks, ItemBundles, TrapPercentage, FillerItems, TrapItems, TrapLength
+        EnabledTricks, OpenWorldMode, FireworkChecks, MinigameChecks, ItemBundles, TrapPercentage, FillerItems, TrapItems, TrapLength
     ]),
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms

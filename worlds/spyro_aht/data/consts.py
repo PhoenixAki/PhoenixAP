@@ -13,6 +13,13 @@ class LoggingLevel(IntEnum):
     HIGH = 4
     MAXIMUM = 5
 
+TRICK_LEVELS = {
+    "Easy": ["Ice Citadel - Glide Above Elder Astor"],
+    "Medium": [],
+    "Hard": [],
+    "Other": []
+}
+
 MOD_MAJOR = 20
 MOD_MINOR = 2
 MOD_VERSION_STR = f"{MOD_MAJOR}.{MOD_MINOR}"
