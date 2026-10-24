@@ -376,12 +376,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 1
+                        "value": 1,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -397,12 +398,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 2
+                        "value": 2,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -420,12 +422,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 3
+                        "value": 3,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -443,12 +446,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 4
+                        "value": 4,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -466,12 +470,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 5
+                        "value": 5,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -489,12 +494,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 6
+                        "value": 6,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -512,12 +518,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 7
+                        "value": 7,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -535,12 +542,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 8
+                        "value": 8,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -558,12 +566,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 9
+                        "value": 9,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -581,12 +590,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 10
+                        "value": 10,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -604,12 +614,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 11
+                        "value": 11,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -627,12 +638,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 12
+                        "value": 12,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -650,12 +662,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 13
+                        "value": 13,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -673,12 +686,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 14
+                        "value": 14,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -696,12 +710,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 15
+                        "value": 15,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -719,12 +734,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 16
+                        "value": 16,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -742,12 +758,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 17
+                        "value": 17,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -765,12 +782,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 18
+                        "value": 18,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -788,12 +806,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 19
+                        "value": 19,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -811,12 +830,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 20
+                        "value": 20,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -834,12 +854,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 21
+                        "value": 21,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -857,12 +878,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 22
+                        "value": 22,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -880,12 +902,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 23
+                        "value": 23,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -903,12 +926,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 24
+                        "value": 24,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -926,12 +950,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 25
+                        "value": 25,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -949,12 +974,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 26
+                        "value": 26,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -972,12 +998,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 27
+                        "value": 27,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -995,12 +1022,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 28
+                        "value": 28,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1018,12 +1046,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 29
+                        "value": 29,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1041,12 +1070,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 30
+                        "value": 30,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1064,12 +1094,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 31
+                        "value": 31,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1087,12 +1118,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 32
+                        "value": 32,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1110,12 +1142,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 33
+                        "value": 33,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1133,12 +1166,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 34
+                        "value": 34,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1156,12 +1190,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 35
+                        "value": 35,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1179,12 +1214,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 36
+                        "value": 36,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1202,12 +1238,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 37
+                        "value": 37,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1225,12 +1262,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 38
+                        "value": 38,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1248,12 +1286,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 39
+                        "value": 39,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1271,12 +1310,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 40
+                        "value": 40,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1294,12 +1334,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 41
+                        "value": 41,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1317,12 +1358,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 42
+                        "value": 42,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1340,12 +1382,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 43
+                        "value": 43,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1363,12 +1406,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 44
+                        "value": 44,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1386,12 +1430,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 45
+                        "value": 45,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1409,12 +1454,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 46
+                        "value": 46,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1432,12 +1478,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 47
+                        "value": 47,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1455,12 +1502,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 48
+                        "value": 48,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1478,12 +1526,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 49
+                        "value": 49,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1501,12 +1550,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 50
+                        "value": 50,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1524,12 +1574,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 51
+                        "value": 51,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1547,12 +1598,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 52
+                        "value": 52,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1570,12 +1622,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 53
+                        "value": 53,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1593,12 +1646,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 54
+                        "value": 54,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1616,12 +1670,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 55
+                        "value": 55,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -1639,12 +1694,13 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.ShopRandomization",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     },
                     {
                         "option": "worlds.spyro_aht.options.ShopItemCount",
-                        "operator": "ge",
-                        "value": 56
+                        "value": 56,
+                        "operator": "ge"
                     }
                 ],
                 "access_rule": {
@@ -2053,7 +2109,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -2075,8 +2132,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -2328,7 +2385,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -2350,8 +2408,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -2512,7 +2570,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -2534,8 +2593,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -2658,7 +2717,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -2680,8 +2740,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -3078,7 +3138,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -3100,8 +3161,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -3959,7 +4020,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -3981,8 +4043,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -4031,11 +4093,11 @@
             }
         ]
     },
-    "CSElderTreeLedge": {
-        "name": "CSElderTreeLedge",
+    "CSTreeLedge": {
+        "name": "CSTreeLedge",
         "entrances": [
             {
-                "name": "CSAboveElder -> CSElderTreeLedge",
+                "name": "CSAboveElder -> CSTreeLedge",
                 "access_rule": {
                     "rule": "HasAny",
                     "options": [],
@@ -4067,7 +4129,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -4089,8 +4152,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -7822,7 +7885,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -7844,8 +7908,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -8274,7 +8338,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -8296,8 +8361,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -8824,7 +8889,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -8846,8 +8912,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -9082,6 +9148,69 @@
                         "level": "Sunken Ruins"
                     }
                 }
+            },
+            {
+                "name": "SR: Dragon Egg atop thermal room",
+                "id": 330,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "SR: Light Gem in Locked Chest atop thermal room",
+                "id": 828,
+                "options": [],
+                "access_rule": {
+                    "rule": "LockedChestRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level": "Sunken Ruins"
+                    }
+                }
+            },
+            {
+                "name": "SR: Firework atop thermal room",
+                "id": 411,
+                "options": [
+                    {
+                        "option": "worlds.spyro_aht.options.FireworkChecks",
+                        "value": 1,
+                        "operator": "eq"
+                    }
+                ],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
             }
         ],
         "gem_events": [
@@ -9243,11 +9372,11 @@
             }
         ]
     },
-    "SRAboveThermalRoom": {
-        "name": "SRAboveThermalRoom",
+    "SRAboveThermal": {
+        "name": "SRAboveThermal",
         "entrances": [
             {
-                "name": "SRSwim1 -> SRAboveThermalRoom",
+                "name": "SRSwim1 -> SRAboveThermal",
                 "access_rule": {
                     "rule": "HasAll",
                     "options": [],
@@ -9261,70 +9390,7 @@
                 }
             }
         ],
-        "locations": [
-            {
-                "name": "SR: Dragon Egg atop thermal room",
-                "id": 330,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "SR: Light Gem in Locked Chest atop thermal room",
-                "id": 828,
-                "options": [],
-                "access_rule": {
-                    "rule": "LockedChestRule",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "level": "Sunken Ruins"
-                    }
-                }
-            },
-            {
-                "name": "SR: Firework atop thermal room",
-                "id": 411,
-                "options": [
-                    {
-                        "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
-                    }
-                ],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Fire Breath",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "True_",
-                            "options": [
-                                {
-                                    "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
-                                }
-                            ],
-                            "filtered_resolution": false,
-                            "args": {}
-                        }
-                    ]
-                }
-            }
-        ],
+        "locations": [],
         "gem_events": []
     },
     "SRSwim2": {
@@ -9817,7 +9883,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -9839,8 +9906,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -10191,7 +10258,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -10213,8 +10281,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -10435,7 +10503,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -10457,8 +10526,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -12971,7 +13040,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -12993,8 +13063,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -13348,8 +13418,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Ice Citadel - Glide Above Elder Astor"
+                                    "value": "Glide Above Elder Astor",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -14505,7 +14575,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -14527,8 +14598,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -14569,7 +14640,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -14591,8 +14663,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -14969,7 +15041,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -14991,8 +15064,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -15206,7 +15279,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -15228,8 +15302,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -17325,7 +17399,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -17347,8 +17422,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -18900,7 +18975,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -18922,8 +18998,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -19447,7 +19523,8 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1
+                        "value": 1,
+                        "operator": "eq"
                     }
                 ],
                 "access_rule": {
@@ -19469,8 +19546,8 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "operator": "contains",
-                                    "value": "Fireworks with Idle Animation"
+                                    "value": "Fireworks with Idle Animation",
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,

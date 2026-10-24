@@ -105,8 +105,7 @@ REGION DVByrdUpper: upper part of byrd area
 	DVByrdLower -> DVByrdUpper | Has('Charge')
 		would have DJ and charge
 
-	LOCATION DVByrdUpper | DV: Firework above Sgt. Byrd | 401 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION DVByrdUpper | DV: Firework above Sgt. Byrd | 401 | Has('Fire Breath') | True_()
 	LOCATION DVByrdUpper | DV: Light Gem above Sgt. Byrd | 202 | True_()
 	LOCATION DVByrdUpper | DV: Dark Gem above Sgt. Byrd | 102 | True_()
 	LOCATION DVByrdUpper | DV: Dragon Egg above Sgt. Byrd | 303 | True_()
@@ -129,8 +128,7 @@ REGION DVHunterPostGlide: hunter section after glide
 		would have DJ and glide
 
 	LOCATION DVHunterPostGlide | DV: Dragon Egg in glide tutorial | 305 | True_()
-	LOCATION DVHunterPostGlide | DV: Firework at end of glide tutorial | 402 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION DVHunterPostGlide | DV: Firework at end of glide tutorial | 402 | Has('Fire Breath') | True_()
 
 REGION DVOutsideBallGadget: ball gadget area (past the door Hunter opens)
 	DVHunterPostGlide -> DVOutsideBallGadget | True_()
@@ -140,8 +138,7 @@ REGION DVOutsideBallGadget: ball gadget area (past the door Hunter opens)
 
 	LOCATION DVOutsideBallGadget | DV: Light Gem in nursery | 204 | True_()
 	LOCATION DVOutsideBallGadget | DV: Dragon Egg in Locked Chest next to Ball Gadget | 837 | LockedChestRule('Dragon Village')
-	LOCATION DVOutsideBallGadget | DV: Firework next to Ball Gadget | 403 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION DVOutsideBallGadget | DV: Firework next to Ball Gadget | 403 | Has('Fire Breath') | True_()
 
 REGION DVTunnelToCroc: across ember's bridge
 	CSPyramidAndTemple -> DVTunnelToCroc | Has('Double Jump')
@@ -149,8 +146,7 @@ REGION DVTunnelToCroc: across ember's bridge
 	DVEntry -> DVTunnelToCroc | Has('Double Jump')
 	    would have DJ
 
-	LOCATION DVTunnelToCroc | DV: Firework across Crocovile bridge | 404 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION DVTunnelToCroc | DV: Firework across Crocovile bridge | 404 | Has('Fire Breath') | True_()
 	LOCATION DVTunnelToCroc | DV: Light Gem in Locked Chest across Crocovile bridge | 823 | LockedChestRule('Dragon Village')
 
 Crocovile Swamp
@@ -177,8 +173,7 @@ REGION CSWest: west area of map
 		would have DJ
 
 	LOCATION CSWest | CS: Light Gem in Locked Chest behind chargeable wall | 824 | And(Has('Charge'), LockedChestRule('Crocovile Swamp'))
-	LOCATION CSWest | CS: Firework behind cliff in west area | 405 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION CSWest | CS: Firework behind cliff in west area | 405 | Has('Fire Breath') | True_()
 	LOCATION CSWest | CS: Dragon Egg across muddy platforms in west area | 306 | True_()
 
 REGION CSInsideTemple: inside forgotten temple
@@ -224,17 +219,14 @@ REGION CSAboveElder: above poles directly across tree (not path to Fredneck)
 	CSTree -> CSAboveElder | HasAll('Double Jump', 'Pole Spin')
 		would have DJ and pole spin
 
-	LOCATION CSAboveElder | CS: Firework atop Elder's tree | 407 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION CSAboveElder | CS: Firework atop Elder's tree | 407 | Has('Fire Breath') | True_()
 	LOCATION CSAboveElder | CS: Light Gem atop Elder's tree | 211 | True_()
 
-REGION CSElderTreeLedge: ledge with dragon egg and firework. just here to make trick logic a bit easier to express tbh
-    CSAboveElder -> CSElderTreeLedge | HasAny('Charge', 'Glide')
-        would have DJ and pole spin and (charge or glide)
+REGION CSTreeLedge: ledge in middle of tree with egg + firework
+    CSAboveElder -> CSTreeLedge | HasAny('Charge', 'Glide')
     
-    LOCATION CSElderTreeLedge | CS: Dragon Egg in middle of Elder's tree | 310 | True_()
-    LOCATION CSElderTreeLedge | CS: Firework in middle of Elder's tree | 406 | Or(Has('Fire Breath'), True_())
-        TRICK: True_() is for the "Fireworks with Idle Animation" trick
+    LOCATION CSTreeLedge | CS: Dragon Egg in middle of Elder's tree | 310 | True_()
+    LOCATION CSTreeLedge | CS: Firework in middle of Elder's tree | 406 | Has('Fire Breath') | True_()
 
 REGION CSFredneck: Fredneck area itself and going back to pyramid
 	CSTree -> CSFredneck | HasAll('Double Jump', 'Pole Spin')
@@ -455,8 +447,7 @@ REGION CDCenter: going across the platforms and up the thermal
 
 	LOCATION CDCenter | CD: Light Gem next to Elder's house | 230 | True_()
 	LOCATION CDCenter | CD: Dark Gem below thermal | 115 | True_()
-	LOCATION CDCenter | CD: Firework next to thermal | 408 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION CDCenter | CD: Firework next to thermal | 408 | Has('Fire Breath') | True_()
 
 REGION CDOutsideElder: outside Elder house
 	CDCenter -> CDOutsideElder | True_()
@@ -488,8 +479,7 @@ REGION CDNorthWest: northwest area after charging switch in CDEntry
 
 	LOCATION CDNorthWest | CD: Dragon Egg in northwest Locked Chest | 841 | LockedChestRule('Cloudy Domain')
 	LOCATION CDNorthWest | CD: Light Gem in northwest | 232 | True_()
-	LOCATION CDNorthWest | CD: Firework in northwest | 409 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION CDNorthWest | CD: Firework in northwest | 409 | Has('Fire Breath') | True_()
 
 REGION CDSouthWest: southwest area after charging switch in CDEntry. covers until last balloon gnorc
 	CDEntry -> CDSouthWest | HasAll('Charge', 'Double Jump', 'Wing Shield', 'Glide')
@@ -531,8 +521,7 @@ REGION CDBallGadget: ball gadget and area after
 
 	LOCATION CDBallGadget | CD: Dragon Egg from Ball Gadget | 329 | True_()
 	LOCATION CDBallGadget | CD: Light Gem from Ball Gadget | 236 | True_()
-	LOCATION CDBallGadget | CD: Firework after Ball Gadget | 410 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION CDBallGadget | CD: Firework after Ball Gadget | 410 | Has('Fire Breath') | True_()
 
 Sunken Ruins
 ------------
@@ -559,14 +548,13 @@ REGION SRSwim1: first swim section and thermal room after
 	LOCATION SRSwim1 | SR: Dark Gem in thermal room | 118 | Has('Double Jump')
 	LOCATION SRSwim1 | SR: Light Gem in Locked Chest by Lily | 829 | LockedChestRule('Sunken Ruins')
 
-REGION SRAboveThermalRoom: top of room with big thermals
-    SRSwim1 -> SRAboveThermalRoom | HasAll('Double Jump', 'Glide')
+REGION SRAboveThermal: ledge above thermal
+    SRSwim1 -> SRAboveThermal | HasAll('Double Jump', 'Glide')
         would have swim and DJ and glide
     
-	LOCATION SRAboveThermalRoom | SR: Dragon Egg atop thermal room | 330 | True_()
-	LOCATION SRAboveThermalRoom | SR: Light Gem in Locked Chest atop thermal room | 828 | LockedChestRule('Sunken Ruins')
-	LOCATION SRAboveThermalRoom | SR: Firework atop thermal room | 411 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION SRSwim1 | SR: Dragon Egg atop thermal room | 330 | True_()
+	LOCATION SRSwim1 | SR: Light Gem in Locked Chest atop thermal room | 828 | LockedChestRule('Sunken Ruins')
+	LOCATION SRSwim1 | SR: Firework atop thermal room | 411 | Has('Fire Breath') | True_()
 
 REGION SRSwim2: second swim section by Lily
 	SRSwim1 -> SRSwim2 | True_()
@@ -597,8 +585,7 @@ REGION SRDepthsUpper: upper layer of Depths room (above invince wall kick)
 		would have wall kick and invincibility gadget
 
 	LOCATION SRDepthsUpper | SR: Dragon Egg above heated wall kick | 332 | Has('Double Jump')
-	LOCATION SRDepthsUpper | SR: Firework above heated wall kick | 412 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION SRDepthsUpper | SR: Firework above heated wall kick | 412 | Has('Fire Breath') | True_()
 
 REGION SRDepthsLower: lower layer of Depths (below invince wall kick) and spitting fish room
 	SRDepthsEntry -> SRDepthsLower | True_()
@@ -623,8 +610,7 @@ REGION SRToxicSwimAbove: atop pole spin puzzle
 
 	LOCATION SRToxicSwimAbove | SR: Dark Gem atop pole rooms | 119 | True_()
 	LOCATION SRToxicSwimAbove | SR: Light Gem in Locked Chest atop pole rooms | 830 | LockedChestRule('Sunken Ruins')
-	LOCATION SRToxicSwimAbove | SR: Firework atop pole rooms | 413 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION SRToxicSwimAbove | SR: Firework atop pole rooms | 413 | Has('Fire Breath') | True_()
 
 REGION SRToxicRise: rising statue room. include stuff before it in toxic swim statue hallway
 	SRToxicSwimAbove -> SRToxicRise | True_()
@@ -638,9 +624,8 @@ REGION SRToxicRise: rising statue room. include stuff before it in toxic swim st
 REGION SRToxicRisePerimeter: just stuff on lower perimeter of room
     SRToxicRise -> SRToxicRisePerimeter | HasAll('Double Jump', 'Electric Breath')
     
-	LOCATION SRToxicRisePerimeter | SR: Firework in rising statue room | 414 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
-	LOCATION SRToxicRisePerimeter | SR: Dragon Egg in Locked Chest in rising statue room | 844 | LockedChestRule('Sunken Ruins')
+    LOCATION SRToxicRisePerimeter | SR: Firework in rising statue room | 414 | Has('Fire Breath') | True_()
+    LOCATION SRToxicRisePerimeter | SR: Dragon Egg in Locked Chest in rising statue room | 844 | LockedChestRule('Sunken Ruins')
 
 REGION SRReturnToStart: area after toxic rise
 	SRToxicRise -> SRReturnToStart | HasAll('Electric Breath', 'Double Jump', 'Glide', 'Pole Spin')
@@ -784,8 +769,7 @@ REGION ICCourtyardUpper: upper courtyard above floating platforms
 		would have DJ
 
 	LOCATION ICCourtyardUpper | IC: Light Gem atop courtyard | 259 | True_()
-	LOCATION ICCourtyardUpper | IC: Firework atop courtyard | 415 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION ICCourtyardUpper | IC: Firework atop courtyard | 415 | Has('Fire Breath') | True_()
 
 REGION ICPastWaterGate: past the water-opened gate, up to elder's door
 	ICCourtyardUpper -> ICPastWaterGate | Has('Water Breath')
@@ -802,7 +786,7 @@ REGION ICElderRoom: elder's room, opened by killing armored huge gnorc in front
 	LOCATION ICElderRoom | IC: Wall Kick from Elder Astor | 604 | True_()
 
 REGION ICSuperchargeShop: supercharge area past Elder. include enemies and boiler to the east needing DJ
-	ICElderRoom -> ICSuperchargeShop | Or(Has('Wall Kick'), Has('Glide'))
+	ICElderRoom -> ICSuperchargeShop | Has('Wall Kick') | Has('Glide')
 	    TRICK: Glide is for the "Glide Above Elder Astor" trick
 		would have DJ and water and charge and one of (fire, electric, ice) and one of (wall kick, glide)
 	ShopPads -> ICSuperchargeShop | OpenWorldRule(['Ice Citadel - Supercharge Central'])
@@ -872,12 +856,10 @@ REGION SBEntryLower: realm entry and lower part of beach + west cove
 	SBShop -> SBEntryLower | True_()
 		could have nothing
 
-	LOCATION SBEntryLower | SB: Firework in lower Stormy Beach | 416 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION SBEntryLower | SB: Firework in lower Stormy Beach | 416 | Has('Fire Breath') | True_()
 	LOCATION SBEntryLower | SB: Empty Locked Chest behind hut in west cove | 812 | LockedChestRule('Stormy Beach')
 	LOCATION SBEntryLower | SB: Empty Locked Chest at end of west cove | 813 | LockedChestRule('Stormy Beach')
-	LOCATION SBEntryLower | SB: Firework in west cove | 417 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION SBEntryLower | SB: Firework in west cove | 417 | Has('Fire Breath') | True_()
 	LOCATION SBEntryLower | SB: Dragon Egg from thief below shop | 348 | Has('Charge')
 
 REGION SBShop: just the shop. only separate because it's not equally accessible with SBEntryLower
@@ -896,8 +878,7 @@ REGION SBEntryUpper: DJ'able areas of SB
 	LOCATION SBEntryUpper | SB: Dragon Egg from Wally | 349 | True_()
 	LOCATION SBEntryUpper | SB: Light Gem from Wally | 266 | True_()
 	LOCATION SBEntryUpper | SB: Empty Locked Chest in cave entrance | 815 | LockedChestRule('Stormy Beach')
-	LOCATION SBEntryUpper | SB: Firework in cave | 418 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION SBEntryUpper | SB: Firework in cave | 418 | Has('Fire Breath') | True_()
 	LOCATION SBEntryUpper | SB: Dark Gem in cave | 131 | True_()
 
 REGION SBCaveUpper: upper part of cave needing wall kick and glide
@@ -914,8 +895,7 @@ REGION MMEntryUpper: entry area of volcano
 	MMVillage -> MMEntryUpper | HasAll('Double Jump', 'Glide')
 	    would have DJ and glide
 
-	LOCATION MMEntryUpper | MM: Firework in entrance | 419 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION MMEntryUpper | MM: Firework in entrance | 419 | Has('Fire Breath') | True_()
 
 REGION MMEntryLower: lower area past the lava spurts. includes first fire imp and headbash rock right before village
 	MMEntryUpper -> MMEntryLower | True_()
@@ -1066,8 +1046,7 @@ REGION MFtWallKickUpper: after using wall kick in the room
 		would have wall kick and (water or ice)
 
 	LOCATION MFtWallKickUpper | MFt: Light Gem in wall kick room | 271 | Has('Double Jump')
-	LOCATION MFtWallKickUpper | MFt: Firework in wall kick room | 420 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION MFtWallKickUpper | MFt: Firework in wall kick room | 420 | Has('Fire Breath') | True_()
 
 REGION MFtBallGadgetEntry: area next to ball gadget
 	MFtCenter -> MFtBallGadgetEntry | Has('Double Jump')
@@ -1162,8 +1141,7 @@ REGION DMAfterRocks: past the chargeable rocks, starting with the piston wall ki
 		would have DJ and charge
 
 	LOCATION DMAfterRocks | DM: Dragon Egg in Locked Chest in piston room | 852 | And(HasAll('Wall Kick', 'Glide'), LockedChestRule('Dark Mine'))
-	LOCATION DMAfterRocks | DM: Firework in piston room | 421 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION DMAfterRocks | DM: Firework in piston room | 421 | Has('Fire Breath') | True_()
 	LOCATION DMAfterRocks | DM: Light Gem in piston room | 277 | HasAll('Wall Kick', 'Glide')
 
 REGION DMCaged: room with caged dark gem
@@ -1201,8 +1179,7 @@ REGION DMSeeSaw: ledge leaving ice pole room, below it, big see saw room, and up
 		would have DJ
 
 	LOCATION DMSeeSaw | DM: Light Gem after ice pole spin | 279 | True_()
-	LOCATION DMSeeSaw | DM: Firework after ice pole spin | 422 | Or(Has('Fire Breath'), True_())
-	    TRICK: True_() is for the "Fireworks with Idle Animation" trick
+	LOCATION DMSeeSaw | DM: Firework after ice pole spin | 422 | Has('Fire Breath') | True_()
 
 REGION DMSeeSawShop: just the ledge with the see saw shop pad
 	DMSeeSaw -> DMSeeSawShop | True_()
