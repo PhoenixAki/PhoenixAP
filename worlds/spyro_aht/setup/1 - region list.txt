@@ -62,7 +62,8 @@ SRToxicSwim1
 SRToxicSwim2
 SRToxicSwimAbove
 SRToxicRise
-SRToxicRisePerimeter
+SRToxicRisePerimeterLow
+SRToxicRisePerimeterHigh
 SRReturnToStart
 FVEntry1
 FVRedChamber

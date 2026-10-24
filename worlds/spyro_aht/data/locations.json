@@ -1868,19 +1868,41 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework across bridge)",
+                "name": "500 Gems (firework across Crocovile bridge)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Fire Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -2132,7 +2154,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -2178,17 +2200,36 @@
         ],
         "gem_events": [
             {
-                "name": "500 Gems (armored chest via firework)",
+                "name": "500 Gems (firework above Sgt. Byrd)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -2334,19 +2375,41 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework)",
+                "name": "500 Gems (firework at end of glide tutorial)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Fire Breath",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Fire Breath",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -2408,7 +2471,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -2593,7 +2656,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -2606,17 +2669,36 @@
         ],
         "gem_events": [
             {
-                "name": "500 Gems (armored chest via firework)",
+                "name": "500 Gems (firework next to ball gadget)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -2740,7 +2822,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -3161,7 +3243,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -3230,17 +3312,36 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework)",
+                "name": "500 Gems (firework behind cliff in west area)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -3955,23 +4056,6 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework in tree)",
-                "gem_amount": 500,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath",
-                            "Pole Spin"
-                        ]
-                    }
-                }
-            },
-            {
                 "name": "1003 Gems (Blink minigames 1-1)",
                 "gem_amount": 1003,
                 "options": [],
@@ -4043,7 +4127,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -4078,17 +4162,36 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework at top of tree)",
+                "name": "500 Gems (firework atop Elder's tree)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -4152,7 +4255,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -4163,7 +4266,41 @@
                 }
             }
         ],
-        "gem_events": []
+        "gem_events": [
+            {
+                "name": "500 Gems (firework in middle of Elder's tree)",
+                "gem_amount": 500,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ]
     },
     "CSFredneck": {
         "name": "CSFredneck",
@@ -7908,7 +8045,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -8361,7 +8498,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -8418,17 +8555,36 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework)",
+                "name": "500 Gems (firework in northwest)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -8912,7 +9068,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -8936,17 +9092,36 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework after ball gadget minigames)",
+                "name": "500 Gems (firework after ball gadget)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -9148,69 +9323,6 @@
                         "level": "Sunken Ruins"
                     }
                 }
-            },
-            {
-                "name": "SR: Dragon Egg atop thermal room",
-                "id": 330,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "SR: Light Gem in Locked Chest atop thermal room",
-                "id": 828,
-                "options": [],
-                "access_rule": {
-                    "rule": "LockedChestRule",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "level": "Sunken Ruins"
-                    }
-                }
-            },
-            {
-                "name": "SR: Firework atop thermal room",
-                "id": 411,
-                "options": [
-                    {
-                        "option": "worlds.spyro_aht.options.FireworkChecks",
-                        "value": 1,
-                        "operator": "eq"
-                    }
-                ],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Fire Breath",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "True_",
-                            "options": [
-                                {
-                                    "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
-                                    "operator": "contains"
-                                }
-                            ],
-                            "filtered_resolution": false,
-                            "args": {}
-                        }
-                    ]
-                }
             }
         ],
         "gem_events": [
@@ -9287,22 +9399,6 @@
                 }
             },
             {
-                "name": "397 Gems (on the ground/baskets/and headbash chest atop thermal)",
-                "gem_amount": 397,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
-                }
-            },
-            {
                 "name": "125 Gems (metal chests)",
                 "gem_amount": 125,
                 "options": [],
@@ -9315,23 +9411,6 @@
                             "Charge",
                             "Double Jump",
                             "Electric Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "1500 Gems (armored chests via firework atop thermal)",
-                "gem_amount": 1500,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath",
-                            "Glide"
                         ]
                     }
                 }
@@ -9390,8 +9469,117 @@
                 }
             }
         ],
-        "locations": [],
-        "gem_events": []
+        "locations": [
+            {
+                "name": "SR: Dragon Egg atop thermal room",
+                "id": 330,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "SR: Light Gem in Locked Chest atop thermal room",
+                "id": 828,
+                "options": [],
+                "access_rule": {
+                    "rule": "LockedChestRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level": "Sunken Ruins"
+                    }
+                }
+            },
+            {
+                "name": "SR: Firework atop thermal room",
+                "id": 411,
+                "options": [
+                    {
+                        "option": "worlds.spyro_aht.options.FireworkChecks",
+                        "value": 1,
+                        "operator": "eq"
+                    }
+                ],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "397 Gems (on the ground/baskets/and headbash chest atop thermal)",
+                "gem_amount": 397,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "1500 Gems (firework atop thermal room)",
+                "gem_amount": 1500,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ]
     },
     "SRSwim2": {
         "name": "SRSwim2",
@@ -9906,7 +10094,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -9952,17 +10140,36 @@
                 }
             },
             {
-                "name": "1500 Gems (armored chests below via firework)",
+                "name": "1500 Gems (firework above heated wall kick)",
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -10281,7 +10488,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -10305,17 +10512,36 @@
                 }
             },
             {
-                "name": "1500 Gems (armored chests via firework atop puzzle)",
+                "name": "1500 Gems (firework atop pole rooms)",
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -10346,26 +10572,7 @@
                 }
             }
         ],
-        "locations": [
-            {
-                "name": "SR: Dark Gem on rising statue",
-                "id": 120,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath",
-                            "Glide",
-                            "Pole Spin"
-                        ]
-                    }
-                }
-            }
-        ],
+        "locations": [],
         "gem_events": [
             {
                 "name": "46 Gems (on the ground before rising statue room)",
@@ -10424,75 +10631,46 @@
                         "count": 1
                     }
                 }
-            },
-            {
-                "name": "1500 Gems (armored chests via firework on perimeter)",
-                "gem_amount": 1500,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath",
-                            "Fire Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "50 Gems (baskets on perimeter)",
-                "gem_amount": 50,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "100 Gems (dark shards in rising statue room)",
-                "gem_amount": 100,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath",
-                            "Glide",
-                            "Pole Spin"
-                        ]
-                    }
-                }
             }
         ]
     },
-    "SRToxicRisePerimeter": {
-        "name": "SRToxicRisePerimeter",
+    "SRToxicRisePerimeterLow": {
+        "name": "SRToxicRisePerimeterLow",
         "entrances": [
             {
-                "name": "SRToxicRise -> SRToxicRisePerimeter",
+                "name": "SRToxicRise -> SRToxicRisePerimeterLow",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Electric Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Toxic Rise Without Electric",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -10526,7 +10704,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -10550,25 +10728,135 @@
                 }
             }
         ],
-        "gem_events": []
+        "gem_events": [
+            {
+                "name": "1500 Gems (firework in rising statue room)",
+                "gem_amount": 1500,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "50 Gems (baskets on perimeter)",
+                "gem_amount": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "SRToxicRisePerimeterHigh": {
+        "name": "SRToxicRisePerimeterHigh",
+        "entrances": [
+            {
+                "name": "SRToxicRise -> SRToxicRisePerimeterHigh",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Electric Breath",
+                                    "Glide",
+                                    "Pole Spin"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Toxic Rise Without Electric",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide",
+                                    "Pole Spin"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "SR: Dark Gem on rising statue",
+                "id": 120,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "100 Gems (dark shards in rising statue room)",
+                "gem_amount": 100,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
     },
     "SRReturnToStart": {
         "name": "SRReturnToStart",
         "entrances": [
             {
-                "name": "SRToxicRise -> SRReturnToStart",
+                "name": "SRToxicRisePerimeterHigh -> SRReturnToStart",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath",
-                            "Glide",
-                            "Pole Spin"
-                        ]
-                    }
+                    "args": {}
                 }
             }
         ],
@@ -12962,13 +13250,32 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -13063,7 +13370,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -13104,17 +13411,36 @@
                 }
             },
             {
-                "name": "1500 Gems (armored chests below via firework)",
+                "name": "1500 Gems (firework atop courtyard)",
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -13674,13 +14000,32 @@
                 "gem_amount": 50,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -14598,7 +14943,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -14663,7 +15008,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -14880,17 +15225,74 @@
                 }
             },
             {
-                "name": "1000 Gems (armored chests via west cove firework)",
+                "name": "1000 Gems (firework in west cove)",
                 "gem_amount": 1000,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "1500 Gems (firework in lower stormy beach)",
+                "gem_amount": 1500,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Fire Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -14925,22 +15327,7 @@
             }
         ],
         "locations": [],
-        "gem_events": [
-            {
-                "name": "1500 Gems (armored chests via firework on ground)",
-                "gem_amount": 1500,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
-                }
-            }
-        ]
+        "gem_events": []
     },
     "SBEntryUpper": {
         "name": "SBEntryUpper",
@@ -15064,7 +15451,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -15132,17 +15519,36 @@
                 }
             },
             {
-                "name": "1000 Gems (armored chests via firework in cave)",
+                "name": "1000 Gems (firework in cave)",
                 "gem_amount": 1000,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -15302,7 +15708,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -15315,17 +15721,36 @@
         ],
         "gem_events": [
             {
-                "name": "500 Gems (armored chests via firework on stump)",
+                "name": "500 Gems (firework in entrance)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -15463,13 +15888,32 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -17033,13 +17477,32 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -17047,15 +17510,37 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Fire Breath"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Fire Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -17422,7 +17907,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -17457,17 +17942,36 @@
                 }
             },
             {
-                "name": "500 Gems (armored chest via firework above wall kick)",
+                "name": "500 Gems (firework in wall kick room)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ]
@@ -18998,7 +19502,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],
@@ -19038,17 +19542,36 @@
                 }
             },
             {
-                "name": "1500 Gems (armored chests via firework)",
+                "name": "1500 Gems (firework in piston room)",
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -19456,20 +19979,46 @@
                 }
             },
             {
-                "name": "1500 Gems (armored chests via firework after ice poles)",
+                "name": "1500 Gems (firework after ice pole spin)",
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Glide",
-                            "Ice Breath",
-                            "Pole Spin"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Fire Breath",
+                                    "Glide",
+                                    "Ice Breath",
+                                    "Pole Spin"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Glide",
+                                    "Ice Breath",
+                                    "Pole Spin"
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -19546,7 +20095,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fireworks with Idle Animation",
+                                    "value": "Fire Breath Idle Animation",
                                     "operator": "contains"
                                 }
                             ],

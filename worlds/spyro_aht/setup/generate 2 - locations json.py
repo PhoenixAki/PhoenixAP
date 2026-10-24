@@ -11,8 +11,9 @@ from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, Invincibility
 # takes some key (mostly entrance/location names) and returns a trick name, used to create option filter dicts.
 # hardcoded to indices here to keep the trick names themselves in one place in consts
 trick_lookup = {
-    "ICElderRoom -> ICSuperchargeShop": consts.TRICK_LEVELS["Easy"][0],
-    "Firework": consts.TRICK_LEVELS["Other"][0]
+    "glide_above_elder_astor": consts.TRICK_LEVELS["Easy"][0],
+    "toxic_rise_without_electric": consts.TRICK_LEVELS["Easy"][1],
+    "fire_breath_idle_animation": consts.TRICK_LEVELS["Other"][0]
 }
 
 regions = {}
@@ -39,10 +40,12 @@ for line in file_in:
     region_info, rule = entrance_full.split(" | ", 1)
     region_from, region_to = region_info.split(" -> ")
     
+    # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic
     if " | " in rule:
         normal_rule = eval(rule.split(" | ")[0])
-        trick_rule = eval(rule.split(" | ")[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[region_info], operator="contains"),)
+        trick_name = rule.split(" | ")[1].split(" ", 1)[0]  # left half of trick rule side is name with underscore spaces
+        trick_rule = eval(rule.split(" | ")[1].split(" ", 1)[1])
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[trick_name], operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule = eval(rule)
@@ -62,15 +65,17 @@ for line in file_in:
     loc_id = int(loc_id)
     options = []
     
-    if " | " in loc_rule:  # trick
+    # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic
+    if " | " in loc_rule:
         normal_rule = eval(loc_rule.split(" | ")[0])
-        trick_rule = eval(loc_rule.split(" | ")[1])
-        if "Firework" in loc_name:
-            trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup["Firework"], operator="contains"),)
+        trick_name = loc_rule.split(" | ")[1].split(" ", 1)[0]
+        trick_rule = eval(loc_rule.split(" | ")[1].split(" ", 1)[1])
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[trick_name], operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
-        evaluated_rule: Rule = eval(loc_rule)
-
+        evaluated_rule = eval(loc_rule)
+    
+    # check for location-level options
     if "Shop Item" in loc_name:
         options = [
             OptionFilter(ShopRandomization, 1, operator="eq").to_dict(),
@@ -105,9 +110,18 @@ file_in.close()
 file_in = open("4 - gem events.txt", "r")
 for line in file_in:
     line = line.strip()
-    region, event_name, event_rule = line.split(" | ")
+    region, event_name, event_rule = line.split(" | ", 2)
     gem_amount = event_name.split(" ", 1)[0]
-    evaluated_rule: Rule = eval(event_rule)
+    
+    # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic 
+    if " | " in event_rule:
+        normal_rule = eval(event_rule.split(" | ")[0])
+        trick_name = event_rule.split(" | ")[1].split(" ", 1)[0]
+        trick_rule = eval(event_rule.split(" | ")[1].split(" ", 1)[1])
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[trick_name], operator="eq"),)
+        evaluated_rule = Or(normal_rule, trick_rule)
+    else:
+        evaluated_rule: Rule = eval(event_rule)
 
     regions[region]["gem_events"].append({
         "name": event_name,

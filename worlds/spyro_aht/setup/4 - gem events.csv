@@ -4,23 +4,23 @@ DVEntry,300,dark shards,"HasAny('Double Jump', 'Charge')"
 DVEntry,100,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 DVEntry,175,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
 DVEntry,150,baskets behind chargeable wall near elder,Has('Charge')
-DVEntry,500,armored chest via firework across bridge,"HasAll('Double Jump', 'Fire Breath')"
+DVEntry,500,firework across Crocovile bridge,"HasAll('Double Jump', 'Fire Breath') | fire_breath_idle_animation Has('Double Jump')"
 DVByrdLower,396,baskets/chests/dark shards/on the ground,True_()
 DVByrdLower,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 DVByrdLower,395,Byrd minigames 1-1,True_()
 DVByrdLower,360,Byrd minigames 1-2,True_()
-DVByrdUpper,500,armored chest via firework,Has('Fire Breath')
+DVByrdUpper,500,firework above Sgt. Byrd,Has('Fire Breath') | fire_breath_idle_animation True_()
 DVLabSecret,335,baskets/headbash chest + rock/metal chest,True_()
 DVLabSecret,40,[enemy] archer gnorcs,True_()
 DVTunnelToCroc,215,on the ground/baskets/headbash chest,True_()
 DVHunterPreGlide,286,on the ground/baskets/chests,True_()
 DVHunterPreGlide,20,[enemy] unarmored huge gnorc,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
-DVHunterPreGlide,500,armored chest via firework,"HasAll('Glide', 'Fire Breath')"
+DVHunterPreGlide,500,firework at end of glide tutorial,"HasAll('Glide', 'Fire Breath') | fire_breath_idle_animation Has('Glide')"
 DVHunterPostGlide,451,chests/baskets/on the ground,True_()
 DVHunterPostGlide,20,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 DVHunterPostGlide,40,[enemy] unarmored huge gnorc,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 DVHunterPostGlide,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-DVOutsideBallGadget,500,armored chest via firework,Has('Fire Breath')
+DVOutsideBallGadget,500,firework next to ball gadget,Has('Fire Breath') | fire_breath_idle_animation True_()
 DVOutsideBallGadget,40,[enemy] armored huge gnorcs,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 DVOutsideBallGadget,75,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 DVOutsideBallGadget,24,on the ground,True_()
@@ -38,7 +38,7 @@ CSPyramidAndTemple,1000,armored chests on pyramid vs cannon,"HasAll('Double Jump
 CSPyramidAndTemple,2550,armored chests and metal chests via supercharge,SuperchargeGadget()
 CSWest,205,on the ground/baskets/headbash chest,True_()
 CSWest,30,[enemy] red and yellow plants,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
-CSWest,500,armored chest via firework,Has('Fire Breath')
+CSWest,500,firework behind cliff in west area,Has('Fire Breath') | fire_breath_idle_animation True_()
 CSInsideTemple,50,[enemy] normal crocoviles,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 CSInsideTemple,80,metal chests and headbash chest behind guarded gate,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 CSInsideTemple,40,[enemy] unarmored huge gnorcs in cave,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
@@ -58,11 +58,11 @@ CSTree,25,[enemy] normal crocovile above poles outside tree,"And(Has('Pole Spin'
 CSTree,25,metal chest above poles outside tree,"And(Has('Pole Spin'), HasAny('Double Jump', 'Charge', 'Electric Breath'))"
 CSTree,30,headbash chest above poles outside tree,"HasAll('Pole Spin', 'Double Jump')"
 CSTree,75,spider web baskets above Blink's poles,"HasAll('Fire Breath', 'Pole Spin')"
-CSTree,500,armored chest via firework in tree,"HasAll('Double Jump', 'Pole Spin', 'Fire Breath')"
 CSTree,1003,Blink minigames 1-1,True_()
 CSTree,928,Blink minigames 1-2,True_()
 CSAboveElder,105,metal chests/headbash chest,True_()
-CSAboveElder,500,armored chest via firework at top of tree,Has('Fire Breath')
+CSAboveElder,500,firework atop Elder's tree,Has('Fire Breath') | fire_breath_idle_animation True_()
+CSTreeLedge,500,firework in middle of Elder's tree,Has('Fire Breath') | fire_breath_idle_animation True_()
 Dragonfly Falls,,,
 DFBallGadget,896,on ball gadget path,True_()
 DFEntry,25,[enemy] normal crocovile by entry area,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
@@ -187,7 +187,7 @@ CDNorthEast,75,[enemy] balloon gnorcs,True_()
 CDNorthWest,100,[enemy] flying middle and small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
 CDNorthWest,40,[enemy] armored and unarmored huge gnorcs,"HasAny('Fire Breath', 'Electric Breath', 'Ice Breath')"
 CDNorthWest,755,on the ground/in the air/baskets/chests,True_()
-CDNorthWest,500,armored chest via firework,Has('Fire Breath')
+CDNorthWest,500,firework in northwest,Has('Fire Breath') | fire_breath_idle_animation True_()
 CDSouthWest,100,[enemy] balloon gnorcs,True_()
 CDSouthWest,150,[enemy] flying middle and small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
 CDSouthWest,85,on the ground/baskets/headbash chest,True_()
@@ -200,7 +200,7 @@ CDTallestTowerUpper,20,[enemy] unarmored huge gnorc,"Or(HasAny('Fire Breath', 'E
 CDTallestTowerUpper,410,in the air/metal chests/dark shards/headbash purple thing,True_()
 CDTallestTowerUpper,50,[enemy] flying small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
 CDBallGadget,815,ball gadget minigame,True_()
-CDBallGadget,500,armored chest via firework after ball gadget minigames,Has('Fire Breath')
+CDBallGadget,500,firework after ball gadget,Has('Fire Breath') | fire_breath_idle_animation True_()
 Sunken Ruins,,,
 SREntry,100,dark shards,"HasAny('Double Jump', 'Charge')"
 SREntry,125,[enemy] critters/mer-gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
@@ -211,11 +211,11 @@ SRSwim1,125,[enemy] underwater mer-gnorc and clams,Has('Charge')
 SRSwim1,100,underwater vases,Has('Charge')
 SRSwim1,25,[enemy] mer-gnorcs,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 SRSwim1,300,dark shards,"HasAny('Double Jump', 'Charge')"
-SRSwim1,397,on the ground/baskets/and headbash chest atop thermal,"HasAll('Double Jump', 'Glide')"
 SRSwim1,125,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
-SRSwim1,1500,armored chests via firework atop thermal,"HasAll('Double Jump', 'Glide', 'Fire Breath')"
 SRSwim1,75,basket,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
 SRSwim1,30,headbash chest,Has('Double Jump')
+SRAboveThermal,397,on the ground/baskets/and headbash chest atop thermal,True_()
+SRAboveThermal,1500,firework atop thermal room,Has('Fire Breath') | fire_breath_idle_animation True_()
 SRSwim2,76,underwater floating,True_()
 SRSwim2,50,[enemy] underwater mer-gnorc,Has('Charge')
 SRSwim2,200,underwater vases,Has('Charge')
@@ -233,7 +233,7 @@ SRDepthsEntry,150,dark shards,"HasAny('Double Jump', 'Charge')"
 SRDepthsEntry,900,Sparx minigames 2-1,True_()
 SRDepthsEntry,800,Sparx minigames 2-2,True_()
 SRDepthsUpper,50,[enemy] mer-gnorcs,"And(Has('Double Jump'), HasAny('Fire Breath', 'Electric Breath', 'Charge'))"
-SRDepthsUpper,1500,armored chests below via firework,Has('Fire Breath')
+SRDepthsUpper,1500,firework above heated wall kick,Has('Fire Breath') | fire_breath_idle_animation True_()
 SRDepthsLower,300,dark shards,"HasAny('Double Jump', 'Charge')"
 SRDepthsLower,275,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
 SRDepthsLower,120,headbash chests,Has('Double Jump')
@@ -244,14 +244,14 @@ SRToxicSwim1,606,dark shards/baskets/chests/on the ground,True_()
 SRToxicSwim1,150,dark shards you can glide to in first room,Has('Glide')
 SRToxicSwim2,235,on the ground/chests/dark shard/baskets,True_()
 SRToxicSwimAbove,513,dark shards/metal chests/on the ground/basket/headbash chest,True_()
-SRToxicSwimAbove,1500,armored chests via firework atop puzzle,Has('Fire Breath')
+SRToxicSwimAbove,1500,firework atop pole rooms,Has('Fire Breath') | fire_breath_idle_animation True_()
 SRToxicRise,46,on the ground before rising statue room,True_()
 SRToxicRise,25,[enemy] mer-gnorc before rising statue room,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 SRToxicRise,50,dark shard before rising statue room,"HasAny('Double Jump', 'Charge')"
 SRToxicRise,30,headbash chest before rising statue room,Has('Double Jump')
-SRToxicRise,1500,armored chests via firework on perimeter,"HasAll('Double Jump', 'Fire Breath', 'Electric Breath')"
-SRToxicRise,50,baskets on perimeter,"HasAll('Double Jump', 'Electric Breath')"
-SRToxicRise,100,dark shards in rising statue room,"HasAll('Electric Breath', 'Pole Spin', 'Glide', 'Double Jump')"
+SRToxicRisePerimeterHigh,100,dark shards in rising statue room,True_()
+SRToxicRisePerimeterLow,1500,firework in rising statue room,Has('Fire Breath') | fire_breath_idle_animation True_()
+SRToxicRisePerimeterLow,50,baskets on perimeter,True_()
 SRReturnToStart,250,[enemy] mer-gnorcs/orange crabs/blue crab,True_()
 SRReturnToStart,342,metal chests/dark shards/on the ground/baskets,True_()
 Frostbite Village,,,
@@ -328,11 +328,11 @@ ICCourtyardLower,80,[enemy] armored middle gnorc,Has('Charge')
 ICCourtyardLower,100,dark shards,"HasAny('Double Jump', 'Charge')"
 ICCourtyardLower,75,metal chests you can't DJ,"HasAny('Charge', 'Electric Breath')"
 ICCourtyardLower,125,baskets you can't DJ,"HasAny('Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
-ICCourtyardLower,25,firework basket,Has('Fire Breath')
+ICCourtyardLower,25,firework basket,Has('Fire Breath') | fire_breath_idle_animation True_()
 ICCourtyardLower,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 ICCourtyardUpper,40,[enemy] archer gnorc/unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 ICCourtyardUpper,175,baskets/dark shards,True_()
-ICCourtyardUpper,1500,armored chests below via firework,Has('Fire Breath')
+ICCourtyardUpper,1500,firework atop courtyard,Has('Fire Breath') | fire_breath_idle_animation True_()
 ICPastWaterGate,400,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 ICPastWaterGate,39,[enemy] yeti/unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 ICPastWaterGate,475,baskets/metal chests/headbash chest and rocks/on the ground/dark shard,True_()
@@ -347,7 +347,7 @@ ICSuperchargeShop,300,dark shards,"HasAny('Double Jump', 'Charge')"
 ICSuperchargeShop,25,[enemy] ice monster,"HasAny('Fire Breath', 'Electric Breath')"
 ICSuperchargeShop,125,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 ICSuperchargeShop,40,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-ICSuperchargeShop,50,firework baskets,Has('Fire Breath')
+ICSuperchargeShop,50,firework baskets,Has('Fire Breath') | fire_breath_idle_animation True_()
 ICSuperchargeShop,100,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 ICSuperchargeShop,140,[enemy] unarmored middle gnorcs/archer gnorcs,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 ICSuperchargeShop,800,Byrd minigames 3-1,True_()
@@ -386,23 +386,23 @@ SBEntryLower,375,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Bre
 SBEntryLower,140,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 SBEntryLower,80,[enemy] armored middle gnorc,Has('Charge')
 SBEntryLower,60,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-SBEntryLower,1000,armored chests via west cove firework,Has('Fire Breath')
-SBShop,1500,armored chests via firework on ground,Has('Fire Breath')
+SBEntryLower,1000,firework in west cove,Has('Fire Breath') | fire_breath_idle_animation True_()
+SBEntryLower,1500,firework in lower stormy beach,"HasAll('Double Jump', 'Fire Breath') | fire_breath_idle_animation Has('Double Jump')"
 SBEntryUpper,1684,on the ground/baskets/dark shards/headbash chests,True_()
 SBEntryUpper,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-SBEntryUpper,1000,armored chests via firework in cave,Has('Fire Breath')
+SBEntryUpper,1000,firework in cave,Has('Fire Breath') | fire_breath_idle_animation True_()
 SBEntryUpper,40,[enemy] archer gnorcs/unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 SBEntryUpper,20,[enemy] armored middle gnorc,Has('Charge')
 SBCaveUpper,40,[enemy] archer gnorcs,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 SBCaveUpper,60,headbash chests behind water gate,True_()
 Molten Mount,,,
-MMEntryUpper,500,armored chests via firework on stump,Has('Fire Breath')
+MMEntryUpper,500,firework in entrance,Has('Fire Breath') | fire_breath_idle_animation True_()
 MMEntryUpper,50,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 MMEntryUpper,1500,armored chests via supercharge,SuperchargeGadget()
 MMEntryUpper,572,baskets/metal chest/on the ground/dark shard,True_()
 MMEntryLower,161,on the ground/headbash rock,True_()
 MMEntryLower,100,[enemy] phoenixes/fire imps,"HasAny('Water Breath', 'Ice Breath')"
-MMEntryLower,25,firework basket,Has('Fire Breath')
+MMEntryLower,25,firework basket,Has('Fire Breath') | fire_breath_idle_animation True_()
 MMVillage,610,on the ground,True_()
 MMVillage,25,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
 MMVillage,150,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
@@ -455,8 +455,8 @@ MFtEntry,90,headbash chests,Has('Double Jump')
 MFtEntry,25,metal chest behind chargeable wall,Has('Charge')
 MFtEntry,20,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 MFtEntry,50,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
-MFtEntry,25,firework basket,Has('Fire Breath')
-MFtEntry,25,firework basket behind chargeable wall,"HasAll('Charge', 'Fire Breath')"
+MFtEntry,25,firework basket,Has('Fire Breath') | fire_breath_idle_animation True_()
+MFtEntry,25,firework basket behind chargeable wall,"HasAll('Charge', 'Fire Breath') | fire_breath_idle_animation Has('Charge')"
 MFtEntry,100,[enemy] rock monster,Has('Charge')
 MFtCenter,100,[enemy] fire imps,True_()
 MFtSouth,50,baskets by locked chest above center,Has('Double Jump')
@@ -467,7 +467,7 @@ MFtWallKickLower,155,on the ground,True_()
 MFtWallKickLower,25,metal chest behind chargeable wall,Has('Charge')
 MFtWallKickUpper,75,baskets above wall kick,True_()
 MFtWallKickUpper,125,[enemy] fire imps and phoenixes above wall kick,True_()
-MFtWallKickUpper,500,armored chest via firework above wall kick,Has('Fire Breath')
+MFtWallKickUpper,500,firework in wall kick room,Has('Fire Breath') | fire_breath_idle_animation True_()
 MFtBallGadgetEntry,40,[enemy] armored huge gnorcs,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 MFtBallGadgetEntry,75,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 MFBallGadget,447,ball gadget path,True_()
@@ -513,7 +513,7 @@ DMLGDoorPastGnorc,150,dark shards,"HasAny('Double Jump', 'Charge')"
 DMLGDoorPastGnorc,60,headbash chest,Has('Double Jump')
 DMLGDoorPastGnorc,350,underwater toxic metal chests and dark shards,"And(HasAll('Swim', 'Charge'), InvincibilityGadget())"
 DMAfterRocks,530,dark shards/baskets/headbash chest/metal chests,True_()
-DMAfterRocks,1500,armored chests via firework,Has('Fire Breath')
+DMAfterRocks,1500,firework in piston room,Has('Fire Breath') | fire_breath_idle_animation True_()
 DMAfterRocks,20,[enemy] huge robo-gnorc,"HasAny('Electric Breath', 'Ice Breath')"
 DMAfterRocks,20,[enemy] small robo-gnorc,True_()
 DMAfterRocks,20,[enemy] small robo-gnorc above wall kick,Has('Wall Kick')
@@ -527,7 +527,7 @@ DMAfterCaged1,40,[enemy] armored middle robo-gnorc,"And(Has('Charge'), HasAny('E
 DMAfterCaged1,195,[enemy] steel traps/huge robo-gnorc blocking door,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 DMAfterCaged2,50,baskets,True_()
 DMBeforeIcePoles,105,baskets/headbash chest,True_()
-DMBeforeIcePoles,1500,armored chests via firework after ice poles,"HasAll('Glide', 'Ice Breath', 'Pole Spin')"
+DMBeforeIcePoles,1500,firework after ice pole spin,"HasAll('Glide', 'Ice Breath', 'Pole Spin', 'Fire Breath') | fire_breath_idle_animation HasAll('Glide', 'Ice Breath', 'Pole Spin')"
 DMSeeSaw,100,baskets at ledge (50 below 50 above),True_()
 DMSeeSaw,60,[enemy] small robo-gnorc/drill robots,"HasAny('Electric Breath', 'Charge')"
 DMSeeSaw,165,[enemy] roller robot/huge robo-gnorcs/steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"

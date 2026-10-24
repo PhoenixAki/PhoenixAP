@@ -14,10 +14,10 @@ class LoggingLevel(IntEnum):
     MAXIMUM = 5
 
 TRICK_LEVELS = {
-    "Easy": ["Glide Above Elder Astor"],
+    "Easy": ["Glide Above Elder Astor", "Toxic Rise Without Electric"],
     "Medium": [],
     "Hard": [],
-    "Other": ["Fireworks with Idle Animation"]
+    "Other": ["Fire Breath Idle Animation"]
 }
 
 MOD_MAJOR = 20
