@@ -1,9 +1,10 @@
 import json
 
+import itertools
 from rule_builder.options import OptionFilter
 from worlds.spyro_aht.options import ShopRandomization, MinigameChecks, ShopItemCount, FireworkChecks, EnabledTricks
 # These are imported so that eval() can recognize them as types below
-from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion
+from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion, CanReachLocation
 from worlds.spyro_aht.data import consts
 from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
@@ -35,9 +36,11 @@ for line in file_in:
     # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic
     if " | " in rule:
         normal_rule = eval(rule.split(" | ")[0])
-        trick_name = rule.split(" | ")[1].split(" ", 1)[0]  # left half of trick rule side is name with underscore spaces
+        trick_name = rule.split(" | ")[1].split(" ", 1)[0].replace("_", " ")  # left half of trick rule side is name with underscore spaces
+        if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
+            exit(f"{trick_name} wasn't in TRICK_LEVELS")
         trick_rule = eval(rule.split(" | ")[1].split(" ", 1)[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_name.replace("_", " "), operator="contains"),)
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule = eval(rule)
@@ -60,9 +63,11 @@ for line in file_in:
     # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic
     if " | " in loc_rule:
         normal_rule = eval(loc_rule.split(" | ")[0])
-        trick_name = loc_rule.split(" | ")[1].split(" ", 1)[0]
+        trick_name = loc_rule.split(" | ")[1].split(" ", 1)[0].replace("_", " ")
+        if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
+            exit(f"{trick_name} wasn't in TRICK_LEVELS")
         trick_rule = eval(loc_rule.split(" | ")[1].split(" ", 1)[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_name.replace("_", " "), operator="contains"),)
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule = eval(loc_rule)
@@ -108,9 +113,11 @@ for line in file_in:
     # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic 
     if " | " in event_rule:
         normal_rule = eval(event_rule.split(" | ")[0])
-        trick_name = event_rule.split(" | ")[1].split(" ", 1)[0]
+        trick_name = event_rule.split(" | ")[1].split(" ", 1)[0].replace("_", " ")
+        if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
+            exit(f"{trick_name} wasn't in TRICK_LEVELS")
         trick_rule = eval(event_rule.split(" | ")[1].split(" ", 1)[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_name.replace("_", " "), operator="eq"),)
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="eq"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule: Rule = eval(event_rule)

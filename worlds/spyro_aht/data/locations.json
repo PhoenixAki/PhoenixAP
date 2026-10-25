@@ -6150,13 +6150,69 @@
                 "id": 319,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Or",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "CanReachLocation",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "location_name": "CR: Dark Gem behind cannon door",
+                                        "parent_region_name": "",
+                                        "skip_indirect_connection": false
+                                    }
+                                },
+                                {
+                                    "rule": "And",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "children": [
+                                        {
+                                            "rule": "CanReachLocation",
+                                            "options": [],
+                                            "filtered_resolution": false,
+                                            "args": {
+                                                "location_name": "CR: Light Gem above water mill",
+                                                "parent_region_name": "",
+                                                "skip_indirect_connection": false
+                                            }
+                                        },
+                                        {
+                                            "rule": "Has",
+                                            "options": [],
+                                            "filtered_resolution": false,
+                                            "args": {
+                                                "item_name": "Glide",
+                                                "count": 1
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Early Coastal Remains Egg",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -13097,13 +13153,32 @@
                 "id": 258,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -13358,13 +13433,32 @@
             {
                 "name": "ICCourtyardLower -> ICCourtyardUpper",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Ice Citadel Platform Jump",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -13374,10 +13468,13 @@
                 "id": 259,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
                 }
             },
             {
@@ -13439,14 +13536,39 @@
                 }
             },
             {
-                "name": "175 Gems (baskets/dark shards)",
-                "gem_amount": 175,
+                "name": "75 Gems (baskets)",
+                "gem_amount": 75,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "HasAny",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump",
+                            "Electric Breath",
+                            "Fire Breath",
+                            "Ice Breath",
+                            "Water Breath"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "100 Gems (dark shards)",
+                "gem_amount": 100,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump"
+                        ]
+                    }
                 }
             },
             {
@@ -13540,12 +13662,14 @@
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "HasAll",
                             "options": [],
                             "filtered_resolution": false,
                             "args": {
-                                "item_name": "Charge",
-                                "count": 1
+                                "item_names": [
+                                    "Charge",
+                                    "Double Jump"
+                                ]
                             }
                         },
                         {
@@ -13615,14 +13739,81 @@
                 }
             },
             {
-                "name": "475 Gems (baskets/metal chests/headbash chest and rocks/on the ground/dark shard)",
-                "gem_amount": 475,
+                "name": "200 Gems (baskets)",
+                "gem_amount": 200,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump",
+                            "Electric Breath",
+                            "Fire Breath",
+                            "Ice Breath",
+                            "Water Breath"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "50 Gems (metal chests)",
+                "gem_amount": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "130 Gems (headbash chest and rocks)",
+                "gem_amount": 130,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            },
+            {
+                "name": "45 Gems (on the ground)",
+                "gem_amount": 45,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {}
+                }
+            },
+            {
+                "name": "50 Gems (dark shard)",
+                "gem_amount": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump"
+                        ]
+                    }
                 }
             },
             {
@@ -13677,12 +13868,14 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "HasAll",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {
-                        "item_name": "Charge",
-                        "count": 1
+                        "item_names": [
+                            "Charge",
+                            "Double Jump"
+                        ]
                     }
                 }
             }
@@ -13868,15 +14061,34 @@
                 "id": 261,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Fire Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -14424,50 +14636,102 @@
                 "id": 262,
                 "options": [],
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "CanReachRegion",
+                            "rule": "And",
                             "options": [],
                             "filtered_resolution": false,
-                            "args": {
-                                "region_name": "ICCourtyardLower"
-                            }
+                            "children": [
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICCourtyardLower"
+                                    }
+                                },
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICPastWaterGate"
+                                    }
+                                },
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICSuperchargeShop"
+                                    }
+                                },
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICRoyalCannon"
+                                    }
+                                },
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Fire Breath",
+                                        "count": 1
+                                    }
+                                }
+                            ]
                         },
                         {
-                            "rule": "CanReachRegion",
-                            "options": [],
+                            "rule": "And",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
-                            "args": {
-                                "region_name": "ICPastWaterGate"
-                            }
-                        },
-                        {
-                            "rule": "CanReachRegion",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "region_name": "ICSuperchargeShop"
-                            }
-                        },
-                        {
-                            "rule": "CanReachRegion",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "region_name": "ICRoyalCannon"
-                            }
-                        },
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Fire Breath",
-                                "count": 1
-                            }
+                            "children": [
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICCourtyardLower"
+                                    }
+                                },
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICPastWaterGate"
+                                    }
+                                },
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICSuperchargeShop"
+                                    }
+                                },
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "ICRoyalCannon"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
@@ -14755,13 +15019,32 @@
                 "id": 264,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Fire Breath",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -15693,13 +15976,32 @@
             {
                 "name": "SBEntryUpper -> MMEntryUpper",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Glide",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Molten Mount Glideless Entry",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -15854,10 +16156,13 @@
             {
                 "name": "MMEntryUpper -> MMEntryLower",
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_name": "Glide",
+                        "count": 1
+                    }
                 }
             },
             {
@@ -16017,13 +16322,37 @@
                 "id": 350,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Shockwave Rock Monsters",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Shockwave"
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -16097,13 +16426,37 @@
                 "gem_amount": 400,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Shockwave Rock Monsters",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Shockwave"
+                                ]
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -17587,24 +17940,7 @@
                 "gem_amount": 100,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
-                }
-            }
-        ]
-    },
-    "MFtCenter": {
-        "name": "MFtCenter",
-        "entrances": [
-            {
-                "name": "MFtEntry -> MFtCenter",
-                "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
@@ -17618,8 +17954,73 @@
                             }
                         },
                         {
-                            "rule": "HasAny",
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Shockwave Rock Monsters",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Shockwave"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "MFtCenter": {
+        "name": "MFtCenter",
+        "entrances": [
+            {
+                "name": "MFtEntry -> MFtCenter",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "And",
                             "options": [],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Charge",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "HasAny",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Ice Breath",
+                                            "Water Breath"
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Shockwave Rock Monsters",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
                             "args": {
                                 "item_names": [
@@ -20409,16 +20810,40 @@
             {
                 "name": "DMPostSeeSaw -> DMGreenPoles",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Glide",
-                            "Pole Spin",
-                            "Wall Kick"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Glide",
+                                    "Pole Spin",
+                                    "Wall Kick"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Dark Mine Death Abuse",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Glide",
+                                    "Pole Spin"
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -21177,21 +21602,12 @@
                 "id": 138,
                 "options": [],
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Double Jump",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "Or",
+                            "rule": "And",
                             "options": [],
                             "filtered_resolution": false,
                             "children": [
@@ -21200,22 +21616,53 @@
                                     "options": [],
                                     "filtered_resolution": false,
                                     "args": {
-                                        "item_name": "Electric Breath",
+                                        "item_name": "Double Jump",
                                         "count": 1
                                     }
                                 },
                                 {
-                                    "rule": "HasAll",
+                                    "rule": "Or",
                                     "options": [],
                                     "filtered_resolution": false,
-                                    "args": {
-                                        "item_names": [
-                                            "Charge",
-                                            "Ice Breath"
-                                        ]
-                                    }
+                                    "children": [
+                                        {
+                                            "rule": "Has",
+                                            "options": [],
+                                            "filtered_resolution": false,
+                                            "args": {
+                                                "item_name": "Electric Breath",
+                                                "count": 1
+                                            }
+                                        },
+                                        {
+                                            "rule": "HasAll",
+                                            "options": [],
+                                            "filtered_resolution": false,
+                                            "args": {
+                                                "item_names": [
+                                                    "Charge",
+                                                    "Ice Breath"
+                                                ]
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Pre-production Dark Gem Breathless",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
                         }
                     ]
                 }

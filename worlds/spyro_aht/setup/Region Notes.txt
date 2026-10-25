@@ -380,7 +380,7 @@ REGION CREntry: shop, southern beach, east hub
 	LOCATION CREntry | CR: Empty Locked Chest behind Coastal Depot | 801 | LockedChestRule('Coastal Remains')
 	LOCATION CREntry | CR: Empty Locked Chest in southern beach | 802 | LockedChestRule('Coastal Remains')
 	LOCATION CREntry | CR: Light Gem above water mill | 222 | HasAll('Water Breath', 'Double Jump')
-	LOCATION CREntry | CR: Dragon Egg across moving shells | 319 | Has('Double Jump')
+	LOCATION CREntry | CR: Dragon Egg across moving shells | 319 | Or(CanReachLocation('CR: Dark Gem behind cannon door'), And(CanReachLocation('CR: Light Gem above water mill'), Has('Glide'))) | Early_Coastal_Remains_Egg Has('Double Jump')
 
 REGION CRWateryTomb: ineptune
 	CREntry -> CRWateryTomb | BossLairRule(1)
@@ -784,13 +784,13 @@ REGION ICCourtyardLower: entrance courtyard
 	    would have DJ and fire breath
 
 	LOCATION ICCourtyardLower | IC: Empty Locked Chest in entryway | 808 | LockedChestRule('Ice Citadel')
-	LOCATION ICCourtyardLower | IC: Light Gem from lighting boiler in courtyard | 258 | Has('Fire Breath')
+	LOCATION ICCourtyardLower | IC: Light Gem from lighting boiler in courtyard | 258 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION ICCourtyardUpper: upper courtyard above floating platforms
-	ICCourtyardLower -> ICCourtyardUpper | Has('Double Jump')
-		would have DJ
+	ICCourtyardLower -> ICCourtyardUpper | Has('Double Jump') | Ice_Citadel_Platform_Jump True_()
+		could have nothing
 
-	LOCATION ICCourtyardUpper | IC: Light Gem atop courtyard | 259 | True_()
+	LOCATION ICCourtyardUpper | IC: Light Gem atop courtyard | 259 | Has('Double Jump')
 	LOCATION ICCourtyardUpper | IC: Firework atop courtyard | 415 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION ICPastWaterGate: past the water-opened gate, up to elder's door
@@ -798,7 +798,7 @@ REGION ICPastWaterGate: past the water-opened gate, up to elder's door
 		would have DJ and water
 
 	LOCATION ICPastWaterGate | IC: Dragon Egg in Locked Chest behind chargeable wall | 849 | And(Has('Charge'), LockedChestRule('Ice Citadel'))
-    LOCATION ICPastWaterGate | IC: Dark Gem above Elder Astor | 126 | And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))
+    LOCATION ICPastWaterGate | IC: Dark Gem above Elder Astor | 126 | And(HasAll('Double Jump', 'Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))
 
 REGION ICElderRoom: elder's room, opened by killing armored huge gnorc in front
 	ICPastWaterGate -> ICElderRoom | And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))
@@ -817,7 +817,7 @@ REGION ICSuperchargeShop: supercharge area past Elder. include enemies and boile
 	LOCATION ICSuperchargeShop | IC: Light Gem in Locked Chest after Elder Astor | 832 | LockedChestRule('Ice Citadel')
 	LOCATION ICSuperchargeShop | IC: Dragon Egg from Sgt. Byrd | 342 | True_()
 	LOCATION ICSuperchargeShop | IC: Light Gem from Sgt. Byrd | 260 | True_()
-	LOCATION ICSuperchargeShop | IC: Light Gem from lighting boiler near drawbridge | 261 | HasAll('Double Jump', 'Fire Breath')
+	LOCATION ICSuperchargeShop | IC: Light Gem from lighting boiler near drawbridge | 261 | HasAll('Double Jump', 'Fire Breath') | Fire_Breath_Idle_Animation True_()
 	LOCATION ICSuperchargeShop | IC: Empty Locked Chest in tunnel to drawbridge | 809 | LockedChestRule('Ice Citadel')
 	LOCATION ICSuperchargeShop | IC: Empty Locked Chest next to drawbridge | 810 | LockedChestRule('Ice Citadel')
 
@@ -846,7 +846,7 @@ REGION ICRoyal: royal chamber area. include egg after pole spin which doesn't ne
 
 	LOCATION ICRoyal | IC: Empty Locked Chest in royal chamber | 811 | LockedChestRule('Ice Citadel')
 	LOCATION ICRoyal | IC: Dragon Egg next to cannon area via pole spin | 346 | HasAll('Pole Spin', 'Glide')
-	LOCATION ICRoyal | IC: Light Gem from Ice Princess | 262 | And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'), Has('Fire Breath'))
+	LOCATION ICRoyal | IC: Light Gem from Ice Princess | 262 | And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'), Has('Fire Breath')) | Fire_Breath_Idle_Animation And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'))
 
 REGION ICRoyalBack: back entrance to chamber via electric platform. includes dark gem right after platform
 	ICRoyal -> ICRoyalBack | HasAll('Pole Spin', 'Electric Breath', 'Double Jump', 'Glide')
@@ -861,7 +861,7 @@ REGION ICRoyalCannon: stuff via cannon which needs DJ to use
 	LOCATION ICRoyalCannon | IC: Dark Gem by cannon | 130 | True_()
 	LOCATION ICRoyalCannon | IC: Dragon Egg above elevator by cannon | 347 | True_()
 	LOCATION ICRoyalCannon | IC: Light Gem behind cannon door | 263 | Has('Glide')
-	LOCATION ICRoyalCannon | IC: Light Gem from lighting boiler after cannon area | 264 | Has('Fire Breath')
+	LOCATION ICRoyalCannon | IC: Light Gem from lighting boiler after cannon area | 264 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION ICRoyalToCourtyard: path above boiler that returns to lower courtyard
 	ICRoyalCannon -> ICRoyalToCourtyard | Has('Fire Breath')
@@ -908,15 +908,15 @@ REGION SBCaveUpper: upper part of cave needing wall kick and glide
 Molten Mount
 ------------
 REGION MMEntryUpper: entry area of volcano
-	SBEntryUpper -> MMEntryUpper | Has('Glide')
-		would have DJ and glide
+	SBEntryUpper -> MMEntryUpper | Has('Glide') | Molten_Mount_Glideless_Entry True_()
+		would have DJ
 	MMVillage -> MMEntryUpper | HasAll('Double Jump', 'Glide')
 	    would have DJ and glide
 
 	LOCATION MMEntryUpper | MM: Firework in entrance | 419 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION MMEntryLower: lower area past the lava spurts. includes first fire imp and headbash rock right before village
-	MMEntryUpper -> MMEntryLower | True_()
+	MMEntryUpper -> MMEntryLower | Has('Glide')
 		would have DJ and glide
 	MMVillage -> MMEntryLower | And(HasAll('Double Jump', 'Glide'), HasAny('Water Breath', 'Ice Breath'))
 		would have DJ and glide and (water or ice)
@@ -930,7 +930,7 @@ REGION MMVillage: hyena village
 		could have nothing
 
 	LOCATION MMVillage | MM: Dark Gem near rock monsters | 132 | Has('Double Jump')
-	LOCATION MMVillage | MM: Dragon Egg for avenging Teena | 350 | Has('Charge')
+	LOCATION MMVillage | MM: Dragon Egg for avenging Teena | 350 | Has('Charge') | Shockwave_Rock_Monsters HasAll('Double Jump', 'Shockwave')
 
 REGION MMVillageImps: going through fire imp area. they don't respawn if you come back seemingly but still going to expect WI to be safe
 	MMVillage -> MMVillageImps | And(Has('Double Jump'), HasAny('Water Breath', 'Ice Breath'))
@@ -1035,7 +1035,7 @@ REGION MFtEntry: entry of MFt. technically includes the little stretch at end of
 		would have (water or ice)
 
 REGION MFtCenter: center area past rock monster
-	MFtEntry -> MFtCenter | And(Has('Charge'), HasAny('Water Breath', 'Ice Breath'))
+	MFtEntry -> MFtCenter | And(Has('Charge'), HasAny('Water Breath', 'Ice Breath')) | Shockwave_Rock_Monsters HasAny('Water Breath', 'Ice Breath')
 		would have DJ and wall kick and charge and (water or ice)
 	MFtSouth -> MFtCenter | HasAny('Water Breath', 'Ice Breath')
 		would have (water or ice)
@@ -1204,8 +1204,8 @@ REGION DMPostSeeSaw: past the huge robo-gnorc approaching the wall kick spot
     DMSeeSaw -> DMPostSeeSaw | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
         would have DJ and (electric or (ice + charge))
 
-REGION DMGreenPoles: green pole room, ending after stretch of red gems approaching red's lab
-	DMPostSeeSaw -> DMGreenPoles | HasAll('Wall Kick', 'Pole Spin', 'Glide')
+REGION DMGreenPoles: green pole room, ending at first RL entry wall kick
+	DMPostSeeSaw -> DMGreenPoles | HasAll('Wall Kick', 'Pole Spin', 'Glide') | Dark_Mine_Death_Abuse HasAll('Pole Spin', 'Glide')
 		would have DJ and (electric or (ice + charge)) and wall kick and pole spin and glide
 
 	LOCATION DMGreenPoles | DM: Light Gem in green pole room | 280 | True_()
@@ -1213,7 +1213,7 @@ REGION DMGreenPoles: green pole room, ending after stretch of red gems approachi
 
 Red's Lab
 ---------
-REGION RLEntry: entry starting after stretch of red gems up to the exit door in charge switch room
+REGION RLEntry: after first wall kick up to center room
 	DMGreenPoles -> RLEntry | True_()
 		would have (electric or ice + charge) and DJ and wall kick and pole spin and glide
 
@@ -1264,7 +1264,7 @@ REGION RLNorthEast4: past lasers you have to DJ over
 	ShopPads -> RLNorthEast4 | OpenWorldRule(['Red\'s Laboratory - Pre-production'])
 		could have nothing
 
-	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge')))
+	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))) | Pre-production_Dark_Gem_Breathless Has('Double Jump')
 
 REGION RLNorthWest1: up through double piston room
 	RLCenter -> RLNorthWest1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))

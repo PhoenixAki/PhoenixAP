@@ -9,7 +9,7 @@ from typing import Any, override
 import orjson
 
 import Utils
-from BaseClasses import Item, MultiWorld, Region, CollectionState
+from BaseClasses import Item, MultiWorld, Region, CollectionState, ItemClassification
 from Options import OptionError, OptionSet, Choice, Range, OptionDict
 from rule_builder.options import OptionFilter
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
@@ -155,8 +155,10 @@ class SpyroAHTWorld(World):
     def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
         classifications = {0: "filler", 1: "progression", 2: "useful", 4: "trap", 25: "progression deprioritized skip balancing"}
-        self.log(f"Created item {name} for player {self.player} with classification {classifications[consts.ITEM_INFO[name][1]]} and ID {self.item_name_to_id[name]}, placed into the {placement}.", consts.LoggingLevel.MAXIMUM)
-        return Item(name, consts.ITEM_INFO[name][1], self.item_name_to_id[name], self.player)
+        if name == "Shockwave" and "Shockwave Rock Monsters" in self.options.enabled_tricks.value: classification = ItemClassification.progression
+        else: classification = consts.ITEM_INFO[name][1]
+        self.log(f"Created item {name} for player {self.player} with classification {classifications[classification]} and ID {self.item_name_to_id[name]}, placed into the {placement}.", consts.LoggingLevel.MAXIMUM)
+        return Item(name, classification, self.item_name_to_id[name], self.player)
     
     def custom_ut_sort(self, region_label: str, location_label: str) -> str | int:
         """Sorts AHT locations in UT based on vanilla game level order -> alphabetical by region -> alphabetical by location."""
