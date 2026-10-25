@@ -1264,7 +1264,7 @@ REGION RLNorthEast4: past lasers you have to DJ over
 	ShopPads -> RLNorthEast4 | OpenWorldRule(['Red\'s Laboratory - Pre-production'])
 		could have nothing
 
-	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))) | Pre-production_Dark_Gem_Breathless Has('Double Jump')
+	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), HasAny('Electric Breath', 'Ice Breath')) | Pre-production_Dark_Gem_Breathless Has('Double Jump')
 
 REGION RLNorthWest1: up through double piston room
 	RLCenter -> RLNorthWest1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))

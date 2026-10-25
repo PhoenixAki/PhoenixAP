@@ -21621,31 +21621,15 @@
                                     }
                                 },
                                 {
-                                    "rule": "Or",
+                                    "rule": "HasAny",
                                     "options": [],
                                     "filtered_resolution": false,
-                                    "children": [
-                                        {
-                                            "rule": "Has",
-                                            "options": [],
-                                            "filtered_resolution": false,
-                                            "args": {
-                                                "item_name": "Electric Breath",
-                                                "count": 1
-                                            }
-                                        },
-                                        {
-                                            "rule": "HasAll",
-                                            "options": [],
-                                            "filtered_resolution": false,
-                                            "args": {
-                                                "item_names": [
-                                                    "Charge",
-                                                    "Ice Breath"
-                                                ]
-                                            }
-                                        }
-                                    ]
+                                    "args": {
+                                        "item_names": [
+                                            "Electric Breath",
+                                            "Ice Breath"
+                                        ]
+                                    }
                                 }
                             ]
                         },
