@@ -2108,11 +2108,72 @@
             }
         ]
     },
-    "DVByrdUpper": {
-        "name": "DVByrdUpper",
+    "DVByrdUpper1": {
+        "name": "DVByrdUpper1",
         "entrances": [
             {
-                "name": "DVByrdLower -> DVByrdUpper",
+                "name": "DVByrdLower -> DVByrdUpper1",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Dragon Village Skip Charge",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "DV: Dark Gem above Sgt. Byrd",
+                "id": 102,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "DV: Dragon Egg above Sgt. Byrd",
+                "id": 303,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "gem_events": []
+    },
+    "DVByrdUpper2": {
+        "name": "DVByrdUpper2",
+        "entrances": [
+            {
+                "name": "DVByrdLower -> DVByrdUpper2",
                 "access_rule": {
                     "rule": "Has",
                     "options": [],
@@ -2167,28 +2228,6 @@
             {
                 "name": "DV: Light Gem above Sgt. Byrd",
                 "id": 202,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "DV: Dark Gem above Sgt. Byrd",
-                "id": 102,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "DV: Dragon Egg above Sgt. Byrd",
-                "id": 303,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",

@@ -15,7 +15,7 @@ class LoggingLevel(IntEnum):
 
 TRICK_LEVELS = {
     "Easy": ["Glide Above Elder Astor", "Toxic Rise Without Electric"],
-    "Medium": [],
+    "Medium": ["Dragon Village Skip Charge"],
     "Hard": [],
     "Other": ["Fire Breath Idle Animation"]
 }

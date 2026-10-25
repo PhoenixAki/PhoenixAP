@@ -8,14 +8,6 @@ from worlds.spyro_aht.data import consts
 from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
 
-# takes some key (mostly entrance/location names) and returns a trick name, used to create option filter dicts.
-# hardcoded to indices here to keep the trick names themselves in one place in consts
-trick_lookup = {
-    "glide_above_elder_astor": consts.TRICK_LEVELS["Easy"][0],
-    "toxic_rise_without_electric": consts.TRICK_LEVELS["Easy"][1],
-    "fire_breath_idle_animation": consts.TRICK_LEVELS["Other"][0]
-}
-
 regions = {}
 ########################################################################################################################
 # load regions
@@ -45,7 +37,7 @@ for line in file_in:
         normal_rule = eval(rule.split(" | ")[0])
         trick_name = rule.split(" | ")[1].split(" ", 1)[0]  # left half of trick rule side is name with underscore spaces
         trick_rule = eval(rule.split(" | ")[1].split(" ", 1)[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[trick_name], operator="contains"),)
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name.replace("_", " "), operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule = eval(rule)
@@ -70,7 +62,7 @@ for line in file_in:
         normal_rule = eval(loc_rule.split(" | ")[0])
         trick_name = loc_rule.split(" | ")[1].split(" ", 1)[0]
         trick_rule = eval(loc_rule.split(" | ")[1].split(" ", 1)[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[trick_name], operator="contains"),)
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name.replace("_", " "), operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule = eval(loc_rule)
@@ -118,7 +110,7 @@ for line in file_in:
         normal_rule = eval(event_rule.split(" | ")[0])
         trick_name = event_rule.split(" | ")[1].split(" ", 1)[0]
         trick_rule = eval(event_rule.split(" | ")[1].split(" ", 1)[1])
-        trick_rule.options = (OptionFilter(EnabledTricks, trick_lookup[trick_name], operator="eq"),)
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name.replace("_", " "), operator="eq"),)
         evaluated_rule = Or(normal_rule, trick_rule)
     else:
         evaluated_rule: Rule = eval(event_rule)

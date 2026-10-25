@@ -3,7 +3,8 @@ ShopPads
 DVEntry
 DVGnastyCave
 DVByrdLower
-DVByrdUpper
+DVByrdUpper1
+DVByrdUpper2
 DVLabSecret
 DVHunterPreGlide
 DVHunterPostGlide
