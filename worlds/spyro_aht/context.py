@@ -5,6 +5,7 @@ import collections
 
 import Utils
 from CommonClient import ClientCommandProcessor, logger
+from Options import Choice, Range, OptionSet, OptionDict, Toggle, OptionCounter
 from kvui import GameManager
 
 tracker_loaded = False
@@ -66,193 +67,32 @@ class SpyroAHTCommands(ClientCommandProcessor):
         # even if it was reformatted it'd still be the same amount of output and data lookup, it's just code cleanliness
         """Displays seed information, retrieved directly from data sent from Archipelago.
         Some of this info is also viewable on the pause menu."""
-        from . import options
+        from .options import spyro_options_groups
         
         if len(self.ctx.slot_data) == 0:
             self.output("Connect to a slot before using commands.")
             return True
         
-        self.output("---------------DEATHLINK---------------")
-        # death link
-        convert = {0: "disabled", 1: "enabled (shielded)", 2: "enabled"}
-        self.output(f"DeathLink is set to {convert[self.ctx.slot_data['death_link']]}.")
-        # amnesty
-        if self.ctx.slot_data["death_link"] != 0:
-            self.output(f"You chose to have DeathLink deaths be sent out every {self.ctx.slot_data['death_link_amnesty']} AHT death(s).")
-        
-        self.output("---------------GENERATION SETTINGS---------------")
-        # logging level
-        convert = {1: "none", 2: "low", 3: "medium", 4: "high", 5: "maximum"}
-        self.output(f"You set your logging level to {convert[self.ctx.slot_data['logging_level']]}.")
-        # auto corrections
-        convert = {0: "halt", 1: "chaos", 2: "fix_minor", 3: "fix_major"}
-        self.output(f"auto_corrections is set to {convert[self.ctx.slot_data['auto_corrections']]}.")
-        
-        self.output("---------------GOAL---------------")
-        # 4 boss goals
-        enabled = []
-        for goal in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]:
-            if goal in self.ctx.slot_data["goals_dict"].keys(): enabled.append(goal)
-        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
-        self.output(f"Enabled Boss Goals: {output}.")
-        # 6 collectible goals
-        enabled = []
-        for goal in ["Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests"]:
-            chests = ""
-            if goal in self.ctx.slot_data["goals_dict"].keys():
-                amount = self.ctx.slot_data["goals_dict"][goal]["amount"]
-                
-                if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2:
-                    chests = " excluding chests"
-                elif goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] < 2:
-                    chests = " including chests"
-                elif goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] in [1, 3]:
-                    chests = " excluding chests"
-                elif goal == "Dragon Eggs" and self.ctx.slot_data["exclude_chest_items"] not in [1, 3]:
-                    chests = " including chests"
-                    
-                enabled.append(f"{goal} ({amount} required{chests})")
-        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
-        self.output(f"Enabled Collectible Goals: {output}.")
-        # elder goals
-        enabled = []
-        for goal in ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor"]:
-            if goal in self.ctx.slot_data["goals_dict"].keys(): enabled.append(goal)
-        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
-        self.output(f"Enabled Elder Goals: {output}.")
-        # minigame goals
-        enabled = []
-        for goal in ["Sgt. Byrd", "Blink", "Turret", "Sparx"]:
-            if goal in self.ctx.slot_data["goals_dict"].keys():
-                amount = self.ctx.slot_data["minigames_goal"][goal]
-                enabled.append(f"{goal} ({amount} required)")
-        output = "none" if len(enabled) == 0 else f"{", ".join(enabled)}"
-        self.output(f"Enabled Minigame Goals: {output}.")
-
-        self.output("---------------CHECKS & ITEMS---------------")
-        # open world mode
-        convert = {0: "vanilla", 1: "full", 2: "randomized", 3: "progressive levels", 4: "reverse progressive levels", 5: "full levels", 6: "full realms"}
-        self.output(f"You chose to set open world mode to {convert[self.ctx.slot_data['open_world_mode']]}.")
-        # firework checks
-        output = "enabled" if self.ctx.slot_data["firework_checks"] else "disabled"
-        self.output(f"Firework checks are {output}.")
-        # minigame checks
-        output = ""
-        for minigame_type in ["Blink", "Sgt. Byrd", "Sparx", "Turret"]:
-            output += f"{minigame_type} is set to {self.ctx.slot_data['minigame_checks'][minigame_type]}, "
-        self.output(f"Minigame Checks: {output[:-2]}.")
-        # item bundles
-        output = ""
-        for bundle_type in ["Dark Gem", "Light Gem", "Lockpick"]:
-            if bundle_type == "Lockpick" and not self.ctx.slot_data['shop_randomization']:
-                continue
-            output += f"{bundle_type} bundle size of {self.ctx.slot_data['item_bundles'][bundle_type]}, "
-        self.output(f"Item Bundling: {output[:-2]}.")
-        # filler
-        output = ""
-        for key in options.FillerItems.valid_keys:
-            if key in self.ctx.slot_data["filler_items"]:
-                output += key + ", "
-        if output == "":
-            output = "none, "
-        self.output(f"Enabled Filler Items: {output[:-2]}.")
-        # traps
-        output = ""
-        for key in options.TrapItems.valid_keys:
-            if key in self.ctx.slot_data["trap_items"]:
-                output += key + ", "
-        if output == "":
-            output = "none, "
-        self.output(f"Enabled Trap Items: {output[:-2]}.")
-        
-        self.output("---------------START OF GAME---------------")
-        # movement randomization
-        output = ""
-        for movement in ["Glide", "Swim", "Charge"]:
-            if movement in self.ctx.slot_data["movement_randomization"]:
-                output += f"{movement} randomized, "
-            else:
-                output += f"{movement} not randomized, "
-        self.output(f"Movement randomization: you chose to have {output[:-2]}.")
-        # starting breath(s)
-        output = ""
-        for breath in ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"]:
-            if breath in self.ctx.slot_data["starting_breaths"]:
-                output += f"{breath}, "
-        if output == "":
-            output += "no, "
-        self.output(f"You chose to start with {output[:-2]} breath(s).")
-        # starting realm(s)
-        self.output(f"You chose to start with access to the following realm(s): {self.ctx.slot_data['starting_realms']}.")
-
-        self.output("---------------SHOP SETTINGS---------------")
-        # shop items & key rings
-        output = "randomized" if self.ctx.slot_data["shop_randomization"] == 1 else "not randomized"
-        convert = {0: "lockpicks", 1: "per-level key rings", 2: "per-realm key rings"}
-        self.output(f"Shop items are {output} and you chose to unlock chests using {convert[self.ctx.slot_data['chest_keys']]}.")
-        if self.ctx.slot_data["shop_randomization"]:
-            # shop item count
-            self.output(f"You chose to have {self.ctx.slot_data['shop_item_count']} shop items.")
-            # shop logic
-            output = "ordered" if self.ctx.slot_data["shop_logic"] == 1 else "unordered"
-            self.output(f"The shop logic system is set to {output}.")
-            # gem collection options
-            self.output(f"You chose to collect {self.ctx.slot_data['blink_gems']}% of Blink's gems, {self.ctx.slot_data['non_blink_enemies']}% of non-Blink enemy gems, and {self.ctx.slot_data['other_gems']}% of other gems.")
-            # shop prices
-            self.output(f"This means your shop prices are {self.ctx.slot_data['shop_costs']}.")
-            # double gems
-            output = "enable" if self.ctx.slot_data['double_gems'] else "disable"
-            self.output(f"You chose to {output} the Double Gems item.")
-            
-        self.output("---------------GATE AND GADGET COSTS---------------")
-        # boss costs
-        data = self.ctx.slot_data["boss_lair_costs"]
-        self.output(f"The boss lair gates require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Dark Gems.")
-        # boss lair forcing
-        data = self.ctx.slot_data["boss_lair_forcing"]
-        convert = {0: "none of the bosses", 1: "Gnasty Gnorc", 2: "Ineptune", 3: "Red", 4: "Mecha-Red", 5: "all goal bosses"}
-        self.output(f"You chose to force {convert[data]} to have the highest boss lair cost(s).")
-        # light gem doors
-        data = self.ctx.slot_data["light_gem_door_costs"]
-        self.output(f"The Light Gem doors require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Light Gems.")
-        # gadget costs
-        data = self.ctx.slot_data["gadget_costs"]
-        self.output(f"Gadget Costs: Ball requires {data[0]} Light Gems, invincibility requires {data[1]} Light Gems, and supercharge requires {data[2]} Light Gems.")
-
-        self.output("---------------QUALITY OF LIFE---------------")
-        # pause menu patch
-        output = "open shop" if self.ctx.slot_data["pause_menu_patch"] == 0 else "teleport to hub"
-        self.output(f"You set your pause menu patch to {output}.")
-        # shop pad proximity activation
-        if self.ctx.slot_data["open_world_mode"] >= 2:
-            output = "re-enable" if self.ctx.slot_data["shop_pad_proximity_activation"] else "disable"
-            self.output(f"You chose to {output} shop pad proximity activation.")
-        # auto-hinting
-        output = ""
-        for key in options.AutoHinting.valid_keys:
-            output_2 = "on" if key in self.ctx.slot_data["auto_hinting"][key] else "off"
-            output += f"{key} is {output_2}, "
-        self.output(f"Auto Hinting: {output[:-2]}.")
-        # disguise shop items
-        if self.ctx.slot_data["shop_randomization"] == 1:
-            output = ""
-            for key in options.DisguiseShopItems.valid_keys:
-                output_2 = "hidden" if key in self.ctx.slot_data["disguise_shop_items"] else "unhidden"
-                output += f"{key}s are {output_2}, "
-            self.output(f"Randomized shop item disguising: {output[:-2]}.")
-        # easy bosses
-        output = "Boss Difficulty: "
-        for boss in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]:
-            output += f"{boss} easy, " if boss in self.ctx.slot_data["easy_bosses"] else f"{boss} normal, "
-        self.output(f"{output[:-2]}.")
-        # time savers
-        output = ""
-        for key in options.TimeSavers.valid_keys:
-            output_2 = "on" if key in self.ctx.slot_data["time_savers"][key] else "off"
-            output += f"{key} is {output_2}, "
-        self.output(f"time_saver game patches: {output[:-2]}.")
-
-        return True
+        for group in spyro_options_groups[:-1]:
+            self.output(f"---------------{group.name}---------------")
+            for option in group.options:
+                slot_data_name = option.display_name.lower().replace(" ", "_")
+                value = self.ctx.slot_data[slot_data_name]
+                if issubclass(option, Choice):
+                    self.output(f"{option.display_name} -> {option.name_lookup[value]}.")
+                elif issubclass(option, Range):
+                    self.output(f"{option.display_name} -> {value}.")
+                elif issubclass(option, OptionSet):
+                    output = ", ".join(value) if len(value) > 0 else "none"
+                    self.output(f"{option.display_name} -> {output}.")
+                elif issubclass(option, OptionDict) or issubclass(option, OptionCounter):
+                    output = ""
+                    for key in option.valid_keys:
+                        output += f"{key}: {value[key]}, "
+                    self.output(f"{option.display_name} -> {output[:-2]}.")
+                elif issubclass(option, Toggle):
+                    self.output(f"{option.display_name} -> {bool(value)}.")
+        return True                
 
     async def _cmd_check_goal(self) -> bool:
         """Details completion progress on all enabled goals, including how many checks are left to do for each."""

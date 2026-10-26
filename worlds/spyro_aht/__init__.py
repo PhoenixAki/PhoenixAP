@@ -490,7 +490,7 @@ class SpyroAHTWorld(World):
         self.options.logging_level.value = slot_data['logging_level']
         self.options.auto_corrections.value = slot_data['auto_corrections']
 
-        self.options.boss_goal.value = slot_data['boss_goal']
+        self.options.boss_goal.value = slot_data['boss_goals']
         self.options.dark_gems_goal.value = slot_data['dark_gems_goal']
         self.options.light_gems_goal.value = slot_data['light_gems_goal']
         self.options.dragon_eggs_goal.value = slot_data['dragon_eggs_goal']
@@ -1015,7 +1015,7 @@ class SpyroAHTWorld(World):
             "auto_corrections": self.options.auto_corrections.value,
             
             "goals_dict": self.goals_dict,  # used by client to easily have goal info
-            "boss_goal": self.options.boss_goal.value,
+            "boss_goals": self.options.boss_goal.value,
             "dark_gems_goal": self.options.dark_gems_goal.value,
             "light_gems_goal": self.options.light_gems_goal.value,
             "dragon_eggs_goal": self.options.dragon_eggs_goal.value,
@@ -1050,12 +1050,18 @@ class SpyroAHTWorld(World):
             "double_gems": self.options.double_gems.value,
             "shop_costs": self.shop_costs,
 
-            "randomize_boss_lair_doors": self.options.randomize_boss_lair_door_costs.value,
-            "boss_lair_costs": self.boss_lairs,
+            "randomize_boss_lair_door_costs": self.options.randomize_boss_lair_door_costs.value,
+            "boss_lair_door_cost_min": self.options.boss_lair_door_cost_min.value,
+            "boss_lair_door_cost_max": self.options.boss_lair_door_cost_max.value,
             "boss_lair_forcing": self.options.boss_lair_forcing.value,
+            "boss_lair_costs": self.boss_lairs,
             "randomize_light_gem_door_costs": self.options.randomize_light_gem_door_costs.value,
+            "light_gem_door_cost_min": self.options.light_gem_door_cost_min.value,
+            "light_gem_door_cost_max": self.options.light_gem_door_cost_max.value,
             "light_gem_door_costs": self.light_gem_doors,
             "randomize_gadget_costs": self.options.randomize_gadget_costs.value,
+            "gadget_cost_min": self.options.gadget_cost_min.value,
+            "gadget_cost_max": self.options.gadget_cost_max.value,
             "gadget_costs": self.gadget_costs,
 
             "pause_menu_patch": self.options.pause_menu_patch.value,

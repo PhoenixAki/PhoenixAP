@@ -11,7 +11,7 @@ class DeathLink(Choice):
     disabled: Disabled.
     Shielded: The Butterfly Jar will protect you from a received DeathLink death, if you have it.
     Enabled: Enabled without shielding."""
-    display_name = "DeathLink"
+    display_name = "Death Link"
     option_disabled = 0
     option_shielded = 1
     option_enabled = 2
@@ -21,7 +21,7 @@ class DeathLink(Choice):
 class DeathLinkAmnesty(Range):
     """If DeathLink is enabled, this option decides how many in-game deaths need to occur before a DeathLink
     death is sent out to the multiworld. The game mod tracks your deaths on the pause menu's box labeled "DL:"."""
-    display_name = "DeathLink Amnesty"
+    display_name = "Death Link Amnesty"
     range_start = 1
     range_end = 100
     default = 1
@@ -225,13 +225,6 @@ class MinigameChecks(OptionDict):
         "Sparx": "enabled",
         "Turret": "enabled"
     }
-    
-    
-class TrapPercentage(Range):
-    """Decides how much of the junk (fillers + traps) item pool will be traps, as a percentage out of 100."""
-    display_name = "Trap Percentage"
-    range_start = 0
-    range_end = 100
 
 
 class ItemBundles(OptionCounter):
@@ -248,6 +241,13 @@ class ItemBundles(OptionCounter):
         "Light Gem": 1,
         "Lockpick": 1
     }
+    
+    
+class TrapPercentage(Range):
+    """Decides how much of the junk (fillers + traps) item pool will be traps, as a percentage out of 100."""
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
 
 
 class FillerItems(OptionSet):
@@ -398,7 +398,7 @@ class BlinkGems(Range):
 class NonBlinkEnemies(Range):
     """Decides what % of gems from enemies you want to be expected to collect, if shop_randomization is enabled.
     Only applies to enemies in Spyro & Hunter levels."""
-    display_name = "Non-Blink Enemies"
+    display_name = "Non Blink Enemies"
     range_start = 0
     range_end = 100
     default = 75
@@ -429,7 +429,7 @@ class RandomizeBossLairDoorCosts(Choice):
     default: Each boss lair has their vanilla cost (10/20/30/40).
     randomized: Randomly pick costs in the range defined by boss_lair_door_cost_min and boss_lair_door_cost_max.
     shuffle: Vanilla boss lair costs are shuffled between each other (still 10/20/30/40 but in a random order)."""
-    display_name = "Randomize Boss Lair Requirements"
+    display_name = "Randomize Boss Lair Door Costs"
     option_default = 0
     option_randomized = 1
     option_shuffle = 2
@@ -438,7 +438,7 @@ class RandomizeBossLairDoorCosts(Choice):
 
 class BossLairDoorCostMin(Range):
     """Minimum cost for boss lairs, if set to randomized. Must be less than or equal to boss_lair_door_cost_max."""
-    display_name = "Boss Lair Door Cost Minimum"
+    display_name = "Boss Lair Door Cost Min"
     range_start = 1
     range_end = 40
     default = 10
@@ -446,7 +446,7 @@ class BossLairDoorCostMin(Range):
 
 class BossLairDoorCostMax(Range):
     """Maximum cost for boss lairs, if set to randomized."""
-    display_name = "Boss Lair Door Cost Maximum"
+    display_name = "Boss Lair Door Cost Max"
     range_start = 1
     range_end = 40
     default = 40
@@ -476,7 +476,7 @@ class RandomizeLightGemDoorCosts(Choice):
     randomized: Randomly pick costs in the range defined by light_gem_door_cost_min and light_gem_door_cost_max.
       Randomized costs can't exceed 90 if open world mode is set to vanilla.
     shuffle: Each door has their vanilla cost shuffled with the others (still 20/45/70/95 but in a random order)."""
-    display_name = "Randomize Light Gem Door Cost"
+    display_name = "Randomize Light Gem Door Costs"
     option_default = 0
     option_randomized = 1
     option_shuffle = 2
@@ -485,7 +485,7 @@ class RandomizeLightGemDoorCosts(Choice):
 
 class LightGemDoorCostMin(Range):
     """Minimum cost for light gem doors, if set to randomized. Must be less than or equal to light_gem_door_cost_max."""
-    display_name = "Minimum Light Gem Door Cost"
+    display_name = "Light Gem Door Cost Min"
     range_start = 1
     range_end = 100
     default = 20
@@ -493,7 +493,7 @@ class LightGemDoorCostMin(Range):
 
 class LightGemDoorCostMax(Range):
     """Maximum cost for light gem doors, if set to randomized."""
-    display_name = "Maximum Light Gem Door Cost"
+    display_name = "Light Gem Door Cost Max"
     range_start = 1
     range_end = 100
     default = 95
@@ -506,7 +506,7 @@ class RandomizeGadgetCosts(Choice):
     randomized: Randomly picks costs in the range defined by gadget_cost_min and gadget_cost_max.
       Randomized costs can't exceed 90 if open world mode is set to vanilla.
     shuffle: Each gadget has their vanilla cost shuffled with the others (still 8/24/40 but in a random order)."""
-    display_name = "Randomize Gadget Cost"
+    display_name = "Randomize Gadget Costs"
     option_default = 0
     option_randomized = 1
     option_shuffle = 2
@@ -515,7 +515,7 @@ class RandomizeGadgetCosts(Choice):
 
 class GadgetCostMin(Range):
     """Minimum cost for gadgets, if set to randomized. Must be less than or equal to gadget_cost_max."""
-    display_name = "Minimum Gadget Cost"
+    display_name = "Gadget Cost Min"
     range_start = 1
     range_end = 100
     default = 8
@@ -523,7 +523,7 @@ class GadgetCostMin(Range):
 
 class GadgetCostMax(Range):
     """Maximum cost for gadgets, if set to randomized."""
-    display_name = "Maximum Gadget Cost"
+    display_name = "Gadget Cost Max"
     range_start = 1
     range_end = 100
     default = 40
@@ -670,7 +670,7 @@ spyro_options_groups = [
     ]),
     OptionGroup("GOAL", [
         BossGoals, DarkGemsGoal, LightGemsGoal, DragonEggsGoal, FireworksGoal, ShopItemsGoal, 
-        LockedChestsGoal, ExcludeChestItems, EldersGoal, MinigamesGoal
+        LockedChestsGoal, EldersGoal, MinigamesGoal, ExcludeChestItems
     ]),
     OptionGroup("CHECKS AND ITEMS", [
         EnabledTricks, OpenWorldMode, FireworkChecks, MinigameChecks, ItemBundles, TrapPercentage, FillerItems, TrapItems, TrapLength
