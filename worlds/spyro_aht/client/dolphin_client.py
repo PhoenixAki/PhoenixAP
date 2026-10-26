@@ -37,7 +37,6 @@ class DolphinClient(GenericClient):
         self.addresses = None  # type: ignore
         
     async def notification_task(self):
-        from CommonClient import logger
         try:
             await self.ready.wait()
             while True:
@@ -55,10 +54,9 @@ class DolphinClient(GenericClient):
                     dolphin_memory_engine.write_bytes(self.addresses.n_TEXT_BUFFER, (msg + "\0").encode("utf_16_be"))
                     dolphin_memory_engine.write_word(self.addresses.n_TIMER, 5*60)
         except Exception:
-            logger.error("ERROR IN NOTIFICATION TASK, REPORT TO DEVS", exc_info=True)
+            self.logger.log("WARNING: Error in notification queue, please report to developers.", exc_info=True)
     
     async def trap_task(self):
-        from CommonClient import logger
         try:
             await self.ready.wait()
             while True:
@@ -73,35 +71,35 @@ class DolphinClient(GenericClient):
                     elif name == "Bounce": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 3)
                     await asyncio.sleep(self.trap_timer - 5)
         except Exception:
-            logger.error("ERROR IN TRAP TASK, REPORT TO DEVS", exc_info=True)
+            self.logger.log("WARNING: Error in trap queue, please report to developers", exc_info=True)
 
     async def connect(self):
-        from CommonClient import logger
         if not dolphin_memory_engine.is_hooked():
             dolphin_memory_engine.hook()
             game_id = dolphin_memory_engine.read_bytes(0x80000000, 6).decode()
 
             if game_id == consts.GAME_ID_NTSC:
-                logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. NTSC game detected.")
+                self.logger.log(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. NTSC game detected.")
                 self.addresses = addresses.G5SE7D()
             elif game_id == consts.GAME_ID_PAL:
-                logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. PAL game detected.")
+                self.logger.log(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. PAL game detected.")
                 self.addresses = addresses.G5SP7D()
             else:
-                logger.error(f"WARNING: Invalid or unsupported game ID of {game_id}.")
+                self.logger.log(f"WARNING: Game ID {game_id} is invalid or unsupported.")
                 return False
 
             mod_version_major, mod_version_minor = self.retrieve_mod_version()
+            mod_version_str = f"{mod_version_major}.{mod_version_minor}"
             
             if mod_version_major != consts.MOD_MAJOR:
-                logger.error(f"WARNING: Mod major version {mod_version_major} is incompatible with AHT AP {consts.CLIENT_VERSION_STR}. Please update game mod to major version {consts.MOD_MAJOR}.")
+                self.logger.log(f"WARNING: Mod version {mod_version_major} is incompatible with AHT AP version {consts.CLIENT_VERSION_STR}. Please update game mod to version {consts.MOD_MAJOR}.")
                 return False
             if mod_version_major == consts.MOD_MAJOR and mod_version_minor < consts.MOD_MINOR:
-                logger.warn(f"NOTICE: Mod minor version {mod_version_minor} is compatible with AHT AP {consts.CLIENT_VERSION_STR}, but there is at least one new minor version available which may contain new features or bugfixes. Update at your leisure.")
+                self.logger.log(f"INFO: Mod version {mod_version_str} is compatible with AHT AP version {consts.CLIENT_VERSION_STR}, but there is a newer minor version available which may contain new features or bugfixes. Update at your leisure.")
             else:
-                logger.info(f"Game mod version {mod_version_major}.{mod_version_minor} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")
+                self.logger.log(f"INFO: Game mod version {mod_version_str} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")
         else:
-            logger.warn("NOTICE: Dolphin memory engine was already hooked. This may cause issues!")  # shouldn't ever happen currently I think
+            self.logger.log("WARNING: Dolphin memory engine was already hooked. This may cause issues!")
         self.ready.set()
     
     async def disconnect(self):
@@ -203,7 +201,7 @@ class DolphinClient(GenericClient):
         if (count - value) < 0: value = count
         dolphin_memory_engine.write_word(self.addresses.GEMS, count - value)
     
-    async def damage_sparx(self, logger):
+    async def damage_sparx(self):
         health = dolphin_memory_engine.read_word(self.addresses.HEALTH)
         decrease = 32
         if health == 64 and len([item for item in self.ctx.items_received if item.item == 0xF]) == 0: return # if no red Sparx

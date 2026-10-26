@@ -144,13 +144,14 @@ class SpyroAHTWorld(World):
         self.filler_items: dict[str, list[str]] = {}
         self.goals_dict = {}  # dict of enabled goal name -> {list of ids & amount needed to goal}. Client uses it
         self.goal_events = {}  # associates goal events -> locations, used in set_rules
+        self.logging = True  # whether to log or not. This avoids the client log getting flooded with generation log messages from UT's internal gen
     
     ###############HELPER METHODS + OVERRIDES###############
     def log(self, message, level: consts.LoggingLevel):
         """Logs messages from generation."""
-        # TODO: add player name to this output
+        if not self.logging: return
         if self.options.logging_level.value >= level:
-            logging.info(f"[Spyro AHT] LOG-{level.name}: {message}")
+            logging.info(f"[Spyro AHT Player {self.player_name}] LOG-{level.name}: {message}")
     
     def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
@@ -287,6 +288,7 @@ class SpyroAHTWorld(World):
     def generate_early(self) -> None:
         passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if isinstance(passthrough, dict) and self.game in passthrough:
+            self.logging = False
             self._apply_slot_data(passthrough[self.game])
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", consts.LoggingLevel.LOW)
@@ -1194,7 +1196,7 @@ class RealmAccessRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
 def _run_client(*args: str):
     import colorama
     from CommonClient import server_loop, gui_enabled, get_base_parser
-    Utils.init_logging("Spyro: A Hero's Tail Client")
+    Utils.init_logging("Spyro_AHT")
 
     async def _main(connect: str | None, password: str | None):
         from .context import SpyroAHTContext, tracker_loaded

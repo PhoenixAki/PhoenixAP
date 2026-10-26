@@ -18,7 +18,6 @@ from NetUtils import ClientStatus, NetworkItem
 
 from .client import GenericClient, DolphinClient
 from .data import consts
-from . import SpyroAHTOptions as options
 
 
 class SpyroAHTCommands(ClientCommandProcessor):
@@ -67,6 +66,8 @@ class SpyroAHTCommands(ClientCommandProcessor):
         # even if it was reformatted it'd still be the same amount of output and data lookup, it's just code cleanliness
         """Displays seed information, retrieved directly from data sent from Archipelago.
         Some of this info is also viewable on the pause menu."""
+        from . import options
+        
         if len(self.ctx.slot_data) == 0:
             self.output("Connect to a slot before using commands.")
             return True
@@ -99,7 +100,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         for goal in ["Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests"]:
             chests = ""
             if goal in self.ctx.slot_data["goals_dict"].keys():
-                amount = self.ctx.slot_data[self.ctx.convert_goal_info[goal][1]]
+                amount = self.ctx.slot_data["goals_dict"][goal]["amount"]
                 
                 if goal == "Light Gems" and self.ctx.slot_data["exclude_chest_items"] >= 2:
                     chests = " excluding chests"
@@ -147,11 +148,22 @@ class SpyroAHTCommands(ClientCommandProcessor):
                 continue
             output += f"{bundle_type} bundle size of {self.ctx.slot_data['item_bundles'][bundle_type]}, "
         self.output(f"Item Bundling: {output[:-2]}.")
-        # filler items
+        # filler
         output = ""
-        for minigame_type in ["Dragon Eggs", "Breath Bombs", "Gem Packs", "Shinies"]:
-            if minigame_type in self.ctx.slot_data['filler_items']: output+= f"{minigame_type}, "
-        self.output(f"Enabled Filler Item Types: {output[:-2]}.")
+        for key in options.FillerItems.valid_keys:
+            if key in self.ctx.slot_data["filler_items"]:
+                output += key + ", "
+        if output == "":
+            output = "none, "
+        self.output(f"Enabled Filler Items: {output[:-2]}.")
+        # traps
+        output = ""
+        for key in options.TrapItems.valid_keys:
+            if key in self.ctx.slot_data["trap_items"]:
+                output += key + ", "
+        if output == "":
+            output = "none, "
+        self.output(f"Enabled Trap Items: {output[:-2]}.")
         
         self.output("---------------START OF GAME---------------")
         # movement randomization
@@ -164,7 +176,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
         self.output(f"Movement randomization: you chose to have {output[:-2]}.")
         # starting breath(s)
         output = ""
-        for breath in ["Fire", "Electric", "Water", "Ice"]:
+        for breath in ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"]:
             if breath in self.ctx.slot_data["starting_breaths"]:
                 output += f"{breath}, "
         if output == "":
@@ -216,14 +228,15 @@ class SpyroAHTCommands(ClientCommandProcessor):
             output = "re-enable" if self.ctx.slot_data["shop_pad_proximity_activation"] else "disable"
             self.output(f"You chose to {output} shop pad proximity activation.")
         # auto-hinting
-        output = "will" if self.ctx.slot_data["auto_hinting"]["Bosses"] == "on" else "won't"
-        output_2 = "will" if self.ctx.slot_data["auto_hinting"]["Minigames"] == "on" else "won't"
-        output_3 = "will" if self.ctx.slot_data["auto_hinting"]["Shop Items"] == "on" else "won't"
-        self.output(f"Boss rewards {output} be hinted, minigame rewards {output_2} be hinted, and randomized shop items {output_3} be hinted.")
+        output = ""
+        for key in options.AutoHinting.valid_keys:
+            output_2 = "on" if key in self.ctx.slot_data["auto_hinting"][key] else "off"
+            output += f"{key} is {output_2}, "
+        self.output(f"Auto Hinting: {output[:-2]}.")
         # disguise shop items
         if self.ctx.slot_data["shop_randomization"] == 1:
             output = ""
-            for key in options.disguise_shop_items.valid_keys:
+            for key in options.DisguiseShopItems.valid_keys:
                 output_2 = "hidden" if key in self.ctx.slot_data["disguise_shop_items"] else "unhidden"
                 output += f"{key}s are {output_2}, "
             self.output(f"Randomized shop item disguising: {output[:-2]}.")
@@ -232,13 +245,12 @@ class SpyroAHTCommands(ClientCommandProcessor):
         for boss in ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]:
             output += f"{boss} easy, " if boss in self.ctx.slot_data["easy_bosses"] else f"{boss} normal, "
         self.output(f"{output[:-2]}.")
-        # skip cutscenes & elevators
-        output = "can" if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == "on" else "can't"
-        output_2 = "can" if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on" else "can't"
-        self.output(f"Cutscenes {output} be skipped and elevators {output_2} be skipped.")
-        # teleport across realms
-        output = "can" if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == "on" else "can't"
-        self.output(f"You {output} teleport across realms.")
+        # time savers
+        output = ""
+        for key in options.TimeSavers.valid_keys:
+            output_2 = "on" if key in self.ctx.slot_data["time_savers"][key] else "off"
+            output += f"{key} is {output_2}, "
+        self.output(f"time_saver game patches: {output[:-2]}.")
 
         return True
 
@@ -557,7 +569,7 @@ class SpyroAHTContext(SuperContext):
                 total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
                 if total < item_counts["Damage Sparx"]:
                     await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 2, total + 1)
-                    await self.emu_client.damage_sparx(logger)
+                    await self.emu_client.damage_sparx()
             elif item.item == consts.ITEM_INFO["Gem Tax"][0]:
                 total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 3)
                 if total < item_counts["Gem Tax"]:
@@ -729,7 +741,6 @@ class SpyroAHTContext(SuperContext):
         return True  # does nothing but is required (and is documented as such by UT)
 
     async def check_goal(self) -> bool:
-        from CommonClient import logger
         output = []
         
         last_one = self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()) - 1  # marks if check_goal_component should acknowledge being last goal or not
@@ -741,12 +752,12 @@ class SpyroAHTContext(SuperContext):
             
         # tally goes +1 when a goal component is met. If that value matches however many goals there are, we're done!
         if self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()):
-            logger.info(f"All goals are complete, nice work!")
+            logger.log("INFO: All goals are complete, nice work!")
             await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             return True
         else:
             if len(output) > 0:
-                logger.info(f"You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
+                logger.log(f"INFO: You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
             return False
 
     async def check_goal_component(self, goal: str, last_one: bool) -> tuple[bool, str]:
@@ -769,7 +780,7 @@ class SpyroAHTContext(SuperContext):
 
             while not self.exit_event.is_set():
                 if not self.server or self.server.socket.closed:
-                    logger.info("Client disconnected")
+                    logger.log("INFO: Client disconnected.")
                     await self.emu_client.disconnect()
                     return
 
@@ -793,7 +804,7 @@ class SpyroAHTContext(SuperContext):
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:
-            logger.error("ERROR IN EMULATOR LOOP, PLEASE REPORT TO DEVS", exc_info=True)
+            logger.log("WARNING: Error in main emulator loop, please report to developers.", exc_info=True)
     
     async def _send_deathlink(self):
         if not self.deathlink_outgoing:  # client-side toggling of deathlink
