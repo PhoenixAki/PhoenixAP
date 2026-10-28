@@ -20,7 +20,7 @@ id_lookup = {"Starter Checks": "A", "Moneybags": "B", "DV": "C", "CS": "D", "DF"
 
 ###############WORLD CLASS HELPER FUNCTIONS###############
 def _load_file(file: str) -> Any:
-    return orjson.loads(pkgutil.get_data(__name__, file).decode("utf-8")) # type: ignore
+    return orjson.loads(pkgutil.get_data(__name__, file).decode("utf-8"))
 
 
 def create_item_groups() -> dict[str, set[str]]:
@@ -1011,7 +1011,8 @@ class SpyroAHTWorld(World):
         for child in rule.children:
             for option in child.options:
                 if option.option.display_name == "Enabled Tricks":
-                    rule.children = (rule.children[0], Has('Glitched Logic Item'))
+                    rule.children[1].options = ()
+                    rule.children = (rule.children[0], And(Has("Glitched Logic Item"), rule.children[1]))
         return rule
     
     def fill_slot_data(self):
