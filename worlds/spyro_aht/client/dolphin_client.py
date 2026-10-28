@@ -8,10 +8,11 @@ from typing import TYPE_CHECKING
 import dolphin_memory_engine
 
 from NetUtils import NetworkItem
-from ..data import consts, addresses
+from . import addresses
+from .. import consts
 
 if TYPE_CHECKING:
-    from ..context import SpyroAHTContext
+    from .context import SpyroAHTContext
 
 class DolphinClient:
     def retrieve_mod_version(self) -> tuple[int, int]:
@@ -340,7 +341,7 @@ class DolphinClient:
             if "Player" in self.ctx.slot_data["disguise_shop_items"]: player = "???"
             if "Item" in self.ctx.slot_data["disguise_shop_items"]: name = "???"
             if "Model" in self.ctx.slot_data["disguise_shop_items"]: model = consts.ShopItemModel.Lockpick
-            bought = consts.SHOP_ITEM_IDS[0]+item_num in self.ctx.checked_locations
+            bought = consts.SHOP_ITEM_IDS[0] + item_num in self.ctx.checked_locations
             
             i = consts.XLSShoppingItem(model, consts.TextEntry(item_num, f"{player}'s {name}", bought), (price, remote_price), large_prices)
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (item_num + 1)), i.to_bytes('big'))

@@ -17,9 +17,8 @@ except ModuleNotFoundError:
 
 from NetUtils import ClientStatus, NetworkItem
 
-from .client import DolphinClient
-from .data import consts
-
+from .dolphin_client import DolphinClient
+from .. import consts
 
 class SpyroAHTCommands(ClientCommandProcessor):
     ctx: SpyroAHTContext
@@ -327,7 +326,7 @@ class SpyroAHTContext(SuperContext):
                 else: ring_ids = [item.item]  # already is a level key ring id
                 
                 for ring_id in ring_ids:
-                    key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1]-3))
+                    key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1] - 3))
                     bit = key_ring_id_list.index(ring_id)
                     address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
                     await self._set_keyring_or_shop(bit, address)
@@ -662,7 +661,7 @@ class SpyroAHTContext(SuperContext):
         if death_id:
             if death_id < 0 or death_id > 27:
                 raise TypeError(f"Invalid outgoing deathlink id: {death_id}.")
-            await self.send_death(consts.DEATHLINK_MESSAGES[death_id-1].format(name=self.player_names[self.slot]))
+            await self.send_death(consts.DEATHLINK_MESSAGES[death_id - 1].format(name=self.player_names[self.slot]))
 
     async def _receive_deathlink(self, msg: str):
         self.emu_client.msg_queue.put_nowait((consts.COLOUR_RED, msg))

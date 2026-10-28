@@ -2,11 +2,11 @@ import json
 
 import itertools
 from rule_builder.options import OptionFilter
-from worlds.spyro_aht.options import ShopRandomization, MinigameChecks, ShopItemCount, FireworkChecks, EnabledTricks
+from ..options import ShopRandomization, MinigameChecks, ShopItemCount, FireworkChecks, EnabledTricks
 # These are imported so that eval() can recognize them as types below
 from rule_builder.rules import Rule, NestedRule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion, CanReachLocation
-from worlds.spyro_aht.data import consts
-from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
+from .. import consts
+from ..AHTWorld import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
 
 regions = {}

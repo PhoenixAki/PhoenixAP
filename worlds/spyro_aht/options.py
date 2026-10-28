@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import itertools
 
 from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup,StartInventoryPool, OptionDict, OptionCounter
-from .data import consts
+from . import consts
 
 ###############DEATHLINK###############
 class DeathLink(Choice):
