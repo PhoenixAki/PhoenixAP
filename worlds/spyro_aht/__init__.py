@@ -12,11 +12,11 @@ import Utils
 from BaseClasses import Item, MultiWorld, Region, CollectionState, ItemClassification
 from Options import OptionError, OptionSet, Choice, Range, OptionDict
 from rule_builder.options import OptionFilter
-from rule_builder.rules import Has, Rule, True_, And, False_, HasAny
+from rule_builder.rules import Has, Rule, True_, And, False_, HasAny, Or
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import icon_paths
 from .data import consts
-from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups, MinigameChecks
+from .options import MovementRandomization, SpyroAHTOptions, StartingBreaths, spyro_options_groups, MinigameChecks, EnabledTricks
 
 icon_paths['spyro_aht'] = f'ap:{__name__}/icons/dark_gem_icon.png'
 
@@ -133,6 +133,7 @@ class SpyroAHTWorld(World):
     location_name_groups = create_location_groups(location_data)
     
     ut_can_gen_without_yaml = True
+    glitches_item_name = "Glitched Logic Item"
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -144,12 +145,12 @@ class SpyroAHTWorld(World):
         self.filler_items: dict[str, list[str]] = {}
         self.goals_dict = {}  # dict of enabled goal name -> {list of ids & amount needed to goal}. Client uses it
         self.goal_events = {}  # associates goal events -> locations, used in set_rules
-        self.logging = True  # whether to log or not. This avoids the client log getting flooded with generation log messages from UT's internal gen
+        self.ut_active = False  # affects logging and rule adjustments for UT glitched logic support
     
     ###############HELPER METHODS + OVERRIDES###############
     def log(self, message, level: consts.LoggingLevel):
         """Logs messages from generation."""
-        if not self.logging: return
+        if self.ut_active: return
         if self.options.logging_level.value >= level:
             logging.info(f"[Spyro AHT Player {self.player_name}] LOG-{level.name}: {message}")
     
@@ -288,7 +289,7 @@ class SpyroAHTWorld(World):
     def generate_early(self) -> None:
         passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if isinstance(passthrough, dict) and self.game in passthrough:
-            self.logging = False
+            self.ut_active = True
             self._apply_slot_data(passthrough[self.game])
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", consts.LoggingLevel.LOW)
@@ -482,8 +483,6 @@ class SpyroAHTWorld(World):
         self.log(f"Boss Lair Costs (in Dark Gems): Gnasty Gnorc requires {self.boss_lairs[0]}, Ineptune requires {self.boss_lairs[1]}, Red requires {self.boss_lairs[2]}, and Mecha-Red requires {self.boss_lairs[3]}.", consts.LoggingLevel.MEDIUM)
 
     def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
-        self._ut_active = True
-
         self.options.death_link.value = slot_data['death_link']
         self.options.death_link_amnesty.value = slot_data['death_link_amnesty']
 
@@ -682,6 +681,7 @@ class SpyroAHTWorld(World):
             for entrance in region_data['entrances']:
                 region_from, region_to = entrance['name'].split(" -> ")
                 rule = self.rule_from_dict(entrance['access_rule'])
+                if isinstance(rule, Or) and self.ut_active: rule = self.fix_rule_for_ut(rule)
                 self.get_region(region_from).connect(self.get_region(region_to), f"{region_from} => {region_to}", rule)
                 self.log(f"Connected region {region_from} to region {region_to} with rule {rule}.", consts.LoggingLevel.MAXIMUM)
         self.log("Regions connected.", consts.LoggingLevel.HIGH)
@@ -999,11 +999,22 @@ class SpyroAHTWorld(World):
             for location in region['locations']:
                 try: loc = self.get_location(location['name'])
                 except KeyError: continue
-                self.set_rule(loc, self.rule_from_dict(location['access_rule']))
+                rule = self.rule_from_dict(location['access_rule'])
+                if isinstance(rule, Or) and self.ut_active: rule = self.fix_rule_for_ut(rule)
+                self.set_rule(loc, rule)
 
         # this does goal events, would be more straightforward to do in create_goal_events, but that fails a unit test
         for goal_event, location_name in self.goal_events.items():
             self.get_location(goal_event).access_rule = self.get_location(location_name).access_rule
+    
+    def fix_rule_for_ut(self, rule: Or):
+        """Takes an Or rule and, if it is a trick-affected rule, returns the rule with its trick rule replaced with a UT glitched logic rule.
+        Otherwise, returns the rule unmodified."""
+        for child in rule.children:
+            for option in child.options:
+                if option.option.display_name == "Enabled Tricks":
+                    rule.children = (rule.children[0], Has('Glitched Logic Item'))
+        return rule
     
     def fill_slot_data(self):
         self.log("Filling slot data.", consts.LoggingLevel.LOW)

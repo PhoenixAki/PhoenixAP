@@ -54,7 +54,7 @@ class DolphinClient(GenericClient):
                     dolphin_memory_engine.write_bytes(self.addresses.n_TEXT_BUFFER, (msg + "\0").encode("utf_16_be"))
                     dolphin_memory_engine.write_word(self.addresses.n_TIMER, 5*60)
         except Exception:
-            self.logger.log("WARNING: Error in notification queue, please report to developers.", exc_info=True)
+            self.logger.info("WARNING: Error in notification queue, please report to developers.", exc_info=True)
     
     async def trap_task(self):
         try:
@@ -71,7 +71,7 @@ class DolphinClient(GenericClient):
                     elif name == "Bounce": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 3)
                     await asyncio.sleep(self.trap_timer - 5)
         except Exception:
-            self.logger.log("WARNING: Error in trap queue, please report to developers", exc_info=True)
+            self.logger.info("WARNING: Error in trap queue, please report to developers", exc_info=True)
 
     async def connect(self):
         if not dolphin_memory_engine.is_hooked():
@@ -79,27 +79,27 @@ class DolphinClient(GenericClient):
             game_id = dolphin_memory_engine.read_bytes(0x80000000, 6).decode()
 
             if game_id == consts.GAME_ID_NTSC:
-                self.logger.log(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. NTSC game detected.")
+                self.logger.info(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. NTSC game detected.")
                 self.addresses = addresses.G5SE7D()
             elif game_id == consts.GAME_ID_PAL:
-                self.logger.log(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. PAL game detected.")
+                self.logger.info(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. PAL game detected.")
                 self.addresses = addresses.G5SP7D()
             else:
-                self.logger.log(f"WARNING: Game ID {game_id} is invalid or unsupported.")
+                self.logger.info(f"WARNING: Game ID {game_id} is invalid or unsupported.")
                 return False
 
             mod_version_major, mod_version_minor = self.retrieve_mod_version()
             mod_version_str = f"{mod_version_major}.{mod_version_minor}"
             
             if mod_version_major != consts.MOD_MAJOR:
-                self.logger.log(f"WARNING: Mod version {mod_version_major} is incompatible with AHT AP version {consts.CLIENT_VERSION_STR}. Please update game mod to version {consts.MOD_MAJOR}.")
+                self.logger.info(f"WARNING: Mod version {mod_version_major} is incompatible with AHT AP version {consts.CLIENT_VERSION_STR}. Please update game mod to version {consts.MOD_MAJOR}.")
                 return False
             if mod_version_major == consts.MOD_MAJOR and mod_version_minor < consts.MOD_MINOR:
-                self.logger.log(f"INFO: Mod version {mod_version_str} is compatible with AHT AP version {consts.CLIENT_VERSION_STR}, but there is a newer minor version available which may contain new features or bugfixes. Update at your leisure.")
+                self.logger.info(f"INFO: Mod version {mod_version_str} is compatible with AHT AP version {consts.CLIENT_VERSION_STR}, but there is a newer minor version available which may contain new features or bugfixes. Update at your leisure.")
             else:
-                self.logger.log(f"INFO: Game mod version {mod_version_str} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")
+                self.logger.info(f"INFO: Game mod version {mod_version_str} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")
         else:
-            self.logger.log("WARNING: Dolphin memory engine was already hooked. This may cause issues!")
+            self.logger.info("WARNING: Dolphin memory engine was already hooked. This may cause issues!")
         self.ready.set()
     
     async def disconnect(self):
@@ -255,7 +255,7 @@ class DolphinClient(GenericClient):
         
         if self.ctx.slot_data["randomize_light_gem_door_costs"]:
             dolphin_memory_engine.write_bytes(self.addresses.p_LG_DOOR_COSTS, struct.pack(">BBBB", *self.ctx.slot_data["light_gem_door_costs"]))
-        if self.ctx.slot_data["randomize_boss_lair_doors"]:
+        if self.ctx.slot_data["randomize_boss_lair_door_costs"]:
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_COSTS, struct.pack(">BBBB", *self.ctx.slot_data["boss_lair_costs"]))
         
         b, i, s = self.ctx.slot_data['gadget_costs']

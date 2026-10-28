@@ -592,12 +592,12 @@ class SpyroAHTContext(SuperContext):
             
         # tally goes +1 when a goal component is met. If that value matches however many goals there are, we're done!
         if self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()):
-            logger.log("INFO: All goals are complete, nice work!")
+            logger.info("INFO: All goals are complete, nice work!")
             await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             return True
         else:
             if len(output) > 0:
-                logger.log(f"INFO: You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
+                logger.info(f"INFO: You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
             return False
 
     async def check_goal_component(self, goal: str, last_one: bool) -> tuple[bool, str]:
@@ -620,7 +620,7 @@ class SpyroAHTContext(SuperContext):
 
             while not self.exit_event.is_set():
                 if not self.server or self.server.socket.closed:
-                    logger.log("INFO: Client disconnected.")
+                    logger.info("INFO: Client disconnected.")
                     await self.emu_client.disconnect()
                     return
 
@@ -644,7 +644,7 @@ class SpyroAHTContext(SuperContext):
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:
-            logger.log("WARNING: Error in main emulator loop, please report to developers.", exc_info=True)
+            logger.info("WARNING: Error in main emulator loop, please report to developers.", exc_info=True)
     
     async def _send_deathlink(self):
         if not self.deathlink_outgoing:  # client-side toggling of deathlink

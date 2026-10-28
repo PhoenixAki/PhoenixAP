@@ -208,7 +208,9 @@ ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     "Treasure from the 10th Dimension": (189, filler), "Stress Ball for Gnasty Gnorc": (190, filler), "Portable Heater for the Ice Princess": (191, filler),
     "Apartment Lease for Teena": (192, filler), "New Sneakers for Crash": (193, filler), "Green Eco for Jak": (194, filler), "Oil Change for Clank": (195, filler),
     # traps
-    "Spam Call": (200, trap), "Reverse Controls": (201, trap), "Damage Sparx": (202, trap), "Gem Tax": (203, trap), "Bounce": (204, trap)
+    "Spam Call": (200, trap), "Reverse Controls": (201, trap), "Damage Sparx": (202, trap), "Gem Tax": (203, trap), "Bounce": (204, trap),
+    # glitched logic item name, solely for UT support. ID None because it's an event item
+    "Glitched Logic Item": (999, prog)
 }
 
 ITEM_GROUP_IDS = {  # "Name": [start of id range, end of id range] INCLUSIVE
