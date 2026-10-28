@@ -8,13 +8,12 @@ from typing import TYPE_CHECKING
 import dolphin_memory_engine
 
 from NetUtils import NetworkItem
-from .client import GenericClient
 from ..data import consts, addresses
 
 if TYPE_CHECKING:
     from ..context import SpyroAHTContext
 
-class DolphinClient(GenericClient):
+class DolphinClient:
     def retrieve_mod_version(self) -> tuple[int, int]:
         mod_version_full = dolphin_memory_engine.read_word(self.addresses.AP_VERSION_MAJOR)
         mod_version_major = mod_version_full >> 16
@@ -119,14 +118,13 @@ class DolphinClient(GenericClient):
 
     async def scan_locations(self, slot_data: dict) -> set[int]:
         result: set[int] = set()
-        for aploc, index in consts.LOCATIONS_BITFIELD.items():
+        for loc_id, offset in consts.LOCATIONS_BITFIELD.items():
             await asyncio.sleep(0)
 
-            addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
-            data = dolphin_memory_engine.read_byte(addr)
-            flag = data & (0b01 << ((index * 2) % 8))
-            if flag:
-                match aploc:
+            data = dolphin_memory_engine.read_byte(self.addresses.g_LOCATION_BITFIELD_COLLECTED + (offset // 8))
+            checked = data & 1 << (offset % 8)
+            if checked:
+                match loc_id:
                     case 701:  # breath from gnasty -> add defeated gnasty
                         result.update({701, 702})
                     case 703:  # breath from ineptune -> add defeated ineptune
@@ -134,7 +132,7 @@ class DolphinClient(GenericClient):
                     case 705:  # breath from red -> add defeated red
                         result.update({705, 706})
                     case _:
-                        result.add(aploc)
+                        result.add(loc_id)
         
         if slot_data["shop_randomization"]:
             for i in range(slot_data["shop_item_count"]):
@@ -348,20 +346,26 @@ class DolphinClient(GenericClient):
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (item_num + 1)), i.to_bytes('big'))
             dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * item_num), i.text.to_bytes('big'))
 
-    async def update_tracker(self, in_logic_ids_to_names: dict[str, str]):
+    async def update_tracker(self, in_logic_ids_to_names: dict[str, str], in_glitched_ids_to_names: dict[str, str]):
         # server_locations is list of all location ids for this slot, regardless of check status. combination of checked_locations and missing_locations
         for loc_id in self.ctx.server_locations:
-            if loc_id not in consts.LOCATIONS_BITFIELD: continue  # skip if no icon
-            if loc_id not in self.ctx.checked_locations and in_logic_ids_to_names[str(loc_id)] == "": continue  # skip if not in logic and not checked
-            mask = 0b01 if loc_id in self.ctx.checked_locations else 0b10
-            await self.write_icon(consts.LOCATIONS_BITFIELD[loc_id], mask)
-    
-    async def write_icon(self, index: int, mask: int):
-        """Updates a map icon. The only part that is generalized is what mask is used (0b01 for collected bit, 0b10 for reachable bit)."""
-        addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
-        bit = (index * 2) % 8
-        data = dolphin_memory_engine.read_byte(addr)
-        dolphin_memory_engine.write_byte(addr, data | (mask << bit))
+            # exclusions: skip if no icon or if unchecked + unreachable
+            if loc_id not in consts.LOCATIONS_BITFIELD: continue
+            if loc_id not in self.ctx.checked_locations and in_logic_ids_to_names[str(loc_id)] == "" and in_glitched_ids_to_names[str(loc_id)] == "": continue
+            
+            # otherwise, update the icon accordingly to be checked, reachable, or glitched-reachable
+            if in_logic_ids_to_names[str(loc_id)] != "":
+                await self.write_icon(self.addresses.g_LOCATION_BITFIELD_REACHABLE, consts.LOCATIONS_BITFIELD[loc_id])
+            elif in_glitched_ids_to_names[str(loc_id)] != "":
+                await self.write_icon(self.addresses.g_LOCATION_BITFIELD_REACHABLE_TRICK, consts.LOCATIONS_BITFIELD[loc_id])
+            elif loc_id in self.ctx.checked_locations:
+                await self.write_icon(self.addresses.g_LOCATION_BITFIELD_COLLECTED, consts.LOCATIONS_BITFIELD[loc_id])
+            
+    async def write_icon(self, bitfield: int, bit: int):
+        """Updates a map icon, given a bitfield address and index."""
+        data = dolphin_memory_engine.read_byte(bitfield + (bit // 8))
+        flag = 1 << (bit % 8)
+        dolphin_memory_engine.write_byte(bitfield + (bit // 8), data | flag)
 
     async def update_pause_gems(self, events: list[str]):
         if not self.ctx.slot_data["shop_randomization"]:

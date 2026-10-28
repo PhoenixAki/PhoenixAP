@@ -17,7 +17,7 @@ except ModuleNotFoundError:
 
 from NetUtils import ClientStatus, NetworkItem
 
-from .client import GenericClient, DolphinClient
+from .client import DolphinClient
 from .data import consts
 
 
@@ -63,8 +63,6 @@ class SpyroAHTCommands(ClientCommandProcessor):
         return True
 
     async def _cmd_list_options(self) -> bool:
-        # this is grossly repetitive, but it only runs when the player demands it so it's not a big deal
-        # even if it was reformatted it'd still be the same amount of output and data lookup, it's just code cleanliness
         """Displays seed information, retrieved directly from data sent from Archipelago.
         Some of this info is also viewable on the pause menu."""
         from .options import spyro_options_groups
@@ -195,11 +193,13 @@ class SpyroAHTContext(SuperContext):
         if tracker_loaded:
             super().set_events_callback(self._event_update)
             super().set_callback(self._location_update)
+            super().set_glitches_callback(self._glitches_update)
         self.tracker_found = tracker_loaded
         
         # these update whenever UT reports a new location or event is in logic
         self._in_logic_events: list[str] = []
         self._in_logic_locations: list[str] = []
+        self._in_glitched_logic_locations: list[str] = []
         
         # these cut back on repetitively scanning to-be-hinted locations after they've been hinted already
         self.shop_hinted = False
@@ -579,6 +579,15 @@ class SpyroAHTContext(SuperContext):
             id = str(loc_names_to_ids[loc_name])
             self.in_logic_ids_to_names[id] = loc_name
         return True  # does nothing but is required (and is documented as such by UT)
+    
+    def _glitches_update(self, locations: list[str]) -> bool:
+        from . import loc_names_to_ids
+        self._in_glitched_logic_locations = locations
+        self.in_glitched_ids_to_names = collections.defaultdict(str)
+        for loc_name in self._in_glitched_logic_locations:
+            id = str(loc_names_to_ids[loc_name])
+            self.in_glitched_ids_to_names[id] = loc_name
+        return True  # does nothing but is required (and is documented as such by UT)
 
     async def check_goal(self) -> bool:
         output = []
@@ -640,7 +649,7 @@ class SpyroAHTContext(SuperContext):
                     if tracker_loaded:
                         await self.emu_client.update_pause_gems(self._in_logic_events)
                     if tracker_loaded:
-                        await self.emu_client.update_tracker(self.in_logic_ids_to_names)
+                        await self.emu_client.update_tracker(self.in_logic_ids_to_names, self.in_glitched_ids_to_names)
                     if not has_goaled:
                         has_goaled = await self.check_goal()
         except Exception:

@@ -20,8 +20,8 @@ TRICK_LEVELS = {
     "Other": ["Fire Breath Idle Animation"]
 }
 
-MOD_MAJOR = 20
-MOD_MINOR = 2
+MOD_MAJOR = 21
+MOD_MINOR = 0
 MOD_VERSION_STR = f"{MOD_MAJOR}.{MOD_MINOR}"
 
 CLIENT_MAJOR = 2
