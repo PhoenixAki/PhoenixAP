@@ -146,6 +146,7 @@ SPARX_IDS = [315, 217, 331, 238, 341, 254, 356, 275]
 ###############ITEM REFERENCES###############
 # just to shorten references to these below
 filler, prog, useful, trap, prog_dep_skip = ItemClassification.filler, ItemClassification.progression, ItemClassification.useful, ItemClassification.trap, ItemClassification.progression_deprioritized_skip_balancing
+GLITCHED_LOGIC_ITEM_NAME = "Trick Enabled"  # just so it's not hardcoded into AHTWorld.py
 
 ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     # elder abilities
@@ -210,7 +211,7 @@ ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     # traps
     "Spam Call": (200, trap), "Reverse Controls": (201, trap), "Damage Sparx": (202, trap), "Gem Tax": (203, trap), "Bounce": (204, trap),
     # glitched logic item name, solely for UT support. ID None because it's an event item
-    "Glitched Logic Item": (999, prog)
+    GLITCHED_LOGIC_ITEM_NAME: (999, prog)
 }
 
 ITEM_GROUP_IDS = {  # "Name": [start of id range, end of id range] INCLUSIVE

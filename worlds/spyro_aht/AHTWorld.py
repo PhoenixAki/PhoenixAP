@@ -128,7 +128,7 @@ class SpyroAHTWorld(World):
     location_name_groups = create_location_groups(location_data)
     
     ut_can_gen_without_yaml = True
-    glitches_item_name = "Glitched Logic Item"
+    glitches_item_name = consts.GLITCHED_LOGIC_ITEM_NAME
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -1012,7 +1012,7 @@ class SpyroAHTWorld(World):
             for option in child.options:
                 if option.option.display_name == "Enabled Tricks":
                     rule.children[1].options = ()
-                    rule.children = (rule.children[0], And(Has("Glitched Logic Item"), rule.children[1]))
+                    rule.children = (rule.children[0], And(Has(consts.GLITCHED_LOGIC_ITEM_NAME), rule.children[1]))
         return rule
     
     def fill_slot_data(self):

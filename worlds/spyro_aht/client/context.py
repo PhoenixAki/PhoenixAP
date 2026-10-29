@@ -64,7 +64,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
     async def _cmd_list_options(self) -> bool:
         """Displays seed information, retrieved directly from data sent from Archipelago.
         Some of this info is also viewable on the pause menu."""
-        from .options import spyro_options_groups
+        from ..options import spyro_options_groups
         
         if len(self.ctx.slot_data) == 0:
             self.output("Connect to a slot before using commands.")
@@ -317,9 +317,9 @@ class SpyroAHTContext(SuperContext):
             if item in self._handled_items: continue
             self._handled_items.add(item)
             if consts.ITEM_GROUP_IDS["Elder Abilities"][0] <= item.item <= consts.ITEM_GROUP_IDS["Abilities"][1]:
-                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
                 if not await self.emu_client.has_any_breath() and consts.ITEM_GROUP_IDS["Breaths"][0] <= item.item <= consts.ITEM_GROUP_IDS["Breaths"][1]:
                     await self.emu_client.set_breath(item.item)
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
             elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
                 if item.item >= consts.ITEM_GROUP_IDS["Key Rings"][1]-4:  # if realm key ring, needs converting into list of level key rings
                     ring_ids = consts.REALM_KEY_RING_LOOKUP[item.item]  # converts from realm key ring id -> list of level key ring ids
@@ -571,7 +571,7 @@ class SpyroAHTContext(SuperContext):
         return True  # does nothing but is required (and is documented as such by UT)
     
     def _location_update(self, locations: list[str]) -> bool:
-        from . import loc_names_to_ids
+        from ..AHTWorld import loc_names_to_ids
         self._in_logic_locations = locations
         self.in_logic_ids_to_names = collections.defaultdict(str)
         for loc_name in self._in_logic_locations:
@@ -580,7 +580,7 @@ class SpyroAHTContext(SuperContext):
         return True  # does nothing but is required (and is documented as such by UT)
     
     def _glitches_update(self, locations: list[str]) -> bool:
-        from . import loc_names_to_ids
+        from ..AHTWorld import loc_names_to_ids
         self._in_glitched_logic_locations = locations
         self.in_glitched_ids_to_names = collections.defaultdict(str)
         for loc_name in self._in_glitched_logic_locations:
