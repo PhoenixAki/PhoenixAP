@@ -301,15 +301,24 @@ class SpyroAHTContext(SuperContext):
                             msg = f"[Hint] {player}'s {self.item_names.lookup_in_slot(item.item, args['receiving'])} is at {location}"
                             self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
     
-    async def start_emu_client(self):
+    async def start_emu_client(self) -> bool:
         # bizarre issue where passworded seeds re-trigger parts of the emu and connection setup process
         # this ensures that if dolphin engine is hooked through that, to unhook it first before continuing as usual
         if self.emu_client is not None:
             await self.emu_client.disconnect()
+            
         self.emu_client = DolphinClient(self, logger)
-        await self.emu_client.connect()
+        
+        # this validates game id and mod version and sets up addresses. Could throw exception if there's mismatches
+        try:
+            await self.emu_client.connect()
+        except Exception as e:
+            logger.info(e)
+            return False
+        
         await self.emu_client.apply_patch()
         await self.emu_client.ready.wait()
+        return True
     
     async def _receive_items(self):
         item_counts = collections.Counter(self.item_names.lookup_in_slot(i.item, self.slot) for i in self.items_received)
@@ -624,7 +633,8 @@ class SpyroAHTContext(SuperContext):
         has_goaled = False
         try:
             await self.auth_ready.wait()
-            await self.start_emu_client()
+            if not await self.start_emu_client():
+                return
 
             while not self.exit_event.is_set():
                 if not self.server or self.server.socket.closed:

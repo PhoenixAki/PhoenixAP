@@ -74,6 +74,7 @@ class DolphinClient:
             self.logger.info("WARNING: Error in trap queue, please report to developers", exc_info=True)
 
     async def connect(self):
+        # exceptions raised here are caught and handled in context.py:start_emu_client
         if not dolphin_memory_engine.is_hooked():
             dolphin_memory_engine.hook()
             game_id = dolphin_memory_engine.read_bytes(0x80000000, 6).decode()
@@ -85,15 +86,13 @@ class DolphinClient:
                 self.logger.info(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. PAL game detected.")
                 self.addresses = addresses.G5SP7D()
             else:
-                self.logger.info(f"WARNING: Game ID {game_id} is invalid or unsupported.")
-                return False
+                raise Exception(f"WARNING: Game ID {game_id} is invalid or unsupported.")
 
             mod_version_major, mod_version_minor = self.retrieve_mod_version()
             mod_version_str = f"{mod_version_major}.{mod_version_minor}"
             
             if mod_version_major != consts.MOD_MAJOR:
-                self.logger.info(f"WARNING: Mod version {mod_version_major} is incompatible with AHT AP version {consts.CLIENT_VERSION_STR}. Please update game mod to version {consts.MOD_MAJOR}.")
-                return False
+                raise Exception(f"WARNING: Mod version {mod_version_major} is incompatible with AHT AP version {consts.CLIENT_VERSION_STR}. Please update game mod to version {consts.MOD_MAJOR}.")
             if mod_version_major == consts.MOD_MAJOR and mod_version_minor < consts.MOD_MINOR:
                 self.logger.info(f"INFO: Mod version {mod_version_str} is compatible with AHT AP version {consts.CLIENT_VERSION_STR}, but there is a newer minor version available which may contain new features or bugfixes. Update at your leisure.")
             else:
