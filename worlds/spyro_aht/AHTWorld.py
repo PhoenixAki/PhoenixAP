@@ -180,7 +180,7 @@ class SpyroAHTWorld(World):
         if name:
             if "Bundle" in name:
                 bundle_type = name.split(" Bundle")[0]
-                convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+                convert = {"Dark Gem": 40, "Light Gem": 100, "Global Lockpick": 52}
                 bundle_size = self.options.item_bundles[bundle_type]
                 
                 if state.count(bundle_type, item.player) + bundle_size > convert[bundle_type]:  # check if adding bundle_size would go over the maximum
@@ -231,7 +231,7 @@ class SpyroAHTWorld(World):
         if name:
             if "Bundle" in name:
                 bundle_type = name.split(" Bundle")[0]
-                convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+                convert = {"Dark Gem": 40, "Light Gem": 100, "Global Lockpick": 52}
                 bundle_size = self.options.item_bundles[bundle_type]
                 
                 if state.count(bundle_type, item.player) == convert[bundle_type]:  # check for being at max amount e.g. if Dark Gem count == 40
@@ -430,7 +430,7 @@ class SpyroAHTWorld(World):
         
         # item bundles
         for key in self.options.item_bundles.valid_keys:
-            convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+            convert = {"Dark Gem": 40, "Light Gem": 100, "Global Lockpick": 52}
             if self.options.item_bundles.value[key] == 0:
                 self.options.item_bundles.value[key] = self.random.randint(1, convert[key])
                 self.log(f"Random value was requested for {key} in item_bundles. {self.options.item_bundles.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
@@ -889,10 +889,10 @@ class SpyroAHTWorld(World):
             else:
                 aht_items.append(self.create_item(movement))
         
-        # Dark Gems, Light Gems, and Lockpicks (as well as item bundle logic)
-        convert = {"Dark Gem": 40, "Light Gem": 100, "Lockpick": 52}
+        # Dark Gems, Light Gems, and Global Lockpicks (as well as item bundle logic)
+        convert = {"Dark Gem": 40, "Light Gem": 100, "Global Lockpick": 52}
         for key in self.options.item_bundles.valid_keys:
-            if key == "Lockpick" and (self.options.shop_randomization == 0 or (self.options.shop_randomization.value == 1 and self.options.chest_keys.value != 0)):
+            if key == "Global Lockpick" and (self.options.shop_randomization == 0 or (self.options.shop_randomization.value == 1 and self.options.chest_keys.value != 0)):
                 continue
             if self.options.item_bundles.value[key] == 1:  # singular items
                 for _ in range(convert[key]): aht_items.append(self.create_item(key))
@@ -905,13 +905,16 @@ class SpyroAHTWorld(World):
                 self.log(f"Creating {bundle_count} {key} bundles.", consts.LoggingLevel.HIGH)
                 for _ in range(bundle_count): aht_items.append(self.create_item(f"{key} Bundle"))
         
-        # Key Rings
+        # Level Lockpicks + Key Rings
         if self.options.shop_randomization.value == 1:
-            if self.options.chest_keys.value == 1:  # 14 level key rings
+            if self.options.chest_keys.value == 1:  # 52 per-level lockpicks
+                for level in consts.LEVEL_TO_REALM.keys():
+                    for _ in range(consts.CHESTS_PER_LEVEL[level]): aht_items.append(self.create_item(f"{level} Lockpick"))
+            if self.options.chest_keys.value == 2:  # 14 level key rings
                 for level in consts.LEVEL_TO_REALM.keys(): aht_items.append(self.create_item(f"{level} Key Ring"))
-            elif self.options.chest_keys.value == 2:  # 4 realm key rings
+            elif self.options.chest_keys.value == 3:  # 4 realm key rings
                 for realm in consts.REALM_LEVEL_LISTS.keys(): aht_items.append(self.create_item(f"{realm} Key Ring"))
-            
+        
         # Starting Realms
         self.log("Setting up starting realms, access cards, and starting shop unlocks (if open world mode is enabled).", consts.LoggingLevel.LOW)
         for realm in consts.REALM_LEVEL_LISTS.keys():
@@ -1134,10 +1137,11 @@ class LockedChestRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
 
     @override
     def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
-        if world.options.shop_randomization.value == 1:  # 2 types of key rings + lockpicks are possible with shop randomization on
-            if world.options.chest_keys.value == 1: return Has(f"{self.level} Key Ring", 1).resolve(world)
-            elif world.options.chest_keys.value == 2: return Has(f"{consts.LEVEL_TO_REALM[self.level]} Key Ring", 1).resolve(world)
-            else: return Has("Lockpick", 52).resolve(world)
+        if world.options.shop_randomization.value == 1:  # 2 types of lockpicks + 2 types of key rings when shop is randomized
+            if world.options.chest_keys.value == 0: return Has("Global Lockpick", 52).resolve(world)  # global lockpicks
+            elif world.options.chest_keys.value == 1: return Has(f"{self.level} Lockpick", consts.CHESTS_PER_LEVEL[self.level]).resolve(world)  # level lockpicks
+            elif world.options.chest_keys.value == 2: return Has(f"{self.level} Key Ring", 1).resolve(world)  # level key rings
+            else: return Has(f"{consts.LEVEL_TO_REALM[self.level]} Key Ring", 1).resolve(world)  # chest_keys = 3, realm key rings
         else:  # always true when shops are unrandomized
             return True_().resolve(world)
     

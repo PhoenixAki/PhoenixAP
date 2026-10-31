@@ -230,8 +230,12 @@ class DolphinClient:
             
         dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_POPUPS, 1)
         dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(self.ctx._seed) & 0xffffffff))
-        if self.ctx.slot_data['chest_keys'] >= 1:  # 1 = level key rings, 2 = realm key rings
-            dolphin_memory_engine.write_byte(self.addresses.p_USE_KEY_RINGS, 1)
+        
+        if self.ctx.slot_data['chest_keys'] == 1:  # level lockpicks
+            dolphin_memory_engine.write_byte(self.addresses.p_KEY_MODE, 2)
+        if self.ctx.slot_data['chest_keys'] >= 2:  # level or realm key rings
+            dolphin_memory_engine.write_byte(self.addresses.p_KEY_MODE, 1)
+        
         dolphin_memory_engine.write_byte(self.addresses.p_FIREWORKS_ARE_RANDOMIZED, self.ctx.slot_data['firework_checks'])
         dolphin_memory_engine.write_byte(self.addresses.p_UT_ENABLED, int(self.ctx.tracker_found))
         if self.ctx.slot_data['death_link']:

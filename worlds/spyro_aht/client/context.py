@@ -35,7 +35,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
     async def _cmd_add_item(self, item, amount) -> bool:
         """Format: /add_item item_name amount.
         Adds <amount> of <item_name> to the game's memory directly.
-        Currently supported items: "dark_gem", "light_gem", "gems", and "lockpick".
+        Currently supported items: "dark_gem", "light_gem", "gems", and "global_lockpick".
         Please use responsibly - minimal error checking is done. High values risk crashing the game.
         Intended for use in recovering save files, as well as testing and debugging."""
         if len(self.ctx.slot_data) == 0:
@@ -46,7 +46,7 @@ class SpyroAHTCommands(ClientCommandProcessor):
             "dark_gem": [self.ctx.emu_client.addresses.DARK_GEM_COUNT, 1],
             "light_gem": [self.ctx.emu_client.addresses.LIGHT_GEM_COUNT, 1],
             "gems": [self.ctx.emu_client.addresses.GEMS, 4],
-            "lockpick": [self.ctx.emu_client.addresses.LOCKPICKS, 1]
+            "global_lockpick": [self.ctx.emu_client.addresses.LOCKPICKS, 1]
         }
         
         if item not in types.keys():
@@ -347,14 +347,28 @@ class SpyroAHTContext(SuperContext):
                 await self.emu_client.enable_butterfly_jar()
             elif item.item == consts.ITEM_INFO["Double Gems"][0]:
                 await self.emu_client.toggle_double_gems(True)
-            elif item.item == consts.ITEM_INFO["Lockpick"][0]:
+            elif item.item == consts.ITEM_INFO["Global Lockpick"][0]:  # global lockpicks
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
                 if count < item_counts["Lockpick"]:
                     lc = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
                     await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, count + 1)
                     await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, lc + 1)
-            elif item.item == consts.ITEM_INFO["Lockpick Bundle"][0]:
-                amount_from_bundles = item_counts["Lockpick Bundle"] * self.slot_data["item_bundles"]["Lockpick"]
+            elif consts.ITEM_GROUP_IDS["Shop Items"][0]+6 <= item.item <= consts.ITEM_GROUP_IDS["Shop Items"][1]:  # level lockpicks
+                # incoming item info
+                ap_count = item_counts[self.item_names.lookup_in_slot(item.item, self.slot)]
+                
+                # game info
+                lockpick_list = list(range(consts.ITEM_GROUP_IDS["Shop Items"][0]+6, consts.ITEM_GROUP_IDS["Shop Items"][1]))
+                bit = lockpick_list.index(item.item)
+                address = self.emu_client.addresses.g_PERLEVEL_LOCKPICKS + (bit * 2)
+                file_curr = await self.emu_client.get_item_count(address)
+                file_total = await self.emu_client.get_item_count(address + 1)
+                
+                if ap_count > file_total:
+                    await self.emu_client.set_item(address, file_curr + 1)
+                    await self.emu_client.set_item(address + 1, file_total + 1)
+            elif item.item == consts.ITEM_INFO["Global Lockpick Bundle"][0]:
+                amount_from_bundles = item_counts["Global Lockpick Bundle"] * self.slot_data["item_bundles"]["Global Lockpick"]
                 if amount_from_bundles > 52: amount_from_bundles = 52
                 file_count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
                 if amount_from_bundles > file_count:

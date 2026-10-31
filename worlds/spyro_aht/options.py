@@ -228,18 +228,22 @@ class MinigameChecks(OptionDict):
 
 
 class ItemBundles(OptionCounter):
-    """Decides how many Dark Gems, Light Gems, and Lockpicks (if enabled) you will be sent at a time. Each bundle will
-    be worth that many, with the final one being worth potentially less. For example, bundle size of 7 for
-    Dark Gems would result in 5 bundles worth 7 (35 total) and the final one worth 5 (40 total).
-    Set to 0 to have a random bundle size chosen."""
+    """Some AHT AP items can be bundled together so that you receive multiple at a time. For example, if you set the Dark Gem
+    bundle size to 7, there would be 6 "Dark Gem Bundle" items created. 5 would be worth 7 each (35 total) and the 6th
+    would be worth 5 (to get to 40 total).
+    
+    Currently supported items for bundling:
+    Dark Gem: bundle size 1-40, or 0 for random choice.
+    Global Lockpick: bundle size 1-52, or 0 for random choice. Requires chest_keys to be set to global_lockpicks.
+    Light Gem: bundle size 1-100, or 0 for random choice."""
     display_name = "Item Bundles"
-    valid_keys = ("Dark Gem", "Light Gem", "Lockpick")
+    valid_keys = ("Dark Gem", "Global Lockpick", "Light Gem")
     min = 0
     max = 100
     default = {
         "Dark Gem": 1,
-        "Light Gem": 1,
-        "Lockpick": 1
+        "Global Lockpick": 1,
+        "Light Gem": 1
     }
     
     
@@ -340,16 +344,21 @@ class ShopRandomization(Toggle):
     
 
 class ChestKeys(Choice):
-    """Choose how you want to open locked chests. The items will be placed in the shop if shop_randomization is disabled,
-    or placed into the world by Archipelago otherwise.
+    """Choose how you want to open locked chests. The items will be placed in the shop if shop_randomization
+    is disabled, or placed into the world by Archipelago otherwise.
     
-    lockpicks: lockpicks, which each open 1 chest. Note that chests don't come into logic until having all 52 lockpicks.
-    level_key_rings: 14 key rings, each opens all chests in that level e.g. "Dragon Village Key Ring".
-    realm_key_rings: 4 key rings, each opens all chests in that realm e.g. "Lost Cities Key Ring"."""
+    The way chests come into logic depends on chest_keys as well as shop_randomization. See the project wiki for a breakdown:
+    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-2-%E2%80%90-Features-(Overview)
+    
+    global_lockpicks: each opens 1 chest anywhere in the game.
+    level_lockpicks: each opens 1 chest in a specific level e.g. "Sunken Ruins Lockpick"
+    level_key_rings: each key ring opens all chests in 1 level e.g. "Dragon Village Key Ring".
+    realm_key_rings: each key ring opens all chests in 1 realm e.g. "Lost Cities Key Ring"."""
     display_name = "Chest Keys"
-    option_lockpicks = 0
-    option_level_key_rings = 1
-    option_realm_key_rings = 2
+    option_global_lockpicks = 0
+    option_level_lockpicks = 1
+    option_level_key_rings = 2
+    option_realm_key_rings = 3
     default = 0
 
 

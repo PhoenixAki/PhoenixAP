@@ -167,7 +167,10 @@ ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     "Dragon Kingdom Access Card": (50, prog), "Lost Cities Access Card": (51, prog), "Icy Wilderness Access Card": (52, prog), "Volcanic Isle Access Card": (53, prog),
     # shop items
     "Health Unit+": (60, useful), "Butterfly Jar": (61, useful), "Double Gems": (62, useful), "Shockwave": (63, useful),
-    "Lockpick": (64, prog_dep_skip), "Lockpick Bundle": (65, prog),
+    "Global Lockpick": (64, prog_dep_skip), "Global Lockpick Bundle": (65, prog), "Dragon Village Lockpick": (66, prog_dep_skip), "Crocovile Swamp Lockpick": (67, prog_dep_skip),
+    "Dragonfly Falls Lockpick": (68, prog_dep_skip), "Coastal Remains Lockpick": (69, prog_dep_skip), "Sunken Ruins Lockpick": (70, prog_dep_skip), "Cloudy Domain Lockpick": (71, prog_dep_skip),
+    "Frostbite Village Lockpick": (72, prog_dep_skip), "Gloomy Glacier Lockpick": (73, prog_dep_skip), "Ice Citadel Lockpick": (74, prog_dep_skip), "Stormy Beach Lockpick": (75, prog_dep_skip),
+    "Molten Mount Lockpick": (76, prog_dep_skip), "Magma Falls Lockpick": (77, prog_dep_skip), "Dark Mine Lockpick": (78, prog_dep_skip), "Red's Laboratory Lockpick": (79, prog_dep_skip),
     # collectibles
     "Dark Gem": (85, prog_dep_skip), "Dark Gem Bundle": (86, prog), "Light Gem": (87, prog_dep_skip), "Light Gem Bundle": (88, prog),
     # individual shop unlocks
@@ -216,7 +219,7 @@ ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
 
 ITEM_GROUP_IDS = {  # "Name": [start of id range, end of id range] INCLUSIVE
     "Elder Abilities": [1, 4], "Breaths": [10, 13], "Abilities": [20, 22], "Key Rings": [30, 47], "Access Cards": [50, 53],
-    "Shop Items": [60, 65], "Collectibles": [85, 88], "Shop Unlocks": [95, 161], "Filler": [170, 195], "Traps": [200, 204] 
+    "Shop Items": [60, 79], "Collectibles": [85, 88], "Shop Unlocks": [95, 161], "Filler": [170, 195], "Traps": [200, 204] 
 }
 
 SHINIES_NAMES = [name for name in ITEM_INFO.keys() if ITEM_GROUP_IDS["Filler"][1]-15 <= ITEM_INFO[name][0] <= ITEM_GROUP_IDS["Filler"][1]]
@@ -296,6 +299,13 @@ REALM_LEVEL_LISTS = {
     "Lost Cities": ["Coastal Remains", "Sunken Ruins", "Cloudy Domain"],
     "Icy Wilderness": ["Frostbite Village", "Gloomy Glacier", "Ice Citadel"],
     "Volcanic Isle": ["Stormy Beach", "Molten Mount", "Magma Falls Top", "Magma Falls Bottom", "Dark Mine", "Red's Laboratory"]
+}
+
+# used to generate per-level lockpicks and also evaluate their logic in AHTWorld:LockedChestRule
+CHESTS_PER_LEVEL = {
+    "Dragon Village": 3, "Crocovile Swamp": 3, "Dragonfly Falls": 2, "Coastal Remains": 2, "Sunken Ruins": 8,
+    "Cloudy Domain": 4, "Frostbite Village": 4, "Gloomy Glacier": 3, "Ice Citadel": 6, "Stormy Beach": 5,
+    "Molten Mount": 4, "Magma Falls": 3, "Dark Mine": 3, "Red's Laboratory": 2
 }
 
 class AbilityFlags(IntFlag):
