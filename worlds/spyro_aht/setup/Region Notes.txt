@@ -132,7 +132,7 @@ REGION DVByrdLower: lower part of byrd area
 	LOCATION DVByrdLower | DV: Light Gem from Sgt. Byrd | 201 | True_()
 
 REGION DVByrdUpper1: upper part of byrd area (cliff)
-	DVByrdLower -> DVByrdUpper1 | Has('Charge') | Dragon_Village_Skip_Charge True_()
+	DVByrdLower -> DVByrdUpper1 | Has('Charge') | DV_Skip_Charge True_()
 		would have DJ
 
     LOCATION DVByrdUpper1 | DV: Dark Gem above Sgt. Byrd | 102 | True_()
@@ -327,7 +327,7 @@ REGION DFElderStatue: statue area
 		would have DJ and glide
 
 	LOCATION DFElderStatue | DF: Dark Gem next to Elder statue | 109 | True_()
-	LOCATION DFElderStatue | DF: Light Gem behind underwater chargeable wall | 216 | HasAll('Swim', 'Charge')
+	LOCATION DFElderStatue | DF: Light Gem behind underwater chargeable wall | 216 | HasAll('Swim', 'Charge') | DF_Swimless_Light_Gem Has('Charge')
 	LOCATION DFElderStatue | DF: Dragon Egg from Sparx | 315 | True_()
 	LOCATION DFElderStatue | DF: Light Gem from Sparx | 217 | True_()
 
@@ -380,7 +380,7 @@ REGION CREntry: shop, southern beach, east hub
 	LOCATION CREntry | CR: Empty Locked Chest behind Coastal Depot | 801 | LockedChestRule('Coastal Remains')
 	LOCATION CREntry | CR: Empty Locked Chest in southern beach | 802 | LockedChestRule('Coastal Remains')
 	LOCATION CREntry | CR: Light Gem above water mill | 222 | HasAll('Water Breath', 'Double Jump')
-	LOCATION CREntry | CR: Dragon Egg across moving shells | 319 | Or(CanReachLocation('CR: Dark Gem behind cannon door'), And(CanReachLocation('CR: Light Gem above water mill'), Has('Glide'))) | Early_Coastal_Remains_Egg Has('Double Jump')
+	LOCATION CREntry | CR: Dragon Egg across moving shells | 319 | Or(CanReachLocation('CR: Dark Gem behind cannon door'), And(CanReachLocation('CR: Light Gem above water mill'), Has('Glide'))) | CR_Early_Egg Has('Double Jump')
 
 REGION CRWateryTomb: ineptune
 	CREntry -> CRWateryTomb | BossLairRule(1)
@@ -787,7 +787,7 @@ REGION ICCourtyardLower: entrance courtyard
 	LOCATION ICCourtyardLower | IC: Light Gem from lighting boiler in courtyard | 258 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION ICCourtyardUpper: upper courtyard above floating platforms
-	ICCourtyardLower -> ICCourtyardUpper | Has('Double Jump') | Ice_Citadel_Platform_Jump True_()
+	ICCourtyardLower -> ICCourtyardUpper | Has('Double Jump') | IC_Platform_Jump True_()
 		could have nothing
 
 	LOCATION ICCourtyardUpper | IC: Light Gem atop courtyard | 259 | Has('Double Jump')
@@ -908,7 +908,7 @@ REGION SBCaveUpper: upper part of cave needing wall kick and glide
 Molten Mount
 ------------
 REGION MMEntryUpper: entry area of volcano
-	SBEntryUpper -> MMEntryUpper | Has('Glide') | Molten_Mount_Glideless_Entry True_()
+	SBEntryUpper -> MMEntryUpper | Has('Glide') | MM_Glideless_Entry True_()
 		would have DJ
 	MMVillage -> MMEntryUpper | HasAll('Double Jump', 'Glide')
 	    would have DJ and glide
@@ -1205,7 +1205,7 @@ REGION DMPostSeeSaw: past the huge robo-gnorc approaching the wall kick spot
         would have DJ and (electric or (ice + charge))
 
 REGION DMGreenPoles: green pole room, ending at first RL entry wall kick
-	DMPostSeeSaw -> DMGreenPoles | HasAll('Wall Kick', 'Pole Spin', 'Glide') | Dark_Mine_Death_Abuse HasAll('Pole Spin', 'Glide')
+	DMPostSeeSaw -> DMGreenPoles | HasAll('Wall Kick', 'Pole Spin', 'Glide') | DM_Death_Abuse HasAll('Pole Spin', 'Glide')
 		would have DJ and (electric or (ice + charge)) and wall kick and pole spin and glide
 
 	LOCATION DMGreenPoles | DM: Light Gem in green pole room | 280 | True_()

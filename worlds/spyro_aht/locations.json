@@ -2132,7 +2132,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Dragon Village Skip Charge",
+                                    "value": "DV Skip Charge",
                                     "operator": "contains"
                                 }
                             ],
@@ -5463,15 +5463,37 @@
                 "id": 216,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Swim"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Swim"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "DF Swimless Light Gem",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -6202,7 +6224,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Early Coastal Remains Egg",
+                                    "value": "CR Early Egg",
                                     "operator": "contains"
                                 }
                             ],
@@ -13451,7 +13473,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Ice Citadel Platform Jump",
+                                    "value": "IC Platform Jump",
                                     "operator": "contains"
                                 }
                             ],
@@ -15994,7 +16016,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Molten Mount Glideless Entry",
+                                    "value": "MM Glideless Entry",
                                     "operator": "contains"
                                 }
                             ],
@@ -20831,7 +20853,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Dark Mine Death Abuse",
+                                    "value": "DM Death Abuse",
                                     "operator": "contains"
                                 }
                             ],

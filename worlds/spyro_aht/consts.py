@@ -14,8 +14,8 @@ class LoggingLevel(IntEnum):
     MAXIMUM = 5
 
 TRICK_LEVELS = {
-    "Easy": ["Dark Mine Death Abuse", "Early Coastal Remains Egg", "Glide Above Elder Astor", "Ice Citadel Platform Jump", "Shockwave Rock Monsters", "Toxic Rise Without Electric"],
-    "Medium": ["Dragon Village Skip Charge", "Molten Mount Glideless Entry"],
+    "Easy": ["DM Death Abuse", "DF Swimless Light Gem", "CR Early Egg", "Glide Above Elder Astor", "IC Platform Jump", "Shockwave Rock Monsters", "Toxic Rise Without Electric"],
+    "Medium": ["DV Skip Charge", "MM Glideless Entry"],
     "Hard": ["Pre-production Dark Gem Breathless"],
     "Other": ["Fire Breath Idle Animation"]
 }
