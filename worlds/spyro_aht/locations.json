@@ -7020,27 +7020,68 @@
             {
                 "name": "CREntry -> CRWindmills",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CR Muddy Pits",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
                 "name": "CRCloudyElevator -> CRWindmills",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CR Muddy Pits",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -7055,6 +7096,7 @@
                     "filtered_resolution": false,
                     "args": {
                         "item_names": [
+                            "Double Jump",
                             "Glide",
                             "Pole Spin"
                         ]
@@ -7064,14 +7106,51 @@
         ],
         "gem_events": [
             {
-                "name": "525 Gems (on the ground/metal chests/headbash chests)",
-                "gem_amount": 525,
+                "name": "200 Gems (on the ground)",
+                "gem_amount": 200,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {}
+                }
+            },
+            {
+                "name": "50 Gems (metal chests)",
+                "gem_amount": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "275 Gems (baskets)",
+                "gem_amount": 275,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump",
+                            "Electric Breath",
+                            "Fire Breath",
+                            "Ice Breath",
+                            "Water Breath"
+                        ]
+                    }
                 }
             },
             {
@@ -7099,13 +7178,37 @@
             {
                 "name": "CRWindmills -> CRCloudyElevator",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Glide",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CR Muddy Pits",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             },
             {

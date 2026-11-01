@@ -371,7 +371,7 @@ REGION CREntry: shop, southern beach, east hub
 	ShopPads -> CREntry | OpenWorldRule(['Coastal Remains - Coastal Depot'])
 		could have nothing
 	CRWindmills -> CREntry | True_()
-		would have DJ and glide
+		would have DJ. No trick entry is intentional due to DJ requirement to be in CRWindmills coming this direction
 	CROttoPool -> CREntry | Has('Double Jump')
 		would have DJ
 
@@ -411,16 +411,16 @@ REGION CRCannon: cannon area with pole spinning
 	LOCATION CRCannon | CR: Dark Gem behind cannon door | 112 | HasAll('Double Jump', 'Glide', 'Charge')
 
 REGION CRWindmills: windmill area on the way to cloudy domain
-	CREntry -> CRWindmills | Has('Double Jump')
+	CREntry -> CRWindmills | Has('Double Jump') | CR_Muddy_Pits True_()
+		could have nothing
+	CRCloudyElevator -> CRWindmills | HasAll('Double Jump', 'Glide') | CR_Muddy_Pits Has('Double Jump')
 		would have DJ
-	CRCloudyElevator -> CRWindmills | HasAll('Double Jump', 'Glide')
-		would have DJ and glide
 
-	LOCATION CRWindmills | CR: Light Gem atop windmill area | 224 | HasAll('Pole Spin', 'Glide')
+	LOCATION CRWindmills | CR: Light Gem atop windmill area | 224 | HasAll('Double Jump', 'Pole Spin', 'Glide')
 
 REGION CRCloudyElevator: cloudy elevator area
-	CRWindmills -> CRCloudyElevator | Has('Glide')
-		would have DJ and glide
+	CRWindmills -> CRCloudyElevator | HasAll('Double Jump', 'Glide') | CR_Muddy_Pits Has('Double Jump')
+		would have DJ
 	ShopPads -> CRCloudyElevator | OpenWorldRule(['Coastal Remains - Domain Doorstep'])
 		could have nothing
 	CDEntry -> CRCloudyElevator | True_()
