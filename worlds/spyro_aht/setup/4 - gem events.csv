@@ -197,8 +197,9 @@ CDEndlessPlatforms,20,[enemy] unarmored huge gnorc,"Or(HasAny('Fire Breath', 'El
 CDTallestTowerUpper,200,Byrd minigames 2-1,True_()
 CDTallestTowerUpper,200,Byrd minigames 2-2,True_()
 CDTallestTowerUpper,20,[enemy] unarmored huge gnorc,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
-CDTallestTowerUpper,410,in the air/metal chests/dark shards/headbash purple thing,True_()
+CDTallestTowerUpper,80,in the air after Byrd,True_()
 CDTallestTowerUpper,50,[enemy] flying small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
+CDOutsideBallGadget,330,metal chests/dark shards/headbash thing/yellow gem in air,True_()
 CDBallGadget,815,ball gadget minigame,True_()
 CDBallGadget,500,firework after ball gadget,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 Sunken Ruins,,,
@@ -543,9 +544,9 @@ DMPostSeeSaw,95,[enemy] critters/huge robo-gnorc,True_()
 DMPostSeeSaw,20,[enemy] armored middle robo-gnorc,"And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))"
 DMPostSeeSaw,175,baskets/dark shards/metal chest,True_()
 DMGreenPoles,160,[enemy] drill robot/huge robo-gnorcs/steel traps,True_()
-DMGreenPoles,16,on the ground,True_()
+DMGreenPoles,276,on the ground/metal chests/baskets/headbash chests,True_()
 Red's Laboratory,,,
-RLEntry,868,on the ground/metal chests/baskets/headbash chests,True_()
+RLEntry,608,on the ground/metal chests/baskets/headbash chests,True_()
 RLEntry,80,[enemy] small robo-gnorcs/huge robo-gnorcs,True_()
 RLEntry,80,[enemy] armored middle robo-gnorc,Has('Charge')
 RLEntry,55,headbash chest and metal chest above charge switches,Has('Charge')

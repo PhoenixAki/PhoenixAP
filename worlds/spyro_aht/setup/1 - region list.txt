@@ -50,6 +50,7 @@ CDSouthWest
 CDEndlessPlatforms
 CDTallestTowerLower
 CDTallestTowerUpper
+CDOutsideBallGadget
 CDBallGadget
 SREntry
 SRSwim1

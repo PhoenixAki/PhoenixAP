@@ -529,6 +529,8 @@ REGION CDTallestTowerLower: just the shop area
 		would have DJ and charge and wing shield and glide
 	ShopPads -> CDTallestTowerLower | OpenWorldRule(['Cloudy Domain - Tallest Tower'])
 		could have nothing
+    CDOutsideBallGadget -> CDTallestTowerLower | True_()
+        would have DJ and glide
 
 REGION CDTallestTowerUpper: byrd and everything besides going into ball gadget
 	CDTallestTowerLower -> CDTallestTowerUpper | HasAll('Double Jump', 'Glide')
@@ -537,7 +539,14 @@ REGION CDTallestTowerUpper: byrd and everything besides going into ball gadget
 	LOCATION CDTallestTowerUpper | CD: Dragon Egg from Sgt. Byrd | 328 | True_()
 	LOCATION CDTallestTowerUpper | CD: Light Gem from Sgt. Byrd | 234 | True_()
 	LOCATION CDTallestTowerUpper | CD: Light Gem in wall kick building | 235 | Has('Wall Kick')
-	LOCATION CDTallestTowerUpper | CD: Dark Gem before Ball Gadget | 117 | True_()
+
+REGION CDOutsideBallGadget: outside ball gadget area, after gliding away from the post-Byrd stretch
+    CDTallestTowerUpper -> CDOutsideBallGadget | True_()
+        would have DJ and glide
+    CDOutsideElder -> CDOutsideBallGadget | False_() | CD_Skip_Across_Platforms HasAll('Double Jump', 'Glide')
+        would have DJ and glide (if it's ever true, it's because of the trick, thus guaranteeing DJ + Glide)
+    
+    LOCATION CDOutsideBallGadget | CD: Dark Gem before Ball Gadget | 117 | True_()
 
 REGION CDBallGadget: ball gadget and area after
 	CDTallestTowerUpper -> CDBallGadget | BallGadget()

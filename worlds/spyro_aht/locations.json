@@ -8945,6 +8945,15 @@
                         ]
                     }
                 }
+            },
+            {
+                "name": "CDOutsideBallGadget -> CDTallestTowerLower",
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
             }
         ],
         "locations": [],
@@ -9021,17 +9030,6 @@
                         "count": 1
                     }
                 }
-            },
-            {
-                "name": "CD: Dark Gem before Ball Gadget",
-                "id": 117,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
             }
         ],
         "gem_events": [
@@ -9092,8 +9090,8 @@
                 }
             },
             {
-                "name": "410 Gems (in the air/metal chests/dark shards/headbash purple thing)",
-                "gem_amount": 410,
+                "name": "80 Gems (in the air after Byrd)",
+                "gem_amount": 80,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -9116,6 +9114,79 @@
                             "Fire Breath"
                         ]
                     }
+                }
+            }
+        ]
+    },
+    "CDOutsideBallGadget": {
+        "name": "CDOutsideBallGadget",
+        "entrances": [
+            {
+                "name": "CDTallestTowerUpper -> CDOutsideBallGadget",
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "CDOutsideElder -> CDOutsideBallGadget",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CD Skip Across Platforms",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "CD: Dark Gem before Ball Gadget",
+                "id": 117,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "330 Gems (metal chests/dark shards/headbash thing/yellow gem in air)",
+                "gem_amount": 330,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
                 }
             }
         ]
@@ -20906,8 +20977,8 @@
                 }
             },
             {
-                "name": "16 Gems (on the ground)",
-                "gem_amount": 16,
+                "name": "276 Gems (on the ground/metal chests/baskets/headbash chests)",
+                "gem_amount": 276,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -20977,8 +21048,8 @@
         ],
         "gem_events": [
             {
-                "name": "868 Gems (on the ground/metal chests/baskets/headbash chests)",
-                "gem_amount": 868,
+                "name": "608 Gems (on the ground/metal chests/baskets/headbash chests)",
+                "gem_amount": 608,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",

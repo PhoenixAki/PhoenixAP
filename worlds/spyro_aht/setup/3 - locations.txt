@@ -167,7 +167,7 @@ CDEndlessPlatforms | CD: Dark Gem after second orbiting platforms | 116 | True_(
 CDTallestTowerUpper | CD: Dragon Egg from Sgt. Byrd | 328 | True_()
 CDTallestTowerUpper | CD: Light Gem from Sgt. Byrd | 234 | True_()
 CDTallestTowerUpper | CD: Light Gem in wall kick building | 235 | Has('Wall Kick')
-CDTallestTowerUpper | CD: Dark Gem before Ball Gadget | 117 | True_()
+CDOutsideBallGadget | CD: Dark Gem before Ball Gadget | 117 | True_()
 CDBallGadget | CD: Dragon Egg from Ball Gadget | 329 | True_()
 CDBallGadget | CD: Light Gem from Ball Gadget | 236 | True_()
 CDBallGadget | CD: Firework after Ball Gadget | 410 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
