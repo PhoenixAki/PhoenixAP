@@ -582,16 +582,17 @@ RLNorthWest2,80,[enemy] armored middle robo-gnorcs,"And(Has('Charge'), HasAny('E
 RLNorthWest2,345,metal chests/headbash chests/and baskets using DJ,Has('Double Jump')
 RLNorthWest2,30,headbash chest after pole spin glide,"HasAll('Double Jump', 'Glide', 'Pole Spin')"
 RLNorthWest2,40,[enemy] small robo-gnorcs that spawn after dark gem,"And(HasAll('Double Jump', 'Glide', 'Pole Spin'), HasAny('Electric Breath', 'Charge'))"
-RLSouthEast1,40,[enemy] armored middle robo-gnorc and small robo-gnorc,True_()
+RLSouthEast1,20,[enemy] armored middle robo-gnorc,True_()
 RLSouthEast1,75,baskets,True_()
-RLSouthEast1,105,baskets behind lasers + headbash chest,Has('Double Jump')
-RLSouthEast2,75,metal chests up high,True_()
-RLSouthEast2,60,[enemy] armored middle robo-gnorc + huge robo-gnorcs up high,True_()
-RLSouthEast3,40,[enemy] armored middle robo-gnorc,"And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))"
-RLSouthEast3,60,[enemy] small robo-gnorcs,"HasAny('Electric Breath', 'Charge')"
-RLSouthEast3,30,headbash chest,Has('Double Jump')
-RLSouthEast3,75,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
-RLSouthEast3,50,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
-RLSouthEast3,20,[enemy] huge robo-gnorc,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
-RLSouthEast3,50,metal chests above boiler,"And(Has('Fire Breath'), HasAny('Double Jump', 'Charge', 'Electric Breath'))"
-RLSouthEast3,20,[enemy] small robo-gnorc above egg,"And(HasAll('Fire Breath', 'Double Jump', 'Glide', 'Pole Spin'), HasAny('Electric Breath', 'Charge'))"
+RLSouthEast1,20,[enemy] small robo-gnorc on vertical platform,True_()
+RLSouthEast1,105,headbash chest / baskets behind lasers,Has('Double Jump')
+RLSouthEast2,75,metal chests,True_()
+RLSouthEast2,60,[enemy] armored middle robo-gnorc / huge robo-gnorcs,True_()
+RLSouthEast4,40,[enemy] armored middle robo-gnorc,"And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))"
+RLSouthEast4,60,[enemy] small robo-gnorcs,"HasAny('Electric Breath', 'Charge')"
+RLSouthEast4,30,headbash chest,Has('Double Jump')
+RLSouthEast4,75,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
+RLSouthEast4,50,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
+RLSouthEast4,20,[enemy] huge robo-gnorc,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
+RLSouthEast4Above,50,metal chests above boiler,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
+RLSouthEast4Above,20,[enemy] small robo-gnorc above egg,"And(HasAll('Double Jump', 'Glide', 'Pole Spin'), HasAny('Electric Breath', 'Charge'))"

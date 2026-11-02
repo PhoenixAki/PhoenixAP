@@ -14,8 +14,8 @@ class LoggingLevel(IntEnum):
     MAXIMUM = 5
 
 TRICK_LEVELS = {
-    "Easy": ["CR Early Egg", "CS Chargeless Tree Ledge", "CS Poleless Elder Tree", "DF Swimless Light Gem", "DM Death Abuse", "Glide Above Elder Astor", "IC Platform Jump", "SR Depths Skip Invincibility", "SR Depths Skip Electric"],
-    "Medium": ["CR Muddy Pits", "DF Glideless Light Gem", "DV Skip Charge", "MM Glideless Entry", "Shockwave Rock Monsters", "Toxic Rise Without Electric"],
+    "Easy": ["CR Early Egg", "CS Chargeless Tree Ledge", "CS Poleless Elder Tree", "DF Swimless Light Gem", "DM Death Abuse", "Glide Above Elder Astor", "IC Platform Jump", "RL Skip Southeast Poles", "SR Depths Skip Invincibility", "SR Depths Skip Electric"],
+    "Medium": ["CR Muddy Pits", "DF Glideless Light Gem", "DV Skip Charge", "MM Glideless Entry", "RL Skip Southeast Lasers", "Shockwave Rock Monsters", "Toxic Rise Without Electric"],
     "Hard": ["CD Skip Across Platforms", "Horn Dive Rock Monsters", "IC Skip Supercharge Stairs", "Pre-production Dark Gem Breathless", "RL Skip Invincibility"],
     "Other": ["Fire Breath Idle Animation"]
 }

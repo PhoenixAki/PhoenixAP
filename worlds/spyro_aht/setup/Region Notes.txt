@@ -1302,24 +1302,33 @@ REGION RLNorthWest2: upper part of double piston room and beyond
 	LOCATION RLNorthWest2 | RL: Light Gem from northwest pole spinning | 283 | HasAll('Double Jump', 'Glide', 'Pole Spin')
 	LOCATION RLNorthWest2 | RL: Dark Gem in northwest | 139 | HasAll('Double Jump', 'Glide', 'Pole Spin')
 
-REGION RLSouthEast1: room with exit up high
+REGION RLSouthEast1: lower part of first room, everything up to the poles
 	RLCenter -> RLSouthEast1 | And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))
 		would have charge and (electric or ice)
 
-	LOCATION RLSouthEast1 | RL: Light Gem atop southeast first room | 284 | HasAll('Double Jump', 'Pole Spin', 'Glide')
+REGION RLSouthEast2: upper part of first room up and hallway after (up to the door)
+    RLSouthEast1 -> RLSouthEast2 | HasAll('Double Jump', 'Pole Spin', 'Glide') | RL_Skip_Southeast_Poles Has('Double Jump')
+        would have charge and (electric or ice) and DJ
+    
+	LOCATION RLSouthEast2 | RL: Light Gem atop southeast first room | 284 | True_()
 
-REGION RLSouthEast2: laser room entry, includes upper area of room with exit up high
-	RLSouthEast1 -> RLSouthEast2 | And(HasAll('Double Jump', 'Pole Spin', 'Glide'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge')))
-		would have DJ and pole spin and glide and charge and (electric or ice)
-	RLSouthEast3 -> RLSouthEast2 | Or(HasAny('Double Jump', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))
-		would have DJ or (electric or ice + charge)
+REGION RLSouthEast3: headbash switch side of dark gem room. That's it lol. Only separate to be a hub for tricks
+    RLSouthEast2 -> RLSouthEast3 | True_()
+        would have charge and (electric or ice) and DJ
+    RLSouthEast4 -> RLSouthEast3 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
+        would have electric or (ice and charge)
 
-REGION RLSouthEast3: laser room dark gem end and side path back
-	RLSouthEast2 -> RLSouthEast3 | True_()
-		would have DJ and pole spin and glide and (electric or ice + charge)
-	ShopPads -> RLSouthEast3 | OpenWorldRule(['Red\'s Laboratory - Laser Leaps'])
-		could have nothing
+REGION RLSouthEast4: dark gem side of dark gem room, with the shop
+    RLSouthEast3 -> RLSouthEast4 | True_()
+        would have charge and (electric or ice) and DJ
+    ShopPads -> RLSouthEast4 | OpenWorldRule(['Red\'s Laboratory - Laser Leaps'])
+        could have nothing
+    
+    LOCATION RLSouthEast4 | RL: Dark Gem in southeast | 140 | Has('Double Jump')
+    LOCATION RLSouthEast4 | RL: Dragon Egg behind lasers | 364 | And(CanReachRegion('RLSouthEast4Above'), HasAll('Double Jump', 'Glide', 'Pole Spin')) | RL_Skip_Southeast_Lasers True_()
 
-	LOCATION RLSouthEast3 | RL: Dark Gem in southeast | 140 | Has('Double Jump')
-	LOCATION RLSouthEast3 | RL: Light Gem above boiler | 285 | HasAll('Fire Breath', 'Double Jump', 'Glide')
-	LOCATION RLSouthEast3 | RL: Dragon Egg behind lasers | 364 | HasAll('Fire Breath', 'Double Jump', 'Glide', 'Pole Spin')
+REGION RLSouthEast4Above: upper part of room with boiler
+    RLSouthEast4 -> RLSouthEast4Above | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
+        could have nothing
+    
+    LOCATION RLSouthEast4Above | RL: Light Gem above boiler | 285 | HasAll('Double Jump', 'Glide')
