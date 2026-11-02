@@ -1893,7 +1893,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -2262,7 +2262,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -2439,7 +2439,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -2731,7 +2731,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -3374,7 +3374,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -4341,7 +4341,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -4430,7 +4430,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -8920,7 +8920,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -9528,7 +9528,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -9983,7 +9983,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -10598,7 +10598,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -10992,7 +10992,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -11210,7 +11210,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -13745,7 +13745,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -13957,7 +13957,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -14632,7 +14632,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -15980,7 +15980,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -16015,7 +16015,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -16274,7 +16274,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -16495,7 +16495,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -16661,7 +16661,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -16855,7 +16855,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Shockwave Rock Monsters",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -18298,7 +18298,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -18333,7 +18333,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -18369,7 +18369,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Shockwave Rock Monsters",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -18815,7 +18815,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -20415,7 +20415,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
@@ -20856,7 +20856,7 @@
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
+                                    "operator": "contains"
                                 }
                             ],
                             "filtered_resolution": false,
