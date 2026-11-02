@@ -87,6 +87,7 @@ ICPastWaterGate
 ICElderRoom
 ICSuperchargeShop
 ICUseSupercharge
+ICSlippyStairs
 ICDrawbridge
 ICRoyal
 ICRoyalBack

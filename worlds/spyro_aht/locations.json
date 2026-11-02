@@ -14766,20 +14766,6 @@
                     "filtered_resolution": false,
                     "args": {}
                 }
-            },
-            {
-                "name": "IC: Dark Gem by drawbridge",
-                "id": 128,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
-                }
             }
         ],
         "gem_events": [
@@ -14849,11 +14835,73 @@
             }
         ]
     },
+    "ICSlippyStairs": {
+        "name": "ICSlippyStairs",
+        "entrances": [
+            {
+                "name": "ICSuperchargeShop -> ICSlippyStairs",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "IC Skip Supercharge Stairs",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "ICUseSupercharge -> ICSlippyStairs",
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "IC: Dark Gem by drawbridge",
+                "id": 128,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "gem_events": []
+    },
     "ICDrawbridge": {
         "name": "ICDrawbridge",
         "entrances": [
             {
-                "name": "ICUseSupercharge -> ICDrawbridge",
+                "name": "ICSlippyStairs -> ICDrawbridge",
                 "access_rule": {
                     "rule": "Has",
                     "options": [],

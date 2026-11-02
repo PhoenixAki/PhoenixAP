@@ -726,7 +726,7 @@ REGION FVIcyCampUpper: upper areas of icy camp that need both wall kick and doub
 	LOCATION FVIcyCampUpper | FV: Dark Gem in orbiting platforms room | 123 | True_()
 	LOCATION FVIcyCampUpper | FV: Light Gem in orbiting platforms room | 246 | True_()
 
-REGION FVReturnFromIC: past the IC drawbridge
+REGION FVReturnFromIC: path back to FV after the horn dive switch
 	ICDrawbridge -> FVReturnFromIC | And(Has('Double Jump'), SuperchargeGadget())
 		would have DJ and supercharge
 
@@ -834,18 +834,25 @@ REGION ICSuperchargeShop: supercharge area past Elder. include enemies and boile
 	LOCATION ICSuperchargeShop | IC: Empty Locked Chest in tunnel to drawbridge | 809 | LockedChestRule('Ice Citadel')
 	LOCATION ICSuperchargeShop | IC: Empty Locked Chest next to drawbridge | 810 | LockedChestRule('Ice Citadel')
 
-REGION ICUseSupercharge: things you need to actually use supercharge to reach/do. includes dark gem on drawbridge
+REGION ICUseSupercharge: things you need to actually use supercharge to reach/do. Dark Gem on stairs is in ICSlippyStairs
 	ICSuperchargeShop -> ICUseSupercharge | SuperchargeGadget()
 		would have supercharge
 
 	LOCATION ICUseSupercharge | IC: Dark Gem in sewer | 127 | Has('Double Jump')
 	LOCATION ICUseSupercharge | IC: Dragon Egg at end of sewer | 343 | Has('Double Jump')
 	LOCATION ICUseSupercharge | IC: Dragon Egg behind supercharge door | 344 | True_()
-	LOCATION ICUseSupercharge | IC: Dark Gem by drawbridge | 128 | Has('Double Jump')
+	
+REGION ICSlippyStairs: just the dark gem above the slippy steps, because of the 2 ways of accessing it
+    ICSuperchargeShop -> ICSlippyStairs | False_() | IC_Skip_Supercharge_Stairs Has('Double Jump')
+        would have DJ
+    ICUseSupercharge -> ICSlippyStairs | True_()
+        would have supercharge
+        
+	LOCATION ICSlippyStairs | IC: Dark Gem by drawbridge | 128 | Has('Double Jump')
 
 REGION ICDrawbridge: room past the drawbridge
-	ICUseSupercharge -> ICDrawbridge | Has('Double Jump')
-		would have DJ and supercharge
+	ICSlippyStairs -> ICDrawbridge | Has('Double Jump')
+		would have DJ
 	ShopPads -> ICDrawbridge | OpenWorldRule(['Ice Citadel - Drawbridge Drop-off'])
 		could have nothing
 

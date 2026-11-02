@@ -249,7 +249,7 @@ ICSuperchargeShop | IC: Empty Locked Chest next to drawbridge | 810 | LockedChes
 ICUseSupercharge | IC: Dark Gem in sewer | 127 | Has('Double Jump')
 ICUseSupercharge | IC: Dragon Egg at end of sewer | 343 | Has('Double Jump')
 ICUseSupercharge | IC: Dragon Egg behind supercharge door | 344 | True_()
-ICUseSupercharge | IC: Dark Gem by drawbridge | 128 | Has('Double Jump')
+ICSlippyStairs | IC: Dark Gem by drawbridge | 128 | Has('Double Jump')
 ICDrawbridge | IC: Dragon Egg from thief after drawbridge | 345 | HasAny('Charge', 'Fire Breath')
 ICRoyal | IC: Empty Locked Chest in royal chamber | 811 | LockedChestRule('Ice Citadel')
 ICRoyal | IC: Dragon Egg next to cannon area via pole spin | 346 | HasAll('Pole Spin', 'Glide')
