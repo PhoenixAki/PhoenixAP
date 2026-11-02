@@ -4124,15 +4124,37 @@
             {
                 "name": "CSTree -> CSAboveElder",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Pole Spin"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Pole Spin"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CS Poleless Elder Tree",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -4190,8 +4212,8 @@
         ],
         "gem_events": [
             {
-                "name": "105 Gems (metal chests/headbash chest)",
-                "gem_amount": 105,
+                "name": "25 Gems (metal chest at top of tree)",
+                "gem_amount": 25,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -4199,47 +4221,14 @@
                     "filtered_resolution": false,
                     "args": {}
                 }
-            },
-            {
-                "name": "500 Gems (firework atop Elder's tree)",
-                "gem_amount": 500,
-                "options": [],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Fire Breath",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "True_",
-                            "options": [
-                                {
-                                    "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fire Breath Idle Animation",
-                                    "operator": "eq"
-                                }
-                            ],
-                            "filtered_resolution": false,
-                            "args": {}
-                        }
-                    ]
-                }
             }
         ]
     },
-    "CSTreeLedge": {
-        "name": "CSTreeLedge",
+    "CSTreeLedge1": {
+        "name": "CSTreeLedge1",
         "entrances": [
             {
-                "name": "CSAboveElder -> CSTreeLedge",
+                "name": "CSAboveElder -> CSTreeLedge1",
                 "access_rule": {
                     "rule": "HasAny",
                     "options": [],
@@ -4308,6 +4297,97 @@
         "gem_events": [
             {
                 "name": "500 Gems (firework in middle of Elder's tree)",
+                "gem_amount": 500,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Fire Breath",
+                                    "Pole Spin"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Pole Spin",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "CSTreeLedge2": {
+        "name": "CSTreeLedge2",
+        "entrances": [
+            {
+                "name": "CSAboveElder -> CSTreeLedge2",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Pole Spin",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CS Poleless Elder Tree",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [],
+        "gem_events": [
+            {
+                "name": "80 Gems (metal chests + headbash chest on ledge)",
+                "gem_amount": 80,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "500 Gems (firework atop Elder's tree)",
                 "gem_amount": 500,
                 "options": [],
                 "access_rule": {
@@ -5851,15 +5931,37 @@
                 "id": 219,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Glide",
-                            "Wall Kick"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Glide",
+                                    "Wall Kick"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "DF Glideless Light Gem",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],

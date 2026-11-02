@@ -60,9 +60,10 @@ CSTree,30,headbash chest above poles outside tree,"HasAll('Pole Spin', 'Double J
 CSTree,75,spider web baskets above Blink's poles,"HasAll('Fire Breath', 'Pole Spin')"
 CSTree,1003,Blink minigames 1-1,True_()
 CSTree,928,Blink minigames 1-2,True_()
-CSAboveElder,105,metal chests/headbash chest,True_()
-CSAboveElder,500,firework atop Elder's tree,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
-CSTreeLedge,500,firework in middle of Elder's tree,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
+CSAboveElder,25,metal chest at top of tree,True_()
+CSTreeLedge1,500,firework in middle of Elder's tree,"HasAll('Pole Spin', 'Fire Breath') | Fire_Breath_Idle_Animation Has('Pole Spin')"
+CSTreeLedge2,80,metal chests + headbash chest on ledge,True_()
+CSTreeLedge2,500,firework atop Elder's tree,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 Dragonfly Falls,,,
 DFBallGadget,896,on ball gadget path,True_()
 DFEntry,25,[enemy] normal crocovile by entry area,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
