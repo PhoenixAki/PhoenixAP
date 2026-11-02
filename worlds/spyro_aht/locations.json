@@ -4230,15 +4230,35 @@
             {
                 "name": "CSAboveElder -> CSTreeLedge1",
                 "access_rule": {
-                    "rule": "HasAny",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CS Chargeless Tree Ledge",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],

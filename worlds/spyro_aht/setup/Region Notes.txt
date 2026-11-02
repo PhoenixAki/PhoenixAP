@@ -256,7 +256,7 @@ REGION CSAboveElder: above poles directly across tree (not path to Fredneck)
 	LOCATION CSAboveElder | CS: Light Gem atop Elder's tree | 211 | True_()
 
 REGION CSTreeLedge1: ledge in middle of tree with egg + firework
-    CSAboveElder -> CSTreeLedge1 | HasAny('Charge', 'Glide')
+    CSAboveElder -> CSTreeLedge1 | Has('Charge') | CS_Chargeless_Tree_Ledge Has('Glide')
         would have DJ and (charge or glide)
     
     LOCATION CSTreeLedge1 | CS: Dragon Egg in middle of Elder's tree | 310 | True_()
