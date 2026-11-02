@@ -152,7 +152,8 @@ class SpyroAHTWorld(World):
     def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
         classifications = {0: "filler", 1: "progression", 2: "useful", 4: "trap", 25: "progression deprioritized skip balancing"}
-        if name == "Shockwave" and "Shockwave Rock Monsters" in self.options.enabled_tricks.value: classification = ItemClassification.progression
+        if name == "Shockwave" and ("Shockwave Rock Monsters" in self.options.enabled_tricks.value and "Horn Dive Rock Monsters" not in self.options.enabled_tricks.value):
+            classification = ItemClassification.progression  # make shockwave progression exactly when ONLY shockwave rock monsters is enabled, but not horn dive. Horn dive being enabled at all means shockwave is never outright required
         else: classification = consts.ITEM_INFO[name][1]
         self.log(f"Created item {name} for player {self.player} with classification {classifications[classification]} and ID {self.item_name_to_id[name]}, placed into the {placement}.", consts.LoggingLevel.MAXIMUM)
         return Item(name, classification, self.item_name_to_id[name], self.player)
@@ -1011,11 +1012,15 @@ class SpyroAHTWorld(World):
     def fix_rule_for_ut(self, rule: Or):
         """Takes an Or rule and, if it is a trick-affected rule, returns the rule with its trick rule replaced with a UT glitched logic rule.
         Otherwise, returns the rule unmodified."""
+        children: list[Rule] = []
         for child in rule.children:
             for option in child.options:
                 if option.option.display_name == "Enabled Tricks":
-                    rule.children[1].options = ()
-                    rule.children = (rule.children[0], And(Has(consts.GLITCHED_LOGIC_ITEM_NAME), rule.children[1]))
+                    child.options = ()
+                    children.append(And(Has(consts.GLITCHED_LOGIC_ITEM_NAME), child))
+                else:
+                    children.append(child)
+        rule.children = (rule.children[0], *children)
         return rule
     
     def fill_slot_data(self):

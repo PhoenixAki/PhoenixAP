@@ -13,8 +13,6 @@ import itertools
 def process_tricks(rule: str) -> list[Rule]:
     tricks = rule.split(" | ", 1)[1].split(" | ")
     trick_rules = []
-    if len(tricks) > 1:
-        print('hi')
     for trick in tricks:
         trick_name = trick.split(" ")[0].replace("_", " ")
         if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):

@@ -416,7 +416,7 @@ MMVillage,610,on the ground,True_()
 MMVillage,25,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
 MMVillage,150,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 MMVillage,100,dark shards,"HasAny('Double Jump', 'Charge')"
-MMVillage,400,[enemy] rock monsters,"Has('Charge') | Shockwave_Rock_Monsters HasAll('Double Jump', 'Shockwave')"
+MMVillage,400,[enemy] rock monsters,"Has('Charge') | Shockwave_Rock_Monsters HasAll('Double Jump', 'Shockwave') | Horn_Dive_Rock_Monsters Has('Double Jump')"
 MMVillage,30,headbash chest,Has('Double Jump')
 MMVillageImps,225,[enemy] fire imps,True_()
 MMVillageImps,443,Byrd minigames 4-1,True_()
@@ -466,7 +466,7 @@ MFtEntry,20,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Brea
 MFtEntry,50,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 MFtEntry,25,firework basket,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 MFtEntry,25,firework basket behind chargeable wall,"HasAll('Charge', 'Fire Breath') | Fire_Breath_Idle_Animation Has('Charge')"
-MFtEntry,100,[enemy] rock monster,"Has('Charge') | Shockwave_Rock_Monsters HasAll('Double Jump', 'Shockwave')"
+MFtEntry,100,[enemy] rock monster,"Has('Charge') | Shockwave_Rock_Monsters HasAll('Double Jump', 'Shockwave') | Horn_Dive_Rock_Monsters Has('Double Jump')"
 MFtCenter,100,[enemy] fire imps,True_()
 MFtSouth,50,baskets by locked chest above center,Has('Double Jump')
 MFtSouth,20,[enemy] armored huge gnorc behind chargeable wall,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"

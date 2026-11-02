@@ -16761,6 +16761,21 @@
                                     "Shockwave"
                                 ]
                             }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Rock Monsters",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
                         }
                     ]
                 }
@@ -16864,6 +16879,21 @@
                                     "Double Jump",
                                     "Shockwave"
                                 ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Rock Monsters",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
                             }
                         }
                     ]
@@ -18379,6 +18409,21 @@
                                     "Shockwave"
                                 ]
                             }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Rock Monsters",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
                         }
                     ]
                 }
@@ -18423,11 +18468,44 @@
                             ]
                         },
                         {
-                            "rule": "HasAny",
+                            "rule": "And",
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
                                     "value": "Shockwave Rock Monsters",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Shockwave",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "HasAny",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Ice Breath",
+                                            "Water Breath"
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Rock Monsters",
                                     "operator": "contains"
                                 }
                             ],
