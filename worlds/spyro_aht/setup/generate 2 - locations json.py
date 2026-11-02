@@ -8,8 +8,10 @@ from rule_builder.rules import Rule, NestedRule, True_, False_, Has, HasAll, And
 from worlds.spyro_aht import consts
 from worlds.spyro_aht.AHTWorld import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
     ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
+import itertools
 
 regions = {}
+trick_list = [*itertools.chain(*consts.TRICK_LEVELS.values())]  # only used for testing
 ########################################################################################################################
 # load regions
 file_in = open("1 - region list.txt", "r")
@@ -39,6 +41,7 @@ for line in file_in:
         trick_name = rule.split(" | ")[1].split(" ", 1)[0].replace("_", " ")  # left half of trick rule side is name with underscore spaces
         if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
             exit(f"{trick_name} wasn't in TRICK_LEVELS")
+        if trick_name in trick_list: trick_list.remove(trick_name)
         trick_rule = eval(rule.split(" | ")[1].split(" ", 1)[1])
         trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
@@ -66,6 +69,7 @@ for line in file_in:
         trick_name = loc_rule.split(" | ")[1].split(" ", 1)[0].replace("_", " ")
         if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
             exit(f"{trick_name} wasn't in TRICK_LEVELS")
+        if trick_name in trick_list: trick_list.remove(trick_name)
         trick_rule = eval(loc_rule.split(" | ")[1].split(" ", 1)[1])
         trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="contains"),)
         evaluated_rule = Or(normal_rule, trick_rule)
@@ -116,6 +120,7 @@ for line in file_in:
         trick_name = event_rule.split(" | ")[1].split(" ", 1)[0].replace("_", " ")
         if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
             exit(f"{trick_name} wasn't in TRICK_LEVELS")
+        if trick_name in trick_list: trick_list.remove(trick_name)
         trick_rule = eval(event_rule.split(" | ")[1].split(" ", 1)[1])
         trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="eq"),)
         evaluated_rule = Or(normal_rule, trick_rule)
@@ -131,6 +136,8 @@ for line in file_in:
 
 ########################################################################################################################
 # output
+if len(trick_list) != 0:
+    exit(f"At least one trick is listed in TRICK_LEVELS but wasn't found in JSON. Missing tricks: {', '.join(trick_list)}.")
 file_out = open("test-locations.json", "w")
 output = json.dumps(regions, indent=4)
 file_out.write(output)

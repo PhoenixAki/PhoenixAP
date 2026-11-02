@@ -10440,24 +10440,46 @@
             {
                 "name": "SRDepthsEntry -> SRDepthsUpper",
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "And",
                             "options": [],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Wall Kick",
-                                "count": 1
-                            }
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Wall Kick",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "InvincibilityGadget",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
                         },
                         {
-                            "rule": "InvincibilityGadget",
-                            "options": [],
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "SR Depths Skip Invincibility",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
-                            "args": {}
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
                         }
                     ]
                 }
@@ -10730,15 +10752,37 @@
             {
                 "name": "SRDepthsLower -> SRToxicSwim1",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Electric Breath"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Electric Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "SR Depths Skip Electric",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],

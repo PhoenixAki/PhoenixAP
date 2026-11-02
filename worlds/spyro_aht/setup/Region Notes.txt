@@ -616,8 +616,8 @@ REGION SRDepthsEntry: middle layer of Depths room (with invince wall kick)
 	LOCATION SRDepthsEntry | SR: Light Gem from Sparx | 238 | True_()
 
 REGION SRDepthsUpper: upper layer of Depths room (above invince wall kick)
-	SRDepthsEntry -> SRDepthsUpper | And(Has('Wall Kick'), InvincibilityGadget())
-		would have wall kick and invincibility gadget
+	SRDepthsEntry -> SRDepthsUpper | And(Has('Wall Kick'), InvincibilityGadget()) | SR_Depths_Skip_Invincibility Has('Double Jump')
+		would have (wall kick and invincibility gadget) or DJ
 
 	LOCATION SRDepthsUpper | SR: Dragon Egg above heated wall kick | 332 | Has('Double Jump')
 	LOCATION SRDepthsUpper | SR: Firework above heated wall kick | 412 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
@@ -630,18 +630,18 @@ REGION SRDepthsLower: lower layer of Depths (below invince wall kick) and spitti
 	LOCATION SRDepthsLower | SR: Light Gem by fish statues | 239 | True_()
 
 REGION SRToxicSwim1: vanilla entry room of toxic swim
-	SRDepthsLower -> SRToxicSwim1 | HasAll('Electric Breath', 'Double Jump')
-		would have electric and DJ
+	SRDepthsLower -> SRToxicSwim1 | HasAll('Electric Breath', 'Double Jump') | SR_Depths_Skip_Electric Has('Double Jump')
+		would have DJ
 
 REGION SRToxicSwim2: vanilla exit room of toxic swim, not including post-statue hallway
 	SRToxicSwim1 -> SRToxicSwim2 | And(HasAll('Swim', 'Charge'), InvincibilityGadget())
-		would have electric and DJ and invince and swim and charge
+		would have DJ and invince and swim and charge
 
 	LOCATION SRToxicSwim2 | SR: Light Gem in pole room acid tunnel | 240 | True_()
 
 REGION SRToxicSwimAbove: atop pole spin puzzle
 	SRToxicSwim2 -> SRToxicSwimAbove | HasAll('Glide', 'Pole Spin')
-		would have electric and DJ and invince and swim and charge and pole spin and glide
+		would have DJ and invince and swim and charge and pole spin and glide
 
 	LOCATION SRToxicSwimAbove | SR: Dark Gem atop pole rooms | 119 | True_()
 	LOCATION SRToxicSwimAbove | SR: Light Gem in Locked Chest atop pole rooms | 830 | LockedChestRule('Sunken Ruins')
@@ -649,7 +649,7 @@ REGION SRToxicSwimAbove: atop pole spin puzzle
 
 REGION SRToxicRise: rising statue room. include stuff before it in toxic swim statue hallway
 	SRToxicSwimAbove -> SRToxicRise | True_()
-		would have electric and invince and swim and charge and DJ and pole spin and glide
+		would have invince and swim and charge and DJ and pole spin and glide
 	ShopPads -> SRToxicRise | OpenWorldRule(['Sunken Ruins - Toxic Rise'])
 		could have nothing
 
