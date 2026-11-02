@@ -21911,24 +21911,48 @@
                 "id": 281,
                 "options": [],
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "And",
                             "options": [],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Wall Kick",
-                                "count": 1
-                            }
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Wall Kick",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "InvincibilityGadget",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
                         },
                         {
-                            "rule": "InvincibilityGadget",
-                            "options": [],
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Skip Invincibility",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
-                            "args": {}
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Wall Kick"
+                                ]
+                            }
                         }
                     ]
                 }
@@ -21968,13 +21992,45 @@
             {
                 "name": "RLNorthEast2 -> RLNorthEast2Above",
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "HasAll",
+                            "rule": "And",
                             "options": [],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Double Jump",
+                                            "Glide",
+                                            "Pole Spin",
+                                            "Wall Kick"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "rule": "InvincibilityGadget",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Skip Invincibility",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
                             "args": {
                                 "item_names": [
@@ -21984,12 +22040,6 @@
                                     "Wall Kick"
                                 ]
                             }
-                        },
-                        {
-                            "rule": "InvincibilityGadget",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {}
                         }
                     ]
                 }

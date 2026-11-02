@@ -1266,10 +1266,10 @@ REGION RLNorthEast2: past electric room, up through conveyor room and up to lase
 	RLNorthEast1 -> RLNorthEast2 | Has('Electric Breath')
 		would have (electric or ice + charge) and electric
 
-	LOCATION RLNorthEast2 | RL: Light Gem after conveyor belt | 281 | And(Has('Wall Kick'), InvincibilityGadget())
+	LOCATION RLNorthEast2 | RL: Light Gem after conveyor belt | 281 | And(Has('Wall Kick'), InvincibilityGadget()) | RL_Skip_Invincibility HasAll('Double Jump', 'Wall Kick')
 
 REGION RLNorthEast2Above: gems above conveyor room
-	RLNorthEast2 -> RLNorthEast2Above | And(HasAll('Wall Kick', 'Double Jump', 'Pole Spin', 'Glide'), InvincibilityGadget())
+	RLNorthEast2 -> RLNorthEast2Above | And(HasAll('Wall Kick', 'Double Jump', 'Pole Spin', 'Glide'), InvincibilityGadget()) | RL_Skip_Invincibility HasAll('Wall Kick', 'Double Jump', 'Pole Spin', 'Glide')
 		would have DJ and (electric or ice + charge) and electric and wall kick and invincibility gadget and pole spin and glide
 
 REGION RLNorthEast3: small room with just the 2 small robo gnorcs because dumb

@@ -322,7 +322,7 @@ RLEntry | RL: Empty Locked Chest above poles | 820 | LockedChestRule('Red\'s Lab
 RLEntry | RL: Empty Locked Chest above charge switches | 821 | And(Has('Charge'), LockedChestRule('Red\'s Laboratory'))
 RLCenter | RL: Dragon Egg from thief in center room | 362 | Has('Charge')
 RLMechaRed | RL: Defeat Mecha-Red | 707 | HasAll('Double Jump', 'Fire Breath', 'Electric Breath', 'Charge')
-RLNorthEast2 | RL: Light Gem after conveyor belt | 281 | And(Has('Wall Kick'), InvincibilityGadget())
+RLNorthEast2 | RL: Light Gem after conveyor belt | 281 | And(Has('Wall Kick'), InvincibilityGadget()) | RL_Skip_Invincibility HasAll('Double Jump', 'Wall Kick')
 RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), HasAny('Electric Breath', 'Ice Breath')) | Pre-production_Dark_Gem_Breathless Has('Double Jump')
 RLNorthWest1 | RL: Dragon Egg in northwest piston room | 363 | HasAll('Double Jump', 'Glide')
 RLNorthWest2 | RL: Light Gem from northwest laser parkour | 282 | Has('Double Jump')
