@@ -1072,6 +1072,9 @@ REGION MFtEntry: entry of MFt. technically includes the little stretch at end of
 	MFtCenter -> MFtEntry | True_()
 		would have (water or ice)
 
+REGION MFtEntryAlcoves: boarded off alcoves in entry area. Just for gem logic
+    MFtEntry -> MFtEntryAlcoves | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+
 REGION MFtCenter: center area past rock monster
 	MFtEntry -> MFtCenter | And(Has('Charge'), HasAny('Water Breath', 'Ice Breath')) | Shockwave_Rock_Monsters And(Has('Shockwave'), HasAny('Water Breath', 'Ice Breath')) | Horn_Dive_Rock_Monsters HasAny('Water Breath', 'Ice Breath')
 		would have DJ and wall kick
@@ -1086,8 +1089,13 @@ REGION MFtSouth: shop area and rest of south
 	ShopPads -> MFtSouth | OpenWorldRule(['Magma Falls - Crackling Cave'])
 		could have nothing
 
-	LOCATION MFtSouth | MFt: Dragon Egg in Locked Chest behind chargeable wall | 851 | And(Has('Charge'), LockedChestRule('Magma Falls'))
 	LOCATION MFtSouth | MFt: Empty Locked Chest across shop | 818 | And(Has('Double Jump'), LockedChestRule('Magma Falls'))
+
+REGION MFtSouthChestRoom: chest room next to shop, boarded off
+    MFtSouth -> MFtSouthChestRoom | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+        would have (charge or DJ)
+
+	LOCATION MFtSouthChestRoom | MFt: Dragon Egg in Locked Chest behind chargeable wall | 851 | LockedChestRule('Magma Falls')
 
 REGION MFtWallKickLower: hallway to and lower wall kick room
 	MFtSouth -> MFtWallKickLower | HasAny('Water Breath', 'Ice Breath')
@@ -1161,7 +1169,12 @@ REGION MFbSparxShop: hallway post-imp room and shop area. don't think thief area
 
 	LOCATION MFbSparxShop | MFb: Dragon Egg from Sparx | 356 | True_()
 	LOCATION MFbSparxShop | MFb: Light Gem from Sparx | 275 | True_()
-	LOCATION MFbSparxShop | MFb: Dragon Egg from thief | 357 | HasAll('Double Jump', 'Charge')
+
+REGION MFbThiefArea: boarded off thief area. Technically doesn't start until at the middle gnorc since nothing of value before
+    MFbSparxShop -> MFbThiefArea | HasAll('Charge', 'Double Jump') | Horn_Dive_Walls HasAll('Double Jump', 'Shockwave')
+        would have DJ and (charge or shockwave)
+    
+	LOCATION MFbThiefArea | MFb: Dragon Egg from thief | 357 | Has('Charge')
 
 Dark Mine
 ---------

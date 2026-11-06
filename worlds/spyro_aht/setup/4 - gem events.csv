@@ -463,19 +463,19 @@ MMNorthEast,50,[enemy] fire imp,True_()
 MMNorthEast,373,on the ground/baskets/headbash chest,True_()
 Magma Falls,,,
 MFtEntry,90,headbash chests,Has('Double Jump')
-MFtEntry,25,metal chest behind chargeable wall,Has('Charge')
 MFtEntry,20,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 MFtEntry,50,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 MFtEntry,25,firework basket,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
-MFtEntry,25,firework basket behind chargeable wall,"HasAll('Charge', 'Fire Breath') | Fire_Breath_Idle_Animation Has('Charge')"
 MFtEntry,100,[enemy] rock monster,"Has('Charge') | Shockwave_Rock_Monsters HasAll('Double Jump', 'Shockwave') | Horn_Dive_Rock_Monsters Has('Double Jump')"
+MFtEntryAlcoves,25,firework basket behind chargeable wall,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
+MFtEntryAlcoves,25,metal chest behind chargeable wall,True_()
 MFtCenter,100,[enemy] fire imps,True_()
 MFtSouth,50,baskets by locked chest above center,Has('Double Jump')
-MFtSouth,20,[enemy] armored huge gnorc behind chargeable wall,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-MFtSouth,50,metal chests behind chargeable wall,Has('Charge')
+MFtSouthChestRoom,20,[enemy] armored huge gnorc behind chargeable wall,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
+MFtSouthChestRoom,50,metal chests behind chargeable wall,True_()
 MFtWallKickLower,50,[enemy] fire imps,True_()
 MFtWallKickLower,155,on the ground,True_()
-MFtWallKickLower,25,metal chest behind chargeable wall,Has('Charge')
+MFtWallKickLower,25,metal chest behind chargeable wall,Has('Charge') | Horn_Dive_Walls Has('Double Jump')
 MFtWallKickUpper,75,baskets above wall kick,True_()
 MFtWallKickUpper,125,[enemy] fire imps and phoenixes above wall kick,True_()
 MFtWallKickUpper,500,firework in wall kick room,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
@@ -493,7 +493,7 @@ MFbSouthEast,50,[enemy] phoenixes,True_()
 MFbSouthEast,100,dark shards,True_()
 MFbBeforeImpRoom,75,baskets,True_()
 MFbBeforeImpRoom,40,[enemy] armored middle gnorcs,Has('Charge')
-MFbBeforeImpRoom,25,metal chest behind chargeable wall,Has('Charge')
+MFbBeforeImpRoom,25,metal chest behind chargeable wall,Has('Charge') | Horn_Dive_Walls Has('Double Jump')
 MFbBeforeImpRoom,20,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 MFbBeforeImpRoom,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 MFbImpRoom,150,[enemy] fire imps 1-6,"HasAny('Water Breath', 'Ice Breath')"
@@ -505,8 +505,8 @@ MFbSparxShop,50,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electri
 MFbSparxShop,1100,Sparx minigames 4-1,True_()
 MFbSparxShop,900,Sparx minigames 4-2,True_()
 MFbSparxShop,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-MFbSparxShop,20,[enemy] armored middle gnorc in thief area,"HasAll('Double Jump', 'Charge')"
-MFbSparxShop,291,on the ground in thief area,"HasAll('Double Jump', 'Charge')"
+MFbThiefArea,20,[enemy] armored middle gnorc in thief area,Has('Charge')
+MFbThiefArea,291,on the ground in thief area,True_()
 Dark Mine,,,
 DMEntry,250,dark shards,"HasAny('Double Jump', 'Charge')"
 DMEntry,275,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
@@ -515,7 +515,7 @@ DMEntry,75,[enemy] critters,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 DMEntry,60,[enemy] drill robots,"HasAny('Electric Breath', 'Charge')"
 DMEntry,150,[enemy] spike robots/steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 DMEntry,100,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
-DMEntry,100,metal chest and baskets behind chargeable wall,Has('Charge')
+DMEntry,100,stuff behind chargeable wall guarded by robot,"Has('Charge') | Horn_Dive_Walls And(Has('Double Jump'), HasAny('Electric Breath', 'Charge'))"
 DMLGDoorEntry,20,[enemy] huge robo-gnorc,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 DMLGDoorEntry,25,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 DMLGDoorPastGnorc,175,baskets/metal chests,True_()

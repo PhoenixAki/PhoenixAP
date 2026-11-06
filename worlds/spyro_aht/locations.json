@@ -18697,20 +18697,6 @@
                 }
             },
             {
-                "name": "25 Gems (metal chest behind chargeable wall)",
-                "gem_amount": 25,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
-                }
-            },
-            {
                 "name": "20 Gems ([enemy] unarmored middle gnorc)",
                 "gem_amount": 20,
                 "options": [],
@@ -18778,44 +18764,6 @@
                 }
             },
             {
-                "name": "25 Gems (firework basket behind chargeable wall)",
-                "gem_amount": 25,
-                "options": [],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "HasAll",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Fire Breath"
-                                ]
-                            }
-                        },
-                        {
-                            "rule": "Has",
-                            "options": [
-                                {
-                                    "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Fire Breath Idle Animation",
-                                    "operator": "contains"
-                                }
-                            ],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Charge",
-                                "count": 1
-                            }
-                        }
-                    ]
-                }
-            },
-            {
                 "name": "100 Gems ([enemy] rock monster)",
                 "gem_amount": 100,
                 "options": [],
@@ -18866,6 +18814,92 @@
                             }
                         }
                     ]
+                }
+            }
+        ]
+    },
+    "MFtEntryAlcoves": {
+        "name": "MFtEntryAlcoves",
+        "entrances": [
+            {
+                "name": "MFtEntry -> MFtEntryAlcoves",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [],
+        "gem_events": [
+            {
+                "name": "25 Gems (firework basket behind chargeable wall)",
+                "gem_amount": 25,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Fire Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "25 Gems (metal chest behind chargeable wall)",
+                "gem_amount": 25,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
                 }
             }
         ]
@@ -19035,35 +19069,6 @@
         ],
         "locations": [
             {
-                "name": "MFt: Dragon Egg in Locked Chest behind chargeable wall",
-                "id": 851,
-                "options": [],
-                "access_rule": {
-                    "rule": "And",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Charge",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "LockedChestRule",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "level": "Magma Falls"
-                            }
-                        }
-                    ]
-                }
-            },
-            {
                 "name": "MFt: Empty Locked Chest across shop",
                 "id": 818,
                 "options": [],
@@ -19107,7 +19112,63 @@
                         "count": 1
                     }
                 }
-            },
+            }
+        ]
+    },
+    "MFtSouthChestRoom": {
+        "name": "MFtSouthChestRoom",
+        "entrances": [
+            {
+                "name": "MFtSouth -> MFtSouthChestRoom",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "MFt: Dragon Egg in Locked Chest behind chargeable wall",
+                "id": 851,
+                "options": [],
+                "access_rule": {
+                    "rule": "LockedChestRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level": "Magma Falls"
+                    }
+                }
+            }
+        ],
+        "gem_events": [
             {
                 "name": "20 Gems ([enemy] armored huge gnorc behind chargeable wall)",
                 "gem_amount": 20,
@@ -19146,13 +19207,10 @@
                 "gem_amount": 50,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "args": {}
                 }
             }
         ]
@@ -19204,13 +19262,35 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -19905,13 +19985,35 @@
                 "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -20186,22 +20288,6 @@
                     "filtered_resolution": false,
                     "args": {}
                 }
-            },
-            {
-                "name": "MFb: Dragon Egg from thief",
-                "id": 357,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
-                        ]
-                    }
-                }
             }
         ],
         "gem_events": [
@@ -20307,20 +20393,79 @@
                         }
                     ]
                 }
-            },
+            }
+        ]
+    },
+    "MFbThiefArea": {
+        "name": "MFbThiefArea",
+        "entrances": [
+            {
+                "name": "MFbSparxShop -> MFbThiefArea",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Double Jump"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Shockwave"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "MFb: Dragon Egg from thief",
+                "id": 357,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Charge",
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "gem_events": [
             {
                 "name": "20 Gems ([enemy] armored middle gnorc in thief area)",
                 "gem_amount": 20,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
-                        ]
+                        "item_name": "Charge",
+                        "count": 1
                     }
                 }
             },
@@ -20329,15 +20474,10 @@
                 "gem_amount": 291,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
-                        ]
-                    }
+                    "args": {}
                 }
             }
         ]
@@ -20534,17 +20674,57 @@
                 }
             },
             {
-                "name": "100 Gems (metal chest and baskets behind chargeable wall)",
+                "name": "100 Gems (stuff behind chargeable wall guarded by robot)",
                 "gem_amount": 100,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "And",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Double Jump",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "HasAny",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Charge",
+                                            "Electric Breath"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
             }
         ]

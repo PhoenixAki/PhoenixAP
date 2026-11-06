@@ -118,8 +118,10 @@ MMPostLumber
 MMPostLumberCaves
 MMNorthEast
 MFtEntry
+MFtEntryAlcoves
 MFtCenter
 MFtSouth
+MFtSouthChestRoom
 MFtWallKickLower
 MFtWallKickUpper
 MFtBallGadgetEntry
@@ -129,6 +131,7 @@ MFbSouthEast
 MFbBeforeImpRoom
 MFbImpRoom
 MFbSparxShop
+MFbThiefArea
 DMEntry
 DMLGDoorEntry
 DMLGDoorPastGnorc
