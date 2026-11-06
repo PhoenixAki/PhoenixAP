@@ -32,6 +32,18 @@ class SpyroAHTCommands(ClientCommandProcessor):
         self.ctx.emu_loop = asyncio.create_task(self.ctx._emu_loop())
         return True
     
+    async def _cmd_console_testing(self) -> bool:
+        """This command is intended for developer testing use, but can be used if it for some reason appeals to you :)
+        It toggles whether console-sent items should be ignored from the list of items the client re-syncs to the game
+        state upon entering a save file. Default is false. Using the command flips it between false/true."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        self.output(f"Switching from {self.ctx.ignore_console_sent_items} to {not self.ctx.ignore_console_sent_items}.")
+        self.ctx.ignore_console_sent_items = not self.ctx.ignore_console_sent_items
+        return True
+    
     async def _cmd_add_item(self, item, amount) -> bool:
         """Format: /add_item item_name amount.
         Adds <amount> of <item_name> to the game's memory directly.
@@ -226,6 +238,7 @@ class SpyroAHTContext(SuperContext):
         self._shop_items_received = asyncio.Event()
 
         self._handled_items: set[NetworkItem] = set()
+        self.ignore_console_sent_items = False
 
         self._checked_boss_doors = set()
         self._checked_gem_doors = set()
@@ -324,7 +337,10 @@ class SpyroAHTContext(SuperContext):
         item_counts = collections.Counter(self.item_names.lookup_in_slot(i.item, self.slot) for i in self.items_received)
         for item in self.items_received:
             # skip already-processed items. Items sent via admin console have location < 0 and should always be processed since they don't get added to items_received
-            if item in self._handled_items and item.location > 0: continue
+            if item in self._handled_items and item.location != -1: continue
+            
+            if item.location == -1 and item in self._handled_items and self.ignore_console_sent_items: continue
+            
             self._handled_items.add(item)
             if consts.ITEM_GROUP_IDS["Elder Abilities"][0] <= item.item <= consts.ITEM_GROUP_IDS["Abilities"][1]:
                 if not await self.emu_client.has_any_breath() and consts.ITEM_GROUP_IDS["Breaths"][0] <= item.item <= consts.ITEM_GROUP_IDS["Breaths"][1]:
