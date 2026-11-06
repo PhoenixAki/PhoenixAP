@@ -350,10 +350,10 @@ class ChestKeys(Choice):
     The way chests come into logic depends on chest_keys as well as shop_randomization. See the project wiki for a breakdown:
     https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-2-%E2%80%90-Features-(Overview)
     
-    global_lockpicks: each opens 1 chest anywhere in the game.
+    global_lockpicks: each opens 1 chest anywhere in the game. Same as vanilla game lockpicks.
     level_lockpicks: each opens 1 chest in a specific level e.g. "Sunken Ruins Lockpick"
-    level_key_rings: each key ring opens all chests in 1 level e.g. "Dragon Village Key Ring".
-    realm_key_rings: each key ring opens all chests in 1 realm e.g. "Lost Cities Key Ring"."""
+    level_key_rings: each opens all chests in 1 level e.g. "Dragon Village Key Ring".
+    realm_key_rings: each opens all chests in 1 realm e.g. "Lost Cities Key Ring"."""
     display_name = "Chest Keys"
     option_global_lockpicks = 0
     option_level_lockpicks = 1
@@ -433,10 +433,10 @@ class DoubleGems(Choice):
 
 ###############GATE & GADGET COSTS###############
 class RandomizeBossLairDoorCosts(Choice):
-    """Determines the Dark Gem cost for each boss lair.
+    """Determines the method of calculating Dark Gem costs for boss lairs.
 
     default: Each boss lair has their vanilla cost (10/20/30/40).
-    randomized: Randomly pick costs in the range defined by boss_lair_door_cost_min and boss_lair_door_cost_max.
+    randomized: Costs are randomly generated using the Boss Lair Min and Boss Lair Max values defined in random_costs.
     shuffle: Vanilla boss lair costs are shuffled between each other (still 10/20/30/40 but in a random order)."""
     display_name = "Randomize Boss Lair Door Costs"
     option_default = 0
@@ -445,25 +445,52 @@ class RandomizeBossLairDoorCosts(Choice):
     default = 0
 
 
-class BossLairDoorCostMin(Range):
-    """Minimum cost for boss lairs, if set to randomized. Must be less than or equal to boss_lair_door_cost_max."""
-    display_name = "Boss Lair Door Cost Min"
-    range_start = 1
-    range_end = 40
-    default = 10
+class RandomizeLightGemDoorCosts(Choice):
+    """Determines the method of calculating Light Gem costs for Light Gem Doors.
+
+    default: Each door has their vanilla cost (20/45/70/95).
+    randomized: Costs are randomly generated using the Light Gem Door Min and Light Gem Door Max values defined in random_costs.
+    shuffle: Each door has their vanilla cost shuffled with the others (still 20/45/70/95 but in a random order)."""
+    display_name = "Randomize Light Gem Door Costs"
+    option_default = 0
+    option_randomized = 1
+    option_shuffle = 2
+    default = 0
 
 
-class BossLairDoorCostMax(Range):
-    """Maximum cost for boss lairs, if set to randomized."""
-    display_name = "Boss Lair Door Cost Max"
-    range_start = 1
-    range_end = 40
-    default = 40
+class RandomizeGadgetCosts(Choice):
+    """Determines the method of calculating Light Gem costs for gadgets. Listed in order of Ball Gadget -> Invincibility -> Supercharge.
+
+    default: Each gadget has their vanilla cost (8/24/40).
+    randomized: Costs are randomly generated using the Gadget Min and Gadget Max values defined in random_costs.
+    shuffle: Each gadget has their vanilla cost shuffled with the others (still 8/24/40 but in a random order)."""
+    display_name = "Randomize Gadget Costs"
+    option_default = 0
+    option_randomized = 1
+    option_shuffle = 2
+    default = 0
+
+
+class RandomCosts(OptionCounter):
+    """If randomize_boss_lair_door_costs, randomize_light_gem_door_costs, or randomize_gadget_costs are set to randomized,
+    this option determines the bounds of each randomly generated cost.
+    
+    Light gem door and gadget costs can't exceed 90 if open world mode is set to vanilla, due to being too restrictive."""
+    display_name = "Random Costs"
+    valid_keys = ("Boss Lair Min", "Boss Lair Max", "Light Gem Door Min", "Light Gem Door Max", "Gadget Min", "Gadget Max")
+    default = {
+        "Boss Lair Min": 10,
+        "Boss Lair Max": 40,
+        "Light Gem Door Min": 20,
+        "Light Gem Door Max": 95,
+        "Gadget Min": 8,
+        "Gadget Max": 40
+    }
 
 
 class BossLairForcing(Choice):
-    """This option decides if the generator should force boss lair(s) to have the most expensive Dark Gem costs.
-    Forcing takes place after costs have been decided through the above 3 options.
+    """Decides if the generator should force any boss lair(s) to have the most expensive Dark Gem costs.
+    Useful if you want to ensure any bosses get unlocked after the others, even if costs are fully randomized.
     
     unchanged: Leaves boss lair costs untouched.
     gnasty_gnorc/ineptune/red/mecha_red: Swaps that boss's cost with the highest cost.
@@ -476,66 +503,6 @@ class BossLairForcing(Choice):
     option_mecha_red = 4
     option_automatic = 5
     default = 0
-    
-
-class RandomizeLightGemDoorCosts(Choice):
-    """Determines the Light Gem cost for each Light Gem door.
-
-    default: Each door has their vanilla cost (20/45/70/95).
-    randomized: Randomly pick costs in the range defined by light_gem_door_cost_min and light_gem_door_cost_max.
-      Randomized costs can't exceed 90 if open world mode is set to vanilla.
-    shuffle: Each door has their vanilla cost shuffled with the others (still 20/45/70/95 but in a random order)."""
-    display_name = "Randomize Light Gem Door Costs"
-    option_default = 0
-    option_randomized = 1
-    option_shuffle = 2
-    default = 0
-
-
-class LightGemDoorCostMin(Range):
-    """Minimum cost for light gem doors, if set to randomized. Must be less than or equal to light_gem_door_cost_max."""
-    display_name = "Light Gem Door Cost Min"
-    range_start = 1
-    range_end = 100
-    default = 20
-
-
-class LightGemDoorCostMax(Range):
-    """Maximum cost for light gem doors, if set to randomized."""
-    display_name = "Light Gem Door Cost Max"
-    range_start = 1
-    range_end = 100
-    default = 95
-
-
-class RandomizeGadgetCosts(Choice):
-    """Determines the Light Gem cost for each gadget. Listed in order of Ball Gadget -> Invincibility -> Supercharge.
-
-    default: Each gadget has their vanilla cost (8/24/40).
-    randomized: Randomly picks costs in the range defined by gadget_cost_min and gadget_cost_max.
-      Randomized costs can't exceed 90 if open world mode is set to vanilla.
-    shuffle: Each gadget has their vanilla cost shuffled with the others (still 8/24/40 but in a random order)."""
-    display_name = "Randomize Gadget Costs"
-    option_default = 0
-    option_randomized = 1
-    option_shuffle = 2
-    default = 0
-
-
-class GadgetCostMin(Range):
-    """Minimum cost for gadgets, if set to randomized. Must be less than or equal to gadget_cost_max."""
-    display_name = "Gadget Cost Min"
-    range_start = 1
-    range_end = 100
-    default = 8
-
-
-class GadgetCostMax(Range):
-    """Maximum cost for gadgets, if set to randomized."""
-    display_name = "Gadget Cost Max"
-    range_start = 1
-    range_end = 100
-    default = 40
     
 ###############QUALITY OF LIFE###############
 class PauseMenuPatch(Choice):
@@ -652,15 +619,10 @@ class SpyroAHTOptions(PerGameCommonOptions):
     double_gems: DoubleGems
     
     randomize_boss_lair_door_costs: RandomizeBossLairDoorCosts
-    boss_lair_door_cost_min: BossLairDoorCostMin
-    boss_lair_door_cost_max: BossLairDoorCostMax
-    boss_lair_forcing: BossLairForcing
     randomize_light_gem_door_costs: RandomizeLightGemDoorCosts
-    light_gem_door_cost_min: LightGemDoorCostMin
-    light_gem_door_cost_max: LightGemDoorCostMax
     randomize_gadget_costs: RandomizeGadgetCosts
-    gadget_cost_min: GadgetCostMin
-    gadget_cost_max: GadgetCostMax
+    random_costs: RandomCosts
+    boss_lair_forcing: BossLairForcing
     
     pause_menu_patch: PauseMenuPatch
     shop_pad_proximity_activation: ShopPadProximityActivation
@@ -691,9 +653,7 @@ spyro_options_groups = [
         ShopRandomization, ChestKeys, ShopItemCount, ShopLogic, BlinkGems, NonBlinkEnemies, OtherGems, DoubleGems
     ]),
     OptionGroup("GATE & GADGET COSTS", [
-        RandomizeBossLairDoorCosts, BossLairDoorCostMin, BossLairDoorCostMax, BossLairForcing,
-        RandomizeLightGemDoorCosts, LightGemDoorCostMin, LightGemDoorCostMax,
-        RandomizeGadgetCosts, GadgetCostMin, GadgetCostMax
+        RandomizeBossLairDoorCosts, RandomizeLightGemDoorCosts, RandomizeGadgetCosts, RandomCosts, BossLairForcing
     ]),
     OptionGroup("QUALITY OF LIFE", [
         PauseMenuPatch, ShopPadProximityActivation, AutoHinting, DisguiseShopItems, EasyBosses, TimeSavers

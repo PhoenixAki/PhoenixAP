@@ -442,12 +442,13 @@ class SpyroAHTWorld(World):
         self.check_egg_and_gem_goals(self.options.light_gems_goal, 15, self.options.exclude_chest_items >= 2)
         self.check_egg_and_gem_goals(self.options.dragon_eggs_goal, 16, self.options.exclude_chest_items.value in [1, 3])
         
-        # setup costs
-        self.gadget_costs = self.setup_costs(self.options.randomize_gadget_costs, self.options.gadget_cost_min, self.options.gadget_cost_max, self.gadget_costs, "gadget")
-        self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.gadget_costs)}.", consts.LoggingLevel.MEDIUM)
-        self.light_gem_doors = self.setup_costs(self.options.randomize_light_gem_door_costs, self.options.light_gem_door_cost_min, self.options.light_gem_door_cost_max, self.light_gem_doors, "Light Gem door")
-        self.log(f"Light Gem Door Costs: {", ".join(str(cost) for cost in self.light_gem_doors)}.", consts.LoggingLevel.MEDIUM)
-        self.boss_lairs = self.setup_costs(self.options.randomize_boss_lair_door_costs, self.options.boss_lair_door_cost_min, self.options.boss_lair_door_cost_max, self.boss_lairs, "boss lair")
+        # setup costs. Don't need to if UT gen, since UT gets cost info from slot data
+        if not self.ut_active:
+            self.gadget_costs = self.setup_costs(self.options.randomize_gadget_costs, self.gadget_costs, "Gadget")
+            self.log(f"Gadget Costs: {", ".join(str(cost) for cost in self.gadget_costs)}.", consts.LoggingLevel.MEDIUM)
+            self.light_gem_doors = self.setup_costs(self.options.randomize_light_gem_door_costs, self.light_gem_doors, "Light Gem Door")
+            self.log(f"Light Gem Door Costs: {", ".join(str(cost) for cost in self.light_gem_doors)}.", consts.LoggingLevel.MEDIUM)
+            self.boss_lairs = self.setup_costs(self.options.randomize_boss_lair_door_costs, self.boss_lairs, "Boss Lair")
         
         # boss lair forcing
         lookup = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]
@@ -634,39 +635,42 @@ class SpyroAHTWorld(World):
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError(f"{name} had its bundle size set too high ({self.options.item_bundles.value[name]}). Fix this, or set auto_corrections to at least fix_minor.")
     
-    def setup_costs(self, option: Choice, opt_min: Range, opt_max: Range, costs: list[int], cost_type: str) -> list[int]:  # returns costs
-        self.log(f"Setting up and checking for issues with {cost_type} costs.", consts.LoggingLevel.LOW)
+    def setup_costs(self, option: Choice, costs: list[int], cost_type: str) -> list[int]:  # returns costs
+        self.log(f"Setting up and checking for issues with {cost_type.lower()} costs.", consts.LoggingLevel.LOW)
         if option.value == 0:  # default
             return costs
         if option.value == 2:  # shuffled
             self.random.shuffle(costs)
             return costs
         elif option.value == 1:  # randomized
-            rand_count = 3 if cost_type == "gadget" else 4
-            bad_condition = opt_min.value > opt_max.value
+            rand_min = self.options.random_costs.value[f"{cost_type} Min"]
+            rand_max = self.options.random_costs.value[f"{cost_type} Max"]
+            
+            bad_condition = rand_min > rand_max
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: {opt_min.display_name} of {opt_min.value} is greater than {opt_max.value}. Fixing by swapping them.", consts.LoggingLevel.WARNING)
-                opt_min.value, opt_max.value = opt_max.value, opt_min.value
+                self.log(f"Minor Warning: {cost_type} random min cost of {rand_min} is greater than {rand_max}. Fixing by swapping them.", consts.LoggingLevel.WARNING)
+                rand_min, rand_max = rand_max, rand_min
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"{opt_min.display_name} of {opt_min.value} is greater than {opt_max.value}. Fix this, or set auto_corrections to at least fix_minor.")
+                raise OptionError(f"{cost_type} random min cost of {rand_min} is greater than {rand_max}. Fix this, or set auto_corrections to at least fix_minor.")
             
-            self.check_high_costs(opt_min)
-            self.check_high_costs(opt_max)
+            if cost_type != "Boss Lair Door":  # boss lair costs are never capped
+                rand_min = self.check_high_costs(rand_min, cost_type + "Min")
+                rand_max = self.check_high_costs(rand_max, cost_type + "Max")
             
-            return [self.random.randint(opt_min.value, opt_max.value) for _ in range(rand_count)]
+            return [self.random.randint(rand_min, rand_max) for _ in range(3 if cost_type == "Gadget" else 4)]
         else:
-            self.log("Something has gone TERRIBLY wrong if you are seeing this log message. Report to devs ASAP.", consts.LoggingLevel.WARNING)
-            return [0]  # something has gone VERY wrong, this should never happen and is only here to shush Python warnings
+            self.log("Something has gone very wrong if you are seeing this log message. Report to devs ASAP.", consts.LoggingLevel.WARNING)
+            return [0]  # this should never happen and is only here to shush Python warnings
     
-    def check_high_costs(self, range_option: Range):
-        if range_option.display_name in ["Boss Lair Door Cost Minimum", "Boss Lair Door Cost Maximum"]:
-            return
-        bad_condition = range_option.value > (range_option.range_end * 0.9) and self.options.open_world_mode.value == 0
+    def check_high_costs(self, rand_value: int, cost_type: str):
+        bad_condition = rand_value > 90 and self.options.open_world_mode.value == 0
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log(f"Minor Warning: {range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fixing by lowering {range_option.value} to {int(range_option.range_end * 0.9)}.", consts.LoggingLevel.WARNING)
-            range_option.value = int(range_option.range_end * 0.9)
+            self.log(f"Minor Warning: {cost_type} is capped to 90 when open world mode is disabled, as high costs are problematic. Fixing by lowering {cost_type} to 90.", consts.LoggingLevel.WARNING)
+            return 90
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError(f"{range_option.display_name} is capped to {int(range_option.range_end * 0.9)} when open world mode is disabled, as high costs are problematic. Fix this, or set auto_corrections to at least fix_minor.")
+            raise OptionError(f"{cost_type} is capped to 90 when open world mode is disabled, as high costs are problematic. Fix this, or set auto_corrections to at least fix_minor.")
+        else:
+            return rand_value
         
     def create_regions(self):
         self.log("Creating regions and locations.", consts.LoggingLevel.LOW)
@@ -1069,17 +1073,12 @@ class SpyroAHTWorld(World):
             "shop_costs": self.shop_costs,
 
             "randomize_boss_lair_door_costs": self.options.randomize_boss_lair_door_costs.value,
-            "boss_lair_door_cost_min": self.options.boss_lair_door_cost_min.value,
-            "boss_lair_door_cost_max": self.options.boss_lair_door_cost_max.value,
+            "randomize_light_gem_door_costs": self.options.randomize_light_gem_door_costs.value,
+            "randomize_gadget_costs": self.options.randomize_gadget_costs.value,
+            "random_costs": self.options.random_costs.value,
             "boss_lair_forcing": self.options.boss_lair_forcing.value,
             "boss_lair_costs": self.boss_lairs,
-            "randomize_light_gem_door_costs": self.options.randomize_light_gem_door_costs.value,
-            "light_gem_door_cost_min": self.options.light_gem_door_cost_min.value,
-            "light_gem_door_cost_max": self.options.light_gem_door_cost_max.value,
             "light_gem_door_costs": self.light_gem_doors,
-            "randomize_gadget_costs": self.options.randomize_gadget_costs.value,
-            "gadget_cost_min": self.options.gadget_cost_min.value,
-            "gadget_cost_max": self.options.gadget_cost_max.value,
             "gadget_costs": self.gadget_costs,
 
             "pause_menu_patch": self.options.pause_menu_patch.value,
