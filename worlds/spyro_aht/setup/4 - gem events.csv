@@ -90,7 +90,7 @@ DFElderStatue,675,Sparx minigames 1-1,True_()
 DFElderStatue,700,Sparx minigames 1-2,True_()
 DFCoveAboveShop,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 DFCoveAboveShop,125,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
-DFCoveAboveShop,25,metal chest behind chargeable wall,Has('Charge')
+DFCoveAboveShop,25,metal chest behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
 DFCoveShop,25,[enemy] normal crocovile,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 DFCove,330,baskets/metal chests/headbash chest,True_()
 DFCove,75,[enemy] normal crocoviles,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
@@ -111,8 +111,8 @@ DFLGDoorShop,33,on the ground,True_()
 DFLGDoorShop,25,metal chest,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 DFLGDoorShop,75,baskets above DJ ledges,Has('Double Jump')
 DFLGDoorShop,75,[enemy] blue monkeys,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
-DFLGDoorShop,157,on the ground and metal chests behind chargeable wall,Has('Charge')
-DFLGDoorShop,30,headbash chest behind chargeable wall,"HasAll('Charge', 'Double Jump')"
+DFLGDoorCave,157,on the ground and metal chests behind chargeable wall,True_()
+DFLGDoorCave,30,headbash chest behind chargeable wall,Has('Double Jump')
 Coastal Remains,,,
 CREntry,668,on the ground,True_()
 CREntry,600,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
@@ -281,8 +281,10 @@ FVIcyCamp,25,metal chest via wall kick,"And(Has('Wall Kick'), HasAny('Double Jum
 FVIcyCamp,175,baskets via wall kick,"And(Has('Wall Kick'), HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath'))"
 FVIcyCamp,20,[enemy] unarmored middle gnorc via wall kick,"And(Has('Wall Kick'), HasAny('Fire Breath', 'Electric Breath', 'Charge'))"
 FVIcyCamp,20,[enemy] armored huge gnorc via wall kick,"And(HasAll('Charge', 'Wall Kick'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-FVIcyCampUpper,141,dark shards on ice/headbash rock and on the ground behind chargeable wall,Has('Charge')
-FVIcyCampUpper,571,baskets/metal chests/headbash chests + rock/on the ground/in air,True_()
+FVIcyCampUpper,571,on the ground/headbash stuff/baskets/metal,True_()
+FVIcyCampUpper,11,on ground behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
+FVIcyCampUpper,30,headbash rock behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
+FVIcyCampUpper,100,dark shards on ice (can't DJ),Has('Charge')
 FVIcyCampUpper,50,[enemy] eskimole on platforms,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 FVReturnFromIC,4500,armored chests via supercharge,True_()
 FVEntry2,15,on the ground,True_()
@@ -347,7 +349,7 @@ ICPastWaterGate,45,on the ground,True_()
 ICPastWaterGate,50,dark shard,"HasAny('Double Jump', 'Charge')"
 ICPastWaterGate,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 ICPastWaterGate,40,[enemy] armored middle gnorc,Has('Charge')
-ICPastWaterGate,25,headbash rocks behind chargeable wall,"HasAll('Charge', 'Double Jump')"
+ICPastWaterGate,25,headbash rock behind chargeable wall,"HasAll('Charge', 'Double Jump') | Horn_Dive_Walls Has('Double Jump')"
 ICElderRoom,208,on the ground/baskets/headbash chest/metal chests,True_()
 ICSuperchargeShop,130,on the ground,True_()
 ICSuperchargeShop,300,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
@@ -456,7 +458,7 @@ MMLumber,25,metal chest,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 MMPostLumber,658,baskets/on the ground/dark shards/chests and rocks,True_()
 MMPostLumber,325,[enemy] fire imps,"HasAny('Water Breath', 'Ice Breath')"
 MMPostLumber,140,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
-MMPostLumber,890,stuff behind chargeable walls,Has('Charge')
+MMPostLumberCaves,890,stuff behind chargeable walls,True_()
 MMNorthEast,50,[enemy] fire imp,True_()
 MMNorthEast,373,on the ground/baskets/headbash chest,True_()
 Magma Falls,,,

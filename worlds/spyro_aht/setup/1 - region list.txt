@@ -29,6 +29,7 @@ DFSteepCanyonCaves
 DFAfterVultures
 DFLGDoorEntry
 DFLGDoorShop
+DFLGDoorCave
 DFElderStatue
 DFCoveShop
 DFCoveAboveShop
@@ -114,6 +115,7 @@ MMLumberEntry
 MMNorth
 MMLumber
 MMPostLumber
+MMPostLumberCaves
 MMNorthEast
 MFtEntry
 MFtCenter

@@ -331,8 +331,13 @@ REGION DFLGDoorShop: majority of secret area
 	ShopPads -> DFLGDoorShop | OpenWorldRule(['Dragonfly Falls - Secret Area'])
 		could have nothing
 
-	LOCATION DFLGDoorShop | DF: Light Gem in Light Gem door area | 215 | Has('Charge')
 	LOCATION DFLGDoorShop | DF: Dragon Egg from thief in Light Gem door area | 314 | Has('Charge')
+
+REGION DFLGDoorCave: cave in secret area
+    DFLGDoorShop -> DFLGDoorCave | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+        would have (charge or DJ)
+    
+    LOCATION DFLGDoorCave | DF: Light Gem in Light Gem door area | 215 | True_()
 
 REGION DFElderStatue: statue area
 	DFAfterVultures -> DFElderStatue | True_()
@@ -355,7 +360,7 @@ REGION DFCoveAboveShop: wall kick area above shop
 	DFCoveShop -> DFCoveAboveShop | Has('Wall Kick')
 		would have Wall Kick
 
-	LOCATION DFCoveAboveShop | DF: Dragon Egg behind chargeable wall in cove | 316 | Has('Charge')
+	LOCATION DFCoveAboveShop | DF: Dragon Egg behind chargeable wall in cove | 316 | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
 
 REGION DFCove: the rest of the cove
 	DFElderStatue -> DFCove | True_()
@@ -387,8 +392,8 @@ REGION CREntry: shop, southern beach, east hub
 	CROttoPool -> CREntry | Has('Double Jump')
 		would have DJ
 
-	LOCATION CREntry | CR: Dragon Egg from Turtle Mother | 318 | Has('Charge')
-	LOCATION CREntry | CR: Light Gem from Turtle Mother | 221 | Has('Charge')
+	LOCATION CREntry | CR: Dragon Egg from Turtle Mother | 318 | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+	LOCATION CREntry | CR: Light Gem from Turtle Mother | 221 | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
 	LOCATION CREntry | CR: Empty Locked Chest behind Coastal Depot | 801 | LockedChestRule('Coastal Remains')
 	LOCATION CREntry | CR: Empty Locked Chest in southern beach | 802 | LockedChestRule('Coastal Remains')
 	LOCATION CREntry | CR: Light Gem above water mill | 222 | HasAll('Water Breath', 'Double Jump')
@@ -420,7 +425,7 @@ REGION CRCannon: cannon area with pole spinning
 
 	LOCATION CRCannon | CR: Dark Gem by cannon | 111 | Has('Double Jump')
 	LOCATION CRCannon | CR: Dragon Egg by cannon | 322 | HasAll('Double Jump', 'Pole Spin', 'Glide')
-	LOCATION CRCannon | CR: Dark Gem behind cannon door | 112 | HasAll('Double Jump', 'Glide', 'Charge')
+	LOCATION CRCannon | CR: Dark Gem behind cannon door | 112 | HasAll('Double Jump', 'Glide', 'Charge') | Horn_Dive_Walls HasAll('Double Jump', 'Glide')
 
 REGION CRWindmills: windmill area on the way to cloudy domain
 	CREntry -> CRWindmills | Has('Double Jump') | CR_Muddy_Pits True_()
@@ -730,7 +735,7 @@ REGION FVIcyCampUpper: upper areas of icy camp that need both wall kick and doub
 	FVIcyCamp -> FVIcyCampUpper | HasAll('Wall Kick', 'Double Jump')
 		would have wall kick and DJ
 
-	LOCATION FVIcyCampUpper | FV: Dragon Egg behind chargeable wall | 337 | Has('Charge')
+	LOCATION FVIcyCampUpper | FV: Dragon Egg behind chargeable wall | 337 | Has('Charge') | Horn_Dive_Walls True_()
 	LOCATION FVIcyCampUpper | FV: Dark Gem in orbiting platforms room | 123 | True_()
 	LOCATION FVIcyCampUpper | FV: Light Gem in orbiting platforms room | 246 | True_()
 
@@ -816,9 +821,9 @@ REGION ICCourtyardUpper: upper courtyard above floating platforms
 
 REGION ICPastWaterGate: past the water-opened gate, up to elder's door
 	ICCourtyardUpper -> ICPastWaterGate | Has('Water Breath')
-		would have DJ and water
+		would have water
 
-	LOCATION ICPastWaterGate | IC: Dragon Egg in Locked Chest behind chargeable wall | 849 | And(Has('Charge'), LockedChestRule('Ice Citadel'))
+	LOCATION ICPastWaterGate | IC: Dragon Egg in Locked Chest behind chargeable wall | 849 | And(Has('Charge'), LockedChestRule('Ice Citadel')) | Horn_Dive_Walls And(Has('Double Jump'), LockedChestRule('Ice Citadel'))
     LOCATION ICPastWaterGate | IC: Dark Gem above Elder Astor | 126 | And(HasAll('Double Jump', 'Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))
 
 REGION ICElderRoom: elder's room, opened by killing armored huge gnorc in front
@@ -1043,9 +1048,14 @@ REGION MMPostLumber: past the gap right after lumber shop
 	MFtEntry -> MMPostLumber | Has('Double Jump')
 		would have DJ
 
-	LOCATION MMPostLumber | MM: Dragon Egg in Locked Chest behind chargeable wall | 850 | And(Has('Charge'), LockedChestRule('Molten Mount'))
-	LOCATION MMPostLumber | MM: Light Gem in Locked Chest behind chargeable wall | 834 | And(Has('Charge'), LockedChestRule('Molten Mount'))
 	LOCATION MMPostLumber | MM: Dark Gem at end of level | 134 | True_()
+
+REGION MMPostLumberCaves: behind chargeable walls near end of level
+    MMPostLumber -> MMPostLumberCaves | Has('Charge') | Horn_Dive_Walls True_()
+        would have DJ and (maybe charge)
+    
+    LOCATION MMPostLumberCaves | MM: Dragon Egg in Locked Chest behind chargeable wall | 850 | LockedChestRule('Molten Mount')
+	LOCATION MMPostLumberCaves | MM: Light Gem in Locked Chest behind chargeable wall | 834 | LockedChestRule('Molten Mount')
 
 REGION MMNorthEast: northeast area down hallway with fire imp
 	MMPostLumber -> MMNorthEast | HasAny('Water Breath', 'Ice Breath')
