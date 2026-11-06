@@ -273,6 +273,7 @@ class SpyroAHTContext(SuperContext):
                 self.auth_ready.set()
             case 'RoomInfo':
                 self._seed = args['seed_name']
+                if self._seed.startswith("W"): self._seed.replace("W", "")
             case 'LocationInfo':
                 if not self._shop_items_received.is_set():
                     self._shop_items = [NetworkItem(*item) for item in args['locations']]
