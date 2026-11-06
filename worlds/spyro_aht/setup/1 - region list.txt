@@ -138,6 +138,7 @@ DMSeeSawShop
 DMPostSeeSaw
 DMGreenPoles
 RLEntry
+RLEntryAbove
 RLCenter
 RLSouthWest
 RLMechaRed

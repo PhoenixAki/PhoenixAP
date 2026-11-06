@@ -1238,7 +1238,11 @@ REGION RLEntry: after first wall kick up to center room
 		would have (electric or ice + charge) and DJ and wall kick and pole spin and glide
 
 	LOCATION RLEntry | RL: Empty Locked Chest above poles | 820 | LockedChestRule('Red\'s Laboratory')
-	LOCATION RLEntry | RL: Empty Locked Chest above charge switches | 821 | And(Has('Charge'), LockedChestRule('Red\'s Laboratory'))
+
+REGION RLEntryAbove: above the 4 switches
+    RLEntry -> RLEntryAbove | Has('Charge') | RL_Shockwave_Switches Has('Shockwave')
+    
+	LOCATION RLEntryAbove | RL: Empty Locked Chest above charge switches | 821 | LockedChestRule('Red\'s Laboratory')
 
 REGION RLCenter: center room. include any immediates from the different corridors
 	RLEntry -> RLCenter | True_()
@@ -1284,7 +1288,7 @@ REGION RLNorthEast4: past lasers you have to DJ over
 	ShopPads -> RLNorthEast4 | OpenWorldRule(['Red\'s Laboratory - Pre-production'])
 		could have nothing
 
-	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), HasAny('Electric Breath', 'Ice Breath')) | Pre-production_Dark_Gem_Breathless Has('Double Jump')
+	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), HasAny('Electric Breath', 'Ice Breath')) | RL_Northeast_Dark_Gem_Breathless Has('Double Jump')
 
 REGION RLNorthWest1: up through double piston room
 	RLCenter -> RLNorthWest1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))

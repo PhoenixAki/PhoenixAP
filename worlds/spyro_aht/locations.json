@@ -21410,35 +21410,6 @@
                         "level": "Red's Laboratory"
                     }
                 }
-            },
-            {
-                "name": "RL: Empty Locked Chest above charge switches",
-                "id": 821,
-                "options": [],
-                "access_rule": {
-                    "rule": "And",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Charge",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "LockedChestRule",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "level": "Red's Laboratory"
-                            }
-                        }
-                    ]
-                }
             }
         ],
         "gem_events": [
@@ -21477,19 +21448,72 @@
                         "count": 1
                     }
                 }
-            },
+            }
+        ]
+    },
+    "RLEntryAbove": {
+        "name": "RLEntryAbove",
+        "entrances": [
+            {
+                "name": "RLEntry -> RLEntryAbove",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Shockwave Switches",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Shockwave",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "RL: Empty Locked Chest above charge switches",
+                "id": 821,
+                "options": [],
+                "access_rule": {
+                    "rule": "LockedChestRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "level": "Red's Laboratory"
+                    }
+                }
+            }
+        ],
+        "gem_events": [
             {
                 "name": "55 Gems (headbash chest and metal chest above charge switches)",
                 "gem_amount": 55,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "args": {}
                 }
             }
         ]
@@ -22176,7 +22200,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Pre-production Dark Gem Breathless",
+                                    "value": "RL Northeast Dark Gem Breathless",
                                     "operator": "contains"
                                 }
                             ],
@@ -22598,29 +22622,11 @@
                 }
             }
         ],
-        "locations": [
-            {
-                "name": "RL: Light Gem atop southeast first room",
-                "id": 284,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide",
-                            "Pole Spin"
-                        ]
-                    }
-                }
-            }
-        ],
+        "locations": [],
         "gem_events": [
             {
-                "name": "40 Gems ([enemy] armored middle robo-gnorc and small robo-gnorc)",
-                "gem_amount": 40,
+                "name": "20 Gems ([enemy] armored middle robo-gnorc)",
+                "gem_amount": 20,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -22641,7 +22647,18 @@
                 }
             },
             {
-                "name": "105 Gems (baskets behind lasers + headbash chest)",
+                "name": "20 Gems ([enemy] small robo-gnorc on vertical platform)",
+                "gem_amount": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "105 Gems (headbash chest / baskets behind lasers)",
                 "gem_amount": 105,
                 "options": [],
                 "access_rule": {
@@ -22662,7 +22679,7 @@
             {
                 "name": "RLSouthEast1 -> RLSouthEast2",
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
@@ -22679,72 +22696,40 @@
                             }
                         },
                         {
-                            "rule": "Or",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "children": [
+                            "rule": "Has",
+                            "options": [
                                 {
-                                    "rule": "Has",
-                                    "options": [],
-                                    "filtered_resolution": false,
-                                    "args": {
-                                        "item_name": "Electric Breath",
-                                        "count": 1
-                                    }
-                                },
-                                {
-                                    "rule": "HasAll",
-                                    "options": [],
-                                    "filtered_resolution": false,
-                                    "args": {
-                                        "item_names": [
-                                            "Charge",
-                                            "Ice Breath"
-                                        ]
-                                    }
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Skip Southeast Poles",
+                                    "operator": "contains"
                                 }
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "RLSouthEast3 -> RLSouthEast2",
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "HasAny",
-                            "options": [],
+                            ],
                             "filtered_resolution": false,
                             "args": {
-                                "item_names": [
-                                    "Double Jump",
-                                    "Electric Breath"
-                                ]
-                            }
-                        },
-                        {
-                            "rule": "HasAll",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Ice Breath"
-                                ]
+                                "item_name": "Double Jump",
+                                "count": 1
                             }
                         }
                     ]
                 }
             }
         ],
-        "locations": [],
+        "locations": [
+            {
+                "name": "RL: Light Gem atop southeast first room",
+                "id": 284,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
         "gem_events": [
             {
-                "name": "75 Gems (metal chests up high)",
+                "name": "75 Gems (metal chests)",
                 "gem_amount": 75,
                 "options": [],
                 "access_rule": {
@@ -22755,7 +22740,7 @@
                 }
             },
             {
-                "name": "60 Gems ([enemy] armored middle robo-gnorc + huge robo-gnorcs up high)",
+                "name": "60 Gems ([enemy] armored middle robo-gnorc / huge robo-gnorcs)",
                 "gem_amount": 60,
                 "options": [],
                 "access_rule": {
@@ -22780,7 +22765,53 @@
                 }
             },
             {
-                "name": "ShopPads -> RLSouthEast3",
+                "name": "RLSouthEast4 -> RLSouthEast3",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Electric Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [],
+        "gem_events": []
+    },
+    "RLSouthEast4": {
+        "name": "RLSouthEast4",
+        "entrances": [
+            {
+                "name": "RLSouthEast3 -> RLSouthEast4",
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "ShopPads -> RLSouthEast4",
                 "access_rule": {
                     "rule": "OpenWorldRule",
                     "options": [],
@@ -22809,38 +22840,54 @@
                 }
             },
             {
-                "name": "RL: Light Gem above boiler",
-                "id": 285,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath",
-                            "Glide"
-                        ]
-                    }
-                }
-            },
-            {
                 "name": "RL: Dragon Egg behind lasers",
                 "id": 364,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Fire Breath",
-                            "Glide",
-                            "Pole Spin"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "And",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "CanReachRegion",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "region_name": "RLSouthEast4Above"
+                                    }
+                                },
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Double Jump",
+                                            "Glide",
+                                            "Pole Spin"
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Skip Southeast Lasers",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -22975,13 +23022,16 @@
                         }
                     ]
                 }
-            },
+            }
+        ]
+    },
+    "RLSouthEast4Above": {
+        "name": "RLSouthEast4Above",
+        "entrances": [
             {
-                "name": "50 Gems (metal chests above boiler)",
-                "gem_amount": 50,
-                "options": [],
+                "name": "RLSouthEast4 -> RLSouthEast4Above",
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
@@ -22995,18 +23045,55 @@
                             }
                         },
                         {
-                            "rule": "HasAny",
-                            "options": [],
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Fire Breath Idle Animation",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Double Jump",
-                                    "Electric Breath"
-                                ]
-                            }
+                            "args": {}
                         }
                     ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "RL: Light Gem above boiler",
+                "id": 285,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAll",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Double Jump",
+                            "Glide"
+                        ]
+                    }
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "50 Gems (metal chests above boiler)",
+                "gem_amount": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
+                    }
                 }
             },
             {
@@ -23025,7 +23112,6 @@
                             "args": {
                                 "item_names": [
                                     "Double Jump",
-                                    "Fire Breath",
                                     "Glide",
                                     "Pole Spin"
                                 ]

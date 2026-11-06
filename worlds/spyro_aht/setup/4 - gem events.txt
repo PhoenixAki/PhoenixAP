@@ -538,7 +538,7 @@ DMGreenPoles | 276 Gems (on the ground/metal chests/baskets/headbash chests) | T
 RLEntry | 608 Gems (on the ground/metal chests/baskets/headbash chests) | True_()
 RLEntry | 80 Gems ([enemy] small robo-gnorcs/huge robo-gnorcs) | True_()
 RLEntry | 80 Gems ([enemy] armored middle robo-gnorc) | Has('Charge')
-RLEntry | 55 Gems (headbash chest and metal chest above charge switches) | Has('Charge')
+RLEntryAbove | 55 Gems (headbash chest and metal chest above charge switches) | True_()
 RLCenter | 20 Gems ([enemy] armored middle robo-gnorc in SE entry) | And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))
 RLCenter | 60 Gems (headbash chests in SE and NW entryways) | Has('Double Jump')
 RLCenter | 50 Gems (baskets in NW entry) | HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')

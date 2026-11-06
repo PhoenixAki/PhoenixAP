@@ -552,7 +552,7 @@ Red's Laboratory,,,
 RLEntry,608,on the ground/metal chests/baskets/headbash chests,True_()
 RLEntry,80,[enemy] small robo-gnorcs/huge robo-gnorcs,True_()
 RLEntry,80,[enemy] armored middle robo-gnorc,Has('Charge')
-RLEntry,55,headbash chest and metal chest above charge switches,Has('Charge')
+RLEntryAbove,55,headbash chest and metal chest above charge switches,True_()
 RLCenter,20,[enemy] armored middle robo-gnorc in SE entry,"And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))"
 RLCenter,60,headbash chests in SE and NW entryways,Has('Double Jump')
 RLCenter,50,baskets in NW entry,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
