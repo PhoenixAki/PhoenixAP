@@ -323,7 +323,8 @@ class SpyroAHTContext(SuperContext):
     async def _receive_items(self):
         item_counts = collections.Counter(self.item_names.lookup_in_slot(i.item, self.slot) for i in self.items_received)
         for item in self.items_received:
-            if item in self._handled_items: continue
+            # skip already-processed items. Items sent via admin console have location < 0 and should always be processed since they don't get added to items_received
+            if item in self._handled_items and item.location > 0: continue
             self._handled_items.add(item)
             if consts.ITEM_GROUP_IDS["Elder Abilities"][0] <= item.item <= consts.ITEM_GROUP_IDS["Abilities"][1]:
                 if not await self.emu_client.has_any_breath() and consts.ITEM_GROUP_IDS["Breaths"][0] <= item.item <= consts.ITEM_GROUP_IDS["Breaths"][1]:
