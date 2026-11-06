@@ -115,6 +115,9 @@ REGION DVEntry: shop, ember, and elder areas
 	LOCATION DVEntry | DV: Double Jump from Elder Tomas | 601 | True_()
 	LOCATION DVEntry | DV: Dark Gem by Ember | 101 | Has('Double Jump')
 
+REGION DVEntryCave: cave in Elder Tomas hallway. Just here for gem logic
+    DVEntry -> DVEntryCave | Has('Charge') | Horn_Dive_Walls True_()
+
 REGION DVGnastyCave: gnasty cave
 	DVEntry -> DVGnastyCave | BossLairRule(0)
 		could have nothing
@@ -146,8 +149,8 @@ REGION DVByrdUpper2: upper part of byrd area (building)
 	LOCATION DVByrdUpper2 | DV: Light Gem above Sgt. Byrd | 202 | True_()
 
 REGION DVLabSecret: path to lab secret entrance
-	DVByrdLower -> DVLabSecret | Has('Charge')
-		would have DJ and charge
+	DVByrdLower -> DVLabSecret | Has('Charge') | Horn_Dive_Walls Has('Shockwave')
+		would have DJ and (charge or shockwave)
 
 	LOCATION DVLabSecret | DV: Dragon Egg by lab secret entrance | 304 | True_()
 	LOCATION DVLabSecret | DV: Light Gem in lab secret entrance | 203 | True_()
@@ -206,7 +209,7 @@ REGION CSWest: west area of map
 	CSPyramidAndTemple -> CSWest | Has('Double Jump')
 		would have DJ
 
-	LOCATION CSWest | CS: Light Gem in Locked Chest behind chargeable wall | 824 | And(Has('Charge'), LockedChestRule('Crocovile Swamp'))
+	LOCATION CSWest | CS: Light Gem in Locked Chest behind chargeable wall | 824 | And(Has('Charge'), LockedChestRule('Crocovile Swamp')) | Horn_Dive_Walls LockedChestRule('Crocovile Swamp')
 	LOCATION CSWest | CS: Firework behind cliff in west area | 405 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 	LOCATION CSWest | CS: Dragon Egg across muddy platforms in west area | 306 | True_()
 
@@ -233,7 +236,7 @@ REGION CSEastPoles: rest of cave above first set of poles
 	CSEast -> CSEastPoles | HasAll('Double Jump', 'Pole Spin')
 		would have DJ and pole spin
     
-    LOCATION CSEastPoles | CS: Dragon Egg in pole spin cave | 308 | Has('Charge')
+    LOCATION CSEastPoles | CS: Dragon Egg in pole spin cave | 308 | Has('Charge') | Horn_Dive_Walls True_()
 
 REGION CSTree: Blink, outside tree, and lower part of tree (including talking to elder). include the outside poles. include path to fredneck above Blink.
 	CSEast -> CSTree | Has('Double Jump')
@@ -256,8 +259,8 @@ REGION CSAboveElder: above poles directly across tree (not path to Fredneck)
 	LOCATION CSAboveElder | CS: Light Gem atop Elder's tree | 211 | True_()
 
 REGION CSTreeLedge1: ledge in middle of tree with egg + firework
-    CSAboveElder -> CSTreeLedge1 | Has('Charge') | CS_Chargeless_Tree_Ledge Has('Glide')
-        would have DJ and (charge or glide)
+    CSAboveElder -> CSTreeLedge1 | Has('Charge') | CS_Chargeless_Tree_Ledge Has('Glide') | Horn_Dive_Walls Has('Shockwave')
+        would have DJ and (charge or glide or shockwave)
     
     LOCATION CSTreeLedge1 | CS: Dragon Egg in middle of Elder's tree | 310 | True_()
     LOCATION CSTreeLedge1 | CS: Firework in middle of Elder's tree | 406 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
@@ -298,10 +301,15 @@ REGION DFSteepCanyon: first main chunk from shop up to vulture area (include goi
 	ShopPads -> DFSteepCanyon | OpenWorldRule(['Dragonfly Falls - Steep Canyon'])
 		could have nothing
 
-	LOCATION DFSteepCanyon | DF: Dark Gem behind chargeable wall in entry area | 107 | HasAll('Charge', 'Double Jump')
-	LOCATION DFSteepCanyon | DF: Dragon Egg behind chargeable wall in entry area | 312 | HasAll('Charge', 'Double Jump')
 	LOCATION DFSteepCanyon | DF: Light Gem behind cannon door | 214 | HasAll('Double Jump', 'Glide')
 	LOCATION DFSteepCanyon | DF: Dark Gem by canyon vultures | 108 | HasAll('Double Jump', 'Glide')
+
+REGION DFSteepCanyonCaves: 2 caves in entry area
+    DFEntry -> DFSteepCanyonCaves | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+        would have (charge or DJ)
+    
+    LOCATION DFSteepCanyonCaves | DF: Dark Gem behind chargeable wall in entry area | 107 | Has('Double Jump')
+	LOCATION DFSteepCanyonCaves | DF: Dragon Egg behind chargeable wall in entry area | 312 | Has('Double Jump')
 
 REGION DFAfterVultures: ledge after vultures up to the drop-off for elder statue area
 	DFSteepCanyon -> DFAfterVultures | HasAll('Double Jump', 'Glide')

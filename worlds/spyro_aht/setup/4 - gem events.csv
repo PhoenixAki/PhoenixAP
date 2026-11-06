@@ -3,8 +3,8 @@ DVEntry,336,on the ground,True_()
 DVEntry,300,dark shards,"HasAny('Double Jump', 'Charge')"
 DVEntry,100,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 DVEntry,175,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
-DVEntry,150,baskets behind chargeable wall near elder,Has('Charge')
 DVEntry,500,firework across Crocovile bridge,"HasAll('Double Jump', 'Fire Breath') | Fire_Breath_Idle_Animation Has('Double Jump')"
+DVEntryCave,150,baskets behind chargeable wall near elder,True_()
 DVByrdLower,396,baskets/chests/dark shards/on the ground,True_()
 DVByrdLower,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 DVByrdLower,395,Byrd minigames 1-1,True_()
@@ -73,14 +73,14 @@ DFSteepCanyon,125,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath
 DFSteepCanyon,90,headbash chests,Has('Double Jump')
 DFSteepCanyon,75,[enemy] rams,"HasAny('Fire Breath', 'Electric Breath')"
 DFSteepCanyon,100,[enemy] shepherd and normal crocoviles,"HasAny('Fire Breach', 'Electric Breath', 'Charge')"
-DFSteepCanyon,1064,on the ground and breakables behind chargeable walls,Has('Charge')
-DFSteepCanyon,60,headbash chests behind chargeable walls,"HasAll('Charge', 'Double Jump')"
 DFSteepCanyon,25,[enemy] normal crocovile by cannon,"And(HasAll('Double Jump', 'Glide'), HasAny('Fire Breath', 'Electric Breath', 'Charge'))"
 DFSteepCanyon,169,on the ground,True_()
 DFSteepCanyon,15,[enemy] red plant,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 DFSteepCanyon,20,[enemy] armored huge gnorc in second canyon area,"And(HasAll('Double Jump', 'Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 DFSteepCanyon,180,baskets and metal and headbash chests in second canyon area,Has('Double Jump')
 DFSteepCanyon,20,[enemy] unarmored huge gnorc in second canyon area,"And(Has('Double Jump'), Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge')))"
+DFSteepCanyonCaves,807,baskets/dark shards/on ground/metal behind chargeable wall,True_()
+DFSteepCanyonCaves,60,headbash chests behind chargeable walls,Has('Double Jump')
 DFAfterVultures,19,on the ground,True_()
 DFAfterVultures,25,[enemy] normal crocovile,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 DFElderStatue,223,baskets/metal chests/on the ground,True_()

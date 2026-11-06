@@ -1,6 +1,7 @@
 START
 ShopPads
 DVEntry
+DVEntryCave
 DVGnastyCave
 DVByrdLower
 DVByrdUpper1
@@ -24,6 +25,7 @@ CSFredneck
 DFBallGadget
 DFEntry
 DFSteepCanyon
+DFSteepCanyonCaves
 DFAfterVultures
 DFLGDoorEntry
 DFLGDoorShop

@@ -1854,20 +1854,6 @@
                 }
             },
             {
-                "name": "150 Gems (baskets behind chargeable wall near elder)",
-                "gem_amount": 150,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
-                }
-            },
-            {
                 "name": "500 Gems (firework across Crocovile bridge)",
                 "gem_amount": 500,
                 "options": [],
@@ -1903,6 +1889,56 @@
                             }
                         }
                     ]
+                }
+            }
+        ]
+    },
+    "DVEntryCave": {
+        "name": "DVEntryCave",
+        "entrances": [
+            {
+                "name": "DVEntry -> DVEntryCave",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [],
+        "gem_events": [
+            {
+                "name": "150 Gems (baskets behind chargeable wall near elder)",
+                "gem_amount": 150,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
                 }
             }
         ]
@@ -2279,13 +2315,35 @@
             {
                 "name": "DVByrdLower -> DVLabSecret",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Shockwave",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -3229,22 +3287,43 @@
                 "id": 824,
                 "options": [],
                 "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "And",
                             "options": [],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Charge",
-                                "count": 1
-                            }
+                            "children": [
+                                {
+                                    "rule": "Has",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_name": "Charge",
+                                        "count": 1
+                                    }
+                                },
+                                {
+                                    "rule": "LockedChestRule",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "level": "Crocovile Swamp"
+                                    }
+                                }
+                            ]
                         },
                         {
                             "rule": "LockedChestRule",
-                            "options": [],
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
                             "args": {
                                 "level": "Crocovile Swamp"
@@ -3710,13 +3789,32 @@
                 "id": 308,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -4257,6 +4355,21 @@
                                 "item_name": "Glide",
                                 "count": 1
                             }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Shockwave",
+                                "count": 1
+                            }
                         }
                     ]
                 }
@@ -4699,38 +4812,6 @@
         ],
         "locations": [
             {
-                "name": "DF: Dark Gem behind chargeable wall in entry area",
-                "id": 107,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "DF: Dragon Egg behind chargeable wall in entry area",
-                "id": 312,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
-                        ]
-                    }
-                }
-            },
-            {
                 "name": "DF: Light Gem behind cannon door",
                 "id": 214,
                 "options": [],
@@ -4844,36 +4925,6 @@
                             "Charge",
                             "Electric Breath",
                             "Fire Breach"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "1064 Gems (on the ground and breakables behind chargeable walls)",
-                "gem_amount": 1064,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Charge",
-                        "count": 1
-                    }
-                }
-            },
-            {
-                "name": "60 Gems (headbash chests behind chargeable walls)",
-                "gem_amount": 60,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
                         ]
                     }
                 }
@@ -5055,6 +5106,102 @@
                             ]
                         }
                     ]
+                }
+            }
+        ]
+    },
+    "DFSteepCanyonCaves": {
+        "name": "DFSteepCanyonCaves",
+        "entrances": [
+            {
+                "name": "DFEntry -> DFSteepCanyonCaves",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "DF: Dark Gem behind chargeable wall in entry area",
+                "id": 107,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            },
+            {
+                "name": "DF: Dragon Egg behind chargeable wall in entry area",
+                "id": 312,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "807 Gems (baskets/dark shards/on ground/metal behind chargeable wall)",
+                "gem_amount": 807,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "60 Gems (headbash chests behind chargeable walls)",
+                "gem_amount": 60,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
                 }
             }
         ]

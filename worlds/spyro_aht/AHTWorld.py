@@ -752,7 +752,7 @@ class SpyroAHTWorld(World):
         if self.options.shop_randomization.value == 1:
             blink = (20203 - blink_exclusions) * self.options.blink_gems.value
             non_blink_enemies = 16353 * self.options.non_blink_enemies.value
-            other = (105357 - other_exclusions) * self.options.other_gems.value
+            other = (105100 - other_exclusions) * self.options.other_gems.value
             gem_total = (blink + non_blink_enemies + other) // 100
             base_price = gem_total / (self.options.shop_item_count.value - 1)
             self.log(f"blink_gems is {self.options.blink_gems.value}, so Blink total is {blink/100}. non_blink_enemies is {self.options.non_blink_enemies.value}, so non-blink total is {non_blink_enemies/100}. other_gems is {self.options.other_gems.value}, so other gems total is {other/100}.", consts.LoggingLevel.HIGH)
