@@ -152,9 +152,12 @@ class SpyroAHTWorld(World):
     def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
         classifications = {0: "filler", 1: "progression", 2: "useful", 4: "trap", 25: "progression deprioritized skip balancing"}
-        if name == "Shockwave" and ("Shockwave Rock Monsters" in self.options.enabled_tricks.value and "Horn Dive Rock Monsters" not in self.options.enabled_tricks.value):
-            classification = ItemClassification.progression  # make shockwave progression exactly when ONLY shockwave rock monsters is enabled, but not horn dive. Horn dive being enabled at all means shockwave is never outright required
-        else: classification = consts.ITEM_INFO[name][1]
+        classification = consts.ITEM_INFO[name][1]
+        
+        # a few tricks can lead to shockwave needing to be progression instead of useful
+        if name == "Shockwave" and ("Shockwave Rock Monsters" in self.options.enabled_tricks.value and "Horn Dive Rock Monsters" not in self.options.enabled_tricks.value) or "RL Shockwave Switches" in self.options.enabled_tricks.value:
+            classification = ItemClassification.progression
+                
         self.log(f"Created item {name} for player {self.player} with classification {classifications[classification]} and ID {self.item_name_to_id[name]}, placed into the {placement}.", consts.LoggingLevel.MAXIMUM)
         return Item(name, classification, self.item_name_to_id[name], self.player)
     
