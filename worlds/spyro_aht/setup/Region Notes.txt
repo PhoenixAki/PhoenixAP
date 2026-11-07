@@ -1298,33 +1298,41 @@ REGION RLMechaRed: mecha red fight
 
 	LOCATION RLMechaRed | RL: Defeat Mecha-Red | 707 | HasAll('Double Jump', 'Fire Breath', 'Electric Breath', 'Charge')
 
-REGION RLNorthEast1: room with electric platform. include stuff above it
+REGION RLNorthEast1: room with electric platform, including stuff above
 	RLCenter -> RLNorthEast1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
-		would have (electric or ice + charge)
+		would have electric or (ice + charge)
 
-REGION RLNorthEast2: past electric room, up through conveyor room and up to lasers you have to DJ over
-	RLNorthEast1 -> RLNorthEast2 | Has('Electric Breath')
-		would have (electric or ice + charge) and electric
+REGION RLNorthEast1After: just the mini hallway after room 1 because of potential backwards trick traversal
+    RLNorthEast1 -> RLNorthEast1After | HasAll('Electric Breath', 'Double Jump')
+        would have electric and DJ and maybe (ice + charge)
+    RLNorthEast2 -> RLNorthEast1After | False_() | RL_Electric_Through_Doors True_()
+        would have electric and DJ
 
-	LOCATION RLNorthEast2 | RL: Light Gem after conveyor belt | 281 | And(Has('Wall Kick'), InvincibilityGadget()) | RL_Skip_Northeast_Invincibility HasAll('Double Jump', 'Wall Kick')
+REGION RLNorthEast2: conveyor room
+	RLNorthEast1After -> RLNorthEast2 | True_()
+		would have electric and DJ and maybe (ice + charge)
+	RLNorthEast3 -> RLNorthEast2 | False_() | RL_Electric_Through_Doors Has('Electric Breath')
+	    would have electric and DJ
+
+	LOCATION RLNorthEast2 | RL: Light Gem after conveyor belt | 281 | And(Has('Wall Kick'), InvincibilityGadget()) | RL_Skip_Northeast_Invincibility Has('Wall Kick')
 
 REGION RLNorthEast2Above: gems above conveyor room
-	RLNorthEast2 -> RLNorthEast2Above | And(HasAll('Wall Kick', 'Double Jump', 'Pole Spin', 'Glide'), InvincibilityGadget()) | RL_Skip_Northeast_Invincibility HasAll('Wall Kick', 'Double Jump', 'Pole Spin', 'Glide')
-		would have DJ and (electric or ice + charge) and electric and wall kick and invincibility gadget and pole spin and glide
+	RLNorthEast2 -> RLNorthEast2Above | And(HasAll('Wall Kick', 'Pole Spin', 'Glide'), InvincibilityGadget()) | RL_Skip_Northeast_Invincibility HasAll('Wall Kick', 'Pole Spin', 'Glide')
+		would have electric and DJ and wall kick and pole spin and glide
 
-REGION RLNorthEast3: small room with just the 2 small robo gnorcs because dumb
+REGION RLNorthEast3: hallway after conveyor room with just the 2 small robo gnorcs
 	RLNorthEast2 -> RLNorthEast3 | True_()
-		would have (electric or ice + charge) and electric
+		would have electric and DJ and maybe (ice + charge)
 	RLNorthEast4 -> RLNorthEast3 | Has('Double Jump')
 		would have DJ
 
-REGION RLNorthEast4: past lasers you have to DJ over
-	RLNorthEast3 -> RLNorthEast4 | Has('Double Jump')
-		would have DJ and (electric or ice + charge) and electric
+REGION RLNorthEast4: past lasers you have to DJ over, 3 small + 2 huge robos + dark gem
+	RLNorthEast3 -> RLNorthEast4 | True_()
+		would have electric and DJ and maybe (ice + charge)
 	ShopPads -> RLNorthEast4 | OpenWorldRule(['Red\'s Laboratory - Pre-production'])
 		could have nothing
 
-	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), HasAny('Electric Breath', 'Ice Breath')) | RL_Northeast_Dark_Gem_Breathless Has('Double Jump')
+	LOCATION RLNorthEast4 | RL: Dark Gem in northeast | 138 | And(Has('Double Jump'), Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))) | RL_Northeast_Dark_Gem_Breathless Has('Double Jump')
 
 REGION RLNorthWest1: lower part of first room. Guarded by huge robo-gnorc
 	RLCenter -> RLNorthWest1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
@@ -1354,20 +1362,24 @@ REGION RLNorthWest2Above: vertical platform in hallway
 REGION RLSouthEast1: lower part of first room, everything up to the poles
 	RLCenter -> RLSouthEast1 | And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))
 		would have charge and (electric or ice)
+	RLSouthEast2 -> RLSouthEast1 | True_()
+	    would have electric
 
 REGION RLSouthEast2: upper part of first room up and hallway after (up to the door)
     RLSouthEast1 -> RLSouthEast2 | HasAll('Double Jump', 'Pole Spin', 'Glide') | RL_Skip_Southeast_Poles Has('Double Jump')
         would have charge and (electric or ice) and DJ
+    RLSouthEast3 -> RLSouthEast2 | False_() | RL_Electric_Through_Doors Has('Electric Breath')
+        would have electric
     
-	LOCATION RLSouthEast2 | RL: Light Gem atop southeast first room | 284 | True_()
+	LOCATION RLSouthEast2 | RL: Light Gem atop southeast first room | 284 | Has('Double Jump')
 
 REGION RLSouthEast3: headbash switch side of dark gem room. That's it lol. Only separate to be a hub for tricks
     RLSouthEast2 -> RLSouthEast3 | True_()
         would have charge and (electric or ice) and DJ
-    RLSouthEast4 -> RLSouthEast3 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
-        would have electric or (ice and charge)
+    RLSouthEast4 -> RLSouthEast3 | Or(HasAny('Electric Breath', 'Double Jump'), HasAll('Ice Breath', 'Charge'))
+        could have (electric or DJ) or (ice and charge)
 
-REGION RLSouthEast4: dark gem side of dark gem room, with the shop
+REGION RLSouthEast4: dark gem side of dark gem room and the side path
     RLSouthEast3 -> RLSouthEast4 | True_()
         would have charge and (electric or ice) and DJ
     ShopPads -> RLSouthEast4 | OpenWorldRule(['Red\'s Laboratory - Laser Leaps'])

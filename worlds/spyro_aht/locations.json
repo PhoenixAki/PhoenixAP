@@ -22543,7 +22543,7 @@
         "locations": [],
         "gem_events": [
             {
-                "name": "60 Gems ([enemy] small robo-gnorcs/huge robo-gnorc)",
+                "name": "60 Gems ([enemy] small/huge robo-gnorcs)",
                 "gem_amount": 60,
                 "options": [],
                 "access_rule": {
@@ -22569,32 +22569,20 @@
                 "gem_amount": 20,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "HasAll",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {
-                        "item_name": "Charge",
-                        "count": 1
+                        "item_names": [
+                            "Charge",
+                            "Electric Breath"
+                        ]
                     }
                 }
             },
             {
                 "name": "75 Gems (baskets above electric platform)",
                 "gem_amount": 75,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Electric Breath",
-                        "count": 1
-                    }
-                }
-            },
-            {
-                "name": "20 Gems ([enemy] huge robo-gnorc above electric platform)",
-                "gem_amount": 20,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -22621,6 +22609,97 @@
                         ]
                     }
                 }
+            },
+            {
+                "name": "20 Gems ([enemy] huge robo-gnorc above electric platform)",
+                "gem_amount": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAll",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    "RLNorthEast1After": {
+        "name": "RLNorthEast1After",
+        "entrances": [
+            {
+                "name": "RLNorthEast1 -> RLNorthEast1After",
+                "access_rule": {
+                    "rule": "HasAll",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Double Jump",
+                            "Electric Breath"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "RLNorthEast2 -> RLNorthEast1After",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Electric Through Doors",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [],
+        "gem_events": [
+            {
+                "name": "20 Gems ([enemy] armored middle robo-gnorc)",
+                "gem_amount": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Charge",
+                        "count": 1
+                    }
+                }
+            },
+            {
+                "name": "20 Gems ([enemy] huge robo-gnorc)",
+                "gem_amount": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
             }
         ]
     },
@@ -22628,15 +22707,43 @@
         "name": "RLNorthEast2",
         "entrances": [
             {
-                "name": "RLNorthEast1 -> RLNorthEast2",
+                "name": "RLNorthEast1After -> RLNorthEast2",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Electric Breath",
-                        "count": 1
-                    }
+                    "args": {}
+                }
+            },
+            {
+                "name": "RLNorthEast3 -> RLNorthEast2",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Electric Through Doors",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Electric Breath",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -22673,7 +22780,7 @@
                             ]
                         },
                         {
-                            "rule": "HasAll",
+                            "rule": "Has",
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
@@ -22683,10 +22790,8 @@
                             ],
                             "filtered_resolution": false,
                             "args": {
-                                "item_names": [
-                                    "Double Jump",
-                                    "Wall Kick"
-                                ]
+                                "item_name": "Wall Kick",
+                                "count": 1
                             }
                         }
                     ]
@@ -22695,8 +22800,8 @@
         ],
         "gem_events": [
             {
-                "name": "100 Gems ([enemy] armored middle robo-gnorc)",
-                "gem_amount": 100,
+                "name": "80 Gems ([enemy] armored middle robo-gnorc)",
+                "gem_amount": 80,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -22709,8 +22814,8 @@
                 }
             },
             {
-                "name": "40 Gems ([enemy] huge robo-gnorc)",
-                "gem_amount": 40,
+                "name": "20 Gems ([enemy] huge robo-gnorc)",
+                "gem_amount": 20,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -22742,7 +22847,6 @@
                                     "filtered_resolution": false,
                                     "args": {
                                         "item_names": [
-                                            "Double Jump",
                                             "Glide",
                                             "Pole Spin",
                                             "Wall Kick"
@@ -22769,7 +22873,6 @@
                             "filtered_resolution": false,
                             "args": {
                                 "item_names": [
-                                    "Double Jump",
                                     "Glide",
                                     "Pole Spin",
                                     "Wall Kick"
@@ -22783,7 +22886,7 @@
         "locations": [],
         "gem_events": [
             {
-                "name": "155 Gems (metal chests/baskets/headbash chest)",
+                "name": "155 Gems (metal chests/baskets/headbash)",
                 "gem_amount": 155,
                 "options": [],
                 "access_rule": {
@@ -22846,13 +22949,10 @@
             {
                 "name": "RLNorthEast3 -> RLNorthEast4",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "args": {}
                 }
             },
             {
@@ -22894,15 +22994,31 @@
                                     }
                                 },
                                 {
-                                    "rule": "HasAny",
+                                    "rule": "Or",
                                     "options": [],
                                     "filtered_resolution": false,
-                                    "args": {
-                                        "item_names": [
-                                            "Electric Breath",
-                                            "Ice Breath"
-                                        ]
-                                    }
+                                    "children": [
+                                        {
+                                            "rule": "Has",
+                                            "options": [],
+                                            "filtered_resolution": false,
+                                            "args": {
+                                                "item_name": "Electric Breath",
+                                                "count": 1
+                                            }
+                                        },
+                                        {
+                                            "rule": "HasAll",
+                                            "options": [],
+                                            "filtered_resolution": false,
+                                            "args": {
+                                                "item_names": [
+                                                    "Charge",
+                                                    "Ice Breath"
+                                                ]
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -23385,6 +23501,15 @@
                         }
                     ]
                 }
+            },
+            {
+                "name": "RLSouthEast2 -> RLSouthEast1",
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
             }
         ],
         "locations": [],
@@ -23394,10 +23519,31 @@
                 "gem_amount": 20,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Electric Breath",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -23423,8 +23569,8 @@
                 }
             },
             {
-                "name": "105 Gems (headbash chest / baskets behind lasers)",
-                "gem_amount": 105,
+                "name": "30 Gems (headbash chest)",
+                "gem_amount": 30,
                 "options": [],
                 "access_rule": {
                     "rule": "Has",
@@ -23434,6 +23580,35 @@
                         "item_name": "Double Jump",
                         "count": 1
                     }
+                }
+            },
+            {
+                "name": "75 Gems (baskets behind lasers)",
+                "gem_amount": 75,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "CanReachRegion",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "region_name": "RLSouthEast2"
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -23477,6 +23652,37 @@
                         }
                     ]
                 }
+            },
+            {
+                "name": "RLSouthEast3 -> RLSouthEast2",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Electric Through Doors",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Electric Breath",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
             }
         ],
         "locations": [
@@ -23485,10 +23691,13 @@
                 "id": 284,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
                 }
             }
         ],
@@ -23505,14 +23714,67 @@
                 }
             },
             {
-                "name": "60 Gems ([enemy] armored middle robo-gnorc / huge robo-gnorcs)",
-                "gem_amount": 60,
+                "name": "20 Gems ([enemy] armored middle robo-gnorc)",
+                "gem_amount": 20,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Electric Breath",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "40 Gems ([enemy] huge robo-gnorcs)",
+                "gem_amount": 40,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Electric Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ]
@@ -23537,12 +23799,14 @@
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "Has",
+                            "rule": "HasAny",
                             "options": [],
                             "filtered_resolution": false,
                             "args": {
-                                "item_name": "Electric Breath",
-                                "count": 1
+                                "item_names": [
+                                    "Double Jump",
+                                    "Electric Breath"
+                                ]
                             }
                         },
                         {
