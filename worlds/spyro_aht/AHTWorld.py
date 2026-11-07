@@ -168,13 +168,12 @@ class SpyroAHTWorld(World):
         return f"{level_id} {region_label} {rest_of_name}"
 
     def get_filler_item_name(self):
-        """Override of World.get_filler_item_name which returns a random filler item name.
+        """Override of World.get_filler_item_name which returns a random filler item name, or Dragon Egg if none are enabled.
         Used whenever start_inventory_from_pool is used."""
-        if self.filler_items == {}:
-            random_choice = "Dragon Egg"
-        else:
-            items = self.random.choice(list(self.filler_items.values()))
-            random_choice = self.random.choice(items)
+        if len(self.options.filler_items.value) == 0: random_choice = "Dragon Egg"
+        else: random_choice = self.random.choice(list(self.options.filler_items.value))
+        if random_choice == "Shinies": random_choice = self.random.choice(consts.SHINIES_NAMES)
+        
         self.log(f"Replacing a start_inventory_from_pool item with \"{random_choice}\".", consts.LoggingLevel.HIGH)
         return random_choice
             
