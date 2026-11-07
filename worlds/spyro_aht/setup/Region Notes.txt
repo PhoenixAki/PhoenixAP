@@ -1198,23 +1198,28 @@ REGION DMLGDoorPastGnorc: LG door area past the huge robo-gnorc
     LOCATION DMLGDoorPastGnorc | DM: Light Gem in Light Gem door area | 276 | And(Has('Swim'), InvincibilityGadget())
 	LOCATION DMLGDoorPastGnorc | DM: Dragon Egg in Light Gem door area | 358 | And(Has('Swim'), InvincibilityGadget())
 
-REGION DMAfterRocks: past the chargeable rocks, starting with the piston wall kick room
-	DMEntry -> DMAfterRocks | HasAll('Double Jump', 'Charge')
-		would have DJ and charge
+REGION DMWallPistons1: just past the chargeable rocks + the stuff on the ledge at the start of the room pre-DJ
+    DMEntry -> DMWallPistons1 | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+        would have charge or DJ
+    
+    LOCATION DMWallPistons1 | DM: Firework in piston room | 421 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
-	LOCATION DMAfterRocks | DM: Dragon Egg in Locked Chest in piston room | 852 | And(HasAll('Wall Kick', 'Glide'), LockedChestRule('Dark Mine'))
-	LOCATION DMAfterRocks | DM: Firework in piston room | 421 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
-	LOCATION DMAfterRocks | DM: Light Gem in piston room | 277 | HasAll('Wall Kick', 'Glide')
+REGION DMWallPistons2: the rest of the room and up to caged dark gem room
+    DMWallPistons1 -> DMWallPistons2 | Has('Double Jump')
+        would have DJ (and maybe charge)
+    
+    LOCATION DMWallPistons2 | DM: Dragon Egg in Locked Chest in piston room | 852 | And(HasAll('Wall Kick', 'Glide'), LockedChestRule('Dark Mine'))
+	LOCATION DMWallPistons2 | DM: Light Gem in piston room | 277 | HasAll('Wall Kick', 'Glide')
 
 REGION DMCaged: room with caged dark gem
-	DMAfterRocks -> DMCaged | Has('Electric Breath')
-		would have DJ and charge and electric
+	DMWallPistons2 -> DMCaged | Has('Electric Breath')
+		would have DJ and electric
 
 	LOCATION DMCaged | DM: Dark Gem in turret room | 136 | True_()
 
 REGION DMAfterCaged1: after caged dark gem room, up to the huge robo-gnorc
 	DMCaged -> DMAfterCaged1 | True_()
-		would have DJ and charge and electric
+		would have DJ and electric
 	DMAfterCaged2 -> DMAfterCaged1 | Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))
 		would have DJ and wall kick and (electric or (ice + charge))
 

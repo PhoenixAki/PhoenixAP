@@ -523,12 +523,13 @@ DMLGDoorPastGnorc,215,[enemy] huge robo-gnorc/steel traps/critters,True_()
 DMLGDoorPastGnorc,150,dark shards,"HasAny('Double Jump', 'Charge')"
 DMLGDoorPastGnorc,60,headbash chest,Has('Double Jump')
 DMLGDoorPastGnorc,350,underwater toxic metal chests and dark shards,"And(HasAll('Swim', 'Charge'), InvincibilityGadget())"
-DMAfterRocks,530,dark shards/baskets/headbash chest/metal chests,True_()
-DMAfterRocks,1500,firework in piston room,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
-DMAfterRocks,20,[enemy] huge robo-gnorc,"HasAny('Electric Breath', 'Ice Breath')"
-DMAfterRocks,20,[enemy] small robo-gnorc,True_()
-DMAfterRocks,20,[enemy] small robo-gnorc above wall kick,Has('Wall Kick')
-DMAfterRocks,50,dark shard by light gem,"HasAll('Wall Kick', 'Glide')"
+DMWallPistons1,100,dark shard/baskets,True_()
+DMWallPistons2,1500,firework in wall piston room,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
+DMWallPistons2,430,headbash/metal chests/dark shards/baskets,True_()
+DMWallPistons2,20,[enemy] huge robo-gnorc,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
+DMWallPistons2,20,[enemy] small robo-gnorc,"HasAny('Electric Breath', 'Charge')"
+DMWallPistons2,20,[enemy] small robo-gnorc above wall kick,"And(Has('Wall Kick'), HasAny('Electric Breath', 'Charge'))"
+DMWallPistons2,50,dark shard by light gem,"HasAll('Wall Kick', 'Glide')"
 DMCaged,75,[enemy] turret robots,True_()
 DMCaged,285,baskets/metal chests/dark shards/headbash chest,True_()
 DMAfterCaged1,490,baskets/dark shards/metal chests/headbash chests,True_()

@@ -20971,56 +20971,45 @@
             }
         ]
     },
-    "DMAfterRocks": {
-        "name": "DMAfterRocks",
+    "DMWallPistons1": {
+        "name": "DMWallPistons1",
         "entrances": [
             {
-                "name": "DMEntry -> DMAfterRocks",
+                "name": "DMEntry -> DMWallPistons1",
                 "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump"
-                        ]
-                    }
-                }
-            }
-        ],
-        "locations": [
-            {
-                "name": "DM: Dragon Egg in Locked Chest in piston room",
-                "id": 852,
-                "options": [],
-                "access_rule": {
-                    "rule": "And",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "HasAll",
+                            "rule": "Has",
                             "options": [],
                             "filtered_resolution": false,
                             "args": {
-                                "item_names": [
-                                    "Glide",
-                                    "Wall Kick"
-                                ]
+                                "item_name": "Charge",
+                                "count": 1
                             }
                         },
                         {
-                            "rule": "LockedChestRule",
-                            "options": [],
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
                             "filtered_resolution": false,
                             "args": {
-                                "level": "Dark Mine"
+                                "item_name": "Double Jump",
+                                "count": 1
                             }
                         }
                     ]
                 }
-            },
+            }
+        ],
+        "locations": [
             {
                 "name": "DM: Firework in piston room",
                 "id": 421,
@@ -21059,6 +21048,69 @@
                         }
                     ]
                 }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "100 Gems (dark shard/baskets)",
+                "gem_amount": 100,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "DMWallPistons2": {
+        "name": "DMWallPistons2",
+        "entrances": [
+            {
+                "name": "DMWallPistons1 -> DMWallPistons2",
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "DM: Dragon Egg in Locked Chest in piston room",
+                "id": 852,
+                "options": [],
+                "access_rule": {
+                    "rule": "And",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Glide",
+                                    "Wall Kick"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "LockedChestRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "level": "Dark Mine"
+                            }
+                        }
+                    ]
+                }
             },
             {
                 "name": "DM: Light Gem in piston room",
@@ -21079,18 +21131,7 @@
         ],
         "gem_events": [
             {
-                "name": "530 Gems (dark shards/baskets/headbash chest/metal chests)",
-                "gem_amount": 530,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "1500 Gems (firework in piston room)",
+                "name": "1500 Gems (firework in wall piston room)",
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
@@ -21123,24 +21164,8 @@
                 }
             },
             {
-                "name": "20 Gems ([enemy] huge robo-gnorc)",
-                "gem_amount": 20,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAny",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Electric Breath",
-                            "Ice Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "20 Gems ([enemy] small robo-gnorc)",
-                "gem_amount": 20,
+                "name": "430 Gems (headbash/metal chests/dark shards/baskets)",
+                "gem_amount": 430,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -21150,17 +21175,83 @@
                 }
             },
             {
+                "name": "20 Gems ([enemy] huge robo-gnorc)",
+                "gem_amount": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Electric Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "20 Gems ([enemy] small robo-gnorc)",
+                "gem_amount": 20,
+                "options": [],
+                "access_rule": {
+                    "rule": "HasAny",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_names": [
+                            "Charge",
+                            "Electric Breath"
+                        ]
+                    }
+                }
+            },
+            {
                 "name": "20 Gems ([enemy] small robo-gnorc above wall kick)",
                 "gem_amount": 20,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Wall Kick",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Wall Kick",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAny",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Electric Breath"
+                                ]
+                            }
+                        }
+                    ]
                 }
             },
             {
@@ -21185,7 +21276,7 @@
         "name": "DMCaged",
         "entrances": [
             {
-                "name": "DMAfterRocks -> DMCaged",
+                "name": "DMWallPistons2 -> DMCaged",
                 "access_rule": {
                     "rule": "Has",
                     "options": [],

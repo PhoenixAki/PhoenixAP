@@ -135,7 +135,8 @@ MFbThiefArea
 DMEntry
 DMLGDoorEntry
 DMLGDoorPastGnorc
-DMAfterRocks
+DMWallPistons1
+DMWallPistons2
 DMCaged
 DMAfterCaged1
 DMAfterCaged2
