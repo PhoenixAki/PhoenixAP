@@ -371,7 +371,7 @@ REGION DFCove: the rest of the cove
 	LOCATION DFCove | DF: Light Gem across platforms in cove | 218 | True_()
 	LOCATION DFCove | DF: Light Gem in Locked Chest in cove | 826 | LockedChestRule('Dragonfly Falls')
 	LOCATION DFCove | DF: Dark Gem at end of cove | 110 | Has('Glide')
-	LOCATION DFCove | DF: Light Gem at end of cove | 219 | HasAll('Wall Kick', 'Glide') | DF_Glideless_Light_Gem Has('Glide')
+	LOCATION DFCove | DF: Light Gem at end of cove | 219 | HasAll('Wall Kick', 'Glide') | DF_Cove_Light_Gem_Glide Has('Glide')
 
 REGION DFHunter: hunter section
 	DFCove -> DFHunter | Has('Glide')

@@ -6194,7 +6194,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "DF Glideless Light Gem",
+                                    "value": "DF Cove Light Gem Glide",
                                     "operator": "contains"
                                 }
                             ],
