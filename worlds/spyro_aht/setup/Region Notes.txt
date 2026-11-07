@@ -475,7 +475,7 @@ REGION CDEntry: top of elevator and inside room with headbash switch. includes f
 	ShopPads -> CDEntry | OpenWorldRule(['Cloudy Domain - Elevator Top'])
 		could have nothing
 	CDSouthWest -> CDEntry | True_()
-		would have DJ and glide and wing shield
+		would have DJ and glide
 	CDBallGadget -> CDEntry | True_()
 		would have DJ and glide and ball gadget
 
@@ -510,8 +510,8 @@ REGION CDInsideElder: inside Elder house. include dragon egg after elder and fir
 	LOCATION CDInsideElder | CD: Dragon Egg after Elder Titan | 325 | Has('Double Jump')
 
 REGION CDNorthEast: wing shield tutorial after talking to elder
-	CDInsideElder -> CDNorthEast | HasAll('Double Jump', 'Glide', 'Wing Shield')
-		would have charge and DJ and glide and wing shield
+	CDInsideElder -> CDNorthEast | HasAll('Double Jump', 'Glide', 'Wing Shield') | CD_Skip_Wing_Shield HasAll('Double Jump', 'Glide')
+		would have charge and DJ and glide
 
 	LOCATION CDNorthEast | CD: Light Gem after Elder Titan | 231 | True_()
 
@@ -524,16 +524,16 @@ REGION CDNorthWest: northwest area after charging switch in CDEntry
 	LOCATION CDNorthWest | CD: Firework in northwest | 409 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION CDSouthWest: southwest area after charging switch in CDEntry. covers until last balloon gnorc
-	CDEntry -> CDSouthWest | HasAll('Charge', 'Double Jump', 'Wing Shield', 'Glide')
-		would have charge and DJ and wing shield and glide
-	CDEndlessPlatforms -> CDSouthWest | Has('Wing Shield')
-		would have DJ and glide and wing shield
+	CDEntry -> CDSouthWest | HasAll('Charge', 'Double Jump', 'Wing Shield', 'Glide') | CD_Skip_Wing_Shield HasAll('Charge', 'Double Jump', 'Glide')
+		would have charge and DJ and glide
+	CDEndlessPlatforms -> CDSouthWest | Has('Wing Shield') | CD_Skip_Wing_Shield True_()
+		would have DJ and glide
 
 	LOCATION CDSouthWest | CD: Light Gem after southwest temporary platforms | 233 | True_()
 
-REGION CDEndlessPlatforms: just past the balloon gnorcs which need wing shield to get past
+REGION CDEndlessPlatforms: just past the balloon gnorcs
 	CDSouthWest -> CDEndlessPlatforms | True_()
-		would have charge and DJ and wing shield and glide
+		would have charge and DJ and glide
 	CDTallestTowerLower -> CDEndlessPlatforms | HasAll('Double Jump', 'Glide')
 		would have DJ and glide
 
@@ -543,7 +543,7 @@ REGION CDEndlessPlatforms: just past the balloon gnorcs which need wing shield t
 
 REGION CDTallestTowerLower: just the shop area
 	CDEndlessPlatforms -> CDTallestTowerLower | True_()
-		would have DJ and charge and wing shield and glide
+		would have DJ and charge and glide
 	ShopPads -> CDTallestTowerLower | OpenWorldRule(['Cloudy Domain - Tallest Tower'])
 		could have nothing
     CDOutsideBallGadget -> CDTallestTowerLower | True_()

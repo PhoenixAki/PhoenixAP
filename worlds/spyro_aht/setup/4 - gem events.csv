@@ -186,12 +186,12 @@ CDOutsideElder,20,[enemy] unarmored huge gnorc,"Or(HasAny('Fire Breath', 'Electr
 CDOutsideElder,75,metal chests behind supercharge door,SuperchargeGadget()
 CDInsideElder,25,[enemy] first balloon gnorc in tutorial,"HasAll('Double Jump', 'Wing Shield')"
 CDNorthEast,75,[enemy] flying small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
-CDNorthEast,75,[enemy] balloon gnorcs,True_()
+CDNorthEast,75,[enemy] balloon gnorcs,Has('Wing Shield')
 CDNorthWest,100,[enemy] flying middle and small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
 CDNorthWest,40,[enemy] armored and unarmored huge gnorcs,"HasAny('Fire Breath', 'Electric Breath', 'Ice Breath')"
 CDNorthWest,755,on the ground/in the air/baskets/chests,True_()
 CDNorthWest,500,firework in northwest,Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
-CDSouthWest,100,[enemy] balloon gnorcs,True_()
+CDSouthWest,100,[enemy] balloon gnorcs,Has('Wing Shield')
 CDSouthWest,150,[enemy] flying middle and small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"
 CDSouthWest,85,on the ground/baskets/headbash chest,True_()
 CDEndlessPlatforms,200,[enemy] flying middle and small gnorcs,"HasAny('Fire Breath', 'Electric Breath')"

@@ -9002,16 +9002,40 @@
             {
                 "name": "CDInsideElder -> CDNorthEast",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide",
-                            "Wing Shield"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide",
+                                    "Wing Shield"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CD Skip Wing Shield",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         ],
@@ -9050,10 +9074,13 @@
                 "gem_amount": 75,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_name": "Wing Shield",
+                        "count": 1
+                    }
                 }
             }
         ]
@@ -9228,29 +9255,73 @@
             {
                 "name": "CDEntry -> CDSouthWest",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Double Jump",
-                            "Glide",
-                            "Wing Shield"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Double Jump",
+                                    "Glide",
+                                    "Wing Shield"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CD Skip Wing Shield",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        }
+                    ]
                 }
             },
             {
                 "name": "CDEndlessPlatforms -> CDSouthWest",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "Or",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Wing Shield",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Wing Shield",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "CD Skip Wing Shield",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -9273,10 +9344,13 @@
                 "gem_amount": 100,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_name": "Wing Shield",
+                        "count": 1
+                    }
                 }
             },
             {
