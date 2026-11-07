@@ -575,16 +575,17 @@ RLNorthEast2Above,155,metal chests/baskets/headbash chest,True_()
 RLNorthEast3,40,[enemy] small robo-gnorcs,"HasAny('Electric Breath', 'Charge')"
 RLNorthEast4,60,[enemy] small robo-gnorc,"HasAny('Electric Breath', 'Charge')"
 RLNorthEast4,40,[enemy] huge robo-gnorcs,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
-RLNorthWest1,80,[enemy] small robo-gnorcs/huge robo-gnorcs,True_()
-RLNorthWest1,50,baskets,True_()
+RLNorthWest1,80,[enemy] huge + small robo-gnorcs,True_()
+RLNorthWest1,25,[enemy] small robo-gnorc on piston,Has('Double Jump')
 RLNorthWest1,30,headbash chest,Has('Double Jump')
-RLNorthWest1,25,[enemy] small robo-gnorc on piston needing DJ,Has('Double Jump')
-RLNorthWest2,40,[enemy] small robo-gnorcs,"HasAny('Electric Breath', 'Charge')"
-RLNorthWest2,300,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
+RLNorthWest1,50,baskets,True_()
+RLNorthWest1Above,40,[enemy] small robo-gnorcs,True_()
+RLNorthWest1Above,235,baskets/headbash chests,True_()
+RLNorthWest2,200,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
 RLNorthWest2,80,[enemy] armored middle robo-gnorcs,"And(Has('Charge'), HasAny('Electric Breath', 'Ice Breath'))"
-RLNorthWest2,345,metal chests/headbash chests/and baskets using DJ,Has('Double Jump')
-RLNorthWest2,30,headbash chest after pole spin glide,"HasAll('Double Jump', 'Glide', 'Pole Spin')"
-RLNorthWest2,40,[enemy] small robo-gnorcs that spawn after dark gem,"And(HasAll('Double Jump', 'Glide', 'Pole Spin'), HasAny('Electric Breath', 'Charge'))"
+RLNorthWest2,30,headbash chest above pole spin room,"HasAll('Double Jump', 'Glide', 'Pole Spin')"
+RLNorthWest2,40,[enemy] small robo-gnorcs after dark gem,"And(HasAll('Double Jump', 'Glide'), HasAny('Electric Breath', 'Charge'))"
+RLNorthWest2Above,210,stuff via laser parkour,True_()
 RLSouthEast1,20,[enemy] armored middle robo-gnorc,True_()
 RLSouthEast1,75,baskets,True_()
 RLSouthEast1,20,[enemy] small robo-gnorc on vertical platform,True_()

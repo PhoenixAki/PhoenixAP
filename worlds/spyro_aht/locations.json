@@ -2168,7 +2168,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "DV Skip Charge",
+                                    "value": "DV Byrd Ledge Chargeless",
                                     "operator": "contains"
                                 }
                             ],
@@ -4242,7 +4242,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "CS Poleless Elder Tree",
+                                    "value": "CS Poleless Tree",
                                     "operator": "contains"
                                 }
                             ],
@@ -4492,7 +4492,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "CS Poleless Elder Tree",
+                                    "value": "CS Poleless Tree",
                                     "operator": "contains"
                                 }
                             ],
@@ -6613,7 +6613,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "CR Early Egg",
+                                    "value": "CR Early Southern Egg",
                                     "operator": "contains"
                                 }
                             ],
@@ -9664,7 +9664,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "CD Skip Across Platforms",
+                                    "value": "CD Skip Raised Platforms",
                                     "operator": "contains"
                                 }
                             ],
@@ -11408,7 +11408,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Toxic Rise Without Electric",
+                                    "value": "SR Toxic Rise Without Electric",
                                     "operator": "contains"
                                 }
                             ],
@@ -11551,7 +11551,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Toxic Rise Without Electric",
+                                    "value": "SR Toxic Rise Without Electric",
                                     "operator": "contains"
                                 }
                             ],
@@ -14189,7 +14189,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "IC Platform Jump",
+                                    "value": "IC Courtyard Platform Jump",
                                     "operator": "contains"
                                 }
                             ],
@@ -14773,7 +14773,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Glide Above Elder Astor",
+                                    "value": "IC Glide Above Elder",
                                     "operator": "contains"
                                 }
                             ],
@@ -22186,7 +22186,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "RL Shockwave Switches",
+                                    "value": "RL Entry Shockwave Switches",
                                     "operator": "contains"
                                 }
                             ],
@@ -22677,7 +22677,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "RL Skip Invincibility",
+                                    "value": "RL Skip Northeast Invincibility",
                                     "operator": "contains"
                                 }
                             ],
@@ -22762,7 +22762,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "RL Skip Invincibility",
+                                    "value": "RL Skip Northeast Invincibility",
                                     "operator": "contains"
                                 }
                             ],
@@ -23010,27 +23010,10 @@
                 }
             }
         ],
-        "locations": [
-            {
-                "name": "RL: Dragon Egg in northwest piston room",
-                "id": 363,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
-                }
-            }
-        ],
+        "locations": [],
         "gem_events": [
             {
-                "name": "80 Gems ([enemy] small robo-gnorcs/huge robo-gnorcs)",
+                "name": "80 Gems ([enemy] huge + small robo-gnorcs)",
                 "gem_amount": 80,
                 "options": [],
                 "access_rule": {
@@ -23041,14 +23024,17 @@
                 }
             },
             {
-                "name": "50 Gems (baskets)",
-                "gem_amount": 50,
+                "name": "25 Gems ([enemy] small robo-gnorc on piston)",
+                "gem_amount": 25,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "Has",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {}
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
                 }
             },
             {
@@ -23066,17 +23052,92 @@
                 }
             },
             {
-                "name": "25 Gems ([enemy] small robo-gnorc on piston needing DJ)",
-                "gem_amount": 25,
+                "name": "50 Gems (baskets)",
+                "gem_amount": 50,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "args": {}
+                }
+            }
+        ]
+    },
+    "RLNorthWest1Above": {
+        "name": "RLNorthWest1Above",
+        "entrances": [
+            {
+                "name": "RLNorthWest1 -> RLNorthWest1Above",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "RL Skip Northwest Glide",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "RL: Dragon Egg in northwest piston room",
+                "id": 363,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "40 Gems ([enemy] small robo-gnorcs)",
+                "gem_amount": 40,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "235 Gems (baskets/headbash chests)",
+                "gem_amount": 235,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
                 }
             }
         ]
@@ -23085,17 +23146,12 @@
         "name": "RLNorthWest2",
         "entrances": [
             {
-                "name": "RLNorthWest1 -> RLNorthWest2",
+                "name": "RLNorthWest1Above -> RLNorthWest2",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "True_",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "args": {}
                 }
             },
             {
@@ -23114,16 +23170,19 @@
         ],
         "locations": [
             {
-                "name": "RL: Light Gem from northwest laser parkour",
-                "id": 282,
+                "name": "RL: Dark Gem in northwest",
+                "id": 139,
                 "options": [],
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "HasAll",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
+                        "item_names": [
+                            "Double Jump",
+                            "Glide",
+                            "Pole Spin"
+                        ]
                     }
                 }
             },
@@ -23143,45 +23202,12 @@
                         ]
                     }
                 }
-            },
-            {
-                "name": "RL: Dark Gem in northwest",
-                "id": 139,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAll",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide",
-                            "Pole Spin"
-                        ]
-                    }
-                }
             }
         ],
         "gem_events": [
             {
-                "name": "40 Gems ([enemy] small robo-gnorcs)",
-                "gem_amount": 40,
-                "options": [],
-                "access_rule": {
-                    "rule": "HasAny",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Charge",
-                            "Electric Breath"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "300 Gems (baskets)",
-                "gem_amount": 300,
+                "name": "200 Gems (baskets)",
+                "gem_amount": 200,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAny",
@@ -23232,21 +23258,7 @@
                 }
             },
             {
-                "name": "345 Gems (metal chests/headbash chests/and baskets using DJ)",
-                "gem_amount": 345,
-                "options": [],
-                "access_rule": {
-                    "rule": "Has",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
-                }
-            },
-            {
-                "name": "30 Gems (headbash chest after pole spin glide)",
+                "name": "30 Gems (headbash chest above pole spin room)",
                 "gem_amount": 30,
                 "options": [],
                 "access_rule": {
@@ -23263,7 +23275,7 @@
                 }
             },
             {
-                "name": "40 Gems ([enemy] small robo-gnorcs that spawn after dark gem)",
+                "name": "40 Gems ([enemy] small robo-gnorcs after dark gem)",
                 "gem_amount": 40,
                 "options": [],
                 "access_rule": {
@@ -23278,8 +23290,7 @@
                             "args": {
                                 "item_names": [
                                     "Double Jump",
-                                    "Glide",
-                                    "Pole Spin"
+                                    "Glide"
                                 ]
                             }
                         },
@@ -23295,6 +23306,49 @@
                             }
                         }
                     ]
+                }
+            }
+        ]
+    },
+    "RLNorthWest2Above": {
+        "name": "RLNorthWest2Above",
+        "entrances": [
+            {
+                "name": "RLNorthWest2 -> RLNorthWest2Above",
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
+            }
+        ],
+        "locations": [
+            {
+                "name": "RL: Light Gem from northwest laser parkour",
+                "id": 282,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "210 Gems (stuff via laser parkour)",
+                "gem_amount": 210,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
                 }
             }
         ]
