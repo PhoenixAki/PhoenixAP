@@ -643,7 +643,7 @@ REGION SRDepthsLower: lower layer of Depths (below invince wall kick) and spitti
 	LOCATION SRDepthsLower | SR: Light Gem by fish statues | 239 | True_()
 
 REGION SRToxicSwim1: vanilla entry room of toxic swim
-	SRDepthsLower -> SRToxicSwim1 | HasAll('Electric Breath', 'Double Jump') | SR_Depths_Skip_Electric Has('Double Jump')
+	SRDepthsLower -> SRToxicSwim1 | HasAll('Electric Breath', 'Double Jump') | SR_Fish_Statue_Jump Has('Double Jump')
 		would have DJ
 
 REGION SRToxicSwim2: vanilla exit room of toxic swim, not including post-statue hallway
@@ -655,14 +655,16 @@ REGION SRToxicSwim2: vanilla exit room of toxic swim, not including post-statue 
 REGION SRToxicSwimAbove: atop pole spin puzzle
 	SRToxicSwim2 -> SRToxicSwimAbove | HasAll('Glide', 'Pole Spin')
 		would have DJ and invince and swim and charge and pole spin and glide
+    SRToxicSwim1 -> SRToxicSwimAbove | False_() | SR_Depths_Skip_Poles Has('Glide')
+        would have DJ and glide
 
 	LOCATION SRToxicSwimAbove | SR: Dark Gem atop pole rooms | 119 | True_()
 	LOCATION SRToxicSwimAbove | SR: Light Gem in Locked Chest atop pole rooms | 830 | LockedChestRule('Sunken Ruins')
 	LOCATION SRToxicSwimAbove | SR: Firework atop pole rooms | 413 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
-REGION SRToxicRise: rising statue room. include stuff before it in toxic swim statue hallway
+REGION SRToxicRise: rising statue room. includes toxic swim post-statue hallway
 	SRToxicSwimAbove -> SRToxicRise | True_()
-		would have invince and swim and charge and DJ and pole spin and glide
+		would have DJ and glide
 	ShopPads -> SRToxicRise | OpenWorldRule(['Sunken Ruins - Toxic Rise'])
 		could have nothing
 

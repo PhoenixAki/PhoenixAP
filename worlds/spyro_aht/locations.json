@@ -11063,7 +11063,7 @@
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "SR Depths Skip Electric",
+                                    "value": "SR Fish Statue Jump",
                                     "operator": "contains"
                                 }
                             ],
@@ -11179,6 +11179,37 @@
                             "Pole Spin"
                         ]
                     }
+                }
+            },
+            {
+                "name": "SRToxicSwim1 -> SRToxicSwimAbove",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "SR Depths Skip Poles",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Glide",
+                                "count": 1
+                            }
+                        }
+                    ]
                 }
             }
         ],
