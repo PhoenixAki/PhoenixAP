@@ -137,8 +137,9 @@ CRPiranhas,125,[enemy] tiki men,"HasAny('Fire Breath', 'Electric Breath', 'Charg
 CRPiranhas,50,[enemy] blue crabs,"Or(Has('Electric Breath'), HasAll('Charge', 'Ice Breath'))"
 CRWateryTomb,100,[enemy] orange crabs,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 CRCannon,20,[enemy] unarmored huge gnorc by dark gem,"And(Has('Double Jump'), Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge')))"
-CRCannon,2020,armored chests by dark gem via cannon/and on the ground after reinforced door,"HasAll('Double Jump', 'Glide')"
-CRCannon,1050,armored chests by dragon egg via cannon/and baskets by dragon egg,"HasAll('Double Jump', 'Glide', 'Pole Spin')"
+CRCannon,2020,armored chests by dark gem via cannon/and on the ground after reinforced door,"And(HasAll('Double Jump', 'Glide'), CannonAccessRule())"
+CRCannon,1000,armored chests by dragon egg via cannon,"And(HasAll('Double Jump', 'Glide', 'Pole Spin'), CannonAccessRule())"
+CRCannon,50,baskets by dragon egg,"HasAll('Double Jump', 'Glide', 'Pole Spin')"
 CRCannon,125,underwater vases,"HasAll('Swim', 'Charge')"
 CRCannon,150,[enemy] underwater clams,"HasAll('Swim', 'Charge')"
 CRWindmills,200,on the ground,True_()
@@ -282,11 +283,11 @@ FVIcyCamp,25,metal chest via wall kick,"And(Has('Wall Kick'), HasAny('Double Jum
 FVIcyCamp,175,baskets via wall kick,"And(Has('Wall Kick'), HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath'))"
 FVIcyCamp,20,[enemy] unarmored middle gnorc via wall kick,"And(Has('Wall Kick'), HasAny('Fire Breath', 'Electric Breath', 'Charge'))"
 FVIcyCamp,20,[enemy] armored huge gnorc via wall kick,"And(HasAll('Charge', 'Wall Kick'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-FVIcyCampUpper,571,on the ground/headbash stuff/baskets/metal,True_()
-FVIcyCampUpper,11,on ground behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
-FVIcyCampUpper,30,headbash rock behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
-FVIcyCampUpper,100,dark shards on ice (can't DJ),Has('Charge')
-FVIcyCampUpper,50,[enemy] eskimole on platforms,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
+FVIcyCampUpper,11,on ground before chargeable wall + in platform room,True_()
+FVIcyCampUpper,41,on ground / headbash rock behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
+FVIcyCampCannon,100,dark shards on ice (can't DJ) in platform room,Has('Charge')
+FVIcyCampCannon,560,stuff in platform room,True_()
+FVIcyCampCannon,50,eskimoles on platforms in platform room,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 FVReturnFromIC,4500,armored chests via supercharge,True_()
 FVEntry2,15,on the ground,True_()
 FVEntry2,100,[enemy] eskimoles,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
@@ -381,7 +382,7 @@ ICRoyalBack,60,[enemy] archer gnorcs/unarmored middle gnorc,True_()
 ICRoyalBack,20,[enemy] armored huge gnorc,Has('Charge')
 ICRoyalCannon,5000,armored chests,True_()
 ICRoyalCannon,50,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
-ICRoyalCannon,20,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
+ICRoyalCannon,20,[enemy] armored huge gnorc at bottom of elevator,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 ICRoyalCannon,80,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 ICRoyalCannon,150,baskets/dark shard,True_()
 ICRoyalToCourtyard,296,baskets/on the ground/dark shards/metal chests,True_()
@@ -438,11 +439,13 @@ MMBridgeEntry,75,[enemy] phoenixes,True_()
 MMBridgeEntry,55,headbash rocks,True_()
 MMBridge,50,metal chests,"HasAny('Double Jump', 'Charge', 'Electric Breath')"
 MMBridge,50,baskets,"HasAny('Double Jump', 'Charge', 'Fire Breath', 'Electric Breath', 'Water Breath', 'Ice Breath')"
-MMBridge,1500,armored chests across bridge via cannon,True_()
+MMBridge,1500,armored chests across bridge via cannon,CannonAccessRule()
 MMBridge,60,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 MMBridge,20,[enemy] armored middle gnorc,Has('Charge')
-MMBridgePoles,160,baskets/headbash rocks,True_()
-MMBridgePoles,300,[enemy] phoenixes/fire imps,"HasAny('Water Breath', 'Ice Breath')"
+MMBridgePoles,80,baskets/headbash rock before cannon rock,True_()
+MMBridgePoles,75,[enemy] phoenixes before cannon rock,"HasAny('Water Breath', 'Ice Breath')"
+MMBridgePoles,225,[enemy] fire imps after cannon rock,"And(HasAny('Water Breath', 'Ice Breath'), CannonAccessRule())"
+MMBridgePoles,80,baskets/headbash rock after cannon rock,CannonAccessRule()
 MMPostBridge,75,[enemy] fire imps,True_()
 MMPostBridge,40,[enemy] armored huge gnorc,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 MMPostBridge,30,headbash rock,True_()

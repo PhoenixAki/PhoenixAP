@@ -312,7 +312,7 @@ REGION DFSteepCanyonCaves: 2 caves in entry area
 	LOCATION DFSteepCanyonCaves | DF: Dragon Egg behind chargeable wall in entry area | 312 | Has('Double Jump')
 
 REGION DFAfterVultures: ledge after vultures up to the drop-off for elder statue area
-	DFSteepCanyon -> DFAfterVultures | HasAll('Double Jump', 'Glide')
+	DFSteepCanyon -> DFAfterVultures | And(HasAll('Double Jump', 'Glide'), CannonAccessRule())
 		would have DJ and Glide
 	DFLGDoorEntry -> DFAfterVultures | And(HasAll('Double Jump', 'Glide'), LGDoorRule(0))
 		would have DJ and glide and LGDoor
@@ -425,7 +425,7 @@ REGION CRCannon: cannon area with pole spinning
 
 	LOCATION CRCannon | CR: Dark Gem by cannon | 111 | Has('Double Jump')
 	LOCATION CRCannon | CR: Dragon Egg by cannon | 322 | HasAll('Double Jump', 'Pole Spin', 'Glide')
-	LOCATION CRCannon | CR: Dark Gem behind cannon door | 112 | HasAll('Double Jump', 'Glide', 'Charge') | Horn_Dive_Walls HasAll('Double Jump', 'Glide')
+	LOCATION CRCannon | CR: Dark Gem behind cannon door | 112 | And(HasAll('Double Jump', 'Glide', 'Charge'), CannonAccessRule()) | Horn_Dive_Walls And(HasAll('Double Jump', 'Glide'), CannonAccessRule())
 
 REGION CRWindmills: windmill area on the way to cloudy domain
 	CREntry -> CRWindmills | Has('Double Jump') | CR_Muddy_Pits True_()
@@ -738,8 +738,13 @@ REGION FVIcyCampUpper: upper areas of icy camp that need both wall kick and doub
 		would have wall kick and DJ
 
 	LOCATION FVIcyCampUpper | FV: Dragon Egg behind chargeable wall | 337 | Has('Charge') | Horn_Dive_Walls True_()
-	LOCATION FVIcyCampUpper | FV: Dark Gem in orbiting platforms room | 123 | True_()
-	LOCATION FVIcyCampUpper | FV: Light Gem in orbiting platforms room | 246 | True_()
+
+REGION FVIcyCampCannon: orbiting platforms room that needs cannon to get into
+    FVIcyCampUpper -> FVIcyCampCannon | CannonAccessRule()
+        would have wall kick and DJ and cannon
+    
+    LOCATION FVIcyCampCannon | FV: Dark Gem in orbiting platforms room | 123 | True_()
+	LOCATION FVIcyCampCannon | FV: Light Gem in orbiting platforms room | 246 | True_()
 
 REGION FVReturnFromIC: path back to FV after the horn dive switch
 	ICDrawbridge -> FVReturnFromIC | And(Has('Double Jump'), SuperchargeGadget())
@@ -771,8 +776,8 @@ REGION FVLGDoorGlide: rest of LG door area locked behind glide. Probably don't n
 
 	LOCATION FVLGDoorGlide | FV: Light Gem in Light Gem door area | 248 | True_()
 
-REGION FVEast: east falling icicles room and pole area. probably don't bother making poles its own region
-	FVEntry2 -> FVEast | Has('Double Jump')
+REGION FVEast: east falling icicles room and pole area
+	FVEntry2 -> FVEast | And(Has('Double Jump'), CannonAccessRule())
 		would have DJ
 
 	LOCATION FVEast | FV: Dark Gem in icicle room | 125 | True_()
@@ -882,6 +887,7 @@ REGION ICRoyal: royal chamber area. include egg after pole spin which doesn't ne
 	LOCATION ICRoyal | IC: Empty Locked Chest in royal chamber | 811 | LockedChestRule('Ice Citadel')
 	LOCATION ICRoyal | IC: Dragon Egg next to cannon area via pole spin | 346 | HasAll('Pole Spin', 'Glide')
 	LOCATION ICRoyal | IC: Light Gem from Ice Princess | 262 | And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'), Has('Fire Breath')) | Fire_Breath_Idle_Animation And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'))
+    LOCATION ICRoyal | IC: Dark Gem by cannon | 130 | Has('Double Jump')
 
 REGION ICRoyalBack: back entrance to chamber via electric platform. includes dark gem right after platform
 	ICRoyal -> ICRoyalBack | HasAll('Pole Spin', 'Electric Breath', 'Double Jump', 'Glide')
@@ -890,10 +896,9 @@ REGION ICRoyalBack: back entrance to chamber via electric platform. includes dar
 	LOCATION ICRoyalBack | IC: Dark Gem via electric platform | 129 | True_()
 
 REGION ICRoyalCannon: stuff via cannon which needs DJ to use
-	ICRoyal -> ICRoyalCannon | Has('Double Jump')
+	ICRoyal -> ICRoyalCannon | And(Has('Double Jump'), CannonAccessRule())
 		would have DJ
 
-	LOCATION ICRoyalCannon | IC: Dark Gem by cannon | 130 | True_()
 	LOCATION ICRoyalCannon | IC: Dragon Egg above elevator by cannon | 347 | True_()
 	LOCATION ICRoyalCannon | IC: Light Gem behind cannon door | 263 | Has('Glide')
 	LOCATION ICRoyalCannon | IC: Light Gem from lighting boiler after cannon area | 264 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
@@ -1014,7 +1019,7 @@ REGION MMBridgePoles: pole spinning in bridge area
 	MMBridge -> MMBridgePoles | HasAll('Double Jump', 'Pole Spin')
 		would have DJ and pole spin
 
-	LOCATION MMBridgePoles | MM: Light Gem across collapsed bridge | 269 | True_()
+	LOCATION MMBridgePoles | MM: Light Gem across collapsed bridge | 269 | CannonAccessRule()
 
 REGION MMPostBridge: platforms and hallway after bridge area. do not include the north intersection
 	MMBridge -> MMPostBridge | And(Has('Double Jump'), HasAny('Water Breath', 'Ice Breath'))

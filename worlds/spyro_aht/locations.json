@@ -5318,15 +5318,28 @@
             {
                 "name": "DFSteepCanyon -> DFAfterVultures",
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -7383,19 +7396,32 @@
                     "filtered_resolution": false,
                     "children": [
                         {
-                            "rule": "HasAll",
+                            "rule": "And",
                             "options": [],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Double Jump",
-                                    "Glide"
-                                ]
-                            }
+                            "children": [
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Charge",
+                                            "Double Jump",
+                                            "Glide"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "rule": "CannonAccessRule",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
                         },
                         {
-                            "rule": "HasAll",
+                            "rule": "And",
                             "options": [
                                 {
                                     "option": "worlds.spyro_aht.options.EnabledTricks",
@@ -7404,12 +7430,25 @@
                                 }
                             ],
                             "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Double Jump",
-                                    "Glide"
-                                ]
-                            }
+                            "children": [
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Double Jump",
+                                            "Glide"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "rule": "CannonAccessRule",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
                         }
                     ]
                 }
@@ -7471,20 +7510,63 @@
                 "gem_amount": 2020,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
-                "name": "1050 Gems (armored chests by dragon egg via cannon/and baskets by dragon egg)",
-                "gem_amount": 1050,
+                "name": "1000 Gems (armored chests by dragon egg via cannon)",
+                "gem_amount": 1000,
+                "options": [],
+                "access_rule": {
+                    "rule": "And",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide",
+                                    "Pole Spin"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "50 Gems (baskets by dragon egg)",
+                "gem_amount": 50,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAll",
@@ -12769,7 +12851,69 @@
                         }
                     ]
                 }
+            }
+        ],
+        "gem_events": [
+            {
+                "name": "11 Gems (on ground before chargeable wall + in platform room)",
+                "gem_amount": 11,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
             },
+            {
+                "name": "41 Gems (on ground / headbash rock behind chargeable wall)",
+                "gem_amount": 41,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Charge",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "True_",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "FVIcyCampCannon": {
+        "name": "FVIcyCampCannon",
+        "entrances": [
+            {
+                "name": "FVIcyCampUpper -> FVIcyCampCannon",
+                "access_rule": {
+                    "rule": "CannonAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            }
+        ],
+        "locations": [
             {
                 "name": "FV: Dark Gem in orbiting platforms room",
                 "id": 123,
@@ -12795,84 +12939,7 @@
         ],
         "gem_events": [
             {
-                "name": "571 Gems (on the ground/headbash stuff/baskets/metal)",
-                "gem_amount": 571,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
-            {
-                "name": "11 Gems (on ground behind chargeable wall)",
-                "gem_amount": 11,
-                "options": [],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Charge",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "True_",
-                            "options": [
-                                {
-                                    "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Horn Dive Walls",
-                                    "operator": "contains"
-                                }
-                            ],
-                            "filtered_resolution": false,
-                            "args": {}
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "30 Gems (headbash rock behind chargeable wall)",
-                "gem_amount": 30,
-                "options": [],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Charge",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "True_",
-                            "options": [
-                                {
-                                    "option": "worlds.spyro_aht.options.EnabledTricks",
-                                    "value": "Horn Dive Walls",
-                                    "operator": "contains"
-                                }
-                            ],
-                            "filtered_resolution": false,
-                            "args": {}
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "100 Gems (dark shards on ice (can't DJ))",
+                "name": "100 Gems (dark shards on ice (can't DJ) in platform room)",
                 "gem_amount": 100,
                 "options": [],
                 "access_rule": {
@@ -12886,7 +12953,18 @@
                 }
             },
             {
-                "name": "50 Gems ([enemy] eskimole on platforms)",
+                "name": "560 Gems (stuff in platform room)",
+                "gem_amount": 560,
+                "options": [],
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "50 Gems (eskimoles on platforms in platform room)",
                 "gem_amount": 50,
                 "options": [],
                 "access_rule": {
@@ -13561,13 +13639,26 @@
             {
                 "name": "FVEntry2 -> FVEast",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
@@ -15813,6 +15904,20 @@
                         }
                     ]
                 }
+            },
+            {
+                "name": "IC: Dark Gem by cannon",
+                "id": 130,
+                "options": [],
+                "access_rule": {
+                    "rule": "Has",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {
+                        "item_name": "Double Jump",
+                        "count": 1
+                    }
+                }
             }
         ],
         "gem_events": [
@@ -16045,28 +16150,30 @@
             {
                 "name": "ICRoyal -> ICRoyalCannon",
                 "access_rule": {
-                    "rule": "Has",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_name": "Double Jump",
-                        "count": 1
-                    }
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             }
         ],
         "locations": [
-            {
-                "name": "IC: Dark Gem by cannon",
-                "id": 130,
-                "options": [],
-                "access_rule": {
-                    "rule": "True_",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "args": {}
-                }
-            },
             {
                 "name": "IC: Dragon Egg above elevator by cannon",
                 "id": 347,
@@ -16171,7 +16278,7 @@
                 }
             },
             {
-                "name": "20 Gems ([enemy] armored huge gnorc)",
+                "name": "20 Gems ([enemy] armored huge gnorc at bottom of elevator)",
                 "gem_amount": 20,
                 "options": [],
                 "access_rule": {
@@ -18163,7 +18270,7 @@
                 "gem_amount": 1500,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "CannonAccessRule",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {}
@@ -18226,7 +18333,7 @@
                 "id": 269,
                 "options": [],
                 "access_rule": {
-                    "rule": "True_",
+                    "rule": "CannonAccessRule",
                     "options": [],
                     "filtered_resolution": false,
                     "args": {}
@@ -18235,8 +18342,8 @@
         ],
         "gem_events": [
             {
-                "name": "160 Gems (baskets/headbash rocks)",
-                "gem_amount": 160,
+                "name": "80 Gems (baskets/headbash rock before cannon rock)",
+                "gem_amount": 80,
                 "options": [],
                 "access_rule": {
                     "rule": "True_",
@@ -18246,8 +18353,8 @@
                 }
             },
             {
-                "name": "300 Gems ([enemy] phoenixes/fire imps)",
-                "gem_amount": 300,
+                "name": "75 Gems ([enemy] phoenixes before cannon rock)",
+                "gem_amount": 75,
                 "options": [],
                 "access_rule": {
                     "rule": "HasAny",
@@ -18259,6 +18366,46 @@
                             "Water Breath"
                         ]
                     }
+                }
+            },
+            {
+                "name": "225 Gems ([enemy] fire imps after cannon rock)",
+                "gem_amount": 225,
+                "options": [],
+                "access_rule": {
+                    "rule": "And",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "HasAny",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Ice Breath",
+                                    "Water Breath"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "80 Gems (baskets/headbash rock after cannon rock)",
+                "gem_amount": 80,
+                "options": [],
+                "access_rule": {
+                    "rule": "CannonAccessRule",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
                 }
             }
         ]
