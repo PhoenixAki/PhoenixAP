@@ -157,7 +157,7 @@ class SpyroAHTWorld(World):
         classification = consts.ITEM_INFO[name][1]
         
         # a few tricks can lead to shockwave needing to be progression instead of useful
-        if name == "Shockwave" and ("Shockwave Rock Monsters" in self.options.enabled_tricks.value and "Horn Dive Rock Monsters" not in self.options.enabled_tricks.value) or "RL Shockwave Switches" in self.options.enabled_tricks.value:
+        if name == "Shockwave" and (("Shockwave Rock Monsters" in self.options.enabled_tricks.value and "Horn Dive Rock Monsters" not in self.options.enabled_tricks.value) or "RL Shockwave Switches" in self.options.enabled_tricks.value):
             classification = ItemClassification.progression
                 
         self.log(f"Created item {name} for player {self.player} with classification {classifications[classification]} and ID {self.item_name_to_id[name]}, placed into the {placement}.", consts.LoggingLevel.MAXIMUM)
@@ -443,6 +443,12 @@ class SpyroAHTWorld(World):
                 self.log(f"Random value was requested for {key} in item_bundles. {self.options.item_bundles.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
             
             self.check_item_bundles(key, convert[key])
+        
+        # trap length, could be requesting random
+        for key in self.options.trap_length.valid_keys:
+            if self.options.trap_length.value[key] == 0:
+                self.options.item_bundles.value[key] = self.random.randint(1, self.options.trap_length.max)
+                self.log(f"Random value was requested for {key} in trap_length. {self.options.trap_length.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
         
         # light gem and dragon egg goals need checking for being set too high while having some excluded from chests or disabled via minigame_checks
         self.check_egg_and_gem_goals(self.options.light_gems_goal, 15, self.options.exclude_chest_items >= 2)

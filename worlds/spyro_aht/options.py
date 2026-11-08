@@ -297,12 +297,18 @@ class TrapItems(OptionSet):
     default = frozenset()
 
 
-class TrapLength(Range):
-    """Determines how long Spam Call, Reverse Controls, and Bounce run for, in seconds."""
+class TrapLength(OptionCounter):
+    """Determines how long Spam Call, Reverse Controls, and Bounce run for, in seconds (maximum 60).
+    Set to 0 to have a random number of seconds chosen."""
     display_name = "Trap Length"
-    range_start = 1
-    range_end = 60
-    default = 30
+    valid_keys = ("Spam Call", "Reverse Controls", "Bounce")
+    min = 0
+    max = 60
+    default = {
+        "Spam Call": 30,
+        "Reverse Controls": 30,
+        "Bounce": 30
+    }
 
 ###############START OF GAME###############
 class StartingBreaths(OptionSet):

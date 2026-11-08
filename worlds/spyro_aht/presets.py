@@ -30,6 +30,7 @@ options_presets = {
         "item_bundles": {"Dark Gem": 40, "Global Lockpick": 52, "Light Gem": 100},
         "trap_items": ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce"],
         "trap_percentage": 100,
+        "trap_length": {"Bounce": 60, "Spam Call": 60, "Reverse Controls": 60},
         "shop_randomization": True,
         "chest_keys": "realm_key_rings",
         "shop_item_count": 56
@@ -80,7 +81,7 @@ options_presets = {
         "trap_percentage": "random",
         "filler_items": ["Random"],
         "trap_items": ["Random"],
-        "trap_length": "random",
+        "trap_length": {"Bounce": 0, "Reverse Controls": 0, "Spam Call": 0},
         "starting_breaths": ["Random"],
         "movement_randomization": ["Random"],
         "starting_realms": [],
