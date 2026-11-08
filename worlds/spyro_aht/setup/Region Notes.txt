@@ -455,8 +455,8 @@ REGION CROttoPool: pool and first filling section. include crabs and metal chest
 	LOCATION CROttoPool | CR: Light Gem from Otto | 227 | And(CanReachRegion('CRWest'), Has('Double Jump'))
 
 REGION CRWest: left out of otto's pool to Blink and sunken entrance
-	CROttoPool -> CRWest | HasAll('Double Jump', 'Pole Spin')
-		would have DJ and pole spin
+	CROttoPool -> CRWest | HasAll('Double Jump', 'Pole Spin') | CR_Skip_Pool_Poles Has('Double Jump')
+		would have DJ
 	ShopPads -> CRWest | OpenWorldRule(['Coastal Remains - Waterfall Walkway'])
 		could have nothing
 
