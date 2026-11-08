@@ -16246,38 +16246,6 @@
                 }
             },
             {
-                "name": "50 Gems ([enemy] steel traps)",
-                "gem_amount": 50,
-                "options": [],
-                "access_rule": {
-                    "rule": "Or",
-                    "options": [],
-                    "filtered_resolution": false,
-                    "children": [
-                        {
-                            "rule": "Has",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_name": "Electric Breath",
-                                "count": 1
-                            }
-                        },
-                        {
-                            "rule": "HasAll",
-                            "options": [],
-                            "filtered_resolution": false,
-                            "args": {
-                                "item_names": [
-                                    "Charge",
-                                    "Ice Breath"
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            {
                 "name": "20 Gems ([enemy] armored huge gnorc at bottom of elevator)",
                 "gem_amount": 20,
                 "options": [],
@@ -16303,6 +16271,86 @@
                                 "item_names": [
                                     "Electric Breath",
                                     "Fire Breath",
+                                    "Ice Breath"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "ICRoyalCannonLedge": {
+        "name": "ICRoyalCannonLedge",
+        "entrances": [
+            {
+                "name": "ICRoyalCannon -> ICRoyalCannonLedge",
+                "access_rule": {
+                    "rule": "True_",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "args": {}
+                }
+            },
+            {
+                "name": "ICRoyal -> ICRoyalCannonLedge",
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "False_",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        },
+                        {
+                            "rule": "Has",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "IC Skip Cannon",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Double Jump",
+                                "count": 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "locations": [],
+        "gem_events": [
+            {
+                "name": "50 Gems ([enemy] steel traps)",
+                "gem_amount": 50,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "Has",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_name": "Electric Breath",
+                                "count": 1
+                            }
+                        },
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Charge",
                                     "Ice Breath"
                                 ]
                             }
@@ -16344,7 +16392,7 @@
         "name": "ICRoyalToCourtyard",
         "entrances": [
             {
-                "name": "ICRoyalCannon -> ICRoyalToCourtyard",
+                "name": "ICRoyalCannonLedge -> ICRoyalToCourtyard",
                 "access_rule": {
                     "rule": "Has",
                     "options": [],

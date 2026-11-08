@@ -381,10 +381,10 @@ ICRoyal,75,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 
 ICRoyalBack,60,[enemy] archer gnorcs/unarmored middle gnorc,True_()
 ICRoyalBack,20,[enemy] armored huge gnorc,Has('Charge')
 ICRoyalCannon,5000,armored chests,True_()
-ICRoyalCannon,50,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 ICRoyalCannon,20,[enemy] armored huge gnorc at bottom of elevator,"And(Has('Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
-ICRoyalCannon,80,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
-ICRoyalCannon,150,baskets/dark shard,True_()
+ICRoyalCannonLedge,50,[enemy] steel traps,"Or(Has('Electric Breath'), HasAll('Ice Breath', 'Charge'))"
+ICRoyalCannonLedge,80,[enemy] unarmored middle gnorc,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
+ICRoyalCannonLedge,150,baskets/dark shard,True_()
 ICRoyalToCourtyard,296,baskets/on the ground/dark shards/metal chests,True_()
 ICRoyalToCourtyard,80,[enemy] armored huge gnorc/armored middle gnorcs,Has('Charge')
 ICRoyalToCourtyard,20,[enemy] unarmored middle gnorc,True_()

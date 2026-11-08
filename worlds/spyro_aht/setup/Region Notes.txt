@@ -901,10 +901,17 @@ REGION ICRoyalCannon: stuff via cannon which needs DJ to use
 
 	LOCATION ICRoyalCannon | IC: Dragon Egg above elevator by cannon | 347 | True_()
 	LOCATION ICRoyalCannon | IC: Light Gem behind cannon door | 263 | Has('Glide')
-	LOCATION ICRoyalCannon | IC: Light Gem from lighting boiler after cannon area | 264 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
+
+REGION ICRoyalCannonLedge: ledge leading to boiler room and return to courtyard path. Only separate because of trick
+    ICRoyalCannon -> ICRoyalCannonLedge | True_()
+        would have DJ
+    ICRoyal -> ICRoyalCannonLedge | False_() | IC_Skip_Cannon Has('Double Jump')
+        would have DJ
+    
+    LOCATION ICRoyalCannon | IC: Light Gem from lighting boiler after cannon area | 264 | Has('Fire Breath') | Fire_Breath_Idle_Animation True_()
 
 REGION ICRoyalToCourtyard: path above boiler that returns to lower courtyard
-	ICRoyalCannon -> ICRoyalToCourtyard | Has('Fire Breath')
+	ICRoyalCannonLedge -> ICRoyalToCourtyard | Has('Fire Breath')
 		would have DJ and fire breath
 
 Stormy Beach
