@@ -3250,19 +3250,32 @@
                 }
             },
             {
-                "name": "1000 Gems (armored chests on pyramid vs cannon)",
+                "name": "1000 Gems (armored chests on pyramid via cannon)",
                 "gem_amount": 1000,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -4829,15 +4842,28 @@
                 "id": 214,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -5120,6 +5146,73 @@
                         }
                     ]
                 }
+            },
+            {
+                "name": "257 Gems (stuff behind chargeable wall in cannon door)",
+                "gem_amount": 257,
+                "options": [],
+                "access_rule": {
+                    "rule": "Or",
+                    "options": [],
+                    "filtered_resolution": false,
+                    "children": [
+                        {
+                            "rule": "And",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Charge",
+                                            "Double Jump",
+                                            "Glide"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "rule": "CannonAccessRule",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
+                        },
+                        {
+                            "rule": "And",
+                            "options": [
+                                {
+                                    "option": "worlds.spyro_aht.options.EnabledTricks",
+                                    "value": "Horn Dive Walls",
+                                    "operator": "contains"
+                                }
+                            ],
+                            "filtered_resolution": false,
+                            "children": [
+                                {
+                                    "rule": "HasAll",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {
+                                        "item_names": [
+                                            "Double Jump",
+                                            "Glide"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "rule": "CannonAccessRule",
+                                    "options": [],
+                                    "filtered_resolution": false,
+                                    "args": {}
+                                }
+                            ]
+                        }
+                    ]
+                }
             }
         ]
     },
@@ -5127,7 +5220,7 @@
         "name": "DFSteepCanyonCaves",
         "entrances": [
             {
-                "name": "DFEntry -> DFSteepCanyonCaves",
+                "name": "DFSteepCanyon -> DFSteepCanyonCaves",
                 "access_rule": {
                     "rule": "Or",
                     "options": [],

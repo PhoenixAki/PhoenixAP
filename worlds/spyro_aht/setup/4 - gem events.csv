@@ -34,7 +34,7 @@ CSPyramidAndTemple,30,headbash chest,Has('Double Jump')
 CSPyramidAndTemple,91,[enemy] red and yellow plants,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
 CSPyramidAndTemple,75,baskets behind chargeable wall with switch,Has('Charge')
 CSPyramidAndTemple,75,[enemy] normal crocoviles on pyramid,Has('Double Jump')
-CSPyramidAndTemple,1000,armored chests on pyramid vs cannon,"HasAll('Double Jump', 'Glide')"
+CSPyramidAndTemple,1000,armored chests on pyramid via cannon,"And(HasAll('Double Jump', 'Glide'), CannonAccessRule())"
 CSPyramidAndTemple,2550,armored chests and metal chests via supercharge,SuperchargeGadget()
 CSWest,205,on the ground/baskets/headbash chest,True_()
 CSWest,30,[enemy] red and yellow plants,"Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge'))"
@@ -79,6 +79,7 @@ DFSteepCanyon,15,[enemy] red plant,"Or(HasAny('Fire Breath', 'Electric Breath'),
 DFSteepCanyon,20,[enemy] armored huge gnorc in second canyon area,"And(HasAll('Double Jump', 'Charge'), HasAny('Fire Breath', 'Electric Breath', 'Ice Breath'))"
 DFSteepCanyon,180,baskets and metal and headbash chests in second canyon area,Has('Double Jump')
 DFSteepCanyon,20,[enemy] unarmored huge gnorc in second canyon area,"And(Has('Double Jump'), Or(HasAny('Fire Breath', 'Electric Breath'), HasAll('Ice Breath', 'Charge')))"
+DFSteepCanyon,257,stuff behind chargeable wall in cannon door,"And(HasAll('Charge', 'Double Jump', 'Glide'), CannonAccessRule()) | Horn_Dive_Walls And(HasAll('Double Jump', 'Glide'), CannonAccessRule())"
 DFSteepCanyonCaves,807,baskets/dark shards/on ground/metal behind chargeable wall,True_()
 DFSteepCanyonCaves,60,headbash chests behind chargeable walls,Has('Double Jump')
 DFAfterVultures,19,on the ground,True_()

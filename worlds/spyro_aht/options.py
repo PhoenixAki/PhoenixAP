@@ -387,7 +387,7 @@ class ShopLogic(Choice):
     ***********************************FORMULA (for the math nerds)***********************************
     blink_gems_total = (20,203 - exclusions) * blink_gems%
     non_blink_enemies_total = 16,353 * non_blink_enemies%
-    other_gems_total = (105,100 - exclusions) * other_gems%
+    other_gems_total = (105,357 - exclusions) * other_gems%
     gem_total = blink_gems_total + non_blink_enemies_total + other_gems_total
     base_shop_price = gem_total / (shop_item_count - 1)
 

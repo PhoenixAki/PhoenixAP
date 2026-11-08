@@ -301,11 +301,11 @@ REGION DFSteepCanyon: first main chunk from shop up to vulture area (include goi
 	ShopPads -> DFSteepCanyon | OpenWorldRule(['Dragonfly Falls - Steep Canyon'])
 		could have nothing
 
-	LOCATION DFSteepCanyon | DF: Light Gem behind cannon door | 214 | HasAll('Double Jump', 'Glide')
+	LOCATION DFSteepCanyon | DF: Light Gem behind cannon door | 214 | And(HasAll('Double Jump', 'Glide'), CannonAccessRule())
 	LOCATION DFSteepCanyon | DF: Dark Gem by canyon vultures | 108 | HasAll('Double Jump', 'Glide')
 
 REGION DFSteepCanyonCaves: 2 caves in entry area
-    DFEntry -> DFSteepCanyonCaves | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
+    DFSteepCanyon -> DFSteepCanyonCaves | Has('Charge') | Horn_Dive_Walls Has('Double Jump')
         would have (charge or DJ)
     
     LOCATION DFSteepCanyonCaves | DF: Dark Gem behind chargeable wall in entry area | 107 | Has('Double Jump')
