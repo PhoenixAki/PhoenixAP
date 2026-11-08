@@ -260,6 +260,7 @@ class TrapPercentage(Range):
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
+    default = 0
 
 
 class FillerItems(OptionSet):
@@ -331,7 +332,7 @@ class MovementRandomization(OptionSet):
 class StartingRealms(OptionSet):
     """Choose which realm(s) to start with realm access cards for. 
     
-    If the list is empty, a subset of not-already-chosen tricks.
+    If the list is empty, a random subset of realms will be chosen for you.
     If using full open_world_mode, you will start with all 4 access cards.
     If using non-full open_world_mode, non-starting realms are unlocked via shop unlocks instead of access cards.
     

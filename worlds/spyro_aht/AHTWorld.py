@@ -1048,15 +1048,17 @@ class SpyroAHTWorld(World):
         """Takes an Or rule and, if it is a trick-affected rule, returns the rule with its trick rule replaced with a UT glitched logic rule.
         Otherwise, returns the rule unmodified."""
         children: list[Rule] = []
-        for child in rule.children:
-            for option in child.options:
-                if option.option.display_name == "Enabled Tricks":
-                    child.options = ()
-                    children.append(And(Has(consts.GLITCHED_LOGIC_ITEM_NAME), child))
+        for child in rule.children:  # child = one half of the original Or(normal_logic, trick_logic)
+            if len(child.options) == 0:
+                children.append(child)
+            else:
+                for option in child.options:
+                    if option.option.display_name == "Enabled Tricks":
+                        children.append(Or(child, Has(consts.GLITCHED_LOGIC_ITEM_NAME)))
+                        break
                 else:
                     children.append(child)
-        rule.children = (rule.children[0], *children)
-        return rule
+        return Or(*children)
     
     def fill_slot_data(self):
         self.log("Filling slot data.", consts.LoggingLevel.LOW)
