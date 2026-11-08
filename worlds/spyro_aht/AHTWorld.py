@@ -320,10 +320,10 @@ class SpyroAHTWorld(World):
         self.check_qol_dicts(self.options.auto_hinting)
         self.check_qol_dicts(self.options.time_savers)
         
-        bad_condition = self.options.time_savers.value["Teleport Across Realms"] == "off" and self.options.open_world_mode.value != 0
+        bad_condition = self.options.time_savers.value["Teleport Across Realms"] == 0 and self.options.open_world_mode.value != 0
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log("Minor Warning: time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling it.", consts.LoggingLevel.WARNING)
-            self.options.time_savers.value["Teleport Across Realms"] = "on"
+            self.options.time_savers.value["Teleport Across Realms"] = 1
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
         
@@ -343,29 +343,21 @@ class SpyroAHTWorld(World):
         self.check_lists(self.options.elders_goal, "elders")
 
         # minigame checks
+        convert = {0: "disabled", 1: "only easy", 2: "enabled"}
         for key in self.options.minigame_checks.valid_keys:
             bad_condition = self.options.minigame_checks.value.get(key, "") == ""
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: minigame_checks setting \"{key}\" was omitted from YAML. Fixing by assuming a value of disabled.", consts.LoggingLevel.WARNING)
-                self.options.minigame_checks.value[key] = "disabled"
+                self.log(f"Minor Warning: minigame_checks setting \"{key}\" was omitted from YAML. Fixing by assuming a value of 0 (disabled).", consts.LoggingLevel.WARNING)
+                self.options.minigame_checks.value[key] = 0
                 continue
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"minigame_checks setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
                 
-            if isinstance(self.options.minigame_checks.value[key], str): self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].capitalize()
-            
-            bad_condition = self.options.minigame_checks.value[key] not in ["Enabled", "Easy", "Disabled", "Random"]
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"Enabled\", \"Easy\", \"Disabled\", or \"Random\". Fixing by setting {key} to \"Enabled\".", consts.LoggingLevel.WARNING)
-                self.options.minigame_checks.value[key] = "Enabled"
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Invalid entry for {key} in minigame_checks. Must be \"Enabled\", \"Easy\", \"Disabled\", or \"Random\". Fix this, or set auto_corrections to at least fix_minor.")
-
-            if self.options.minigame_checks.value[key] == "Random":
-                self.options.minigame_checks.value[key] = self.random.choice(["Enabled", "Easy", "Disabled"])
-                self.log(f"\"Random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
+            if self.options.minigame_checks.value[key] == 3:
+                self.options.minigame_checks.value[key] = self.random.randint(0, 2)
+                self.log(f"Random was requested for \"{key}\" in minigame_checks. {self.options.minigame_checks.value[key]} ({convert[self.options.minigame_checks.value[key]]}) was chosen.", consts.LoggingLevel.MEDIUM)
         
-        # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
+        # minigames goal
         for key in self.options.minigames_goal.valid_keys:
             bad_condition = self.options.minigames_goal.value.get(key, "") == ""
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -375,39 +367,19 @@ class SpyroAHTWorld(World):
             elif bad_condition and self.options.auto_corrections.value == 0:  # fix_minor
                 raise OptionError(f"minigames_goal setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
             
-            bad_condition = self.options.minigames_goal.value[key] in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: \"{self.options.minigames_goal.value[key]}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fixing by auto-converting to a number.", consts.LoggingLevel.WARNING)
-                self.options.minigames_goal.value[key] = int(self.options.minigames_goal.value[key])
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"\"{self.options.minigames_goal.value[key]}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fix this, or set auto_corrections to at least fix_minor.")
-            
-            # for capitalized form before further comparison
-            if isinstance(self.options.minigames_goal.value[key], str): self.options.minigames_goal.value[key] = self.options.minigames_goal.value[key].capitalize()
-            
-            bad_condition = self.options.minigames_goal.value[key] not in [0, 1, 2, 3, 4, 5, 6, 7, 8, "Random-on", "Random-off"]
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"Random-on\", or \"Random-off\". Fixing by setting {key} to 0.", consts.LoggingLevel.WARNING)
-                self.options.minigames_goal.value[key] = 0
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"Random-on\", or \"Random-off\". Fix this, or set auto_corrections to at least fix_minor.")
-            
             # handle random if needed
-            if self.options.minigames_goal.value[key] == "Random-on":
+            if self.options.minigames_goal.value[key] == -1:
                 self.options.minigames_goal.value[key] = self.random.randint(1, 8)
-                self.log(f"\"Random-on\" was requested for {key} for minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
-            elif self.options.minigames_goal.value[key] == "Random-off":
+                self.log(f"Random was requested for \"{key}\" in minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
+            elif self.options.minigames_goal.value[key] == -2:
                 coin_flip = self.random.randint(0, 1)  # 0 = off, 1 = on (and do a new random spin of 1-8)
-                if coin_flip == 1:
-                    self.options.minigames_goal.value[key] = self.random.randint(1, 8)
-                    self.log(f"\"Random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being enabled with a requirement of {self.options.minigames_goal.value[key]}.", consts.LoggingLevel.MEDIUM)
-                elif coin_flip == 0:
-                    self.options.minigames_goal.value[key] = 0
-                    self.log(f"\"Random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", consts.LoggingLevel.MEDIUM)
+                if coin_flip == 1: self.options.minigames_goal.value[key] = self.random.randint(1, 8)
+                elif coin_flip == 0: self.options.minigames_goal.value[key] = 0
+                self.log(f"Random was requested for \"{key}\" for minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
             
             # if here, it's safely a number. Need error checking in case it's set too high (i.e. if this minigame is partially or fully disabled)
-            self.check_minigame_goal_values(key, "Easy", 4)
-            self.check_minigame_goal_values(key, "Disabled", 0)
+            self.check_minigame_goal_values(key, "easy", 1, 4)
+            self.check_minigame_goal_values(key, "disabled", 0, 0)
             
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
@@ -440,15 +412,15 @@ class SpyroAHTWorld(World):
             convert = {"Dark Gem": 40, "Light Gem": 100, "Global Lockpick": 52}
             if self.options.item_bundles.value[key] == 0:
                 self.options.item_bundles.value[key] = self.random.randint(1, convert[key])
-                self.log(f"Random value was requested for {key} in item_bundles. {self.options.item_bundles.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
+                self.log(f"Random value was requested for \"{key}\" in item_bundles. {self.options.item_bundles.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
             
             self.check_item_bundles(key, convert[key])
         
         # trap length, could be requesting random
         for key in self.options.trap_length.valid_keys:
             if self.options.trap_length.value[key] == 0:
-                self.options.item_bundles.value[key] = self.random.randint(1, self.options.trap_length.max)
-                self.log(f"Random value was requested for {key} in trap_length. {self.options.trap_length.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
+                self.options.trap_length.value[key] = self.random.randint(1, self.options.trap_length.max)
+                self.log(f"Random value was requested for \"{key}\" in trap_length. {self.options.trap_length.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
         
         # light gem and dragon egg goals need checking for being set too high while having some excluded from chests or disabled via minigame_checks
         self.check_egg_and_gem_goals(self.options.light_gems_goal, 15, self.options.exclude_chest_items >= 2)
@@ -552,37 +524,30 @@ class SpyroAHTWorld(World):
     def random_choices_pls(self, option: OptionSet, unchosen: list):
         bad_condition = len(unchosen) == 0
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log(f"Minor Warning: \"Random\" was requested for {option.display_name}, but all are already chosen. Fixing by skipping random choices.", consts.LoggingLevel.WARNING)
+            self.log(f"Minor Warning: Random was requested for {option.display_name}, but all are already chosen. Fixing by skipping random choices.", consts.LoggingLevel.WARNING)
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError(f"\"Random\" was requested for {option.display_name}, but all are already chosen. Fix this, or set auto_corrections to at least fix_minor.")
+            raise OptionError(f"Random was requested for {option.display_name}, but all are already chosen. Fix this, or set auto_corrections to at least fix_minor.")
         else:  # chaos or there is at least 1 unchosen random
             rand_num = self.random.randint(1, len(unchosen))
             unchosen.sort()
             choices = self.random.sample(unchosen, k=rand_num)
-            self.log(f"\"Random\" was requested for {option.display_name}. [{", ".join(choices)}] was chosen to be added to {option.display_name}.", consts.LoggingLevel.MEDIUM)
+            self.log(f"Random was requested for {option.display_name}. [{", ".join(choices)}] was chosen to be added to {option.display_name}.", consts.LoggingLevel.MEDIUM)
             option.value.update(choices)
             
     def check_qol_dicts(self, option: OptionDict):
+        convert = {0: "off", 1: "on"}
         for key in option.valid_keys:
             bad_condition = option.value.get(key, "") == ""
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of \"Off\".", consts.LoggingLevel.WARNING)
-                option.value[key] = "Off"
+                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of 0 (off).", consts.LoggingLevel.WARNING)
+                option.value[key] = 0
                 continue
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"{option.display_name} setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
             
-            if isinstance(option.value[key], str): option.value[key] = option.value[key].capitalize()
-            bad_condition = option.value[key] not in ["Off", "On", "Random"]
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log( f"Minor Warning: {option.display_name} setting \"{key}\" was given an invalid entry. Must be \"Off\", \"On\", or \"Random\". Fixing by setting it to Off.", consts.LoggingLevel.WARNING)
-                option.value[key] = "Off"
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"{option.display_name} setting \"{key}\" was given an invalid entry. Must be \"Off\", \"On\", or \"Random\". Fix this, or set auto_corrections to at least fix_minor.")
-            
-            if option.value[key] == "Random":
-                option.value[key] = "On" if self.random.randint(0, 1) == 1 else "Off"
-                self.log(f"\"Random\" was requested for {key} in {option.display_name}. It was set to {option.value[key]}.", consts.LoggingLevel.MEDIUM)
+            if option.value[key] == 2:
+                option.value[key] = self.random.randint(0, 1)
+                self.log(f"Random was requested for \"{key}\" in {option.display_name}. It was set to {option.value[key]} ({convert[option.value[key]]}).", consts.LoggingLevel.MEDIUM)
         
     def check_filler_and_traps(self, option: OptionSet, items: list):
         if len(option.value) == 0:
@@ -616,15 +581,15 @@ class SpyroAHTWorld(World):
                     option.value.add(rand_choice)
                     available_choices.remove(rand_choice)
                     rand_count -= 1
-                self.log(f"\"Random\" was requested for {option.display_name}. List is now: {", ".join(option.value)}.", consts.LoggingLevel.MEDIUM)
+                self.log(f"Random was requested for {option.display_name}. List is now: {", ".join(option.value)}.", consts.LoggingLevel.MEDIUM)
     
-    def check_minigame_goal_values(self, npc: str, setting: str, max_amount: int):
+    def check_minigame_goal_values(self, npc: str, output: str, setting: int, max_amount: int):
         bad_condition = self.options.minigame_checks[npc] == setting and self.options.minigames_goal[npc] > max_amount
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log(f"Minor Warning: {npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting}. Fixing by lowering goal to {max_amount}.", consts.LoggingLevel.WARNING)
+            self.log(f"Minor Warning: {npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting} ({output}). Fixing by lowering goal to {max_amount}.", consts.LoggingLevel.WARNING)
             self.options.minigames_goal.value[npc] = max_amount
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError(f"{npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting}. Fix this, or set auto_corrections to at least fix_minor.")
+            raise OptionError(f"{npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting} ({output}). Fix this, or set auto_corrections to at least fix_minor.")
                     
     def check_egg_and_gem_goals(self, option: Range, count: int, chest_error: bool):
         max_value = option.range_end - count
@@ -638,8 +603,8 @@ class SpyroAHTWorld(World):
         # calculate how many minigame checks are disabled, separated by type for better output
         egg_lower, gem_lower = 0, 0
         for minigame in self.options.minigame_checks.valid_keys:
-            if self.options.minigame_checks.value[minigame] == "Easy": gem_lower += 4
-            elif self.options.minigame_checks.value[minigame] == "Disabled": egg_lower, gem_lower = egg_lower+4, gem_lower+4
+            if self.options.minigame_checks.value[minigame] == 1: gem_lower += 4
+            elif self.options.minigame_checks.value[minigame] == 0: egg_lower, gem_lower = egg_lower+4, gem_lower+4
         # adjust output and math based on which option, due to the separation by type above
         if option.display_name == "Dragon Eggs Goal":
             output = f"{egg_lower} Dragon Egg minigame checks"
@@ -755,19 +720,19 @@ class SpyroAHTWorld(World):
                     for key in convert.keys():
                         if key in gem_event['name']:
                             if "Byrd minigames" in gem_event['name']:
-                                if consts.MINIGAME_LOCS[convert[key]] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sgt. Byrd"] == "Disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sgt. Byrd"] != "Enabled"):
+                                if consts.MINIGAME_LOCS[convert[key]] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sgt. Byrd"] == 0) or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sgt. Byrd"] != 2):
                                     self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {consts.MINIGAME_LOCS[convert[key]]} was excluded or disabled via minigame_checks.", consts.LoggingLevel.HIGH)
                                     other_exclusions += int(gem_event['gem_amount'])
                                     exclusion = True
                                     break
                             elif "Blink minigames" in gem_event['name']:
-                                if consts.MINIGAME_LOCS[convert[key] + 8] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Blink"] == "Disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Blink"] != "Enabled"):
+                                if consts.MINIGAME_LOCS[convert[key] + 8] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Blink"] == 0) or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Blink"] != 2):
                                     self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {consts.MINIGAME_LOCS[convert[key] + 8]} was excluded or disabled via minigame_checks.", consts.LoggingLevel.HIGH)
                                     blink_exclusions += int(gem_event['gem_amount'])
                                     exclusion = True
                                     break
                             elif "Sparx minigames" in gem_event['name']:
-                                if consts.MINIGAME_LOCS[convert[key] + 16] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sparx"] == "Disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sparx"] != "Enabled"):
+                                if consts.MINIGAME_LOCS[convert[key] + 16] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sparx"] == 0) or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sparx"] != 2):
                                     self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {consts.MINIGAME_LOCS[convert[key] + 16]} was excluded or disabled via minigame_checks.", consts.LoggingLevel.HIGH)
                                     other_exclusions += int(gem_event['gem_amount'])
                                     exclusion = True
@@ -823,11 +788,11 @@ class SpyroAHTWorld(World):
         # exclude IDs of any disabled minigames from minigames_goal, dragon_eggs_goal, and light_gems_goal
         for minigame_type, id_list in {"Blink": consts.BLINK_IDS, "Sgt. Byrd": consts.BYRD_IDS, "Sparx": consts.SPARX_IDS, "Cannon": consts.CANNON_IDS}.items():
             value = self.options.minigame_checks.value[minigame_type]
-            if value == "Disabled":
+            if value == 0:
                 goal_info[minigame_type]["ids"] = []
                 goal_info["Dragon Eggs"]["ids"] = [id for id in goal_info["Dragon Eggs"]["ids"] if id not in id_list]
                 goal_info["Light Gems"]["ids"] = [id for id in goal_info["Light Gems"]["ids"] if id not in id_list]
-            elif value == "Easy":
+            elif value == 1:
                 goal_info[minigame_type]["ids"] = goal_info[minigame_type]["ids"][::2]  # removes lg checks
                 goal_info["Light Gems"]["ids"] = [id for id in goal_info["Light Gems"]["ids"] if id not in id_list[1::2]]
         

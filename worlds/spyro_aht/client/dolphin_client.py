@@ -217,12 +217,12 @@ class DolphinClient:
         return False
 
     async def apply_patch(self):
-        if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == "On":
+        if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, 1)
-        if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "On":
+        if self.ctx.slot_data["time_savers"]["Skip Elevators"] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, 1)
         
-        convert_config = {"Enabled": 0, "Easy": 1, "Disabled": 2}
+        convert_config = {2: 0, 1: 1, 0: 2}  # YAML: 0=disabled, 1=easy, 2=enabled. MOD: 0=enabled, 1=easy, 2=disabled
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_BLINK_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Blink']])
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SGTBYRD_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sgt. Byrd']])
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SPARX_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sparx']])
@@ -296,7 +296,7 @@ class DolphinClient:
                         bosses[3] = True
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_EASY_MODE, struct.pack(">????", *bosses))
             
-        if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == "On":
+        if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
             
         if self.ctx.slot_data['open_world_mode'] == 1:

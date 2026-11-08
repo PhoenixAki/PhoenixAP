@@ -588,19 +588,19 @@ class SpyroAHTContext(SuperContext):
     
     async def _location_scouts(self):
         locations = set()
-        if self.slot_data['auto_hinting']["Minigames"] == "on":
+        if self.slot_data['auto_hinting']["Minigames"] == 1:
             for obj, loc in consts.MINIGAME_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
                     locations.update(loc)
         
-        if self.slot_data['auto_hinting']["Bosses"] == "on":
+        if self.slot_data['auto_hinting']["Bosses"] == 1:
             for obj, loc in consts.BOSS_LAIR_OPEN_OBJECTIVES.items():
                 flag = await self.emu_client.get_objective(obj)
                 if flag:
                     locations.update(loc)
         
-        if self.slot_data['auto_hinting']["Shop Items"] == "on" and not self.shop_hinted:
+        if self.slot_data['auto_hinting']["Shop Items"] == 1 and not self.shop_hinted:
             locations.update(consts.SHOP_ITEM_IDS[:self.slot_data['shop_item_count']])
             self.shop_hinted = True
                 

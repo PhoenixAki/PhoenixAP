@@ -96,7 +96,7 @@ def main():
             else: npc = "Cannon"
             
             # enabled or easy if dragon egg (id in the 300's). only enabled for light gems (id in the 200's)
-            values = ["Enabled", "Easy"] if loc_id // 100 == 3 else ["Enabled"]
+            values = [1, 2] if loc_id // 100 == 3 else [2]
             options = [{  # can't make into a proper OptionFilter to then to_dict on since this is custom format
                 "option": "worlds.spyro_aht.options.MinigameChecks",
                 "npc": npc,

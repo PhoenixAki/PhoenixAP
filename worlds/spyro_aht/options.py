@@ -1,8 +1,9 @@
-from dataclasses import dataclass
 import itertools
+from dataclasses import dataclass
 
-from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup,StartInventoryPool, OptionDict, OptionCounter
+from Options import OptionSet, PerGameCommonOptions, Toggle, Choice, Range, OptionGroup, StartInventoryPool, OptionCounter
 from . import consts
+
 
 ###############DEATHLINK###############
 class DeathLink(Choice):
@@ -33,11 +34,10 @@ class LoggingLevel(Choice):
     and medium messages, but not high or maximum messages. **Warning messages stemming from YAML issues are always logged.**
     
     None: No additional logging beyond warnings.
-    Low: Logs notable generation steps, such as "Checking for common YAML option/setting issues".
-    Medium: Logs useful debugging information, such as listing your randomized shop prices. This is the default because
-      the information in these messages can be very helpful when making bug reports.
-    High: Logs messages with extra generation logic, such as "Fire Breath has been placed into Starter Checks: Breath."
-    Maximum: Logs with extreme detail, such as noting every single item created."""
+    Low: Includes notable generation steps, such as "Checking for common YAML option/setting issues".
+    Medium: Includes useful debugging information, such as listing the final result of options that were randomized.
+    High: Includes extra generation logic.
+    Maximum: Maximum detail, such as noting every single item created."""
     option_none = 1
     option_low = 2
     option_medium = 3
@@ -49,12 +49,11 @@ class LoggingLevel(Choice):
 
 class AutoCorrections(Choice):
     """Chooses the logging behavior of the generator if YAML issues are encountered. It is recommended to leave this
-    set to fix_minor, especially if intending to randomize multiple options. Clashes stemming from this (such as having
-    fireworks_goal on but having firework_checks disabled) are fixed by fix_minor.
+    set to fix_minor, especially if intending to randomize multiple options.
     
     halt: Generation will be strictly halted upon any sort of YAML issue.
     chaos: The generator will not halt or make changes, even if there is a known problem or high likelihood of generation failing.
-    fix_minor: Only issues deemed minor will be fixed (such as the above example with fireworks_goal).
+    fix_minor: Only issues that have a minor impact will be fixed.
     fix_major: All issues will be fixed, even if it has a major impact (such as changing your starting realm to avoid an impossible start).
     
     A full, detailed list of every scenario that can lead to a generation issue can be found on the project's wiki,
@@ -69,11 +68,9 @@ class AutoCorrections(Choice):
 
 ###############GOAL###############
 class BossGoals(OptionSet):
-    """Adds a goal requirement to defeat a number of boss(es). You can enter "Random" to have a random selection
-    of bosses chosen, even if you also choose a few bosses explicitly alongside "Random".
+    """Adds a goal requirement to defeat a number of boss(es). Entering "Random" will pick a subset of not-already-chosen bosses.
     
-    Note that this + all other goals are based on AHT checks. In specific circumstances, this can result in AHT
-    registering goals unexpectedly early. See the below project wiki FAQ post for more info.
+    Note that this + all other goals are based on AHT checks. See the wiki FAQ post for more info on how this can impact seeds.
     https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1-%E2%80%90-Setup-Guide-&-FAQ#i-goaled-early-what-gives 
     
     Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
@@ -132,8 +129,7 @@ class LockedChestsGoal(Range):
 
 
 class EldersGoal(OptionSet):
-    """Adds a goal requirement to talk to a number of elder dragons. You can enter "Random" to have a random selection
-    of elders chosen, even if you also choose a few elders explicitly alongside "Random".
+    """Adds a goal requirement to talk to a number of elder dragons. Entering "Random" will pick a subset of not-already-chosen elders.
     
     Valid Options: ["Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Random"]"""
     display_name = "Elders Goal"
@@ -141,13 +137,13 @@ class EldersGoal(OptionSet):
     default = frozenset()
 
 
-class MinigamesGoal(OptionDict):
-    """Adds a goal requirement to complete minigames. Next to each, you can enter any of the following:
-    - 0-8: complete this many to goal.
-    - Random-on: picks a random number from 1-8.
-    - Random-off: 1/2 chance of 0, 1/2 chance of 1-8."""
+class MinigamesGoal(OptionCounter):
+    """Adds a goal requirement to complete minigames (0-8 each). Enter -1 for a random number 1-8. Enter -2 for a
+    1/2 chance of 0 and 1/2 chance of 1-8."""
     display_name = "Minigames Goal"
     valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
+    min = -2
+    max = 8
     default = {
         "Blink": 0,
         "Cannon": 0,
@@ -168,9 +164,9 @@ class ExcludeChestItems(Choice):
     
 ###############CHECKS AND ITEMS###############
 class EnabledTricks(OptionSet):
-    """Many things in AHT can be done using "tricks", which by default you aren't expected to do. This option lets you choose
-    to enable a series of tricks that you may be expected to do. These tricks can be enabled individually or through a few
-    presets (Easy, Medium, Hard, Other). You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
+    """AHT AP's default logic stays very close to vanilla, casual logic. This option lets you choose to
+    enable a series of alternative logic conditions ("tricks") which you may be expected to do. Youc an enable tricks
+    individually, or through a few presets. You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
     Entering "Random" will pick a subset of not-already-chosen tricks.
     
     See here for a full list of tricks: https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-3.1-%E2%80%90-List-of-Tricks
@@ -209,29 +205,26 @@ class FireworkChecks(Toggle):
     default = 0
 
 
-class MinigameChecks(OptionDict):
-    """Customize whether each minigame will be fully enabled, enabled with only Dragon Egg challenges,
-    or disabled. For each minigame, enter one of:
-    
-    Enabled: Keeps vanilla behavior for this minigame.
-    Easy: Disables the Light Gem challenges for this minigame.
-    Disabled: Fully disables this minigame. Its NPCs will not spawn at all in-game.
-      If cannon minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
-    Random: Random choice between Enabled, Easy, and Disabled."""
+class MinigameChecks(OptionCounter):
+    """Customize how much of each type of minigame is able to be done.
+    Enter 0 to disable the minigame. Enter 1 to keep it enabled, but only with Dragon Egg challenges.
+    Enter 2 to leave fully enabled. Enter 3 for a random choice of 0-2."""
     display_name = "Minigame Checks"
     valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
+    min = 0
+    max = 3
     default = {
-        "Blink": "Enabled",
-        "Cannon": "Enabled",
-        "Sgt. Byrd": "Enabled",
-        "Sparx": "Enabled"
+        "Blink": 2,
+        "Cannon": 2,
+        "Sgt. Byrd": 2,
+        "Sparx": 2
     }
 
 
 class ItemBundles(OptionCounter):
-    """Some AHT AP items can be bundled together so that you receive multiple at a time. For example, if you set the Dark Gem
-    bundle size to 7, there would be 6 "Dark Gem Bundle" items created. 5 would be worth 7 each (35 total) and the 6th
-    would be worth 5 (to get to 40 total).
+    """Some AHT AP items can be bundled together so that you receive multiple at a time. For example, if you set the
+    Dark Gem bundle size to 7, there would be 6 "Dark Gem Bundle" items created. 5 would be worth 7 each (35 total)
+    and the 6th would be worth 5 (to get to 40 total).
     
     Currently supported items for bundling:
     Dark Gem: bundle size 1-40, or 0 for random choice.
@@ -249,8 +242,7 @@ class ItemBundles(OptionCounter):
 
 
 class CannonLock(Toggle):
-    """If enabled, you will not be able to use cannons in the game until you receive the "Cannon Unlock" item.
-    Cannons in minigames are excluded, and are always usable."""
+    """Disables your ability to use cannons until receiving the "Cannon Unlock" item. Minigame cannons are excluded."""
     display_name = "Cannon Lock"
     default = 0
     
@@ -394,7 +386,7 @@ class ShopLogic(Choice):
     The first item is always free, to prevent restrictive starts (Moneybags offers it as a loss-leader).
     
     unordered: items will have equal prices and can be bought in any order. Logic assumes you will buy them in order left -> right.
-    ordered: items will be free, but get unlocked at a steadily increasing amount of gems, which enforces the logical order.
+    ordered: items will technically be free, but get unlocked at a steadily increasing amount of gems, which enforces the logical order.
      
     ***********************************FORMULA (for the math nerds)***********************************
     blink_gems_total = (20,203 - exclusions) * blink_gems%
@@ -442,8 +434,8 @@ class OtherGems(Range):
     
     
 class DoubleGems(Choice):
-    """Enables or disables the Double Gems item, if shop_randomization is enabled. It is advised to keep this disabled if so,
-    as shop logic does not account for gems received through Double Gems."""
+    """Enables or disables the Double Gems item, if shop_randomization is enabled.
+    Shop logic does not account for gems received through Double Gems."""
     display_name = "Double Gems"
     option_disabled = 0
     option_enabled = 1
@@ -451,7 +443,7 @@ class DoubleGems(Choice):
 
 ###############GATE & GADGET COSTS###############
 class RandomizeBossLairDoorCosts(Choice):
-    """Determines the method of calculating Dark Gem costs for boss lairs.
+    """Determines how Dark Gem costs for boss lairs are calculated.
 
     default: Each boss lair has their vanilla cost (10/20/30/40).
     randomized: Costs are randomly generated using the Boss Lair Min and Boss Lair Max values defined in random_costs.
@@ -464,7 +456,7 @@ class RandomizeBossLairDoorCosts(Choice):
 
 
 class RandomizeLightGemDoorCosts(Choice):
-    """Determines the method of calculating Light Gem costs for Light Gem Doors.
+    """Determines how Light Gem costs for Light Gem doors are calculated.
 
     default: Each door has their vanilla cost (20/45/70/95).
     randomized: Costs are randomly generated using the Light Gem Door Min and Light Gem Door Max values defined in random_costs.
@@ -477,7 +469,7 @@ class RandomizeLightGemDoorCosts(Choice):
 
 
 class RandomizeGadgetCosts(Choice):
-    """Determines the method of calculating Light Gem costs for gadgets. Listed in order of Ball Gadget -> Invincibility -> Supercharge.
+    """Determines how Light Gem costs for gadgets are calculated. Listed as Ball Gadget/Invincibility/Supercharge.
 
     default: Each gadget has their vanilla cost (8/24/40).
     randomized: Costs are randomly generated using the Gadget Min and Gadget Max values defined in random_costs.
@@ -546,26 +538,27 @@ class ShopPadProximityActivation(Toggle):
     default = 1
 
 
-class AutoHinting(OptionDict):
-    """Toggles automatic hinting for boss rewards (upon opening their lair), minigames (upon talking to NPCs), and shop
-    items (upon creating the save file). For each, you can enter "On", "Off", or "Random"."""
+class AutoHinting(OptionCounter):
+    """Toggles automatic hinting for boss rewards (upon opening their lair), minigames (upon talking to NPCs), and
+    shop items (upon creating the save file). For each, enter 0 for off, 1 for on, or 2 for a random choice of 0-1."""
     display_name = "Auto Hinting"
     valid_keys = ("Bosses", "Minigames", "Shop Items")
+    min = 0
+    max = 2
     default = {
-        "Bosses": "Off",
-        "Minigames": "Off",
-        "Shop Items": "Off"
+        "Bosses": 0,
+        "Minigames": 0,
+        "Shop Items": 0
     }
-    
+
     
 class DisguiseShopItems(OptionSet):
-    """When the shop is randomized, items show as "<player name>'s <item name>". By default, they use the lockpick model,
-    but this is overridden in some cases, such as key rings using the keychain model. This option lets you disguise your
-    randomized shop items in a few ways, to add more mystery to your purchases. Hinting still works even if disguised.
+    """This option lets you disguise your randomized shop items in a few ways, to add more mystery to your purchases.
+    Hinting still works to get info on items, even if disguised. Entering "Random" will pick a subset of not-already-chosen options.
     
-    Player: Replaced player names with ???.
+    Player: Replaces player names with ???.
     Item: Replaces item names with ???.
-    Model: All items will use the lockpick model.
+    Model: All items will use the lockpick 3D model.
      
     Valid options: ["Player", "Item", "Model", "Random"]"""
     valid_keys = ("Player", "Item", "Model", "Random")
@@ -583,17 +576,19 @@ class EasyBosses(OptionSet):
     default = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red")
 
 
-class TimeSavers(OptionDict):
-    """Choose which time-saving quality of life patches are enabled. For each, enter "On", "Off", or "Random".
-    Skip Cutscenes: enables skipping most cutscenes with the Y button.
-    Skip Elevators: enables skipping long elevator waits with loading screen.
-    Teleport Across Realms: enables teleporting across realms using normal shop pads."""
+class TimeSavers(OptionCounter):
+    """Choose which time-saving quality of life patches are enabled.
+    For each, enter 0 for off, 1 for on, or 2 for a random choice of 0-1.
+    
+    Skip Cutscenes: skip most cutscenes with the Y button.
+    Skip Elevators: skips long elevator waits with a loading screen.
+    Teleport Across Realms: teleport across realms using normal shop pads."""
     display_name = "Time Savers"
     valid_keys = ("Skip Cutscenes", "Skip Elevators", "Teleport Across Realms")
     default = {
-        "Skip Cutscenes": "On",
-        "Skip Elevators": "On",
-        "Teleport Across Realms": "On"
+        "Skip Cutscenes": 1,
+        "Skip Elevators": 1,
+        "Teleport Across Realms": 1
     }
 
 @dataclass
