@@ -287,7 +287,7 @@ FVIcyCampUpper,11,on ground before chargeable wall + in platform room,True_()
 FVIcyCampUpper,41,on ground / headbash rock behind chargeable wall,Has('Charge') | Horn_Dive_Walls True_()
 FVIcyCampCannon,100,dark shards on ice (can't DJ) in platform room,Has('Charge')
 FVIcyCampCannon,560,stuff in platform room,True_()
-FVIcyCampCannon,50,eskimoles on platforms in platform room,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
+FVIcyCampCannon,50,[enemy] eskimoles on platforms in platform room,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"
 FVReturnFromIC,4500,armored chests via supercharge,True_()
 FVEntry2,15,on the ground,True_()
 FVEntry2,100,[enemy] eskimoles,"HasAny('Fire Breath', 'Electric Breath', 'Charge')"

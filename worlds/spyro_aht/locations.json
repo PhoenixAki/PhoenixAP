@@ -12964,7 +12964,7 @@
                 }
             },
             {
-                "name": "50 Gems (eskimoles on platforms in platform room)",
+                "name": "50 Gems ([enemy] eskimoles on platforms in platform room)",
                 "gem_amount": 50,
                 "options": [],
                 "access_rule": {

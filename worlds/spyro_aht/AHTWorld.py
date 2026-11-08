@@ -294,7 +294,6 @@ class SpyroAHTWorld(World):
         if isinstance(passthrough, dict) and self.game in passthrough:
             self.ut_active = True
             self._apply_slot_data(passthrough[self.game])
-            return  # since UT loads options from slot data, they don't need to be validated below
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", consts.LoggingLevel.LOW)
         
@@ -407,8 +406,8 @@ class SpyroAHTWorld(World):
                     self.log(f"\"Random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", consts.LoggingLevel.MEDIUM)
             
             # if here, it's safely a number. Need error checking in case it's set too high (i.e. if this minigame is partially or fully disabled)
-            self.check_minigame_goal_values(key, "easy", 4)
-            self.check_minigame_goal_values(key, "disabled", 0)
+            self.check_minigame_goal_values(key, "Easy", 4)
+            self.check_minigame_goal_values(key, "Disabled", 0)
             
         # these 2 *could* be extracted to another helper checking method but eh. They're just slightly too different
         bad_condition = self.options.fireworks_goal.value > 0 and self.options.firework_checks.value == 0  # firework goal but no firework checks
@@ -485,7 +484,6 @@ class SpyroAHTWorld(World):
                     else:
                         self.log(f"Skipping swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is already larger.", consts.LoggingLevel.HIGH)
         self.log(f"Boss Lair Costs (in Dark Gems): Gnasty Gnorc requires {self.boss_lairs[0]}, Ineptune requires {self.boss_lairs[1]}, Red requires {self.boss_lairs[2]}, and Mecha-Red requires {self.boss_lairs[3]}.", consts.LoggingLevel.MEDIUM)
-        print('hi') # TODO take this out later
 
     def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
         self.options.death_link.value = slot_data['death_link']
@@ -529,12 +527,21 @@ class SpyroAHTWorld(World):
         self.options.other_gems.value = slot_data['other_gems']
         self.options.double_gems.value = slot_data['double_gems']
 
+        self.options.randomize_boss_lair_door_costs.value = slot_data['randomize_boss_lair_door_costs']
+        self.options.randomize_light_gem_door_costs.value = slot_data['randomize_light_gem_door_costs']
+        self.options.randomize_gadget_costs.value = slot_data['randomize_gadget_costs']
+        self.options.random_costs.value = slot_data['random_costs']
+        self.options.boss_lair_forcing.value = slot_data['boss_lair_forcing']
         self.boss_lairs = slot_data['boss_lair_costs']
         self.light_gem_doors = slot_data['light_gem_door_costs']
         self.gadget_costs = slot_data['gadget_costs']
 
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
+        self.options.auto_hinting.value = slot_data['auto_hinting']
+        self.options.disguise_shop_items.value = slot_data['disguise_shop_items']
+        self.options.easy_bosses.value = slot_data['easy_bosses']
+        self.options.time_savers.value = slot_data['time_savers']
     
     def random_choices_pls(self, option: OptionSet, unchosen: list):
         bad_condition = len(unchosen) == 0
@@ -791,15 +798,12 @@ class SpyroAHTWorld(World):
         enabled_goals = []
 
         goal_info = {
-            "Gnasty Gnorc": {"ids": consts.BOSS_IDS[0:2], "count": 2}, "Ineptune": {"ids": consts.BOSS_IDS[2:4], "count": 2}, "Red": {"ids": consts.BOSS_IDS[4:6], "count": 2}, "Mecha-Red": {"ids": [
-                consts.BOSS_IDS[6]], "count": 1},
+            "Gnasty Gnorc": {"ids": consts.BOSS_IDS[0:2], "count": 2}, "Ineptune": {"ids": consts.BOSS_IDS[2:4], "count": 2}, "Red": {"ids": consts.BOSS_IDS[4:6], "count": 2}, "Mecha-Red": {"ids": [consts.BOSS_IDS[6]], "count": 1},
             "Dark Gems": {"ids": consts.DARK_GEM_IDS, "count": self.options.dark_gems_goal.value}, "Light Gems": {"ids": consts.LIGHT_GEM_IDS, "count": self.options.light_gems_goal.value},
             "Dragon Eggs": {"ids": consts.DRAGON_EGG_IDS, "count": self.options.dragon_eggs_goal.value}, "Fireworks": {"ids": consts.FIREWORK_IDS, "count": self.options.fireworks_goal.value},
             "Shop Items": {"ids": consts.SHOP_ITEM_IDS[:self.options.shop_item_count.value], "count": self.options.shop_items_goal.value}, "Locked Chests": {"ids": consts.LOCKED_CHEST_IDS, "count": self.options.locked_chests_goal.value},
-            "Elder Tomas": {"ids": [consts.ELDER_ABILITY_IDS[0]], "count": 1}, "Elder Magnus": {"ids": [
-                consts.ELDER_ABILITY_IDS[1]], "count": 1},
-            "Elder Titan": {"ids": [consts.ELDER_ABILITY_IDS[2]], "count": 1}, "Elder Astor": {"ids": [
-                consts.ELDER_ABILITY_IDS[3]], "count": 1},
+            "Elder Tomas": {"ids": [consts.ELDER_ABILITY_IDS[0]], "count": 1}, "Elder Magnus": {"ids": [consts.ELDER_ABILITY_IDS[1]], "count": 1},
+            "Elder Titan": {"ids": [consts.ELDER_ABILITY_IDS[2]], "count": 1}, "Elder Astor": {"ids": [consts.ELDER_ABILITY_IDS[3]], "count": 1},
             "Blink": {"ids": consts.BLINK_IDS, "count": self.options.minigames_goal.value["Blink"]}, "Sgt. Byrd": {"ids": consts.BYRD_IDS, "count": self.options.minigames_goal.value["Sgt. Byrd"]},
             "Sparx": {"ids": consts.SPARX_IDS, "count": self.options.minigames_goal.value["Sparx"]}, "Cannon": {"ids": consts.CANNON_IDS, "count": self.options.minigames_goal.value["Cannon"]}
         }
@@ -1203,9 +1207,6 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
             non_blink_enemies = state.count("Non-Blink Enemies", self.player)
             other = state.count("Other Gems", self.player)
             in_logic_gems = ((blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling)) // 100
-            result = in_logic_gems >= self.item_cost
-            if self.item_cost == 45098 and not result:
-                print(in_logic_gems)
             return in_logic_gems >= self.item_cost
     
 
