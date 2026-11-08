@@ -96,7 +96,7 @@ def main():
             else: npc = "Cannon"
             
             # enabled or easy if dragon egg (id in the 300's). only enabled for light gems (id in the 200's)
-            values = ["enabled", "easy"] if loc_id // 100 == 3 else ["enabled"]
+            values = ["Enabled", "Easy"] if loc_id // 100 == 3 else ["Enabled"]
             options = [{  # can't make into a proper OptionFilter to then to_dict on since this is custom format
                 "option": "worlds.spyro_aht.options.MinigameChecks",
                 "npc": npc,
@@ -140,6 +140,7 @@ main()
 # output
 if len(trick_list) != 0:
     exit(f"At least one trick is listed in TRICK_LEVELS but wasn't found in JSON. Missing tricks: {', '.join(trick_list)}.")
+    
 file_out = open("test-locations.json", "w")
 output = json.dumps(regions, indent=4)
 file_out.write(output)

@@ -144,8 +144,8 @@ class EldersGoal(OptionSet):
 class MinigamesGoal(OptionDict):
     """Adds a goal requirement to complete minigames. Next to each, you can enter any of the following:
     - 0-8: complete this many to goal.
-    - random-on: picks a random number from 1-8.
-    - random-off: 1/2 chance of 0, 1/2 chance of 1-8."""
+    - Random-on: picks a random number from 1-8.
+    - Random-off: 1/2 chance of 0, 1/2 chance of 1-8."""
     display_name = "Minigames Goal"
     valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
     default = {
@@ -171,10 +171,12 @@ class EnabledTricks(OptionSet):
     """Many things in AHT can be done using "tricks", which by default you aren't expected to do. This option lets you choose
     to enable a series of tricks that you may be expected to do. These tricks can be enabled individually or through a few
     presets (Easy, Medium, Hard, Other). You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
+    Entering "Random" will pick a subset of not-already-chosen tricks.
     
-    See here for a full list of tricks: https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-3.1-%E2%80%90-List-of-Tricks"""
+    See here for a full list of tricks: https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-3.1-%E2%80%90-List-of-Tricks
+    Valid options: ["Easy", "Medium", "Hard", "Other", "Random", "trick names from the link above"]"""
     display_name = "Enabled Tricks"
-    valid_keys = ("Easy", "Medium", "Hard", "Other", *itertools.chain(*consts.TRICK_LEVELS.values()))
+    valid_keys = ("Easy", "Medium", "Hard", "Other", "Random", *itertools.chain(*consts.TRICK_LEVELS.values()))
     default = frozenset()
     
     
@@ -211,18 +213,18 @@ class MinigameChecks(OptionDict):
     """Customize whether each minigame will be fully enabled, enabled with only Dragon Egg challenges,
     or disabled. For each minigame, enter one of:
     
-    enabled: Keeps vanilla behavior for this minigame.
-    easy: Disables the Light Gem challenges for this minigame.
-    disabled: Fully disables this minigame. Its NPCs will not spawn at all in-game.
+    Enabled: Keeps vanilla behavior for this minigame.
+    Easy: Disables the Light Gem challenges for this minigame.
+    Disabled: Fully disables this minigame. Its NPCs will not spawn at all in-game.
       If cannon minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
-    random: Random choice between enabled, easy, and disabled."""
+    Random: Random choice between Enabled, Easy, and Disabled."""
     display_name = "Minigame Checks"
     valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
     default = {
-        "Blink": "enabled",
-        "Cannon": "enabled",
-        "Sgt. Byrd": "enabled",
-        "Sparx": "enabled"
+        "Blink": "Enabled",
+        "Cannon": "Enabled",
+        "Sgt. Byrd": "Enabled",
+        "Sparx": "Enabled"
     }
 
 
@@ -262,6 +264,7 @@ class TrapPercentage(Range):
 
 class FillerItems(OptionSet):
     """Choose which filler (neutral-to-positive effect) items to enable.
+    Entering "Random" will pick a subset of not-already-chosen filler items.
 
     Dragon Egg: These are filler due to having no logical impact.
     Fire/Electric/Water/Ice Bomb: Only usable if their respective breath is unlocked.
@@ -269,15 +272,16 @@ class FillerItems(OptionSet):
       It is advised to disable these if using shop_randomization, as shop logic does not account for gem packs.
     Shinies: A set 16 items which do nothing, but have humorous names referencing AHT or other games/series. 
     
-    Valid options: ["Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb", "Gem Pack", "Shinies"]"""
+    Valid options: ["Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb", "Gem Pack", "Shinies", "Random"]"""
     display_name = "Filler Items"
-    valid_keys = ("Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb", "Gem Pack", "Shinies")
+    valid_keys = ("Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb", "Gem Pack", "Shinies", "Random")
     default = ("Dragon Egg", "Fire Bomb", "Electric Bomb", "Water Bomb", "Ice Bomb")
 
 
 class TrapItems(OptionSet):
     """Choose which trap (neutral-to-negative effect) items to enable. Spam Call, Reverse Controls, and Bounce are
     queued and triggered sequentially. Traps received while offline will get processed upon next client reconnection.
+    Entering "Random" will pick a subset of not-already-chosen trap items.
 
     Spam Call: Random lines of Moneybags dialog + shop music will play for trap_length seconds.
     Reverse Controls: Flips the X and Y axis of both control sticks for trap_length seconds.
@@ -286,9 +290,9 @@ class TrapItems(OptionSet):
       It is advised to disable these if using shop_randomization, as shop logic does not account for gem taxes.
     Bounce: The player character's model will bounce for trap_length seconds. Can negatively affect first-person camera aiming.
     
-    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce"]"""
+    Valid options: ["Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce", "Random"]"""
     display_name = "Trap Items"
-    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce")
+    valid_keys = ("Spam Call", "Reverse Controls", "Damage Sparx", "Gem Tax", "Bounce", "Random")
     default = frozenset()
 
 
@@ -304,32 +308,33 @@ class StartingBreaths(OptionSet):
     """Choose which breath(s) you want to start with.
     
     If multiple are listed, one will go into "Starter Checks: Breath", and the rest will go into your start inventory.
-    "None" will place a random Archipelago item into "Starter Checks: Breath".
-    If the list is left empty, 1 random breath will be chosen.
+    If the list is left empty, you will start with no breath.
+    Entering "Random" will pick a subset of not-already-chosen breaths.
     
-    Valid Options: ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "None"]"""
+    Valid Options: ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "Random"]"""
     display_name = "Starting Breaths"
-    valid_keys = ("Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "None")
+    valid_keys = ("Fire Breath", "Electric Breath", "Water Breath", "Ice Breath", "Random")
     default = ("Fire Breath",)
 
 
 class MovementRandomization(OptionSet):
     """Choose whether to randomize each of the 3 base movement abilities (glide, swim, and charge).
     If any are randomized, you will start with a random item from Archipelago in their place.
+    Entering "Random" will pick a subset of not-already-chosen abilities. 
     
-    Valid Options: ["Glide", "Swim", "Charge"]"""
+    Valid Options: ["Glide", "Swim", "Charge", "Random"]"""
     display_name = "Movement Randomization"
-    valid_keys = ("Glide", "Swim", "Charge")
+    valid_keys = ("Glide", "Swim", "Charge", "Random")
     default = frozenset()
 
 
 class StartingRealms(OptionSet):
     """Choose which realm(s) to start with realm access cards for. 
     
-    If the list is left empty, 1 random realm will be chosen.
+    If the list is empty, a subset of not-already-chosen tricks.
     If using full open_world_mode, you will start with all 4 access cards.
     If using non-full open_world_mode, non-starting realms are unlocked via shop unlocks instead of access cards.
-        
+    
     Starting with only Icy Wilderness, shop_randomization off, and movement_randomization empty is disallowed due to impossible starts.
     
     Valid Options: ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"]"""
@@ -479,11 +484,13 @@ class RandomizeGadgetCosts(Choice):
 
 class RandomCosts(OptionCounter):
     """If randomize_boss_lair_door_costs, randomize_light_gem_door_costs, or randomize_gadget_costs are set to randomized,
-    this option determines the bounds of each randomly generated cost.
+    this option determines the bounds of each randomly generated cost. Enter 0 for any to get a random choice.
     
-    Light gem door and gadget costs can't exceed 90 if open world mode is set to vanilla, due to being too restrictive."""
+    Light Gem door and gadget costs can't exceed 90 if open world mode is set to vanilla, due to being too restrictive."""
     display_name = "Random Costs"
     valid_keys = ("Boss Lair Min", "Boss Lair Max", "Light Gem Door Min", "Light Gem Door Max", "Gadget Min", "Gadget Max")
+    min = 0
+    max = 100
     default = {
         "Boss Lair Min": 10,
         "Boss Lair Max": 40,
@@ -534,18 +541,18 @@ class ShopPadProximityActivation(Toggle):
 
 class AutoHinting(OptionDict):
     """Toggles automatic hinting for boss rewards (upon opening their lair), minigames (upon talking to NPCs), and shop
-    items (upon creating the save file). For each, you can enter "on", "off", or "random"."""
+    items (upon creating the save file). For each, you can enter "On", "Off", or "Random"."""
     display_name = "Auto Hinting"
     valid_keys = ("Bosses", "Minigames", "Shop Items")
     default = {
-        "Bosses": "off",
-        "Minigames": "off",
-        "Shop Items": "off"
+        "Bosses": "Off",
+        "Minigames": "Off",
+        "Shop Items": "Off"
     }
     
     
 class DisguiseShopItems(OptionSet):
-    """When the shop is randomized, items show as "<player name>'s <item  name>". By default, they use the lockpick model,
+    """When the shop is randomized, items show as "<player name>'s <item name>". By default, they use the lockpick model,
     but this is overridden in some cases, such as key rings using the keychain model. This option lets you disguise your
     randomized shop items in a few ways, to add more mystery to your purchases. Hinting still works even if disguised.
     
@@ -553,32 +560,33 @@ class DisguiseShopItems(OptionSet):
     Item: Replaces item names with ???.
     Model: All items will use the lockpick model.
      
-    Valid options: ["Player", "Item", "Model"]"""
-    valid_keys = ("Player", "Item", "Model")
+    Valid options: ["Player", "Item", "Model", "Random"]"""
+    valid_keys = ("Player", "Item", "Model", "Random")
     display_name = "Disguise Shop Items"
     default = frozenset()
     
 
 class EasyBosses(OptionSet):
     """Bosses listed below will take triple damage, significantly shortening fights.
+    Entering "Random" will pick a subset of not-already-chosen bosses.
     
-    Valid options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red"]"""
+    Valid options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
     display_name = "Easy Bosses"
-    valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red")
+    valid_keys = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random")
     default = ("Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red")
 
 
 class TimeSavers(OptionDict):
-    """Choose which time-saving quality of life patches are enabled. For each, enter "on", "off", or "random".
+    """Choose which time-saving quality of life patches are enabled. For each, enter "On", "Off", or "Random".
     Skip Cutscenes: enables skipping most cutscenes with the Y button.
     Skip Elevators: enables skipping long elevator waits with loading screen.
     Teleport Across Realms: enables teleporting across realms using normal shop pads."""
     display_name = "Time Savers"
     valid_keys = ("Skip Cutscenes", "Skip Elevators", "Teleport Across Realms")
     default = {
-        "Skip Cutscenes": "on",
-        "Skip Elevators": "on",
-        "Teleport Across Realms": "on"
+        "Skip Cutscenes": "On",
+        "Skip Elevators": "On",
+        "Teleport Across Realms": "On"
     }
 
 @dataclass

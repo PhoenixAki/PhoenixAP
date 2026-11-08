@@ -2043,8 +2043,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -2063,7 +2063,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -3927,8 +3927,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -3947,7 +3947,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -4607,8 +4607,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -4627,7 +4627,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -5905,8 +5905,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -5925,7 +5925,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -6552,8 +6552,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -6597,7 +6597,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -8266,8 +8266,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -8286,7 +8286,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -9786,8 +9786,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -9806,7 +9806,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -10874,8 +10874,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -10894,7 +10894,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -12150,8 +12150,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -12170,7 +12170,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -12378,8 +12378,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -12398,7 +12398,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -14005,8 +14005,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -14025,7 +14025,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -15146,8 +15146,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -15166,7 +15166,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -16933,8 +16933,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -16953,7 +16953,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Cannon",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -17792,8 +17792,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -17812,7 +17812,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sgt. Byrd",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -20686,8 +20686,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -20706,7 +20706,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Sparx",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],
@@ -21806,8 +21806,8 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled",
-                            "easy"
+                            "Enabled",
+                            "Easy"
                         ]
                     }
                 ],
@@ -21826,7 +21826,7 @@
                         "option": "worlds.spyro_aht.options.MinigameChecks",
                         "npc": "Blink",
                         "value": [
-                            "enabled"
+                            "Enabled"
                         ]
                     }
                 ],

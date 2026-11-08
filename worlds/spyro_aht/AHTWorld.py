@@ -14,6 +14,7 @@ from rule_builder.rules import Has, Rule, True_, And, False_, HasAny, Or
 from worlds.AutoWorld import World, WebWorld
 from . import consts
 from .options import SpyroAHTOptions, spyro_options_groups
+from .presets import options_presets
 
 # used for UT custom sorting
 id_lookup = {"Starter Checks": "A", "Moneybags": "B", "DV": "C", "CS": "D", "DF": "E", "CR": "F", "SR": "G", "CD": "H", "FV": "I", "GG": "J", "IC": "K", "SB": "L", "MM": "M", "MFt": "N", "MFb": "O", "DM": "P", "RL": "Q"}
@@ -109,6 +110,7 @@ def create_location_groups(location_data) -> dict[str, set[str]]:
 
 class SpyroAHTWeb(WebWorld):
     option_groups = spyro_options_groups
+    options_presets = options_presets
 
 class SpyroAHTWorld(World):
     """Spyro: A Hero's Tail is a 3D platformer and collect-a-thon released in 2004 for the Xbox, Playstation 2 and GameCube."""
@@ -147,7 +149,7 @@ class SpyroAHTWorld(World):
         """Logs messages from generation."""
         if self.ut_active: return
         if self.options.logging_level.value >= level:
-            logging.info(f"[Spyro AHT Player {self.player_name}] LOG-{level.name}: {message}")
+            logging.info(f"[Spyro AHT - {self.player_name}] LOG-{level.name}: {message}")
     
     def create_item(self, name: str, placement: str = "item pool") -> Item:
         """Returns an Item object, given an item name."""
@@ -292,6 +294,7 @@ class SpyroAHTWorld(World):
         if isinstance(passthrough, dict) and self.game in passthrough:
             self.ut_active = True
             self._apply_slot_data(passthrough[self.game])
+            return  # since UT loads options from slot data, they don't need to be validated below
         
         self.log("Checking for common YAML option/setting issues, and setting up costs. All auto_corrections adjustments are done here.", consts.LoggingLevel.LOW)
         
@@ -305,26 +308,25 @@ class SpyroAHTWorld(World):
                     self.options.enabled_tricks.value.add(trick)
                 else:
                     self.log(f"{trick} from preset {level} was found already added to enabled_tricks. Skipping adding it from preset list.", consts.LoggingLevel.HIGH)
-        
+                    
+        # a ton of option sets which have "Random" as an option, all handled here due to nearly identical logic
+        for option in [self.options.enabled_tricks, self.options.movement_randomization, self.options.starting_breaths, self.options.starting_realms, 
+                       self.options.disguise_shop_items, self.options.easy_bosses, self.options.filler_items, self.options.trap_items]:
+            if "Random" in option.value or (option.display_name == "Starting Realms" and len(option.value) == 0):  # realms is exception since there must be at least 1
+                if option.display_name != "Starting Realms": option.value.remove("Random")
+                unchosen = [choice for choice in option.valid_keys if choice != "Random" and choice not in option.value]
+                if option.display_name == "Enabled Tricks": unchosen = [choice for choice in unchosen if choice not in ["Easy", "Medium", "Hard", "Other"]]  # tricks have preset keys to remove
+                self.random_choices_pls(option, unchosen)
+                
         self.check_qol_dicts(self.options.auto_hinting)
         self.check_qol_dicts(self.options.time_savers)
-            
+        
         bad_condition = self.options.time_savers.value["Teleport Across Realms"] == "off" and self.options.open_world_mode.value != 0
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
             self.log("Minor Warning: time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fixing by enabling it.", consts.LoggingLevel.WARNING)
             self.options.time_savers.value["Teleport Across Realms"] = "on"
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError("time_savers setting Teleport Across Realms was disabled, but needs to be on when using open world mode to prevent possible softlocks. Fix this, or set auto_corrections to at least fix_minor.")
-        
-        bad_condition = len(self.options.starting_breaths.value) > 1 and "None" in self.options.starting_breaths.value  # "none" alongside breath choices
-        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log("Minor Warning: Starting breath list cannot contain breaths and \"None\". Fixing by removing the \"None\".", consts.LoggingLevel.WARNING)
-            self.options.starting_breaths.value.remove("None")
-        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError("Starting breath list cannot contain breaths and \"None\". Fix this, or set auto_corrections to at least fix_minor.")
-        
-        self.check_breaths_and_realms(self.options.starting_breaths, ["Fire Breath", "Electric Breath", "Water Breath", "Ice Breath"], "breath")
-        self.check_breaths_and_realms(self.options.starting_realms, ["Dragon Kingdom", "Lost Cities", "Icy Wilderness", "Volcanic Isle"], "realm")
         
         if self.options.open_world_mode.value != 1 and self.options.starting_realms.value == {"Icy Wilderness"}:
             if self.options.shop_randomization.value == 0 and len(self.options.movement_randomization.value) == 0:
@@ -334,8 +336,9 @@ class SpyroAHTWorld(World):
                 elif self.options.auto_corrections.value == 0:  # halt
                     raise OptionError("Can't have Icy Wilderness as the only starting realm if shop randomization is disabled and all 3 movement abilities are unrandomized. Fix this, or set auto_corrections to fix_major.")
         
-        if self.options.trap_percentage.value < 100: self.check_filler_and_traps(self.options.filler_items, "Filler", "Shinies")
-        if self.options.trap_percentage.value > 0: self.check_filler_and_traps(self.options.trap_items, "Trap", "Spam Call")
+        # enforce non-empty lists if there are filler/traps needed
+        if self.options.trap_percentage.value < 100: self.check_filler_and_traps(self.options.filler_items, list(self.options.filler_items.valid_keys))
+        if self.options.trap_percentage.value > 0: self.check_filler_and_traps(self.options.trap_items, list(self.options.trap_items.valid_keys))
         
         self.check_lists(self.options.boss_goal, "bosses")
         self.check_lists(self.options.elders_goal, "elders")
@@ -350,19 +353,18 @@ class SpyroAHTWorld(World):
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"minigame_checks setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
                 
-            if isinstance(self.options.minigame_checks.value[key], str):
-                self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].lower()
-
-            bad_condition = self.options.minigame_checks.value[key] not in ["enabled", "easy", "disabled", "random"]
+            if isinstance(self.options.minigame_checks.value[key], str): self.options.minigame_checks.value[key] = self.options.minigame_checks.value[key].capitalize()
+            
+            bad_condition = self.options.minigame_checks.value[key] not in ["Enabled", "Easy", "Disabled", "Random"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"enabled\", \"easy\", \"disabled\", or \"random\". Fixing by setting {key} to \"enabled\".", consts.LoggingLevel.WARNING)
-                self.options.minigame_checks.value[key] = "enabled"
+                self.log(f"Minor Warning: Invalid entry for {key} in minigame_checks. Must be \"Enabled\", \"Easy\", \"Disabled\", or \"Random\". Fixing by setting {key} to \"Enabled\".", consts.LoggingLevel.WARNING)
+                self.options.minigame_checks.value[key] = "Enabled"
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Invalid entry for {key} in minigame_checks. Must be \"enabled\", \"easy\", \"disabled\", or \"random\". Fix this, or set auto_corrections to at least fix_minor.")
+                raise OptionError(f"Invalid entry for {key} in minigame_checks. Must be \"Enabled\", \"Easy\", \"Disabled\", or \"Random\". Fix this, or set auto_corrections to at least fix_minor.")
 
-            if self.options.minigame_checks.value[key] == "random":
-                self.options.minigame_checks.value[key] = self.random.choice(["enabled", "easy", "disabled"])
-                self.log(f"\"random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
+            if self.options.minigame_checks.value[key] == "Random":
+                self.options.minigame_checks.value[key] = self.random.choice(["Enabled", "Easy", "Disabled"])
+                self.log(f"\"Random\" was requested for {key} for minigame_checks. {self.options.minigame_checks.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
         
         # minigames goal. More complex than auto_hinting and time_savers despite being also OptionDict
         for key in self.options.minigames_goal.valid_keys:
@@ -381,28 +383,28 @@ class SpyroAHTWorld(World):
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"\"{self.options.minigames_goal.value[key]}\" was entered for {key} in minigames_goal, but should've been entered as a number (no quotes). Fix this, or set auto_corrections to at least fix_minor.")
             
-            # force lowercase if it's a str before comparing to random-on/random-off
-            if isinstance(self.options.minigames_goal.value[key], str): self.options.minigames_goal.value[key] = self.options.minigames_goal.value[key].lower()
+            # for capitalized form before further comparison
+            if isinstance(self.options.minigames_goal.value[key], str): self.options.minigames_goal.value[key] = self.options.minigames_goal.value[key].capitalize()
             
-            bad_condition = self.options.minigames_goal.value[key] not in [0, 1, 2, 3, 4, 5, 6, 7, 8, "random-on", "random-off"]
+            bad_condition = self.options.minigames_goal.value[key] not in [0, 1, 2, 3, 4, 5, 6, 7, 8, "Random-on", "Random-off"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fixing by setting {key} to 0.", consts.LoggingLevel.WARNING)
+                self.log(f"Minor Warning: Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"Random-on\", or \"Random-off\". Fixing by setting {key} to 0.", consts.LoggingLevel.WARNING)
                 self.options.minigames_goal.value[key] = 0
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"random-on\", or \"random-off\". Fix this, or set auto_corrections to at least fix_minor.")
+                raise OptionError(f"Invalid entry for {key} in minigames_goal. Must be a number 0-8, \"Random-on\", or \"Random-off\". Fix this, or set auto_corrections to at least fix_minor.")
             
             # handle random if needed
-            if self.options.minigames_goal.value[key] == "random-on":
+            if self.options.minigames_goal.value[key] == "Random-on":
                 self.options.minigames_goal.value[key] = self.random.randint(1, 8)
-                self.log(f"\"random-on\" was requested for {key} for minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
-            elif self.options.minigames_goal.value[key] == "random-off":
+                self.log(f"\"Random-on\" was requested for {key} for minigames_goal. {self.options.minigames_goal.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
+            elif self.options.minigames_goal.value[key] == "Random-off":
                 coin_flip = self.random.randint(0, 1)  # 0 = off, 1 = on (and do a new random spin of 1-8)
                 if coin_flip == 1:
                     self.options.minigames_goal.value[key] = self.random.randint(1, 8)
-                    self.log(f"\"random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being enabled with a requirement of {self.options.minigames_goal.value[key]}.", consts.LoggingLevel.MEDIUM)
+                    self.log(f"\"Random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being enabled with a requirement of {self.options.minigames_goal.value[key]}.", consts.LoggingLevel.MEDIUM)
                 elif coin_flip == 0:
                     self.options.minigames_goal.value[key] = 0
-                    self.log(f"\"random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", consts.LoggingLevel.MEDIUM)
+                    self.log(f"\"Random-off\" was requested for {key} for minigames_goal. 50% chance resulted in it being disabled.", consts.LoggingLevel.MEDIUM)
             
             # if here, it's safely a number. Need error checking in case it's set too high (i.e. if this minigame is partially or fully disabled)
             self.check_minigame_goal_values(key, "easy", 4)
@@ -483,6 +485,7 @@ class SpyroAHTWorld(World):
                     else:
                         self.log(f"Skipping swapping {lookup[goal_boss_index]}'s cost of {goal_boss_cost} and {lookup[highest_non_goal_index]}'s cost of {highest_non_goal_cost} as the former is already larger.", consts.LoggingLevel.HIGH)
         self.log(f"Boss Lair Costs (in Dark Gems): Gnasty Gnorc requires {self.boss_lairs[0]}, Ineptune requires {self.boss_lairs[1]}, Red requires {self.boss_lairs[2]}, and Mecha-Red requires {self.boss_lairs[3]}.", consts.LoggingLevel.MEDIUM)
+        print('hi') # TODO take this out later
 
     def _apply_slot_data(self, slot_data: dict[str, Any]) -> None:
         self.options.death_link.value = slot_data['death_link']
@@ -532,44 +535,51 @@ class SpyroAHTWorld(World):
 
         self.options.pause_menu_patch.value = slot_data['pause_menu_patch']
         self.options.shop_pad_proximity_activation.value = slot_data['shop_pad_proximity_activation']
-
+    
+    def random_choices_pls(self, option: OptionSet, unchosen: list):
+        bad_condition = len(unchosen) == 0
+        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+            self.log(f"Minor Warning: \"Random\" was requested for {option.display_name}, but all are already chosen. Fixing by skipping random choices.", consts.LoggingLevel.WARNING)
+        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+            raise OptionError(f"\"Random\" was requested for {option.display_name}, but all are already chosen. Fix this, or set auto_corrections to at least fix_minor.")
+        else:  # chaos or there is at least 1 unchosen random
+            rand_num = self.random.randint(1, len(unchosen))
+            unchosen.sort()
+            choices = self.random.sample(unchosen, k=rand_num)
+            self.log(f"\"Random\" was requested for {option.display_name}. [{", ".join(choices)}] was chosen to be added to {option.display_name}.", consts.LoggingLevel.MEDIUM)
+            option.value.update(choices)
+            
     def check_qol_dicts(self, option: OptionDict):
         for key in option.valid_keys:
             bad_condition = option.value.get(key, "") == ""
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of \"off\".", consts.LoggingLevel.WARNING)
-                option.value[key] = "off"
+                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of \"Off\".", consts.LoggingLevel.WARNING)
+                option.value[key] = "Off"
                 continue
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"{option.display_name} setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
             
-            if isinstance(option.value[key], str): option.value[key] = option.value[key].lower()
-            bad_condition = option.value[key] not in ["off", "on", "random"]
+            if isinstance(option.value[key], str): option.value[key] = option.value[key].capitalize()
+            bad_condition = option.value[key] not in ["Off", "On", "Random"]
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log( f"Minor Warning: {option.display_name} setting \"{key}\" was given an invalid entry. Must be \"off\" or \"on\". Fixing by setting it to off.", consts.LoggingLevel.WARNING)
-                option.value[key] = "off"
+                self.log( f"Minor Warning: {option.display_name} setting \"{key}\" was given an invalid entry. Must be \"Off\", \"On\", or \"Random\". Fixing by setting it to Off.", consts.LoggingLevel.WARNING)
+                option.value[key] = "Off"
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"{option.display_name} setting \"{key}\" was given an invalid entry. Must be \"off\" or \"on\". Fix this, or set auto_corrections to at least fix_minor.")
+                raise OptionError(f"{option.display_name} setting \"{key}\" was given an invalid entry. Must be \"Off\", \"On\", or \"Random\". Fix this, or set auto_corrections to at least fix_minor.")
             
-            if option.value[key] == "random":
-                option.value[key] = "on" if self.random.randint(0, 1) == 1 else "off"
-                output = "enabled" if option.value[key] == "on" else "disabled"
-                self.log(f"\"Random\" was requested for {option.display_name}. It was {output}.", consts.LoggingLevel.MEDIUM)
-                
-    def check_breaths_and_realms(self, option: OptionSet, choices: list, error_txt: str):
-        if len(option.value) == 0:
-            random_choice = self.random.choice(choices)
-            self.log(f"Starting {error_txt} list is empty. {random_choice} was chosen at random.", consts.LoggingLevel.MEDIUM)
-            option.value.add(random_choice)
+            if option.value[key] == "Random":
+                option.value[key] = "On" if self.random.randint(0, 1) == 1 else "Off"
+                self.log(f"\"Random\" was requested for {key} in {option.display_name}. It was set to {option.value[key]}.", consts.LoggingLevel.MEDIUM)
         
-    def check_filler_and_traps(self, option: OptionSet, error_txt_1: str, error_txt_2: str):
-        bad_condition = len(option.value) == 0  # empty list
-        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log(f"Minor Warning: {error_txt_1} item list cannot be empty when {error_txt_1.lower()}s are enabled. Fixing by adding \"{error_txt_2}\".", consts.LoggingLevel.WARNING)
-            option.value.add(error_txt_2)
-        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError(f"{error_txt_1} item list cannot be empty when {error_txt_1.lower()}s are enabled. Fix this, or set auto_corrections to at least fix_minor.")
-    
+    def check_filler_and_traps(self, option: OptionSet, items: list):
+        if len(option.value) == 0:
+            items.sort()
+            items.remove("Random")
+            rand_num = self.random.randint(1, len(items))
+            choices = self.random.sample(items, k=rand_num)
+            self.log(f"{option.display_name} was left empty, but at least one is needed. The item(s) {", ".join(choices)} were chosen at random.", consts.LoggingLevel.MEDIUM)
+            option.value.update(choices)
+        
     def check_lists(self, option: OptionSet, error_text: str):
         if "Random" in option.value:  # 3 cases to deal with here, all relate to having Random in the list
             choices = [choice for choice in option.valid_keys if choice in option.value and choice != "Random"]
@@ -593,7 +603,7 @@ class SpyroAHTWorld(World):
                     option.value.add(rand_choice)
                     available_choices.remove(rand_choice)
                     rand_count -= 1
-                self.log(f"\"Random\" was requested for {option.display_name}. Goals are now: {", ".join(option.value)}.", consts.LoggingLevel.MEDIUM)
+                self.log(f"\"Random\" was requested for {option.display_name}. List is now: {", ".join(option.value)}.", consts.LoggingLevel.MEDIUM)
     
     def check_minigame_goal_values(self, npc: str, setting: str, max_amount: int):
         bad_condition = self.options.minigame_checks[npc] == setting and self.options.minigames_goal[npc] > max_amount
@@ -615,8 +625,8 @@ class SpyroAHTWorld(World):
         # calculate how many minigame checks are disabled, separated by type for better output
         egg_lower, gem_lower = 0, 0
         for minigame in self.options.minigame_checks.valid_keys:
-            if self.options.minigame_checks.value[minigame] == "easy": gem_lower += 4
-            elif self.options.minigame_checks.value[minigame] == "disabled": egg_lower, gem_lower = egg_lower+4, gem_lower+4
+            if self.options.minigame_checks.value[minigame] == "Easy": gem_lower += 4
+            elif self.options.minigame_checks.value[minigame] == "Disabled": egg_lower, gem_lower = egg_lower+4, gem_lower+4
         # adjust output and math based on which option, due to the separation by type above
         if option.display_name == "Dragon Eggs Goal":
             output = f"{egg_lower} Dragon Egg minigame checks"
@@ -652,6 +662,13 @@ class SpyroAHTWorld(World):
             rand_min = self.options.random_costs.value[f"{cost_type} Min"]
             rand_max = self.options.random_costs.value[f"{cost_type} Max"]
             
+            if rand_min == 0:
+                rand_min = self.random.randint(1, 40 if cost_type == "Boss Lair" else 100)
+                self.log(f"Random cost was requested for {cost_type} Min. {rand_min} was chosen.", consts.LoggingLevel.MEDIUM)
+            if rand_max == 0:
+                rand_max = self.random.randint(1, 40 if cost_type == "Boss Lair" else 100)
+                self.log(f"Random cost was requested for {cost_type} Max. {rand_max} was chosen.", consts.LoggingLevel.MEDIUM)
+            
             bad_condition = rand_min > rand_max
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
                 self.log(f"Minor Warning: {cost_type} random min cost of {rand_min} is greater than {rand_max}. Fixing by swapping them.", consts.LoggingLevel.WARNING)
@@ -659,7 +676,7 @@ class SpyroAHTWorld(World):
             elif bad_condition and self.options.auto_corrections.value == 0:  # halt
                 raise OptionError(f"{cost_type} random min cost of {rand_min} is greater than {rand_max}. Fix this, or set auto_corrections to at least fix_minor.")
             
-            if cost_type != "Boss Lair Door":  # boss lair costs are never capped
+            if cost_type != "Boss Lair":  # boss lair costs are never capped
                 rand_min = self.check_high_costs(rand_min, cost_type + "Min")
                 rand_max = self.check_high_costs(rand_max, cost_type + "Max")
             
@@ -702,7 +719,7 @@ class SpyroAHTWorld(World):
                     else:
                         add = OptionFilter.from_dict(option).check(self.options)  # check if options are right
                     if not add:
-                        self.log(f"Skipping creating location {location_data['name']} as one or more of its options criteria were not met.", consts.LoggingLevel.HIGH)
+                        self.log(f"Skipping creating location {location_data['name']} as one or more of its options criteria were not met.", consts.LoggingLevel.MAXIMUM)
                         break  # as soon as any part of the options fails, it's gg
                 if add:
                     new_locations[location_data['name']] = location_data['id']
@@ -725,19 +742,19 @@ class SpyroAHTWorld(World):
                     for key in convert.keys():
                         if key in gem_event['name']:
                             if "Byrd minigames" in gem_event['name']:
-                                if consts.MINIGAME_LOCS[convert[key]] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sgt. Byrd"] == "disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sgt. Byrd"] != "normal"):
+                                if consts.MINIGAME_LOCS[convert[key]] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sgt. Byrd"] == "Disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sgt. Byrd"] != "Enabled"):
                                     self.log(f"Skipping Sgt. Byrd gem event {gem_event['name']} because its associated location {consts.MINIGAME_LOCS[convert[key]]} was excluded or disabled via minigame_checks.", consts.LoggingLevel.HIGH)
                                     other_exclusions += int(gem_event['gem_amount'])
                                     exclusion = True
                                     break
                             elif "Blink minigames" in gem_event['name']:
-                                if consts.MINIGAME_LOCS[convert[key] + 8] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Blink"] == "disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Blink"] != "normal"):
+                                if consts.MINIGAME_LOCS[convert[key] + 8] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Blink"] == "Disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Blink"] != "Enabled"):
                                     self.log(f"Skipping Blink gem event {gem_event['name']} because its associated location {consts.MINIGAME_LOCS[convert[key] + 8]} was excluded or disabled via minigame_checks.", consts.LoggingLevel.HIGH)
                                     blink_exclusions += int(gem_event['gem_amount'])
                                     exclusion = True
                                     break
                             elif "Sparx minigames" in gem_event['name']:
-                                if consts.MINIGAME_LOCS[convert[key] + 16] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sparx"] == "disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sparx"] != "normal"):
+                                if consts.MINIGAME_LOCS[convert[key] + 16] in self.options.exclude_locations.value or (key.split("-")[1] == "1" and self.options.minigame_checks.value["Sparx"] == "Disabled") or (key.split("-")[1] == "2" and self.options.minigame_checks.value["Sparx"] != "Enabled"):
                                     self.log(f"Skipping Sparx gem event {gem_event['name']} because its associated location {consts.MINIGAME_LOCS[convert[key] + 16]} was excluded or disabled via minigame_checks.", consts.LoggingLevel.HIGH)
                                     other_exclusions += int(gem_event['gem_amount'])
                                     exclusion = True
@@ -796,11 +813,11 @@ class SpyroAHTWorld(World):
         # exclude IDs of any disabled minigames from minigames_goal, dragon_eggs_goal, and light_gems_goal
         for minigame_type, id_list in {"Blink": consts.BLINK_IDS, "Sgt. Byrd": consts.BYRD_IDS, "Sparx": consts.SPARX_IDS, "Cannon": consts.CANNON_IDS}.items():
             value = self.options.minigame_checks.value[minigame_type]
-            if value == "disabled":
+            if value == "Disabled":
                 goal_info[minigame_type]["ids"] = []
                 goal_info["Dragon Eggs"]["ids"] = [id for id in goal_info["Dragon Eggs"]["ids"] if id not in id_list]
                 goal_info["Light Gems"]["ids"] = [id for id in goal_info["Light Gems"]["ids"] if id not in id_list]
-            elif value == "easy":
+            elif value == "Easy":
                 goal_info[minigame_type]["ids"] = goal_info[minigame_type]["ids"][::2]  # removes lg checks
                 goal_info["Light Gems"]["ids"] = [id for id in goal_info["Light Gems"]["ids"] if id not in id_list[1::2]]
         
@@ -888,7 +905,7 @@ class SpyroAHTWorld(World):
                 self.push_precollected(self.create_item(breath, "start inventory"))
             else:
                 aht_items.append(self.create_item(breath))
-        output = "none" if "None" in self.options.starting_breaths.value else ", ".join(self.options.starting_breaths.value)
+        output = "none" if len(self.options.starting_breaths.value) == 0 else ", ".join(self.options.starting_breaths.value)
         self.log(f"Starting breaths: {output}.", consts.LoggingLevel.MEDIUM)
         
         # 3 Base Movement Abilities
@@ -1186,6 +1203,9 @@ class ShopCheckRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
             non_blink_enemies = state.count("Non-Blink Enemies", self.player)
             other = state.count("Other Gems", self.player)
             in_logic_gems = ((blink_gems * self.blink_scaling) + (non_blink_enemies * self.non_blink_enemy_scaling) + (other * self.other_scaling)) // 100
+            result = in_logic_gems >= self.item_cost
+            if self.item_cost == 45098 and not result:
+                print(in_logic_gems)
             return in_logic_gems >= self.item_cost
     
 
