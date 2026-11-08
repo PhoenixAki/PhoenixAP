@@ -226,7 +226,7 @@ class DolphinClient:
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_BLINK_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Blink']])
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SGTBYRD_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sgt. Byrd']])
         dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SPARX_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sparx']])
-        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_TURRET_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Turret']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_TURRET_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Cannon']])
             
         dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_POPUPS, 1)
         dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(self.ctx._seed) & 0xffffffff))

@@ -79,10 +79,10 @@ def create_location_groups(location_data) -> dict[str, set[str]]:
                     loc_groups[f"{key} Minigames"].add(location['name'])
                     loc_groups[f"All Minigames"].add(location['name'])
                     loc_groups[f"{realm} Minigames"].add(location['name'])
-            # turrets separate because the names don't say "Turret"        
+            # cannons separate because the names don't say "cannon"        
             for npc in ["Fredneck", "Turtle Mother", "Peggy", "Wally"]:
                 if f"from {npc}" in location['name']:
-                    loc_groups["Turret Minigames"].add(location['name'])
+                    loc_groups["Cannon Minigames"].add(location['name'])
                     loc_groups["All Minigames"].add(location['name'])
                     loc_groups[f"{realm} Minigames"].add(location['name'])
             # bosses
@@ -165,6 +165,9 @@ class SpyroAHTWorld(World):
         """Sorts AHT locations in UT based on vanilla game level order -> alphabetical by region -> alphabetical by location."""
         level_acronym, rest_of_name = location_label.split(": ")
         level_id = id_lookup[level_acronym]
+        if "Shop Item" in rest_of_name:  # pad small numbers with 0 for better sorting
+            start, number = rest_of_name.rsplit(" ", 1)
+            if int(number) < 10: rest_of_name = f"{start} 0{number}"
         return f"{level_id} {region_label} {rest_of_name}"
 
     def get_filler_item_name(self):
@@ -504,6 +507,7 @@ class SpyroAHTWorld(World):
         self.options.firework_checks.value = slot_data['firework_checks']
         self.options.minigame_checks.value = slot_data['minigame_checks']
         self.options.item_bundles.value = slot_data['item_bundles']
+        self.options.cannon_lock.value = slot_data['cannon_lock']
         self.options.trap_percentage.value = slot_data['trap_percentage']
         self.options.filler_items.value = slot_data['filler_items']
         self.options.trap_items.value = slot_data['trap_items']
@@ -780,7 +784,7 @@ class SpyroAHTWorld(World):
             "Elder Titan": {"ids": [consts.ELDER_ABILITY_IDS[2]], "count": 1}, "Elder Astor": {"ids": [
                 consts.ELDER_ABILITY_IDS[3]], "count": 1},
             "Blink": {"ids": consts.BLINK_IDS, "count": self.options.minigames_goal.value["Blink"]}, "Sgt. Byrd": {"ids": consts.BYRD_IDS, "count": self.options.minigames_goal.value["Sgt. Byrd"]},
-            "Sparx": {"ids": consts.SPARX_IDS, "count": self.options.minigames_goal.value["Sparx"]}, "Turret": {"ids": consts.TURRET_IDS, "count": self.options.minigames_goal.value["Turret"]}
+            "Sparx": {"ids": consts.SPARX_IDS, "count": self.options.minigames_goal.value["Sparx"]}, "Cannon": {"ids": consts.CANNON_IDS, "count": self.options.minigames_goal.value["Cannon"]}
         }
 
         # shrink light gem/dragon egg ID lists if needed. The last 15/16 IDs of each are the chest ones
@@ -790,7 +794,7 @@ class SpyroAHTWorld(World):
             goal_info["Dragon Eggs"]["ids"] = goal_info["Dragon Eggs"]["ids"][:-16]
 
         # exclude IDs of any disabled minigames from minigames_goal, dragon_eggs_goal, and light_gems_goal
-        for minigame_type, id_list in {"Blink": consts.BLINK_IDS, "Sgt. Byrd": consts.BYRD_IDS, "Sparx": consts.SPARX_IDS, "Turret": consts.TURRET_IDS}.items():
+        for minigame_type, id_list in {"Blink": consts.BLINK_IDS, "Sgt. Byrd": consts.BYRD_IDS, "Sparx": consts.SPARX_IDS, "Cannon": consts.CANNON_IDS}.items():
             value = self.options.minigame_checks.value[minigame_type]
             if value == "disabled":
                 goal_info[minigame_type]["ids"] = []
@@ -809,7 +813,7 @@ class SpyroAHTWorld(World):
             "Elder Tomas": "Elder Tomas" in self.options.elders_goal.value, "Elder Magnus": "Elder Magnus" in self.options.elders_goal.value,
             "Elder Titan": "Elder Titan" in self.options.elders_goal.value, "Elder Astor": "Elder Astor" in self.options.elders_goal.value,
             "Blink": self.options.minigames_goal["Blink"] > 0, "Sgt. Byrd": self.options.minigames_goal.value["Sgt. Byrd"] > 0,
-            "Sparx": self.options.minigames_goal.value["Sparx"] > 0, "Turret": self.options.minigames_goal.value["Turret"] > 0
+            "Sparx": self.options.minigames_goal.value["Sparx"] > 0, "Cannon": self.options.minigames_goal.value["Cannon"] > 0
         }
 
         for goal_name, data in goal_info.items():
@@ -974,6 +978,10 @@ class SpyroAHTWorld(World):
             for realm in consts.REALM_LEVEL_LISTS.keys():
                 aht_items.append(self.create_item(f"{realm} - Shop Unlock"))
         
+        # other unlocks
+        if self.options.cannon_lock.value == 1:
+            aht_items.append(self.create_item("Cannon Unlock"))
+        
         # Filler and Traps
         self.log("Setting up filler and trap items.", consts.LoggingLevel.LOW)
         junk_count = len(self.multiworld.get_unfilled_locations(self.player)) - len(aht_items)
@@ -1055,6 +1063,7 @@ class SpyroAHTWorld(World):
             "firework_checks": self.options.firework_checks.value,
             "minigame_checks": self.options.minigame_checks.value,
             "item_bundles": self.options.item_bundles.value,
+            "cannon_lock": self.options.cannon_lock.value,
             "trap_percentage": self.options.trap_percentage.value,
             "filler_items": self.options.filler_items.value,
             "trap_items": self.options.trap_items.value,
@@ -1216,3 +1225,13 @@ class RealmAccessRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
                         items.append(f"{level} - {shop}")
         
         return HasAny(*items).resolve(world)
+
+
+@dataclass
+class CannonAccessRule(Rule[SpyroAHTWorld], game="Spyro: A Hero's Tail"):
+    @override
+    def _instantiate(self, world: SpyroAHTWorld) -> Rule.Resolved:
+        if world.options.cannon_lock.value == 1:
+            return Has("Cannon Unlock").resolve(world)
+        else:
+            return True_().resolve(world)

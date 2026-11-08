@@ -20,7 +20,7 @@ TRICK_LEVELS = {
     "Other": ["Fire Breath Idle Animation"]
 }
 
-MOD_MAJOR = 21
+MOD_MAJOR = 22
 MOD_MINOR = 0
 MOD_VERSION_STR = f"{MOD_MAJOR}.{MOD_MINOR}"
 
@@ -89,7 +89,7 @@ LOCATIONS_BITFIELD: dict[int, int] = {
 MINIGAME_OBJECTIVES: dict[int, tuple[int, int]] = {
     0x44000017: (302, 201), 0x440000a7: (328, 234), 0x44000094: (342, 260), 0x440000d1: (352, 267),  # byrd
     0x44000013: (309, 210), 0x4400004b: (323, 228), 0x4400008f: (335, 243), 0x440000b6: (359, 278),  # blink
-    0x4400000c: (311, 212), 0x4400001a: (318, 221), 0x4400008a: (333, 242), 0x44000097: (349, 266),  # turret
+    0x4400000c: (311, 212), 0x4400001a: (318, 221), 0x4400008a: (333, 242), 0x44000097: (349, 266),  # cannon
     0x4400007b: (315, 217), 0x440000a5: (331, 238), 0x440000aa: (341, 254), 0x440000bb: (356, 275)  # sparx
 }
 
@@ -140,7 +140,7 @@ SHOP_ITEM_IDS = list(range(901, 957))  # IDs 901-956
 # these 4 aren't as generalizable since the ID design didn't specifically separate them 
 BYRD_IDS = [302, 201, 328, 234, 342, 260, 352, 267]
 BLINK_IDS = [309, 210, 323, 228, 335, 243, 359, 278]
-TURRET_IDS = [311, 212, 318, 221, 333, 242, 349, 266]
+CANNON_IDS = [311, 212, 318, 221, 333, 242, 349, 266]
 SPARX_IDS = [315, 217, 331, 238, 341, 254, 356, 275]
 
 ###############ITEM REFERENCES###############
@@ -202,24 +202,27 @@ ITEM_INFO: dict[str, tuple] = {  # "Name": (id, classification)
     "Dark Mine - Shop Unlock": (156, prog), "Red's Laboratory - Shop Unlock": (157, prog),
     # realm shop unlocks
     "Dragon Kingdom - Shop Unlock": (158, prog), "Lost Cities - Shop Unlock": (159, prog), "Icy Wilderness - Shop Unlock": (160, prog), "Volcanic Isle - Shop Unlock": (161, prog),
+    # other unlocks
+    "Cannon Unlock": (170, prog),
     # non-shinies filler
-    "Dragon Egg": (170, filler), "Gem Pack": (171, filler),
-    "Fire Bomb": (172, filler), "Electric Bomb": (173, filler), "Water Bomb": (174, filler), "Ice Bomb": (175, filler),
+    "Dragon Egg": (190, filler), "Gem Pack": (191, filler),
+    "Fire Bomb": (192, filler), "Electric Bomb": (193, filler), "Water Bomb": (194, filler), "Ice Bomb": (195, filler),
     # shinies filler
-    "Spare Jetpack for Sgt. Byrd": (180, filler), "New Goggles for Blink": (181, filler), "New Bow for Hunter": (182, filler),
-    "New Monocle for Moneybags": (183, filler), "A Cracked Gem": (184, filler), "Mouthwash for Inpetune": (185, filler),
-    "Anger Management Class for Red": (186, filler), "A Long Story from Elder Tomas": (187, filler), "1 Million Brain Cells": (188, filler),
-    "Treasure from the 10th Dimension": (189, filler), "Stress Ball for Gnasty Gnorc": (190, filler), "Portable Heater for the Ice Princess": (191, filler),
-    "Apartment Lease for Teena": (192, filler), "New Sneakers for Crash": (193, filler), "Green Eco for Jak": (194, filler), "Oil Change for Clank": (195, filler),
+    "Spare Jetpack for Sgt. Byrd": (200, filler), "New Goggles for Blink": (201, filler), "New Bow for Hunter": (202, filler),
+    "New Monocle for Moneybags": (203, filler), "A Cracked Gem": (204, filler), "Mouthwash for Inpetune": (205, filler),
+    "Anger Management Class for Red": (206, filler), "A Long Story from Elder Tomas": (207, filler), "1 Million Brain Cells": (208, filler),
+    "Treasure from the 10th Dimension": (209, filler), "Stress Ball for Gnasty Gnorc": (210, filler), "Portable Heater for the Ice Princess": (211, filler),
+    "Apartment Lease for Teena": (212, filler), "New Sneakers for Crash": (213, filler), "Green Eco for Jak": (214, filler), "Oil Change for Clank": (215, filler),
     # traps
-    "Spam Call": (200, trap), "Reverse Controls": (201, trap), "Damage Sparx": (202, trap), "Gem Tax": (203, trap), "Bounce": (204, trap),
+    "Spam Call": (220, trap), "Reverse Controls": (221, trap), "Damage Sparx": (222, trap), "Gem Tax": (223, trap), "Bounce": (224, trap),
     # glitched logic item name, solely for UT support. ID None because it's an event item
     GLITCHED_LOGIC_ITEM_NAME: (999, prog)
 }
 
 ITEM_GROUP_IDS = {  # "Name": [start of id range, end of id range] INCLUSIVE
-    "Elder Abilities": [1, 4], "Breaths": [10, 13], "Abilities": [20, 22], "Key Rings": [30, 47], "Access Cards": [50, 53],
-    "Shop Items": [60, 79], "Collectibles": [85, 88], "Shop Unlocks": [95, 161], "Filler": [170, 195], "Traps": [200, 204] 
+    "Elder Abilities": [1, 4], "Breaths": [10, 13], "Abilities": [20, 22], "Key Rings": [30, 47],
+    "Access Cards": [50, 53], "Shop Items": [60, 79], "Collectibles": [85, 88], "Shop Unlocks": [95, 161],
+    "Other Unlocks": [170, 170], "Filler": [190, 215], "Traps": [220, 224] 
 }
 
 SHINIES_NAMES = [name for name in ITEM_INFO.keys() if ITEM_GROUP_IDS["Filler"][1]-15 <= ITEM_INFO[name][0] <= ITEM_GROUP_IDS["Filler"][1]]
@@ -327,14 +330,15 @@ class AbilityFlags(IntFlag):
     Glide = 0x100000
     Charge = 0x200000
     Swim = 0x400000
+    Cannon = 0x800000
 
 ABILITY_MATCH = {
     ITEM_INFO["Double Jump"][0]: AbilityFlags.DoubleJump, ITEM_INFO["Pole Spin"][0]: AbilityFlags.PoleSpin, ITEM_INFO["Wing Shield"][0]: AbilityFlags.WingShield,
     ITEM_INFO["Wall Kick"][0]: AbilityFlags.WallKick, ITEM_INFO["Fire Breath"][0]: AbilityFlags.FireBreath, ITEM_INFO["Electric Breath"][0]: AbilityFlags.ElectricBreath,
     ITEM_INFO["Water Breath"][0]: AbilityFlags.WaterBreath, ITEM_INFO["Ice Breath"][0]: AbilityFlags.IceBreath, ITEM_INFO["Swim"][0]: AbilityFlags.Swim,
-    ITEM_INFO["Glide"][0]: AbilityFlags.Glide, ITEM_INFO["Charge"][0]: AbilityFlags.Charge, ITEM_INFO["Health Unit+"][0]: AbilityFlags.SparxHealthUpgrade, ITEM_INFO["Shockwave"][0]: AbilityFlags.Shockwave
+    ITEM_INFO["Glide"][0]: AbilityFlags.Glide, ITEM_INFO["Charge"][0]: AbilityFlags.Charge, ITEM_INFO["Health Unit+"][0]: AbilityFlags.SparxHealthUpgrade,
+    ITEM_INFO["Shockwave"][0]: AbilityFlags.Shockwave, ITEM_INFO["Cannon Unlock"][0]: AbilityFlags.Cannon
 }
-
 
 class ShopItemModel(IntEnum):
     Lockpick = 0x0200014c

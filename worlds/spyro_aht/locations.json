@@ -3039,15 +3039,28 @@
                 "id": 206,
                 "options": [],
                 "access_rule": {
-                    "rule": "HasAll",
+                    "rule": "And",
                     "options": [],
                     "filtered_resolution": false,
-                    "args": {
-                        "item_names": [
-                            "Double Jump",
-                            "Glide"
-                        ]
-                    }
+                    "children": [
+                        {
+                            "rule": "HasAll",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {
+                                "item_names": [
+                                    "Double Jump",
+                                    "Glide"
+                                ]
+                            }
+                        },
+                        {
+                            "rule": "CannonAccessRule",
+                            "options": [],
+                            "filtered_resolution": false,
+                            "args": {}
+                        }
+                    ]
                 }
             },
             {
@@ -4579,7 +4592,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled",
                             "easy"
@@ -4599,7 +4612,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled"
                         ]
@@ -6431,7 +6444,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled",
                             "easy"
@@ -6476,7 +6489,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled"
                         ]
@@ -11960,7 +11973,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled",
                             "easy"
@@ -11980,7 +11993,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled"
                         ]
@@ -16670,7 +16683,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled",
                             "easy"
@@ -16690,7 +16703,7 @@
                 "options": [
                     {
                         "option": "worlds.spyro_aht.options.MinigameChecks",
-                        "npc": "Turret",
+                        "npc": "Cannon",
                         "value": [
                             "enabled"
                         ]

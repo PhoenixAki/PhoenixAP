@@ -7,7 +7,7 @@ from worlds.spyro_aht.options import ShopRandomization, MinigameChecks, ShopItem
 from rule_builder.rules import Rule, NestedRule, True_, False_, Has, HasAll, And, HasAny, Or, CanReachRegion, CanReachLocation
 from worlds.spyro_aht import consts
 from worlds.spyro_aht.AHTWorld import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
-    ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
+    ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule, CannonAccessRule
 import itertools
 
 def process_tricks(rule: str) -> list[Rule]:
@@ -89,11 +89,11 @@ def main():
             ]
         elif "Firework" in loc_name:
             options = [OptionFilter(FireworkChecks, 1, operator="eq").to_dict()]
-        elif loc_id in [*consts.BLINK_IDS, *consts.BYRD_IDS, *consts.SPARX_IDS, *consts.TURRET_IDS]:
+        elif loc_id in [*consts.BLINK_IDS, *consts.BYRD_IDS, *consts.SPARX_IDS, *consts.CANNON_IDS]:
             if loc_id in consts.BLINK_IDS: npc = "Blink"
             elif loc_id in consts.BYRD_IDS: npc = "Sgt. Byrd"
             elif loc_id in consts.SPARX_IDS: npc = "Sparx"
-            else: npc = "Turret"
+            else: npc = "Cannon"
             
             # enabled or easy if dragon egg (id in the 300's). only enabled for light gems (id in the 200's)
             values = ["enabled", "easy"] if loc_id // 100 == 3 else ["enabled"]

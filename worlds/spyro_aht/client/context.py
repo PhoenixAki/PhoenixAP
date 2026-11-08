@@ -220,7 +220,7 @@ class SpyroAHTContext(SuperContext):
         self.hint_notifs = True
         
         # tracks goal completion so far. finished_goals replaces Falses with Trues as things complete. full_goal_list is used with .index to find a given goal's index
-        self.full_goal_list = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests", "Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Sgt. Byrd", "Blink", "Turret", "Sparx"]
+        self.full_goal_list = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests", "Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Sgt. Byrd", "Blink", "Cannon", "Sparx"]
         self.finished_goals = [False]*len(self.full_goal_list)
         
         self.unlocked_shops = []
@@ -422,6 +422,8 @@ class SpyroAHTContext(SuperContext):
                 await self._unlock_shop(item.item, "Level")
             elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+63 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][1]:
                 await self._unlock_shop(item.item, "Realm")
+            elif item.item == consts.ITEM_INFO["Cannon Unlock"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
             elif item.item == consts.ITEM_INFO["Dragon Egg"][0]:
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
                 if count < item_counts["Dragon Egg"]:

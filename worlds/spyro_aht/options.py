@@ -147,12 +147,12 @@ class MinigamesGoal(OptionDict):
     - random-on: picks a random number from 1-8.
     - random-off: 1/2 chance of 0, 1/2 chance of 1-8."""
     display_name = "Minigames Goal"
-    valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
+    valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
     default = {
         "Blink": 0,
+        "Cannon": 0,
         "Sgt. Byrd": 0,
-        "Sparx": 0,
-        "Turret": 0
+        "Sparx": 0
     }
     
 
@@ -169,9 +169,8 @@ class ExcludeChestItems(Choice):
 ###############CHECKS AND ITEMS###############
 class EnabledTricks(OptionSet):
     """Many things in AHT can be done using "tricks", which by default you aren't expected to do. This option lets you choose
-    to enable a series of tricks that, depending on the randomization, you may be expected to do. These tricks can be enabled
-    individually or through a few presets (Easy, Medium, Hard, Other) that bundle similarly difficult tricks together.
-    You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
+    to enable a series of tricks that you may be expected to do. These tricks can be enabled individually or through a few
+    presets (Easy, Medium, Hard, Other). You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
     
     See here for a full list of tricks: https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-3.1-%E2%80%90-List-of-Tricks"""
     display_name = "Enabled Tricks"
@@ -215,15 +214,15 @@ class MinigameChecks(OptionDict):
     enabled: Keeps vanilla behavior for this minigame.
     easy: Disables the Light Gem challenges for this minigame.
     disabled: Fully disables this minigame. Its NPCs will not spawn at all in-game.
-      If turret minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
+      If cannon minigames are disabled, Fredneck's lilypads will instead raise when breaking the Dark Gem before him.
     random: Random choice between enabled, easy, and disabled."""
     display_name = "Minigame Checks"
-    valid_keys = ("Blink", "Sgt. Byrd", "Sparx", "Turret")
+    valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
     default = {
         "Blink": "enabled",
+        "Cannon": "enabled",
         "Sgt. Byrd": "enabled",
-        "Sparx": "enabled",
-        "Turret": "enabled"
+        "Sparx": "enabled"
     }
 
 
@@ -245,6 +244,13 @@ class ItemBundles(OptionCounter):
         "Global Lockpick": 1,
         "Light Gem": 1
     }
+
+
+class CannonLock(Toggle):
+    """If enabled, you will not be able to use cannons in the game until you receive the "Cannon Unlock" item.
+    Cannons in minigames are excluded, and are always usable."""
+    display_name = "Cannon Lock"
+    default = 0
     
     
 class TrapPercentage(Range):
@@ -600,6 +606,7 @@ class SpyroAHTOptions(PerGameCommonOptions):
     firework_checks: FireworkChecks
     minigame_checks: MinigameChecks
     item_bundles: ItemBundles
+    cannon_lock: CannonLock
     trap_percentage: TrapPercentage
     filler_items: FillerItems
     trap_items: TrapItems
@@ -644,7 +651,8 @@ spyro_options_groups = [
         LockedChestsGoal, EldersGoal, MinigamesGoal, ExcludeChestItems
     ]),
     OptionGroup("CHECKS AND ITEMS", [
-        EnabledTricks, OpenWorldMode, FireworkChecks, MinigameChecks, ItemBundles, TrapPercentage, FillerItems, TrapItems, TrapLength
+        EnabledTricks, OpenWorldMode, FireworkChecks, MinigameChecks, ItemBundles, CannonLock,
+        TrapPercentage, FillerItems, TrapItems, TrapLength
     ]),
     OptionGroup("START OF GAME", [
         StartingBreaths, MovementRandomization, StartingRealms
