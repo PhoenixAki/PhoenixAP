@@ -33,7 +33,7 @@ class DolphinClient:
         self.ready = asyncio.Event()
         self.msg_queue = asyncio.Queue()
         self.trap_queue = asyncio.Queue()
-        self.trap_timer = ctx.slot_data['trap_length']
+        self.trap_timers = ctx.slot_data['trap_length']
         self.addresses = None  # type: ignore
         
     async def notification_task(self):
@@ -65,11 +65,11 @@ class DolphinClient:
                     await asyncio.sleep(5)
                     name = await self.trap_queue.get()
                     
-                    dolphin_memory_engine.write_word(self.addresses.g_TRAP_DATA, 60*self.trap_timer)
+                    dolphin_memory_engine.write_word(self.addresses.g_TRAP_DATA, 60 * self.trap_timers[name])
                     if name == "Spam Call": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 1)
                     elif name == "Reverse Controls": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 2)
                     elif name == "Bounce": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 3)
-                    await asyncio.sleep(self.trap_timer - 5)
+                    await asyncio.sleep(self.trap_timers[name] - 5)
         except Exception:
             self.logger.info("WARNING: Error in trap queue, please report to developers", exc_info=True)
 
