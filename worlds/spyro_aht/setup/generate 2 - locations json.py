@@ -1,93 +1,146 @@
 import json
 
+import itertools
+from rule_builder.options import OptionFilter
+from worlds.spyro_aht.options import ShopRandomization, MinigameChecks, ShopItemCount, FireworkChecks, EnabledTricks
 # These are imported so that eval() can recognize them as types below
-from rule_builder.rules import Rule, True_, Has, HasAll, And, HasAny, Or, CanReachRegion
-from worlds.spyro_aht import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
-    ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule
+from rule_builder.rules import Rule, NestedRule, True_, False_, Has, HasAll, And, HasAny, Or, CanReachRegion, CanReachLocation
+from worlds.spyro_aht import consts
+from worlds.spyro_aht.AHTWorld import BossLairRule, BallGadget, LGDoorRule, InvincibilityGadget, SuperchargeGadget, \
+    ShopCheckRule, LockedChestRule, OpenWorldRule, RealmAccessRule, CannonAccessRule
+import itertools
+
+def process_tricks(rule: str) -> list[Rule]:
+    tricks = rule.split(" | ", 1)[1].split(" | ")
+    trick_rules = []
+    for trick in tricks:
+        trick_name = trick.split(" ")[0].replace("_", " ")
+        if trick_name not in itertools.chain(*consts.TRICK_LEVELS.values()):
+            exit(f"{trick_name} wasn't in TRICK_LEVELS")
+        if trick_name in trick_list: trick_list.remove(trick_name)
+        trick_rule = eval(trick.split(" ", 1)[1])
+        trick_rule.options = (OptionFilter(EnabledTricks, trick_name, operator="contains"),)
+        trick_rules.append(trick_rule)
+    return trick_rules
 
 regions = {}
-########################################################################################################################
-# load regions
-file_in = open("1 - region list.txt", "r")
-for line in file_in:
-    region_name = line.strip()
-    if region_name not in regions:
-        regions[region_name] = {
-            "name": region_name,
-            "entrances": [],
-            "locations": [],
-            "gem_events": []
-        }
+trick_list = [*itertools.chain(*consts.TRICK_LEVELS.values())]  # only used for testing
+
+def main():
+    ########################################################################################################################
+    # load regions
+    file_in = open("1 - region list.txt", "r")
+    for line in file_in:
+        region_name = line.strip()
+        if region_name not in regions:
+            regions[region_name] = {
+                "name": region_name,
+                "entrances": [],
+                "locations": [],
+                "gem_events": []
+            }
+        
+    file_in.close()
     
-file_in.close()
-
-########################################################################################################################
-# load entrances
-file_in = open("2 - region entrances.txt", "r")
-for line in file_in:
-    entrance_full = line.strip()
-    region_info, rule = entrance_full.split(" | ")
-    region_from, region_to = region_info.split(" -> ")
+    ########################################################################################################################
+    # load entrances
+    file_in = open("2 - region entrances.txt", "r")
+    for line in file_in:
+        entrance_full = line.strip()
+        region_info, rule = entrance_full.split(" | ", 1)
+        region_from, region_to = region_info.split(" -> ")
+        
+        # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic
+        if " | " in rule:
+            normal_rule = eval(rule.split(" | ")[0])
+            trick_rules = process_tricks(rule)
+            evaluated_rule = Or(normal_rule, *trick_rules)
+        else:
+            evaluated_rule = eval(rule)
+        
+        regions[region_to]["entrances"].append({
+            "name": region_info,
+            "access_rule": evaluated_rule.to_dict()
+        })
+    file_in.close()
     
-    evaluated_rule = eval(rule)
+    ########################################################################################################################
+    # load locations
+    file_in = open("3 - locations.txt", "r")
+    for line in file_in:
+        line = line.strip()
+        region, loc_name, loc_id, loc_rule = line.split(" | ", 3)
+        loc_id = int(loc_id)
+        options = []
+        
+        # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic
+        if " | " in loc_rule:
+            normal_rule = eval(loc_rule.split(" | ")[0])
+            trick_rules = process_tricks(loc_rule)
+            evaluated_rule = Or(normal_rule, *trick_rules)
+        else:
+            evaluated_rule = eval(loc_rule)
+        
+        # check for location-level options
+        if "Shop Item" in loc_name:
+            options = [
+                OptionFilter(ShopRandomization, 1, operator="eq").to_dict(),
+                OptionFilter(ShopItemCount, int(loc_name[-2:]), operator="ge").to_dict()
+            ]
+        elif "Firework" in loc_name:
+            options = [OptionFilter(FireworkChecks, 1, operator="eq").to_dict()]
+        elif loc_id in [*consts.BLINK_IDS, *consts.BYRD_IDS, *consts.SPARX_IDS, *consts.CANNON_IDS]:
+            if loc_id in consts.BLINK_IDS: npc = "Blink"
+            elif loc_id in consts.BYRD_IDS: npc = "Sgt. Byrd"
+            elif loc_id in consts.SPARX_IDS: npc = "Sparx"
+            else: npc = "Cannon"
+            
+            # enabled or easy if dragon egg (id in the 300's). only enabled for light gems (id in the 200's)
+            values = [1, 2] if loc_id // 100 == 3 else [2]
+            options = [{  # can't make into a proper OptionFilter to then to_dict on since this is custom format
+                "option": "worlds.spyro_aht.options.MinigameChecks",
+                "npc": npc,
+                "value": values
+            }]
     
-    regions[region_to]["entrances"].append({
-        "name": region_info,
-        "access_rule": evaluated_rule.to_dict()
-    })
-file_in.close()
+        regions[region]["locations"].append({
+            "name": loc_name,
+            "id": loc_id,
+            "options": options,
+            "access_rule": evaluated_rule.to_dict()
+        })
+    file_in.close()
+    
+    ########################################################################################################################
+    # load gem events
+    file_in = open("4 - gem events.txt", "r")
+    for line in file_in:
+        line = line.strip()
+        region, event_name, event_rule = line.split(" | ", 2)
+        gem_amount = event_name.split(" ", 1)[0]
+        
+        # check for rule-level options (tricks). tricks have an additional | i.e. normal logic | trick logic 
+        if " | " in event_rule:
+            normal_rule = eval(event_rule.split(" | ")[0])
+            trick_rules = process_tricks(event_rule)
+            evaluated_rule = Or(normal_rule, *trick_rules)
+        else:
+            evaluated_rule: Rule = eval(event_rule)
+    
+        regions[region]["gem_events"].append({
+            "name": event_name,
+            "gem_amount": int(gem_amount),
+            "options": [],
+            "access_rule": evaluated_rule.to_dict()
+        })
 
 ########################################################################################################################
-# load locations
-file_in = open("3 - locations.txt", "r")
-for line in file_in:
-    line = line.strip()
-    region, loc_name, loc_id, loc_rule = line.split(" | ")
-    options = []  # default, overridden below if an optionable location is encountered
-    evaluated_rule: Rule = eval(loc_rule)
+main()
 
-    if "Shop Item" in loc_name:
-        options = [{
-            "option": "shop_randomization",
-            "value": 1
-        },
-        {
-            "option": "shop_item_count",
-            "operator": "ge",
-            "value": int(loc_name[-2:])
-        }]
-    elif "Firework" in loc_name:
-        options = [{
-            "option": "firework_checks",
-            "value": 1
-        }]
-
-    regions[region]["locations"].append({
-        "name": loc_name,
-        "id": int(loc_id),
-        "options": options,
-        "access_rule": evaluated_rule.to_dict()
-    })
-file_in.close()
-
-########################################################################################################################
-# load gem events
-file_in = open("4 - gem events.txt", "r")
-for line in file_in:
-    line = line.strip()
-    region, event_name, event_rule = line.split(" | ")
-    gem_amount = event_name.split(" ", 1)[0]
-    evaluated_rule: Rule = eval(event_rule)
-
-    regions[region]["gem_events"].append({
-        "name": event_name,
-        "gem_amount": int(gem_amount),
-        "options": [],
-        "access_rule": evaluated_rule.to_dict()
-    })
-
-########################################################################################################################
 # output
+if len(trick_list) != 0:
+    exit(f"At least one trick is listed in TRICK_LEVELS but wasn't found in JSON. Missing tricks: {', '.join(trick_list)}.")
+    
 file_out = open("test-locations.json", "w")
 output = json.dumps(regions, indent=4)
 file_out.write(output)

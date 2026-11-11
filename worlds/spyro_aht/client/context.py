@@ -1,0 +1,715 @@
+from __future__ import annotations
+
+import asyncio
+import collections
+
+import Utils
+from CommonClient import ClientCommandProcessor, logger
+from Options import Choice, Range, OptionSet, OptionDict, Toggle, OptionCounter
+from kvui import GameManager
+
+tracker_loaded = False
+try:
+    from worlds.tracker.TrackerClient import TrackerGameContext as SuperContext
+    tracker_loaded = True
+except ModuleNotFoundError:
+    from CommonClient import CommonContext as SuperContext
+
+from NetUtils import ClientStatus, NetworkItem
+
+from .dolphin_client import DolphinClient
+from .. import consts
+
+class SpyroAHTCommands(ClientCommandProcessor):
+    ctx: SpyroAHTContext
+    
+    async def _cmd_console_testing(self) -> bool:
+        """This command is intended for developer testing use, but can be used if it for some reason appeals to you :)
+        It toggles whether console-sent items should be ignored from the list of items the client re-syncs to the game
+        state upon entering a save file. Default is false. Using the command flips it between false/true."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        self.output(f"Switching from {self.ctx.ignore_console_sent_items} to {not self.ctx.ignore_console_sent_items}.")
+        self.ctx.ignore_console_sent_items = not self.ctx.ignore_console_sent_items
+        return True
+    
+    async def _cmd_add_item(self, item, amount) -> bool:
+        """Format: /add_item item_name amount.
+        Adds <amount> of <item_name> to the game's memory directly.
+        Currently supported items: "dark_gem", "light_gem", "gems", and "global_lockpick".
+        Please use responsibly - minimal error checking is done. High values risk crashing the game.
+        Intended for use in recovering save files, as well as testing and debugging."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        types = {
+            "dark_gem": [self.ctx.emu_client.addresses.DARK_GEM_COUNT, 1],
+            "light_gem": [self.ctx.emu_client.addresses.LIGHT_GEM_COUNT, 1],
+            "gems": [self.ctx.emu_client.addresses.GEMS, 4],
+            "global_lockpick": [self.ctx.emu_client.addresses.LOCKPICKS, 1]
+        }
+        
+        if item not in types.keys():
+            self.output("Incorrect command format. Please use one of the supported item types.")
+            return True
+
+        amount = int(amount)
+        if amount < 0:
+            self.output("This command can only add items. Please enter a positive amount.")
+            return True
+        
+        await self.ctx.emu_client.debug_add_item(amount, *types[item])
+        return True
+
+    async def _cmd_list_options(self) -> bool:
+        """Displays seed information, retrieved directly from data sent from Archipelago.
+        Some of this info is also viewable on the pause menu."""
+        from ..options import spyro_options_groups
+        
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        for group in spyro_options_groups[:-1]:
+            self.output(f"---------------{group.name}---------------")
+            for option in group.options:
+                slot_data_name = option.display_name.lower().replace(" ", "_")
+                value = self.ctx.slot_data[slot_data_name]
+                if issubclass(option, Choice):
+                    self.output(f"{option.display_name} -> {option.name_lookup[value]}.")
+                elif issubclass(option, Range):
+                    self.output(f"{option.display_name} -> {value}.")
+                elif issubclass(option, OptionSet):
+                    output = ", ".join(value) if len(value) > 0 else "none"
+                    self.output(f"{option.display_name} -> {output}.")
+                elif issubclass(option, OptionDict) or issubclass(option, OptionCounter):
+                    output = ""
+                    for key in option.valid_keys:
+                        output += f"{key}: {value[key]}, "
+                    self.output(f"{option.display_name} -> {output[:-2]}.")
+                elif issubclass(option, Toggle):
+                    self.output(f"{option.display_name} -> {bool(value)}.")
+        return True                
+
+    async def _cmd_check_goal(self) -> bool:
+        """Details completion progress on all enabled goals, including how many checks are left to do for each."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Command cannot be ran before entering your save file.")
+            return True
+        
+        completed_goals, incomplete_goals = [], []
+        for goal in self.ctx.slot_data["goals_dict"].keys():
+            # retrieve data from goals dict
+            id_list = self.ctx.slot_data["goals_dict"][goal]["ids"]
+            amount = self.ctx.slot_data["goals_dict"][goal]["amount"]
+            # tally it up
+            count = 0
+            for goal_id in id_list:
+                count += goal_id in self.ctx.checked_locations  # += 1 if true, otherwise 0
+            # check for completed status
+            if count >= amount: completed_goals.append(goal)
+            else: incomplete_goals.append(f"{goal} ({amount-count} checks left)")
+        # output while being cautious of empty lists
+        complete_text = "none" if len(completed_goals) == 0 else f"{", ".join(completed_goals)}"
+        incomplete_text = "none" if len(incomplete_goals) == 0 else f"{", ".join(incomplete_goals)}"
+        self.output(f"Completed Goals: {complete_text}.")
+        self.output(f"Incomplete Goals: {incomplete_text}.")
+        return True
+
+    async def _cmd_costs(self) -> bool:
+        """Displays the cost of each boss lair, light gem door, and gadget.
+        This information is also listed in /list_options.
+        /costs is offered as a convenience in case costs are the only information you want."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        # boss costs
+        data = self.ctx.slot_data["boss_lair_costs"]
+        self.output(f"The boss lair gates require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Dark Gems.")
+        # light gem doors
+        data = self.ctx.slot_data["light_gem_door_costs"]
+        self.output(f"The Light Gem doors require, in vanilla realm order: {data[0]}, {data[1]}, {data[2]}, and {data[3]} Light Gems.")
+        # gadget costs
+        data = self.ctx.slot_data["gadget_costs"]
+        self.output(f"Gadget Costs: Ball requires {data[0]} Light Gems, invincibility requires {data[1]} Light Gems, and supercharge requires {data[2]} Light Gems.")
+        return True
+    
+    async def _cmd_toggle_notifications(self, argument) -> bool:
+        """Toggles displaying 2 types of in-game notifications.
+        Useful if you only want certain types of notifications.
+        This command does not remove any already-queued notifications.
+        1) "/toggle_notifications hints" toggles showing hints notifications
+        2) "/toggle_notifications self_sent" toggles notifications for items you send to yourself (such as when playing a solo seed)."""
+        
+        if argument not in ["hints", "self_sent"]:
+            self.output(f"{argument} is not a valid argument. Must be either \"hints\" or \"self_sent\".")
+            return True
+        
+        if argument == "hints":
+            self.output(f"Toggling hint notifications from {self.ctx.hint_notifs} to {not self.ctx.hint_notifs}.")
+            self.ctx.hint_notifs = not self.ctx.hint_notifs
+            return True
+        else:
+            self.output(f"Toggling self sent notifications from {self.ctx.self_sent_notifs} to {not self.ctx.self_sent_notifs}.")
+            self.ctx.self_sent_notifs = not self.ctx.self_sent_notifs
+            return True
+    
+    async def _cmd_toggle_deathlink(self, argument: str) -> bool:
+        """Toggles DeathLink, if enabled for this seed.
+        Can be toggled separately for incoming and outgoing deaths.
+        1) "/toggle_deathlink incoming" toggles whether to process or ignore incoming deaths.
+        2) "/toggle_deathlink outgoing" toggles whether to send deaths when you die enough times (per your amnesty value)."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
+        
+        if not self.ctx.slot_data["death_link"]:
+            self.output("DeathLink is not enabled for this seed.")
+            return True
+        
+        if argument not in ["incoming", "outgoing"]:
+            self.output("Invalid command format. Must be \"/toggle_deathlink incoming\" or \"/toggle_deathlink outgoing\".")
+            return True
+        
+        if argument == "outgoing":
+            self.output(f"Toggling DeathLink from {self.ctx.deathlink_outgoing} to {not self.ctx.deathlink_outgoing}.")
+            self.ctx.deathlink_outgoing = not self.ctx.deathlink_outgoing
+        elif argument == "incoming":
+            self.output(f"Toggling incoming DeathLink from {self.ctx.deathlink_incoming} to {not self.ctx.deathlink_incoming}.")
+            self.ctx.deathlink_incoming = not self.ctx.deathlink_incoming
+        return True
+        
+
+class SpyroAHTContext(SuperContext):
+    tags = {"AP"}
+    items_handling = 0b111
+    game = "Spyro: A Hero's Tail"
+    command_processor = SpyroAHTCommands
+
+    def __init__(self, server_address: str | None = None, password: str | None = None) -> None:
+        super().__init__(server_address, password)
+        if tracker_loaded:
+            super().set_events_callback(self._event_update)
+            super().set_callback(self._location_update)
+            super().set_glitches_callback(self._glitches_update)
+        self.tracker_found = tracker_loaded
+        
+        # these update whenever UT reports a new location or event is in logic
+        self._in_logic_events: list[str] = []
+        self._in_logic_locations: list[str] = []
+        self._in_glitched_logic_locations: list[str] = []
+        
+        # these cut back on repetitively scanning to-be-hinted locations after they've been hinted already
+        self.shop_hinted = False
+        
+        # notification flags
+        self.self_sent_notifs = True
+        self.hint_notifs = True
+        
+        # tracks goal completion so far. finished_goals replaces Falses with Trues as things complete. full_goal_list is used with .index to find a given goal's index
+        self.full_goal_list = ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Dark Gems", "Light Gems", "Dragon Eggs", "Fireworks", "Shop Items", "Locked Chests", "Elder Tomas", "Elder Magnus", "Elder Titan", "Elder Astor", "Sgt. Byrd", "Blink", "Cannon", "Sparx"]
+        self.finished_goals = [False]*len(self.full_goal_list)
+        
+        self.unlocked_shops = []
+
+        self.emu_client: GenericClient = None # type: ignore
+        self.emu_loop: asyncio.Task = None # type: ignore
+        self.auth_ready = asyncio.Event()
+        self.deathlink_incoming = True
+        self.deathlink_outgoing = True
+
+        self.slot_data = {}
+        self._seed = ""
+
+        self._shop_items: list[NetworkItem] = []
+        self._shop_items_received = asyncio.Event()
+
+        self._handled_items: set[NetworkItem] = set()
+        self.ignore_console_sent_items = False
+
+        self._checked_boss_doors = set()
+        self._checked_gem_doors = set()
+        self._checked_gadgets = set()
+
+        self._scouted_locations: set[int] = set()
+    
+    def make_gui(self) -> type[GameManager]:
+        ui = super().make_gui()
+        ui.base_title = "Spyro: A Hero's Tail Archipelago Client"
+        return ui
+
+    async def server_auth(self, password_requested: bool = False):
+        if password_requested and not self.password:
+            await super().server_auth(password_requested)
+        await self.get_username()
+        await self.send_connect(game=self.game)
+    
+    def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
+        
+        match cmd:
+            case 'Connected':
+                self.slot_data = args['slot_data']
+                # TODO: try messing with this to see if able to prevent connection if version mismatch?
+                if self.slot_data['death_link'] != 0:
+                    self.tags.add("DeathLink")
+                    Utils.async_start(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
+                if self.emu_loop and not self.emu_loop.cancelled():
+                    self.emu_loop.cancel()
+                self.emu_loop = asyncio.create_task(self._emu_loop())
+                self.auth_ready.set()
+            case 'RoomInfo':
+                self._seed = args['seed_name']
+                if self._seed.startswith("W"): self._seed.replace("W", "")
+            case 'LocationInfo':
+                if not self._shop_items_received.is_set():
+                    self._shop_items = [NetworkItem(*item) for item in args['locations']]
+                    self._shop_items_received.set()
+            case 'PrintJSON':
+                match args.get('type', ''):
+                    case 'ItemSend':
+                        # item.player = # of player who sent it
+                        # args['receiving'] = # of player receiving it
+                        # item.item = id of item
+                        # item.location = id of location where it was found
+                        # self.slot = # of currently connected AHT player
+                        item = args['item']
+                        if args['receiving'] == self.slot:
+                            if item.item == consts.ITEM_INFO["Spam Call"][0] or item.item == consts.ITEM_INFO["Gem Tax"][0]: sender = "Moneybags" 
+                            elif item.player == self.slot: sender = "yourself"
+                            else: sender = self.player_names[item.player]
+                            item_name = self.item_names.lookup_in_slot(item.item, self.slot)
+                            if item.player == self.slot and not self.self_sent_notifs:  # don't send "received <item> from yourself" notifs if flag is off
+                                return
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f'Received {item_name} from {sender}'))
+                        elif args['receiving'] != self.slot and item.player == self.slot:
+                            receiver_id = args['receiving']
+                            receiver_name = self.player_names[receiver_id]
+                            item_name = self.item_names.lookup_in_slot(item.item, receiver_id)
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, f"Sent {item_name} to {receiver_name}"))
+                    case 'Hint':
+                        if args['found']: return
+                        if args['receiving'] == self.slot and self.hint_notifs:  # don't send hint notifs if flag is off
+                            item = args['item']
+                            player = "your" if item.player == self.slot else f"{self.player_names[item.player]}'s"
+                            location = self.location_names.lookup_in_slot(item.location, item.player)
+                            msg = f"[Hint] Your {self.item_names.lookup_in_slot(item.item, self.slot)} is at {player} {location}"
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
+                        elif args['item'].player == self.slot and self.hint_notifs:  # don't send hint notifs if flag is off
+                            item = args['item']
+                            location = self.location_names.lookup_in_slot(item.location, self.slot)
+                            player = self.player_names[args['receiving']]
+                            msg = f"[Hint] {player}'s {self.item_names.lookup_in_slot(item.item, args['receiving'])} is at {location}"
+                            self.emu_client.msg_queue.put_nowait((consts.COLOUR_WHITE, msg))
+    
+    async def start_emu_client(self) -> bool:
+        # bizarre issue where passworded seeds re-trigger parts of the emu and connection setup process
+        # this ensures that if dolphin engine is hooked through that, to unhook it first before continuing as usual
+        if self.emu_client is not None:
+            await self.emu_client.disconnect()
+            
+        self.emu_client = DolphinClient(self, logger)
+        
+        # this validates game id and mod version and sets up addresses. Could throw exception if there's mismatches
+        try:
+            await self.emu_client.connect()
+        except Exception as e:
+            logger.info(e)
+            return False
+        
+        await self.emu_client.apply_patch()
+        await self.emu_client.ready.wait()
+        return True
+    
+    async def _receive_items(self):
+        item_counts = collections.Counter(self.item_names.lookup_in_slot(i.item, self.slot) for i in self.items_received)
+        for item in self.items_received:
+            # skip already-processed items. Items sent via admin console have location < 0 and should always be processed since they don't get added to items_received
+            if item in self._handled_items and item.location != -1: continue
+            
+            if item.location == -1 and item in self._handled_items and self.ignore_console_sent_items: continue
+            
+            self._handled_items.add(item)
+            if consts.ITEM_GROUP_IDS["Elder Abilities"][0] <= item.item <= consts.ITEM_GROUP_IDS["Abilities"][1]:
+                if not await self.emu_client.has_any_breath() and consts.ITEM_GROUP_IDS["Breaths"][0] <= item.item <= consts.ITEM_GROUP_IDS["Breaths"][1]:
+                    await self.emu_client.set_breath(item.item)
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
+            elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
+                if item.item >= consts.ITEM_GROUP_IDS["Key Rings"][1]-4:  # if realm key ring, needs converting into list of level key rings
+                    ring_ids = consts.REALM_KEY_RING_LOOKUP[item.item]  # converts from realm key ring id -> list of level key ring ids
+                else: ring_ids = [item.item]  # already is a level key ring id
+                
+                for ring_id in ring_ids:
+                    key_ring_id_list = list(range(consts.ITEM_GROUP_IDS["Key Rings"][0], consts.ITEM_GROUP_IDS["Key Rings"][1] - 3))
+                    bit = key_ring_id_list.index(ring_id)
+                    address = self.emu_client.addresses.g_KEYRING_BITFIELD + (bit // 8)
+                    await self._set_keyring_or_shop(bit, address)
+            elif consts.ITEM_GROUP_IDS["Access Cards"][0] <= item.item <= consts.ITEM_GROUP_IDS["Access Cards"][1]:
+                await self.emu_client.allow_realm_access(item.item - consts.ITEM_GROUP_IDS["Access Cards"][0])  # adjust to value from 0-3
+            elif item.item == consts.ITEM_INFO["Health Unit+"][0] or item.item == consts.ITEM_INFO["Shockwave"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
+            elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
+                await self.emu_client.enable_butterfly_jar()
+            elif item.item == consts.ITEM_INFO["Double Gems"][0]:
+                await self.emu_client.toggle_double_gems(True)
+            elif item.item == consts.ITEM_INFO["Global Lockpick"][0]:  # global lockpicks
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
+                if count < item_counts["Lockpick"]:
+                    lc = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, count + 1)
+                    await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, lc + 1)
+            elif consts.ITEM_GROUP_IDS["Shop Items"][0]+6 <= item.item <= consts.ITEM_GROUP_IDS["Shop Items"][1]:  # level lockpicks
+                # incoming item info
+                ap_count = item_counts[self.item_names.lookup_in_slot(item.item, self.slot)]
+                
+                # game info
+                lockpick_list = list(range(consts.ITEM_GROUP_IDS["Shop Items"][0]+6, consts.ITEM_GROUP_IDS["Shop Items"][1]))
+                bit = lockpick_list.index(item.item)
+                address = self.emu_client.addresses.g_PERLEVEL_LOCKPICKS + (bit * 2)
+                file_curr = await self.emu_client.get_item_count(address)
+                file_total = await self.emu_client.get_item_count(address + 1)
+                
+                if ap_count > file_total:
+                    await self.emu_client.set_item(address, file_curr + 1)
+                    await self.emu_client.set_item(address + 1, file_total + 1)
+            elif item.item == consts.ITEM_INFO["Global Lockpick Bundle"][0]:
+                amount_from_bundles = item_counts["Global Lockpick Bundle"] * self.slot_data["item_bundles"]["Global Lockpick"]
+                if amount_from_bundles > 52: amount_from_bundles = 52
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, amount_from_bundles)
+                    difference = amount_from_bundles - file_count
+                    curr_lockpick_amount = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
+                    await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, curr_lockpick_amount + difference)
+            elif item.item == consts.ITEM_INFO["Dark Gem"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+                if count < item_counts["Dark Gem"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Dark Gem Bundle"][0]:
+                amount_from_bundles = item_counts["Dark Gem Bundle"] * self.slot_data["item_bundles"]["Dark Gem"]
+                if amount_from_bundles > 40: amount_from_bundles = 40
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.DARK_GEM_COUNT, amount_from_bundles)
+            elif item.item == consts.ITEM_INFO["Light Gem"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+                if count < item_counts["Light Gem"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Light Gem Bundle"][0]:
+                amount_from_bundles = item_counts["Light Gem Bundle"] * self.slot_data["item_bundles"]["Light Gem"]
+                if amount_from_bundles > 100: amount_from_bundles = 100
+                file_count = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+                if amount_from_bundles > file_count:
+                    await self.emu_client.set_item(self.emu_client.addresses.LIGHT_GEM_COUNT, amount_from_bundles)
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0] <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+36:
+                await self._unlock_shop(item.item, "Randomized")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+37 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+49:
+                await self._unlock_shop(item.item, "Progressive")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+50 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+62:
+                await self._unlock_shop(item.item, "Level")
+            elif consts.ITEM_GROUP_IDS["Shop Unlocks"][0]+63 <= item.item <= consts.ITEM_GROUP_IDS["Shop Unlocks"][1]:
+                await self._unlock_shop(item.item, "Realm")
+            elif item.item == consts.ITEM_INFO["Cannon Unlock"][0]:
+                await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
+            elif item.item == consts.ITEM_INFO["Dragon Egg"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.DRAGON_EGG_COUNT)
+                if count < item_counts["Dragon Egg"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.DRAGON_EGG_COUNT, count + 1)
+            elif item.item == consts.ITEM_INFO["Gem Pack"][0]:
+                count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED)
+                if count < item_counts["Gem Pack"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_NUM_GEM_PACKS_RECEIVED, count + 1)
+                    await self.emu_client.add_gem_pack()
+            elif item.item == consts.ITEM_INFO["Fire Bomb"][0]:
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_FIRE_AMMO_RECEIVED, item_counts["Fire Bomb"], self.emu_client.addresses.FIRE_BOMBS)
+            elif item.item == consts.ITEM_INFO["Electric Bomb"][0]:
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_ELECTRIC_AMMO_RECEIVED, item_counts["Electric Bomb"], self.emu_client.addresses.ELECTRIC_BOMBS)
+            elif item.item == consts.ITEM_INFO["Water Bomb"][0]:
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_WATER_AMMO_RECEIVED, item_counts["Water Bomb"], self.emu_client.addresses.WATER_BOMBS)
+            elif item.item == consts.ITEM_INFO["Ice Bomb"][0]:
+                await self.add_breath_bomb(self.emu_client.addresses.g_NUM_ICE_AMMO_RECEIVED, item_counts["Ice Bomb"], self.emu_client.addresses.ICE_BOMBS)
+            elif item.item == consts.ITEM_INFO["Spam Call"][0]:
+                await self.queue_trap(self.emu_client.addresses.g_TRAP_COUNTERS, "Spam Call", item_counts["Spam Call"])
+            elif item.item == consts.ITEM_INFO["Reverse Controls"][0]:
+                await self.queue_trap(self.emu_client.addresses.g_TRAP_COUNTERS+1, "Reverse Controls", item_counts["Reverse Controls"])
+            elif item.item == consts.ITEM_INFO["Bounce"][0]:
+                await self.queue_trap(self.emu_client.addresses.g_TRAP_COUNTERS+4, "Bounce", item_counts["Bounce"])
+            elif item.item == consts.ITEM_INFO["Damage Sparx"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 2)
+                if total < item_counts["Damage Sparx"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 2, total + 1)
+                    await self.emu_client.damage_sparx()
+            elif item.item == consts.ITEM_INFO["Gem Tax"][0]:
+                total = await self.emu_client.get_item_count(self.emu_client.addresses.g_TRAP_COUNTERS + 3)
+                if total < item_counts["Gem Tax"]:
+                    await self.emu_client.set_item(self.emu_client.addresses.g_TRAP_COUNTERS + 3, total + 1)
+                    await self.emu_client.gem_tax()
+    
+    async def add_breath_bomb(self, ammo_address, count, bomb_address):
+        total = await self.emu_client.get_item_count(ammo_address)
+        if total < count:
+            count = await self.emu_client.get_item_count(bomb_address)
+            await self.emu_client.set_item(ammo_address, total + 1)
+            await self.emu_client.set_item(bomb_address, count + 1)
+    
+    async def queue_trap(self, trap_address: int, name: str, count: int):
+        total = await self.emu_client.get_item_count(trap_address)
+        if total < count:
+            await self.emu_client.set_item(trap_address, total + 1)
+            self.emu_client.trap_queue.put_nowait(name)
+                
+    async def _unlock_shop(self, item_id, shop_type):
+        if shop_type == "Randomized":
+            name = self.item_names.lookup_in_slot(item_id, self.slot).replace(" Shop Unlock", "")
+            if "Depot" in name: await self.check_hub_access(name)
+            bit = consts.SHOP_PAD_LIST.index(name)
+            address = self.emu_client.addresses.g_SHOPPAD_BITFIELD + (bit // 8)
+            await self._set_keyring_or_shop(bit, address)
+        elif shop_type == "Progressive":
+            name = self.item_names.lookup_in_slot(item_id, self.slot).replace("Progressive ", "")
+            level = name.split(" - ")[0]
+            shops = consts.LEVEL_SHOP_LOOKUP[level].copy()
+            if self.slot_data["open_world_mode"] == 4: shops.reverse()
+            for shop in shops:
+                if f"{level} - {shop}" not in self.unlocked_shops:
+                    name = f"{level} - {shop}"
+                    if "Depot" in name: await self.check_hub_access(name)
+                    self.unlocked_shops.append(name)
+                    bit = consts.SHOP_PAD_LIST.index(name)
+                    address = self.emu_client.addresses.g_SHOPPAD_BITFIELD + (bit // 8)
+                    await self._set_keyring_or_shop(bit, address)
+                    break
+        elif shop_type == "Level":
+            level = self.item_names.lookup_in_slot(item_id, self.slot).split(" - ")[0]
+            for shop in consts.LEVEL_SHOP_LOOKUP[level]:
+                name = f"{level} - {shop}"
+                if "Depot" in name: await self.check_hub_access(name)
+                self.unlocked_shops.append(name)
+                bit = consts.SHOP_PAD_LIST.index(name)
+                address = self.emu_client.addresses.g_SHOPPAD_BITFIELD + (bit // 8)
+                await self._set_keyring_or_shop(bit, address)
+        elif shop_type == "Realm":
+            realm = self.item_names.lookup_in_slot(item_id, self.slot).split(" - ")[0]
+            for level in consts.REALM_LEVEL_LOOKUP[realm]:
+                for shop in consts.LEVEL_SHOP_LOOKUP[level]:
+                    name = f"{level} - {shop}"
+                    if "Depot" in name: await self.check_hub_access(name)
+                    self.unlocked_shops.append(name)
+                    bit = consts.SHOP_PAD_LIST.index(name)
+                    address = self.emu_client.addresses.g_SHOPPAD_BITFIELD + (bit // 8)
+                    await self._set_keyring_or_shop(bit, address)
+    
+    async def _unlock_starting_realm_shop(self, name: str):
+        bit = consts.SHOP_PAD_LIST.index(name)
+        address = self.emu_client.addresses.p_SHOPPAD_BITFIELD + (bit // 8)
+        await self._set_keyring_or_shop(bit, address)
+    
+    async def _set_keyring_or_shop(self, bit, address):
+        data = await self.emu_client.get_item_count(address)
+        flag = 1 << (bit % 8)
+        data |= flag
+        await self.emu_client.set_item(address, data)
+        
+    async def check_hub_access(self, name: str):
+        if "Village Depot" in name: await self.emu_client.allow_realm_access(0)
+        elif "Coastal Depot" in name: await self.emu_client.allow_realm_access(1)
+        elif "Frosty Depot" in name: await self.emu_client.allow_realm_access(2)
+        elif "Stormy Depot" in name: await self.emu_client.allow_realm_access(3)
+
+    async def _check_doors(self):
+        dark = await self.emu_client.get_item_count(self.emu_client.addresses.DARK_GEM_COUNT)
+        for idx, cost in enumerate(self.slot_data['boss_lair_costs']):
+            if idx in self._checked_boss_doors: continue
+            if dark >= cost:
+                self._checked_boss_doors.add(idx)
+                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG CHECKING BOSS LAIR DOOR COSTS"
+                match idx:
+                    case 0:
+                        msg = consts.COLOUR_WHITE, "You have enough Dark Gems for Gnasty's Lair!"
+                    case 1:
+                        msg = consts.COLOUR_WHITE, "You have enough Dark Gems for Ineptune's Lair!"
+                    case 2:
+                        msg = consts.COLOUR_WHITE, "You have enough Dark Gems for Red's Lair!"
+                    case 3:
+                        msg = consts.COLOUR_WHITE, "You have enough Dark Gems for Mecha-Red's Lair!"
+                self.emu_client.msg_queue.put_nowait(msg)
+        
+        light = await self.emu_client.get_item_count(self.emu_client.addresses.LIGHT_GEM_COUNT)
+        for idx, cost in enumerate(self.slot_data['light_gem_door_costs']):
+            if idx in self._checked_gem_doors: continue
+            if light >= cost:
+                self._checked_gem_doors.add(idx)
+                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG CHECKING LIGHT GEM DOOR COSTS"
+                match idx:
+                    case 0:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the door in Dragonfly Falls!"
+                    case 1:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the door in Coastal Remains!"
+                    case 2:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the door in Frostbite Village"
+                    case 3:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the door in Dark Mine!"
+                self.emu_client.msg_queue.put_nowait(msg)
+        
+        for idx, cost in enumerate(self.slot_data['gadget_costs']):
+            if idx in self._checked_gadgets: continue
+            if light >= cost:
+                self._checked_gadgets.add(idx)
+                msg = consts.COLOUR_RED, "SOMETHING WENT WRONG CHECKING GADGET COSTS"
+                match idx:
+                    case 0:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the Ball Gadget!"
+                    case 1:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the Invincibility Gadget!"
+                    case 2:
+                        msg = consts.COLOUR_WHITE, "You have enough Light Gems for the Supercharge Gadget!"
+                self.emu_client.msg_queue.put_nowait(msg)
+
+    async def _location_checks(self):
+        locations = await self.emu_client.scan_locations(self.slot_data)
+        if consts.STARTER_CHECK_IDS[0] not in self.checked_locations:
+            locations.update(consts.STARTER_CHECK_IDS)
+        locations -= self.checked_locations
+        if locations:
+            await self.send_msgs([{"cmd": "LocationChecks", "locations": locations}])
+    
+    async def _location_scouts(self):
+        locations = set()
+        if self.slot_data['auto_hinting']["Minigames"] == 1:
+            for obj, loc in consts.MINIGAME_OBJECTIVES.items():
+                flag = await self.emu_client.get_objective(obj)
+                if flag:
+                    locations.update(loc)
+        
+        if self.slot_data['auto_hinting']["Bosses"] == 1:
+            for obj, loc in consts.BOSS_LAIR_OPEN_OBJECTIVES.items():
+                flag = await self.emu_client.get_objective(obj)
+                if flag:
+                    locations.update(loc)
+        
+        if self.slot_data['auto_hinting']["Shop Items"] == 1 and not self.shop_hinted:
+            locations.update(consts.SHOP_ITEM_IDS[:self.slot_data['shop_item_count']])
+            self.shop_hinted = True
+                
+        locations -= self._scouted_locations
+        if locations:
+            self._scouted_locations.update(locations)
+            await self.send_msgs([{"cmd":"LocationScouts","locations":locations,"create_as_hint":2}])
+    
+    def _event_update(self, events: list[str]) -> bool:
+        self._in_logic_events = events
+        return True  # does nothing but is required (and is documented as such by UT)
+    
+    def _location_update(self, locations: list[str]) -> bool:
+        from ..AHTWorld import loc_names_to_ids
+        self._in_logic_locations = locations
+        self.in_logic_ids_to_names = collections.defaultdict(str)
+        for loc_name in self._in_logic_locations:
+            id = str(loc_names_to_ids[loc_name])
+            self.in_logic_ids_to_names[id] = loc_name
+        return True  # does nothing but is required (and is documented as such by UT)
+    
+    def _glitches_update(self, locations: list[str]) -> bool:
+        from ..AHTWorld import loc_names_to_ids
+        self._in_glitched_logic_locations = locations
+        self.in_glitched_ids_to_names = collections.defaultdict(str)
+        for loc_name in self._in_glitched_logic_locations:
+            id = str(loc_names_to_ids[loc_name])
+            self.in_glitched_ids_to_names[id] = loc_name
+        return True  # does nothing but is required (and is documented as such by UT)
+
+    async def check_goal(self) -> bool:
+        output = []
+        
+        last_one = self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()) - 1  # marks if check_goal_component should acknowledge being last goal or not
+        for goal in self.slot_data["goals_dict"]:
+            if not self.finished_goals[self.full_goal_list.index(goal)]:
+                done, new_output = await self.check_goal_component(goal, last_one)
+                self.finished_goals[self.full_goal_list.index(goal)] = done
+                if new_output != "": output.append(new_output)
+            
+        # tally goes +1 when a goal component is met. If that value matches however many goals there are, we're done!
+        if self.finished_goals.count(True) == len(self.slot_data["goals_dict"].keys()):
+            logger.info("INFO: All goals are complete, nice work!")
+            await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            return True
+        else:
+            if len(output) > 0:
+                logger.info(f"INFO: You've completed the following goal(s): {", ".join(output)}! Run /check_goal for info on what's left to do.")
+            return False
+
+    async def check_goal_component(self, goal: str, last_one: bool) -> tuple[bool, str]:
+        count = 0
+        for goal_id in self.slot_data["goals_dict"][goal]["ids"]:
+            if goal_id in self.checked_locations:
+                count += 1
+        
+        if count >= self.slot_data["goals_dict"][goal]["amount"]:
+            return_text = "" if last_one else goal
+            return True, return_text
+            
+        return False, ""
+    
+    async def _emu_loop(self):
+        has_goaled = False
+        try:
+            await self.auth_ready.wait()
+            if not await self.start_emu_client():
+                return
+
+            while not self.exit_event.is_set():
+                if not self.server or self.server.socket.closed:
+                    logger.info("INFO: Client disconnected.")
+                    await self.emu_client.disconnect()
+                    return
+
+                try:
+                    await asyncio.wait_for(self.watcher_event.wait(), 1.0)
+                except asyncio.TimeoutError:
+                    pass
+                self.watcher_event.clear()
+
+                if await self.emu_client.should_process_checks():
+                    if self.slot_data["death_link"] > 0:
+                        await self._send_deathlink()
+                    await self._receive_items()
+                    await self._check_doors()
+                    await self._location_checks()
+                    await self._location_scouts()
+                    if tracker_loaded:
+                        await self.emu_client.update_pause_gems(self._in_logic_events)
+                    if tracker_loaded:
+                        await self.emu_client.update_tracker(self.in_logic_ids_to_names, self.in_glitched_ids_to_names)
+                    if not has_goaled:
+                        has_goaled = await self.check_goal()
+        except Exception:
+            logger.info("WARNING: Error in main emulator loop, please report to developers.", exc_info=True)
+    
+    async def _send_deathlink(self):
+        if not self.deathlink_outgoing:  # client-side toggling of deathlink
+            return
+        death_id = await self.emu_client.export_deathlink()
+        if death_id:
+            if death_id < 0 or death_id > 27:
+                raise TypeError(f"Invalid outgoing deathlink id: {death_id}.")
+            await self.send_death(consts.DEATHLINK_MESSAGES[death_id - 1].format(name=self.player_names[self.slot]))
+
+    async def _receive_deathlink(self, msg: str):
+        self.emu_client.msg_queue.put_nowait((consts.COLOUR_RED, msg))
+        await self.emu_client.import_deathlink(self.slot_data['death_link'])
+    
+    def on_deathlink(self, data: dict) -> None:
+        if not self.deathlink_incoming:  # client-side toggling of deathlink
+            return
+        Utils.async_start(self._receive_deathlink(data.get('cause') or f"{data['source']} died."))
+
+    async def shutdown(self):
+        if self.emu_loop:
+            self.emu_loop.cancel()
+        if self.emu_client:
+            await self.emu_client.disconnect()
+        return await super().shutdown()

@@ -4,10 +4,13 @@
 # my stuff
 worlds/spyro_aht/setup/test.py
 worlds/spyro_aht/setup/test-locations.json
-worlds/spyro_aht/setup/Item & Location Stats.txt
-worlds/spyro_aht/setup/fuzzer meta files
 fuzz_output/
 determinism.py
+worlds/spyro_aht/setup/~$Gem Research.xlsx
+worlds/spyro_aht/setup/1 - region list.txt
+worlds/spyro_aht/setup/2 - region entrances.txt
+worlds/spyro_aht/setup/3 - locations.txt
+worlds/spyro_aht/setup/4 - gem events.txt
 
 *_Spoiler.txt
 *.bmbp

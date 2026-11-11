@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING
 import dolphin_memory_engine
 
 from NetUtils import NetworkItem
-from .client import GenericClient
-from ..data import consts, addresses
+from . import addresses
+from .. import consts
 
 if TYPE_CHECKING:
-    from ..context import SpyroAHTContext
+    from .context import SpyroAHTContext
 
-class DolphinClient(GenericClient):
+class DolphinClient:
     def retrieve_mod_version(self) -> tuple[int, int]:
         mod_version_full = dolphin_memory_engine.read_word(self.addresses.AP_VERSION_MAJOR)
         mod_version_major = mod_version_full >> 16
@@ -33,11 +33,10 @@ class DolphinClient(GenericClient):
         self.ready = asyncio.Event()
         self.msg_queue = asyncio.Queue()
         self.trap_queue = asyncio.Queue()
-        self.trap_timer = ctx.slot_data['trap_length']
+        self.trap_timers = ctx.slot_data['trap_length']
         self.addresses = None  # type: ignore
         
     async def notification_task(self):
-        from CommonClient import logger
         try:
             await self.ready.wait()
             while True:
@@ -55,10 +54,9 @@ class DolphinClient(GenericClient):
                     dolphin_memory_engine.write_bytes(self.addresses.n_TEXT_BUFFER, (msg + "\0").encode("utf_16_be"))
                     dolphin_memory_engine.write_word(self.addresses.n_TIMER, 5*60)
         except Exception:
-            logger.error("ERROR IN NOTIFICATION TASK, REPORT TO DEVS", exc_info=True)
+            self.logger.info("WARNING: Error in notification queue, please report to developers.", exc_info=True)
     
     async def trap_task(self):
-        from CommonClient import logger
         try:
             await self.ready.wait()
             while True:
@@ -67,41 +65,40 @@ class DolphinClient(GenericClient):
                     await asyncio.sleep(5)
                     name = await self.trap_queue.get()
                     
-                    dolphin_memory_engine.write_word(self.addresses.g_TRAP_DATA, 60*self.trap_timer)
+                    dolphin_memory_engine.write_word(self.addresses.g_TRAP_DATA, 60 * self.trap_timers[name])
                     if name == "Spam Call": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 1)
                     elif name == "Reverse Controls": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 2)
                     elif name == "Bounce": dolphin_memory_engine.write_byte(self.addresses.g_TRAP, 3)
-                    await asyncio.sleep(self.trap_timer - 5)
+                    await asyncio.sleep(self.trap_timers[name] - 5)
         except Exception:
-            logger.error("ERROR IN TRAP TASK, REPORT TO DEVS", exc_info=True)
+            self.logger.info("WARNING: Error in trap queue, please report to developers", exc_info=True)
 
     async def connect(self):
-        from CommonClient import logger
+        # exceptions raised here are caught and handled in context.py:start_emu_client
         if not dolphin_memory_engine.is_hooked():
             dolphin_memory_engine.hook()
-            game_id = dolphin_memory_engine.read_bytes(0x80000000, 6)
+            game_id = dolphin_memory_engine.read_bytes(0x80000000, 6).decode()
 
-            if game_id == b'G5SE7D':
-                logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. NTSC game detected.")
+            if game_id == consts.GAME_ID_NTSC:
+                self.logger.info(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. NTSC game detected.")
                 self.addresses = addresses.G5SE7D()
-            elif game_id == b'G5SP7D':
-                logger.info(f"Spyro: A Hero's Tail Archipelago (AHT AP) {consts.CLIENT_VERSION_STR} client initializing. PAL game detected.")
+            elif game_id == consts.GAME_ID_PAL:
+                self.logger.info(f"INFO: Spyro: A Hero's Tail Archipelago (AHT AP) client version {consts.CLIENT_VERSION_STR} initializing. PAL game detected.")
                 self.addresses = addresses.G5SP7D()
             else:
-                logger.error("WARNING: Invalid or unsupported game ID.")
-                return False
+                raise Exception(f"WARNING: Game ID {game_id} is invalid or unsupported.")
 
             mod_version_major, mod_version_minor = self.retrieve_mod_version()
+            mod_version_str = f"{mod_version_major}.{mod_version_minor}"
             
             if mod_version_major != consts.MOD_MAJOR:
-                logger.error(f"WARNING: Mod major version {mod_version_major} is incompatible with AHT AP {consts.CLIENT_VERSION_STR}. Please update game mod to major version {consts.MOD_MAJOR}.")
-                return False
+                raise Exception(f"WARNING: Mod version {mod_version_major} is incompatible with AHT AP version {consts.CLIENT_VERSION_STR}. Please update game mod to version {consts.MOD_MAJOR}.")
             if mod_version_major == consts.MOD_MAJOR and mod_version_minor < consts.MOD_MINOR:
-                logger.warn(f"NOTICE: Mod minor version {mod_version_minor} is compatible with AHT AP {consts.CLIENT_VERSION_STR}, but there is at least one new minor version available which may contain new features or bugfixes. Update at your leisure.")
+                self.logger.info(f"INFO: Mod version {mod_version_str} is compatible with AHT AP version {consts.CLIENT_VERSION_STR}, but there is a newer minor version available which may contain new features or bugfixes. Update at your leisure.")
             else:
-                logger.info(f"Game mod version {mod_version_major}.{mod_version_minor} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")
+                self.logger.info(f"INFO: Game mod version {mod_version_str} and AHT AP {consts.CLIENT_VERSION_STR} are compatible. Enjoy!")
         else:
-            logger.warn("NOTICE: Dolphin memory engine was already hooked. This may cause issues!")  # shouldn't ever happen currently I think
+            self.logger.info("WARNING: Dolphin memory engine was already hooked. This may cause issues!")
         self.ready.set()
     
     async def disconnect(self):
@@ -113,20 +110,21 @@ class DolphinClient(GenericClient):
             self.ready.clear()
     
     async def should_process_checks(self) -> bool:
-        m_state = dolphin_memory_engine.read_word(self.addresses.IN_GAME)
-        m_pause = dolphin_memory_engine.read_byte(self.addresses.PAUSE)
-        return m_state == 3 and (m_pause & 0x80 == 0)
+        if dolphin_memory_engine.is_hooked():
+            m_state = dolphin_memory_engine.read_word(self.addresses.IN_GAME)
+            m_pause = dolphin_memory_engine.read_byte(self.addresses.PAUSE)
+            return m_state == 3 and (m_pause & 0x80 == 0)
+        else: return False
 
     async def scan_locations(self, slot_data: dict) -> set[int]:
         result: set[int] = set()
-        for aploc, index in consts.LOCATIONS_BITFIELD.items():
+        for loc_id, offset in consts.LOCATIONS_BITFIELD.items():
             await asyncio.sleep(0)
 
-            addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
-            data = dolphin_memory_engine.read_byte(addr)
-            flag = data & (0b01 << ((index * 2) % 8))
-            if flag:
-                match aploc:
+            data = dolphin_memory_engine.read_byte(self.addresses.g_LOCATION_BITFIELD_COLLECTED + (offset // 8))
+            checked = data & 1 << (offset % 8)
+            if checked:
+                match loc_id:
                     case 701:  # breath from gnasty -> add defeated gnasty
                         result.update({701, 702})
                     case 703:  # breath from ineptune -> add defeated ineptune
@@ -134,7 +132,7 @@ class DolphinClient(GenericClient):
                     case 705:  # breath from red -> add defeated red
                         result.update({705, 706})
                     case _:
-                        result.add(aploc)
+                        result.add(loc_id)
         
         if slot_data["shop_randomization"]:
             for i in range(slot_data["shop_item_count"]):
@@ -146,10 +144,8 @@ class DolphinClient(GenericClient):
 
     async def set_flag(self, address: int, flag: int, to: bool):
         flags = dolphin_memory_engine.read_word(address)
-        if to:
-            flags |= flag
-        else:
-            flags &= ~flag
+        if to: flags |= flag
+        else: flags &= ~flag
         dolphin_memory_engine.write_word(address, int(flags))
     
     async def get_flag(self, address: int, flag: int) -> bool:
@@ -174,7 +170,9 @@ class DolphinClient(GenericClient):
         return b & (0x800e0) != 0
 
     async def set_breath(self, breath_id: int):
-        dolphin_memory_engine.write_word(self.addresses.ACTIVE_BREATH, breath_id)
+        convert = {consts.ITEM_INFO["Fire Breath"][0]: consts.BREATH_FIRE, consts.ITEM_INFO["Electric Breath"][0]: consts.BREATH_ELECTRIC,
+                   consts.ITEM_INFO["Water Breath"][0]: consts.BREATH_WATER, consts.ITEM_INFO["Ice Breath"][0]: consts.BREATH_ICE}
+        dolphin_memory_engine.write_word(self.addresses.ACTIVE_BREATH, convert[breath_id])
     
     async def get_item_count(self, address: int) -> int:
         return dolphin_memory_engine.read_byte(address)
@@ -191,8 +189,7 @@ class DolphinClient(GenericClient):
     async def add_gem_pack(self):
         value = random.randint(400, 600)
         double = dolphin_memory_engine.read_byte(self.addresses.g_INFINITE_DOUBLE_GEM)
-        if double:
-            value *= 2
+        if double: value *= 2
         count = dolphin_memory_engine.read_word(self.addresses.GEMS)
         dolphin_memory_engine.write_word(self.addresses.GEMS, count + value)
     
@@ -202,7 +199,7 @@ class DolphinClient(GenericClient):
         if (count - value) < 0: value = count
         dolphin_memory_engine.write_word(self.addresses.GEMS, count - value)
     
-    async def damage_sparx(self, logger):
+    async def damage_sparx(self):
         health = dolphin_memory_engine.read_word(self.addresses.HEALTH)
         decrease = 32
         if health == 64 and len([item for item in self.ctx.items_received if item.item == 0xF]) == 0: return # if no red Sparx
@@ -220,14 +217,25 @@ class DolphinClient(GenericClient):
         return False
 
     async def apply_patch(self):
-        if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == "on":
+        if self.ctx.slot_data["time_savers"]["Skip Cutscenes"] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_SKIP_CUTSCENE_BUTTON, 1)
-        if self.ctx.slot_data["time_savers"]["Skip Elevators"] == "on":
+        if self.ctx.slot_data["time_savers"]["Skip Elevators"] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_INSTANT_ELEVATORS, 1)
+        
+        convert_config = {2: 0, 1: 1, 0: 2}  # YAML: 0=disabled, 1=easy, 2=enabled. MOD: 0=enabled, 1=easy, 2=disabled
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_BLINK_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Blink']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SGTBYRD_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sgt. Byrd']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_SPARX_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Sparx']])
+        dolphin_memory_engine.write_byte(self.addresses.p_MINIGAME_TURRET_CONFIG, convert_config[self.ctx.slot_data['minigame_checks']['Cannon']])
             
         dolphin_memory_engine.write_byte(self.addresses.p_DISABLE_POPUPS, 1)
         dolphin_memory_engine.write_word(self.addresses.p_MW_SEED, (int(self.ctx._seed) & 0xffffffff))
-        dolphin_memory_engine.write_byte(self.addresses.p_USE_KEY_RINGS, self.ctx.slot_data['key_rings'])
+        
+        if self.ctx.slot_data['chest_keys'] == 1:  # level lockpicks
+            dolphin_memory_engine.write_byte(self.addresses.p_KEY_MODE, 2)
+        if self.ctx.slot_data['chest_keys'] >= 2:  # level or realm key rings
+            dolphin_memory_engine.write_byte(self.addresses.p_KEY_MODE, 1)
+        
         dolphin_memory_engine.write_byte(self.addresses.p_FIREWORKS_ARE_RANDOMIZED, self.ctx.slot_data['firework_checks'])
         dolphin_memory_engine.write_byte(self.addresses.p_UT_ENABLED, int(self.ctx.tracker_found))
         if self.ctx.slot_data['death_link']:
@@ -249,7 +257,7 @@ class DolphinClient(GenericClient):
         
         if self.ctx.slot_data["randomize_light_gem_door_costs"]:
             dolphin_memory_engine.write_bytes(self.addresses.p_LG_DOOR_COSTS, struct.pack(">BBBB", *self.ctx.slot_data["light_gem_door_costs"]))
-        if self.ctx.slot_data["randomize_boss_lair_doors"]:
+        if self.ctx.slot_data["randomize_boss_lair_door_costs"]:
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_COSTS, struct.pack(">BBBB", *self.ctx.slot_data["boss_lair_costs"]))
         
         b, i, s = self.ctx.slot_data['gadget_costs']
@@ -257,20 +265,20 @@ class DolphinClient(GenericClient):
         dolphin_memory_engine.write_byte(self.addresses.p_INVINCIBILITY_COST, i)
         dolphin_memory_engine.write_byte(self.addresses.p_SUPERCHARGE_COST, s)
 
-        convert = {"Dragon Kingdom": 0, "Lost Cities": 1, "Icy Wilderness": 2, "Volcanic Isle": 3}
+        convert_realm = {"Dragon Kingdom": 0, "Lost Cities": 1, "Icy Wilderness": 2, "Volcanic Isle": 3}
         realm_access = [False, False, False, False]
         for realm in self.ctx.slot_data['starting_realms']:
-            realm_access[convert[realm]] = True
+            realm_access[convert_realm[realm]] = True
 
-        dolphin_memory_engine.write_byte(self.addresses.p_STARTING_REALM, convert[self.ctx.slot_data['starting_realms'][0]])
+        dolphin_memory_engine.write_byte(self.addresses.p_STARTING_REALM, convert_realm[self.ctx.slot_data['starting_realms'][0]])
         dolphin_memory_engine.write_bytes(self.addresses.p_REALM_ACCESS, struct.pack(">????", *realm_access))
 
         if self.ctx.slot_data['open_world_mode'] > 1 and self.ctx.slot_data['pause_menu_patch'] == 0:
             # non-full open world with "open shop" pause menu needs to have starting realm depot shops forcibly unlocked
-            convert = {0: "Dragon Village - Village Depot", 1: "Coastal Remains - Coastal Depot", 2: "Frostbite Village - Frosty Depot", 3: "Stormy Beach - Stormy Depot"}
+            convert_open_world = {0: "Dragon Village - Village Depot", 1: "Coastal Remains - Coastal Depot", 2: "Frostbite Village - Frosty Depot", 3: "Stormy Beach - Stormy Depot"}
             for index, realm in enumerate(realm_access):
                 if realm:  # if this is a starting realm
-                    shop_name = convert[index]
+                    shop_name = convert_open_world[index]
                     self.ctx.unlocked_shops.append(shop_name)
                     await self.ctx._unlock_starting_realm_shop(shop_name)
         
@@ -288,7 +296,7 @@ class DolphinClient(GenericClient):
                         bosses[3] = True
             dolphin_memory_engine.write_bytes(self.addresses.p_BOSS_EASY_MODE, struct.pack(">????", *bosses))
             
-        if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == "on":
+        if self.ctx.slot_data['time_savers']["Teleport Across Realms"] == 1:
             dolphin_memory_engine.write_byte(self.addresses.p_TELEPORT_ANYWHERE, 1)
             
         if self.ctx.slot_data['open_world_mode'] == 1:
@@ -304,59 +312,64 @@ class DolphinClient(GenericClient):
         dolphin_memory_engine.write_byte(self.addresses.p_RANDOMIZE_SHOP, 1)
         dolphin_memory_engine.write_word(self.addresses.p_XLS_SHOP_ROWCOUNT, len(shop_items)+1)
 
-        for idx, item in enumerate(shop_items):
+        for item_num, item in enumerate(shop_items):
             player = self.ctx.player_names[item.player]
             name = self.ctx.item_names.lookup_in_slot(item.item, item.player)
             game = self.ctx.slot_info[item.player]
             model = consts.ShopItemModel.Lockpick
-            price = self.ctx.slot_data["shop_costs"][idx]
+            price = self.ctx.slot_data["shop_costs"][item_num]
             if game.game == "Spyro: A Hero's Tail":
-                match item.item:
-                    case 0xE:
-                        model = consts.ShopItemModel.FireBomb
-                    case 0x5:
-                        model = consts.ShopItemModel.ElectricBomb
-                    case 0x6:
-                        model = consts.ShopItemModel.WaterBomb
-                    case 0x7:
-                        model = consts.ShopItemModel.IceBomb
-                    case 0xF:
-                        model = consts.ShopItemModel.HealthUpgrade
-                    case 0x19:
-                        model = consts.ShopItemModel.ButterflyJar
-                    case 0x1A:
-                        model = consts.ShopItemModel.DoubleGems
-                    case 0x1B:
-                        model = consts.ShopItemModel.Shockwave
-                    case 0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B | 0x2C | 0x2D | 0x2E | 0x2F:
-                        model = consts.ShopItemModel.Keychain
+                if item.item == consts.ITEM_INFO["Fire Breath"][0] or item.item == consts.ITEM_INFO["Fire Bomb"][0]:
+                    model = consts.ShopItemModel.FireBomb
+                elif item.item == consts.ITEM_INFO["Electric Breath"][0] or item.item == consts.ITEM_INFO["Electric Bomb"][0]:
+                    model = consts.ShopItemModel.ElectricBomb
+                elif item.item == consts.ITEM_INFO["Water Breath"][0] or item.item == consts.ITEM_INFO["Water Bomb"][0]:
+                    model = consts.ShopItemModel.WaterBomb
+                elif item.item == consts.ITEM_INFO["Ice Breath"][0] or item.item == consts.ITEM_INFO["Ice Bomb"][0]:
+                    model = consts.ShopItemModel.IceBomb
+                elif item.item == consts.ITEM_INFO["Health Unit+"][0]:
+                    model = consts.ShopItemModel.HealthUpgrade
+                elif item.item == consts.ITEM_INFO["Butterfly Jar"][0]:
+                    model = consts.ShopItemModel.ButterflyJar
+                elif item.item == consts.ITEM_INFO["Double Gems"][0]:
+                    model = consts.ShopItemModel.DoubleGems
+                elif item.item == consts.ITEM_INFO["Shockwave"][0]:
+                    model = consts.ShopItemModel.Shockwave
+                elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
+                    model = consts.ShopItemModel.Keychain
             
             remote_price = price if self.ctx.slot_data["shop_randomization"] else (price * 1.25)
             large_prices = self.ctx.slot_data["shop_randomization"] == 1 and self.ctx.slot_data["shop_logic"] == 1  # large prices are only a concern if shop logic is ordered
-            name = "???" if self.ctx.slot_data["hide_shop_item_names"] else name
-            i = consts.XLSShoppingItem(model, consts.TextEntry(idx, f"{player}'s {name}"), (price, remote_price), large_prices)
-            dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (idx + 1)), i.to_bytes('big'))
-            dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * idx), i.text.to_bytes('big'))
+            
+            if "Player" in self.ctx.slot_data["disguise_shop_items"]: player = "???"
+            if "Item" in self.ctx.slot_data["disguise_shop_items"]: name = "???"
+            if "Model" in self.ctx.slot_data["disguise_shop_items"]: model = consts.ShopItemModel.Lockpick
+            bought = consts.SHOP_ITEM_IDS[0] + item_num in self.ctx.checked_locations
+            
+            i = consts.XLSShoppingItem(model, consts.TextEntry(item_num, f"{player}'s {name}", bought), (price, remote_price), large_prices)
+            dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (item_num + 1)), i.to_bytes('big'))
+            dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * item_num), i.text.to_bytes('big'))
 
-    async def update_tracker(self, in_logic_ids_to_names: dict[str, str]):
-        from .. import loc_names_to_ids
+    async def update_tracker(self, in_logic_ids_to_names: dict[str, str], in_glitched_ids_to_names: dict[str, str]):
         # server_locations is list of all location ids for this slot, regardless of check status. combination of checked_locations and missing_locations
         for loc_id in self.ctx.server_locations:
-            if loc_id in self.ctx.checked_locations:
-                continue  # don't update icon if already checked
-            else:
-                if loc_id not in consts.LOCATIONS_BITFIELD:
-                    continue  # don't update if it doesn't have an icon
-                    
-                if in_logic_ids_to_names[str(loc_id)] == "":
-                    continue  # skip if not in logic (no KeyError because defaultdict. Instead, "" comes back
-                
-                index = consts.LOCATIONS_BITFIELD[loc_id]
-                addr = self.addresses.g_LOCATION_BITFIELD + (index * 2) // 8
-                bit = (index * 2) % 8
-                data = dolphin_memory_engine.read_byte(addr)
-                dolphin_memory_engine.write_byte(addr, data | (0b10 << bit))
-        return loc_names_to_ids
+            # exclusions: skip if no icon or if unchecked + unreachable
+            if loc_id not in consts.LOCATIONS_BITFIELD: continue
+            if loc_id not in self.ctx.checked_locations and in_logic_ids_to_names[str(loc_id)] == "" and in_glitched_ids_to_names[str(loc_id)] == "": continue
+            
+            # otherwise, update the icon accordingly to be checked, reachable, or glitched-reachable
+            if in_logic_ids_to_names[str(loc_id)] != "":
+                await self.write_icon(self.addresses.g_LOCATION_BITFIELD_REACHABLE, consts.LOCATIONS_BITFIELD[loc_id])
+            elif in_glitched_ids_to_names[str(loc_id)] != "":
+                await self.write_icon(self.addresses.g_LOCATION_BITFIELD_REACHABLE_TRICK, consts.LOCATIONS_BITFIELD[loc_id])
+            elif loc_id in self.ctx.checked_locations:
+                await self.write_icon(self.addresses.g_LOCATION_BITFIELD_COLLECTED, consts.LOCATIONS_BITFIELD[loc_id])
+            
+    async def write_icon(self, bitfield: int, bit: int):
+        """Updates a map icon, given a bitfield address and index."""
+        data = dolphin_memory_engine.read_byte(bitfield + (bit // 8))
+        flag = 1 << (bit % 8)
+        dolphin_memory_engine.write_byte(bitfield + (bit // 8), data | flag)
 
     async def update_pause_gems(self, events: list[str]):
         if not self.ctx.slot_data["shop_randomization"]:
@@ -383,7 +396,7 @@ class DolphinClient(GenericClient):
     
     async def allow_realm_access(self, id: int):
         current: list[bool] = list(struct.unpack(">????", dolphin_memory_engine.read_bytes(self.addresses.g_REALM_ACCESS, 4)))
-        current[id - 0x30] = True
+        current[id] = True
         dolphin_memory_engine.write_bytes(self.addresses.g_REALM_ACCESS, struct.pack(">????", *current))
     
     async def toggle_double_gems(self, to: bool):
