@@ -138,8 +138,9 @@ class EldersGoal(OptionSet):
 
 
 class MinigamesGoal(OptionCounter):
-    """Adds a goal requirement to complete minigames (0-8 each). Enter -1 for a random number 1-8. Enter -2 for a
-    1/2 chance of 0 and 1/2 chance of 1-8."""
+    """Adds a goal requirement to complete a number of each type of minigame (up to 8 each).
+    Enter -1 for a random number 1-8.
+    Enter -2 for a 50% chance of 0 and a 50% chance of a random number 1-8."""
     display_name = "Minigames Goal"
     valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
     min = -2
@@ -165,7 +166,7 @@ class ExcludeChestItems(Choice):
 ###############CHECKS AND ITEMS###############
 class EnabledTricks(OptionSet):
     """AHT AP's default logic stays very close to vanilla, casual logic. This option lets you choose to
-    enable a series of alternative logic conditions ("tricks") which you may be expected to do. Youc an enable tricks
+    enable a series of alternative logic conditions ("tricks") which you may be expected to do. You can enable tricks
     individually, or through a few presets. You can also combine them, for example as ["Easy", "Medium", "some trick name here"].
     Entering "Random" will pick a subset of not-already-chosen tricks.
     
@@ -206,9 +207,11 @@ class FireworkChecks(Toggle):
 
 
 class MinigameChecks(OptionCounter):
-    """Customize how much of each type of minigame is able to be done.
-    Enter 0 to disable the minigame. Enter 1 to keep it enabled, but only with Dragon Egg challenges.
-    Enter 2 to leave fully enabled. Enter 3 for a random choice of 0-2."""
+    """Customizes your minigame experience (Blink, Cannons, Sgt. Byrd, and Sparx). Enter 0-3 for each.
+    0 disables the minigame entirely and despawns its NPC(s).
+    1 disables just the Light Gem challenges.
+    2 leaves it fully enabled.
+    3 chooses a number 0-2 at random."""
     display_name = "Minigame Checks"
     valid_keys = ("Blink", "Cannon", "Sgt. Byrd", "Sparx")
     min = 0
@@ -223,13 +226,13 @@ class MinigameChecks(OptionCounter):
 
 class ItemBundles(OptionCounter):
     """Some AHT AP items can be bundled together so that you receive multiple at a time. For example, if you set the
-    Dark Gem bundle size to 7, there would be 6 "Dark Gem Bundle" items created. 5 would be worth 7 each (35 total)
-    and the 6th would be worth 5 (to get to 40 total).
+    Dark Gem bundle size to 7, there would be 6 "Dark Gem Bundle" items created. The first 5 would be worth 7
+    each (35 total), and the 6th would be worth 5 (to get to 40 total).
     
     Currently supported items for bundling:
-    Dark Gem: bundle size 1-40, or 0 for random choice.
-    Global Lockpick: bundle size 1-52, or 0 for random choice. Requires chest_keys to be set to global_lockpicks.
-    Light Gem: bundle size 1-100, or 0 for random choice."""
+    Dark Gem: bundle size 1-40, or 0 for random choice 1-40.
+    Global Lockpick: bundle size 1-52, or 0 for random choice 1-52. Only takes effect if chest_keys is set to global_lockpicks.
+    Light Gem: bundle size 1-100, or 0 for random choice 1-100."""
     display_name = "Item Bundles"
     valid_keys = ("Dark Gem", "Global Lockpick", "Light Gem")
     min = 0
@@ -248,7 +251,7 @@ class CannonLock(Toggle):
     
     
 class TrapPercentage(Range):
-    """Decides how much of the junk (fillers + traps) item pool will be traps, as a percentage out of 100."""
+    """Decides how much of the junk (filler + traps) item pool will be traps, as a percentage out of 100."""
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
@@ -290,8 +293,8 @@ class TrapItems(OptionSet):
 
 
 class TrapLength(OptionCounter):
-    """Determines how long Spam Call, Reverse Controls, and Bounce run for, in seconds (maximum 60).
-    Set to 0 to have a random number of seconds chosen."""
+    """Determines how long Spam Call, Reverse Controls, and Bounce run for, in seconds (up to 60).
+    Set to 0 to have a random number of seconds chosen (1-60)."""
     display_name = "Trap Length"
     valid_keys = ("Spam Call", "Reverse Controls", "Bounce")
     min = 0
@@ -482,10 +485,10 @@ class RandomizeGadgetCosts(Choice):
 
 
 class RandomCosts(OptionCounter):
-    """If randomize_boss_lair_door_costs, randomize_light_gem_door_costs, or randomize_gadget_costs are set to randomized,
-    this option determines the bounds of each randomly generated cost. Enter 0 for any to get a random choice.
+    """If boss lair, Light Gem doors, or gadget costs are set to randomized, this option determines the bounds of each
+    randomly generated cost. Enter 0 for any to get a random choice.
     
-    Light Gem door and gadget costs can't exceed 90 if open world mode is set to vanilla, due to being too restrictive."""
+    Light Gem door and gadget costs can't exceed 90 if open world mode is set to vanilla, as a preventative measure for restrictive seeds."""
     display_name = "Random Costs"
     valid_keys = ("Boss Lair Min", "Boss Lair Max", "Light Gem Door Min", "Light Gem Door Max", "Gadget Min", "Gadget Max")
     min = 0
@@ -540,7 +543,9 @@ class ShopPadProximityActivation(Toggle):
 
 class AutoHinting(OptionCounter):
     """Toggles automatic hinting for boss rewards (upon opening their lair), minigames (upon talking to NPCs), and
-    shop items (upon creating the save file). For each, enter 0 for off, 1 for on, or 2 for a random choice of 0-1."""
+    shop items (upon creating the save file).
+    For each, enter 0 to disable automatic hinting, or 1 to enable automatic hinting.
+    Enter 2 to have a random choice of 0-1."""
     display_name = "Auto Hinting"
     valid_keys = ("Bosses", "Minigames", "Shop Items")
     min = 0
@@ -577,8 +582,8 @@ class EasyBosses(OptionSet):
 
 
 class TimeSavers(OptionCounter):
-    """Choose which time-saving quality of life patches are enabled.
-    For each, enter 0 for off, 1 for on, or 2 for a random choice of 0-1.
+    """Choose which time-saving quality of life patches are enabled. For each, enter 0 for off, or 1 for on.
+    Enter 2 for a random choice of 0-1.
     
     Skip Cutscenes: skip most cutscenes with the Y button.
     Skip Elevators: skips long elevator waits with a loading screen.
@@ -607,9 +612,9 @@ class SpyroAHTOptions(PerGameCommonOptions):
     fireworks_goal: FireworksGoal
     shop_items_goal: ShopItemsGoal
     locked_chests_goal: LockedChestsGoal
-    exclude_chest_items: ExcludeChestItems
     elders_goal: EldersGoal
     minigames_goal: MinigamesGoal
+    exclude_chest_items: ExcludeChestItems
     
     enabled_tricks: EnabledTricks
     open_world_mode: OpenWorldMode

@@ -23,15 +23,6 @@ from .. import consts
 class SpyroAHTCommands(ClientCommandProcessor):
     ctx: SpyroAHTContext
     
-    async def _cmd_reset_client(self) -> bool:
-        """Forcibly reconnect the client."""
-        self.output("Resetting client...")
-        if self.ctx.emu_client:
-            self.ctx.emu_loop.cancel()
-            await self.ctx.emu_client.disconnect()
-        self.ctx.emu_loop = asyncio.create_task(self.ctx._emu_loop())
-        return True
-    
     async def _cmd_console_testing(self) -> bool:
         """This command is intended for developer testing use, but can be used if it for some reason appeals to you :)
         It toggles whether console-sent items should be ignored from the list of items the client re-syncs to the game
