@@ -8,7 +8,7 @@ from typing import Any, override
 import orjson
 
 from BaseClasses import Item, MultiWorld, Region, CollectionState, ItemClassification
-from Options import OptionError, OptionSet, Choice, Range, OptionDict
+from Options import OptionError, OptionSet, Choice, Range, OptionCounter
 from rule_builder.options import OptionFilter
 from rule_builder.rules import Has, Rule, True_, And, False_, HasAny, Or
 from worlds.AutoWorld import World, WebWorld
@@ -310,15 +310,17 @@ class SpyroAHTWorld(World):
                     
         # a ton of option sets which have "Random" as an option, all handled here due to nearly identical logic
         for option in [self.options.enabled_tricks, self.options.movement_randomization, self.options.starting_breaths, self.options.starting_realms, 
-                       self.options.disguise_shop_items, self.options.easy_bosses, self.options.filler_items, self.options.trap_items]:
+                       self.options.disguise_shop_items, self.options.easy_bosses, self.options.filler_items, self.options.trap_items, self.options.boss_goal, self.options.elders_goal]:
             if "Random" in option.value or (option.display_name == "Starting Realms" and len(option.value) == 0):  # realms is exception since there must be at least 1
                 if option.display_name != "Starting Realms": option.value.remove("Random")
                 unchosen = [choice for choice in option.valid_keys if choice != "Random" and choice not in option.value]
                 if option.display_name == "Enabled Tricks": unchosen = [choice for choice in unchosen if choice not in ["Easy", "Medium", "Hard", "Other"]]  # tricks have preset keys to remove
                 self.random_choices_pls(option, unchosen)
-                
-        self.check_qol_dicts(self.options.auto_hinting)
-        self.check_qol_dicts(self.options.time_savers)
+
+        # OptionCounters each could have keys omitted, or have random choices requested. minigames_goal is more left out because it's more complicated        
+        self.check_option_counters(self.options.auto_hinting, {0: "off", 1: "on"}, 2)
+        self.check_option_counters(self.options.time_savers, {0: "off", 1: "on"}, 2)
+        self.check_option_counters(self.options.minigame_checks, {0: "disabled", 1: "no Light Gems", 2: "enabled"}, 3)
         
         bad_condition = self.options.time_savers.value["Teleport Across Realms"] == 0 and self.options.open_world_mode.value != 0
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -339,25 +341,7 @@ class SpyroAHTWorld(World):
         if self.options.trap_percentage.value < 100: self.check_filler_and_traps(self.options.filler_items, list(self.options.filler_items.valid_keys))
         if self.options.trap_percentage.value > 0: self.check_filler_and_traps(self.options.trap_items, list(self.options.trap_items.valid_keys))
         
-        self.check_lists(self.options.boss_goal, "bosses")
-        self.check_lists(self.options.elders_goal, "elders")
-
-        # minigame checks
-        convert = {0: "disabled", 1: "only easy", 2: "enabled"}
-        for key in self.options.minigame_checks.valid_keys:
-            bad_condition = self.options.minigame_checks.value.get(key, "") == ""
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: minigame_checks setting \"{key}\" was omitted from YAML. Fixing by assuming a value of 0 (disabled).", consts.LoggingLevel.WARNING)
-                self.options.minigame_checks.value[key] = 0
-                continue
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"minigame_checks setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
-                
-            if self.options.minigame_checks.value[key] == 3:
-                self.options.minigame_checks.value[key] = self.random.randint(0, 2)
-                self.log(f"Random was requested for \"{key}\" in minigame_checks. {self.options.minigame_checks.value[key]} ({convert[self.options.minigame_checks.value[key]]}) was chosen.", consts.LoggingLevel.MEDIUM)
-        
-        # minigames goal
+        # minigames goal. Repeats some code (checking for omitted keys) because the rest isn't compatible with how OptionCounters do it
         for key in self.options.minigames_goal.valid_keys:
             bad_condition = self.options.minigames_goal.value.get(key, "") == ""
             if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
@@ -534,21 +518,6 @@ class SpyroAHTWorld(World):
             self.log(f"Random was requested for {option.display_name}. [{", ".join(choices)}] was chosen to be added to {option.display_name}.", consts.LoggingLevel.MEDIUM)
             option.value.update(choices)
             
-    def check_qol_dicts(self, option: OptionDict):
-        convert = {0: "off", 1: "on"}
-        for key in option.valid_keys:
-            bad_condition = option.value.get(key, "") == ""
-            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of 0 (off).", consts.LoggingLevel.WARNING)
-                option.value[key] = 0
-                continue
-            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-                raise OptionError(f"{option.display_name} setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
-            
-            if option.value[key] == 2:
-                option.value[key] = self.random.randint(0, 1)
-                self.log(f"Random was requested for \"{key}\" in {option.display_name}. It was set to {option.value[key]} ({convert[option.value[key]]}).", consts.LoggingLevel.MEDIUM)
-        
     def check_filler_and_traps(self, option: OptionSet, items: list):
         if len(option.value) == 0:
             items.sort()
@@ -557,31 +526,20 @@ class SpyroAHTWorld(World):
             choices = self.random.sample(items, k=rand_num)
             self.log(f"{option.display_name} was left empty, but at least one is needed. The item(s) {", ".join(choices)} were chosen at random.", consts.LoggingLevel.MEDIUM)
             option.value.update(choices)
-        
-    def check_lists(self, option: OptionSet, error_text: str):
-        if "Random" in option.value:  # 3 cases to deal with here, all relate to having Random in the list
-            choices = [choice for choice in option.valid_keys if choice in option.value and choice != "Random"]
-            rand_count = 0
-            if len(choices) == 0:  # random is the only thing in the list
-                rand_count = self.random.randint(1, 4)
-            elif 1 <= len(choices) <= 3:  # there's other things in the list
-                rand_count = self.random.randint(1, 4 - len(choices))
-            elif len(choices) == 4:
-                if self.options.auto_corrections >= 2:  # fix_minor
-                    self.log(f"Minor Warning: \"Random\" was entered into {option.display_name}, but all 4 {error_text} were chosen alongside it. Fixing by removing the \"Random\".", consts.LoggingLevel.WARNING)
-                    option.value.remove("Random")
-                elif self.options.auto_corrections.value == 0:  # halt
-                    raise OptionError(f"\"Random\" was entered into {option.display_name}, but all 4 {error_text} were chosen alongside it. Fix this, or set auto_corrections to at least fix_minor.")
-
-            if rand_count > 0:
-                option.value.remove("Random")
-                available_choices = [choice for choice in option.valid_keys if choice not in choices and choice != "Random"]
-                while rand_count > 0:
-                    rand_choice = self.random.choice(available_choices)
-                    option.value.add(rand_choice)
-                    available_choices.remove(rand_choice)
-                    rand_count -= 1
-                self.log(f"Random was requested for {option.display_name}. List is now: {", ".join(option.value)}.", consts.LoggingLevel.MEDIUM)
+    
+    def check_option_counters(self, option: OptionCounter, convert: dict, rand_num: int):
+        for key in option.valid_keys:
+            bad_condition = option.value.get(key, "") == ""
+            if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
+                self.log(f"Minor Warning: {option.display_name} setting \"{key}\" was omitted from YAML. Fixing by assuming a value of 0 (disabled).", consts.LoggingLevel.WARNING)
+                option.value[key] = 0
+                continue
+            elif bad_condition and self.options.auto_corrections.value == 0:  # halt
+                raise OptionError(f"{option.display_name} setting \"{key}\" was omitted from YAML. Fix this, or set auto_corrections to at least fix_minor.")
+            
+            if option.value[key] == rand_num:
+                option.value[key] = self.random.randint(0, rand_num-1)
+                self.log(f"Random was requested for \"{key}\" in {option.display_name}. {option.value[key]} ({convert[option.value[key]]}) was chosen.", consts.LoggingLevel.MEDIUM)
     
     def check_minigame_goal_values(self, npc: str, output: str, setting: int, max_amount: int):
         bad_condition = self.options.minigame_checks[npc] == setting and self.options.minigames_goal[npc] > max_amount

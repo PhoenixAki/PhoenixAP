@@ -361,7 +361,7 @@ class ChestKeys(Choice):
     is disabled, or placed into the world by Archipelago otherwise.
     
     The way chests come into logic depends on chest_keys as well as shop_randomization. See the project wiki for a breakdown:
-    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-2-%E2%80%90-Features-(Overview)
+    https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-2-%E2%80%90-Features-(Overview)#chest-keys
     
     global_lockpicks: each opens 1 chest anywhere in the game. Same as vanilla game lockpicks.
     level_lockpicks: each opens 1 chest in a specific level e.g. "Sunken Ruins Lockpick"
