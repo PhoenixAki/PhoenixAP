@@ -91,7 +91,7 @@ def create_location_groups(location_data) -> dict[str, set[str]]:
                 loc_groups["All Bosses"].add(location['name'])
             # light gem doors
             if "Light Gem door" in location['name']:
-                loc_groups["Light Gem Doors"].add(location['name'])
+                loc_groups["All Light Gem Doors"].add(location['name'])
                 loc_groups[f"{level} Light Gem Door"].add(location['name'])
             # ball gadget checks (including the firework after it in CD since it requires Ball Gadget to reach)
             if region['name'] in ["CDBallGadget", "MFBallGadget"]:
