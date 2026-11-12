@@ -407,8 +407,8 @@ class SpyroAHTWorld(World):
                 self.log(f"Random value was requested for \"{key}\" in trap_length. {self.options.trap_length.value[key]} was chosen.", consts.LoggingLevel.MEDIUM)
         
         # light gem and dragon egg goals need checking for being set too high while having some excluded from chests or disabled via minigame_checks
-        self.check_egg_and_gem_goals(self.options.light_gems_goal, 15, self.options.exclude_chest_items >= 2)
-        self.check_egg_and_gem_goals(self.options.dragon_eggs_goal, 16, self.options.exclude_chest_items.value in [1, 3])
+        self.check_egg_and_gem_goals(self.options.light_gems_goal)
+        self.check_egg_and_gem_goals(self.options.dragon_eggs_goal)
         
         # setup costs. Don't need to if UT gen, since UT gets cost info from slot data
         if not self.ut_active:
@@ -549,35 +549,22 @@ class SpyroAHTWorld(World):
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
             raise OptionError(f"{npc} minigames were enabled as a goal, but {self.options.minigames_goal[npc]} is too high a value due to setting {npc} minigames to {setting} ({output}). Fix this, or set auto_corrections to at least fix_minor.")
                     
-    def check_egg_and_gem_goals(self, option: Range, count: int, chest_error: bool):
-        max_value = option.range_end - count
-        bad_condition = option.value > max_value and chest_error
-        if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log(f"Minor Warning: {option.display_name} is set to {option.value}, but {count} from chests are excluded from goals via exclude_chest_items. Fixing by lowering {option.display_name} to {option.value-count}.", consts.LoggingLevel.WARNING)
-            option.value -= count
-            max_value = option.value
-        elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError(f"{option.display_name} is set to {option.value}, but {count} from chests are excluded from goals via exclude_chest_items. Fix this, or set auto_corrections to at least fix_minor.")
-        # calculate how many minigame checks are disabled, separated by type for better output
-        egg_lower, gem_lower = 0, 0
-        for minigame in self.options.minigame_checks.valid_keys:
-            if self.options.minigame_checks.value[minigame] == 1: gem_lower += 4
-            elif self.options.minigame_checks.value[minigame] == 0: egg_lower, gem_lower = egg_lower+4, gem_lower+4
-        # adjust output and math based on which option, due to the separation by type above
-        if option.display_name == "Dragon Eggs Goal":
-            output = f"{egg_lower} Dragon Egg minigame checks"
-            true_lower = egg_lower
-        else:
-            output = f"{gem_lower} Light Gem minigame checks"
-            true_lower = gem_lower
+    def check_egg_and_gem_goals(self, option: Range):
+        lower = 0
+        if option.display_name == "Dragon Eggs Goal" and self.options.exclude_chest_items.value in [1, 3]: lower += 16
+        elif option.display_name == "Light Gems Goal" and self.options.exclude_chest_items.value in [2, 3]: lower += 15
         
-        max_value -= egg_lower + gem_lower
-        bad_condition = option.value > max_value
+        for minigame in self.options.minigame_checks.valid_keys:
+            if self.options.minigame_checks.value[minigame] == 0: lower += 4  # fully disabled
+            elif self.options.minigame_checks.value[minigame] == 1: lower += 2  # partially disabled
+        
+        self.log(f"{option.display_name} has {lower} total exclusions from exclude_chest_items and/or minigame_checks.", consts.LoggingLevel.HIGH)
+        bad_condition = option.value > (option.range_end - lower)
         if bad_condition and self.options.auto_corrections.value >= 2:  # fix_minor
-            self.log(f"Minor Warning: {option.display_name} is set to {option.value}, but {output} are disabled. Fixing by lowering lowering {option.display_name} to {option.value-true_lower}.", consts.LoggingLevel.WARNING)
-            option.value -= true_lower
+            self.log(f"Minor Warning: {option.display_name} is set too high due to exclusions from exclude_chest_items and/or minigame_checks. Fixing by lowering {option.display_name} to {option.range_end - lower}.", consts.LoggingLevel.WARNING)
+            option.value = option.range_end - lower
         elif bad_condition and self.options.auto_corrections.value == 0:  # halt
-            raise OptionError(f"{option.display_name} is set to {option.value}, but {output} are disabled. Fis this, or set auto_corrections to at least fix_minor.")
+            raise OptionError(f"{option.display_name} is set too high due to exclusions from exclude_chest_items and/or minigame_checks. Fix this, or set auto_corrections to at least fix_minor.")
          
     def check_item_bundles(self, name: str, max: int):
         bad_condition = self.options.item_bundles.value[name] > max
@@ -974,8 +961,7 @@ class SpyroAHTWorld(World):
             self.get_location(goal_event).access_rule = self.get_location(location_name).access_rule
     
     def fix_rule_for_ut(self, rule: Or):
-        """Takes an Or rule and, if it is a trick-affected rule, returns the rule with its trick rule replaced with a UT glitched logic rule.
-        Otherwise, returns the rule unmodified."""
+        """Takes a trick-affected rule and alters it to be compatible with UT's glitched logic feature."""
         children: list[Rule] = []
         for child in rule.children:  # child = one half of the original Or(normal_logic, trick_logic)
             if len(child.options) == 0:
@@ -983,7 +969,10 @@ class SpyroAHTWorld(World):
             else:
                 for option in child.options:
                     if option.option.display_name == "Enabled Tricks":
-                        children.append(Or(child, Has(consts.GLITCHED_LOGIC_ITEM_NAME)))
+                        new_true = True_(options=(option,))
+                        child.options = ()
+                        new_or = Or(new_true, Has(consts.GLITCHED_LOGIC_ITEM_NAME))
+                        children.append(And(new_or, child))
                         break
                 else:
                     children.append(child)

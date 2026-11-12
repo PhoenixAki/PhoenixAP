@@ -182,7 +182,22 @@ class SpyroAHTCommands(ClientCommandProcessor):
             self.output(f"Toggling incoming DeathLink from {self.ctx.deathlink_incoming} to {not self.ctx.deathlink_incoming}.")
             self.ctx.deathlink_incoming = not self.ctx.deathlink_incoming
         return True
+    
+    async def _cmd_enabled_tricks(self) -> bool:
+        """Lists all enabled tricks for this seed."""
+        if len(self.ctx.slot_data) == 0:
+            self.output("Connect to a slot before using commands.")
+            return True
         
+        tricks = {"Easy": [], "Medium": [], "Hard": [], "Other": []}
+        for trick in self.ctx.slot_data["enabled_tricks"]:
+            for level in ["Easy", "Medium", "Hard", "Other"]:
+                if trick in consts.TRICK_LEVELS[level]: tricks[level].append(trick)
+        
+        for level in tricks.keys():
+            if len(tricks[level]) == 0: self.output(f"Enabled {level} Tricks: none.")
+            else: self.output(f"Enabled {level} Tricks: {tricks[level]}.")
+        return True
 
 class SpyroAHTContext(SuperContext):
     tags = {"AP"}
