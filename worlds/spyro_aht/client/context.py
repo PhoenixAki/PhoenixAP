@@ -373,7 +373,7 @@ class SpyroAHTContext(SuperContext):
                 await self.emu_client.toggle_double_gems(True)
             elif item.item == consts.ITEM_INFO["Global Lockpick"][0]:  # global lockpicks
                 count = await self.emu_client.get_item_count(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED)
-                if count < item_counts["Lockpick"]:
+                if count < item_counts["Global Lockpick"]:
                     lc = await self.emu_client.get_item_count(self.emu_client.addresses.LOCKPICKS)
                     await self.emu_client.set_item(self.emu_client.addresses.g_NUM_LOCK_PICKS_RECEIVED, count + 1)
                     await self.emu_client.set_item(self.emu_client.addresses.LOCKPICKS, lc + 1)
@@ -382,7 +382,7 @@ class SpyroAHTContext(SuperContext):
                 ap_count = item_counts[self.item_names.lookup_in_slot(item.item, self.slot)]
                 
                 # game info
-                lockpick_list = list(range(consts.ITEM_GROUP_IDS["Shop Items"][0]+6, consts.ITEM_GROUP_IDS["Shop Items"][1]))
+                lockpick_list = list(range(consts.ITEM_GROUP_IDS["Shop Items"][0]+6, consts.ITEM_GROUP_IDS["Shop Items"][1]+1))
                 bit = lockpick_list.index(item.item)
                 address = self.emu_client.addresses.g_PERLEVEL_LOCKPICKS + (bit * 2)
                 file_curr = await self.emu_client.get_item_count(address)
