@@ -207,11 +207,12 @@ class SpyroAHTContext(SuperContext):
 
     def __init__(self, server_address: str | None = None, password: str | None = None) -> None:
         super().__init__(server_address, password)
-        if tracker_loaded:
+        self.tracker_found = tracker_loaded
+        if self.tracker_found:
             super().set_events_callback(self._event_update)
             super().set_callback(self._location_update)
             super().set_glitches_callback(self._glitches_update)
-        self.tracker_found = tracker_loaded
+        self.mod_UT_status = None
         
         # these update whenever UT reports a new location or event is in logic
         self._in_logic_events: list[str] = []
@@ -689,15 +690,21 @@ class SpyroAHTContext(SuperContext):
                 self.watcher_event.clear()
 
                 if await self.emu_client.should_process_checks():
+                    # it's possible that the player doesn't have UT during initial save file creation and patching
+                    # if so, even adding UT after the fact wouldn't result in the game patching to see it
+                    # this fixes it by forcing the mod to update its UT_ENABLED to true if UT is found on this client instance
+                    if self.mod_UT_status is None:
+                        self.mod_UT_status = await self.emu_client.check_UT()
+                        
                     if self.slot_data["death_link"] > 0:
                         await self._send_deathlink()
                     await self._receive_items()
                     await self._check_doors()
                     await self._location_checks()
                     await self._location_scouts()
-                    if tracker_loaded:
+                    if self.tracker_found:
                         await self.emu_client.update_pause_gems(self._in_logic_events)
-                    if tracker_loaded:
+                    if self.tracker_found:
                         await self.emu_client.update_tracker(self.in_logic_ids_to_names, self.in_glitched_ids_to_names)
                     if not has_goaled:
                         has_goaled = await self.check_goal()
