@@ -355,7 +355,7 @@ class SpyroAHTContext(SuperContext):
                     await self.emu_client.set_breath(item.item)
                 await self.emu_client.set_flag(self.emu_client.addresses.ABILITY_FLAGS, consts.ABILITY_MATCH[item.item], True)
             elif consts.ITEM_GROUP_IDS["Key Rings"][0] <= item.item <= consts.ITEM_GROUP_IDS["Key Rings"][1]:
-                if item.item >= consts.ITEM_GROUP_IDS["Key Rings"][1]-4:  # if realm key ring, needs converting into list of level key rings
+                if item.item > consts.ITEM_GROUP_IDS["Key Rings"][1]-4:  # if realm key ring, needs converting into list of level key rings
                     ring_ids = consts.REALM_KEY_RING_LOOKUP[item.item]  # converts from realm key ring id -> list of level key ring ids
                 else: ring_ids = [item.item]  # already is a level key ring id
                 
