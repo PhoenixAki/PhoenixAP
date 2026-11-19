@@ -886,7 +886,7 @@ REGION ICRoyal: royal chamber area. include egg after pole spin which doesn't ne
 
 	LOCATION ICRoyal | IC: Empty Locked Chest in royal chamber | 811 | LockedChestRule('Ice Citadel')
 	LOCATION ICRoyal | IC: Dragon Egg next to cannon area via pole spin | 346 | HasAll('Pole Spin', 'Glide')
-	LOCATION ICRoyal | IC: Light Gem from Ice Princess | 262 | And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'), Has('Fire Breath')) | Fire_Breath_Idle_Animation And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannon'))
+	LOCATION ICRoyal | IC: Light Gem from Ice Princess | 262 | And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannonLedge'), Has('Fire Breath')) | Fire_Breath_Idle_Animation And(CanReachRegion('ICCourtyardLower'), CanReachRegion('ICPastWaterGate'), CanReachRegion('ICSuperchargeShop'), CanReachRegion('ICRoyalCannonLedge'))
     LOCATION ICRoyal | IC: Dark Gem by cannon | 130 | Has('Double Jump')
 
 REGION ICRoyalBack: back entrance to chamber via electric platform. includes dark gem right after platform

@@ -349,6 +349,12 @@ class DolphinClient:
             i = consts.XLSShoppingItem(model, consts.TextEntry(item_num, f"{player}'s {name}", bought), (price, remote_price), large_prices)
             dolphin_memory_engine.write_bytes(self.addresses.p_XLS_SHOP_ITEMS + (0x20 * (item_num + 1)), i.to_bytes('big'))
             dolphin_memory_engine.write_bytes(self.addresses.p_SHOP_TEXT + (0x62 * item_num), i.text.to_bytes('big'))
+    
+    async def check_UT(self):
+        enabled = dolphin_memory_engine.read_byte(self.addresses.g_UT_ENABLED)
+        if self.ctx.tracker_found and not enabled:
+            dolphin_memory_engine.write_byte(self.addresses.g_UT_ENABLED, self.ctx.tracker_found)
+        return enabled
 
     async def update_tracker(self, in_logic_ids_to_names: dict[str, str], in_glitched_ids_to_names: dict[str, str]):
         # server_locations is list of all location ids for this slot, regardless of check status. combination of checked_locations and missing_locations
