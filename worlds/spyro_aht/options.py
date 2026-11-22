@@ -70,7 +70,7 @@ class AutoCorrections(Choice):
 class BossGoals(OptionSet):
     """Adds a goal requirement to defeat a number of boss(es). Entering "Random" will pick a subset of not-already-chosen bosses.
     
-    Note that this + all other goals are based on AHT checks. See the wiki FAQ post for more info on how this can impact seeds.
+    Note that all AHT goals are based on checks, not items sent to you. See the wiki FAQ post for more info on how this can impact seeds.
     https://github.com/PhoenixAki/PhoenixAP/wiki/Spyro:-AHT-1-%E2%80%90-Setup-Guide-&-FAQ#i-goaled-early-what-gives 
     
     Valid Options: ["Gnasty Gnorc", "Ineptune", "Red", "Mecha-Red", "Random"]"""
