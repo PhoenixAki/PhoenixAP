@@ -1,0 +1,64 @@
+{
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.game.schema.json",
+    "game": "Crash 3",
+    "creator": "PhoenixAki",
+
+    "filler_item_name": "Wumpa Fruit",
+    "death_link": false,
+    "unused_goals_are_locations": false,
+    "starting_items": [
+        {
+            "item_categories": ["Warp Unlocks"],
+            "random": 1,
+            "yaml_option": ["warp_unlock_items"],
+            "_comment": "Always give 1 random warp unlock if warp_unlock_items is enabled."
+        },
+        {
+            "items": ["Toad Village Unlock", "Under Pressure Unlock", "Orient Express Unlock", "Bone Yard Unlock", "Makin' Waves Unlock"],
+            "random": 2,
+            "yaml_option": ["!warp_unlock_items", "level_unlock_items"],
+            "_comment": "Level unlocks on without warp unlocks on means starting in warp 1."
+        },
+        {
+            "item_categories": ["Level Unlocks"],
+            "random": 1,
+            "yaml_option": ["warp_unlock_items", "level_unlock_items"],
+            "_comment": "Level and warp unlocks both being on gets 2 starting levels - this is the first one (full random)."
+        },
+        {
+            "if_previous_item": ["Warp 1 Unlock"],
+            "items": ["Toad Village Unlock", "Under Pressure Unlock", "Orient Express Unlock", "Bone Yard Unlock", "Makin' Waves Unlock"],
+            "random": 1,
+            "yaml_option": ["level_unlock_items"],
+            "_comment": "Level and warp unlocks both being on gets 2 starting levels - this is the second one (one from starting warp)."
+        },
+        {
+            "if_previous_item": ["Warp 2 Unlock"],
+            "items": ["Gee Wiz Unlock", "Hang'em High Unlock", "Hog Ride Unlock", "Tomb Time Unlock", "Midnight Run Unlock"],
+            "random": 1,
+            "yaml_option": ["level_unlock_items"],
+            "_comment": "Level and warp unlocks both being on gets 2 starting levels - this is the second one (one from starting warp)."
+        },
+        {
+            "if_previous_item": ["Warp 3 Unlock"],
+            "items": ["Dino Might! Unlock", "Deep Trouble Unlock", "High Time Unlock", "Road Crash Unlock", "Double Header Unlock"],
+            "random": 1,
+            "yaml_option": ["level_unlock_items"],
+            "_comment": "Level and warp unlocks both being on gets 2 starting levels - this is the second one (one from starting warp)."
+        },
+        {
+            "if_previous_item": ["Warp 4 Unlock"],
+            "items": ["Sphynxinator Unlock", "Bye Bye Blimps Unlock", "Tell No Tales Unlock", "Future Frenzy Unlock", "Tomb Wader Unlock"],
+            "random": 1,
+            "yaml_option": ["level_unlock_items"],
+            "_comment": "Level and warp unlocks both being on gets 2 starting levels - this is the second one (one from starting warp)."
+        },
+        {
+            "if_previous_item": ["Warp 5 Unlock"],
+            "items": ["Gone Tomorrow Unlock", "Orange Asphalt Unlock", "Flaming Passion Unlock", "Mad Bombers Unlock", "Bug Lite Unlock"],
+            "random": 1,
+            "yaml_option": ["level_unlock_items"],
+            "_comment": "Level and warp unlocks both being on gets 2 starting levels - this is the second one (one from starting warp)."
+        }
+    ]
+}

@@ -1,0 +1,141 @@
+{
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.regions.schema.json",
+    "START": {
+        "connects_to": ["Goals", "Warp 1", "Warp 2", "Warp 3", "Warp 4", "Warp 5", "Warp 6"],
+        "starting": true
+    },
+    "Goals": {
+        "_comment": "Only separate from START for goal grouping purposes."
+    },
+    "Warp 1": {
+        "connects_to": ["Toad Village", "Under Pressure", "Orient Express", "Bone Yard", "Makin' Waves", "Tiny Tiger"],
+        "requires": "({YamlEnabled(warp_unlock_items)} and |Warp 1 Unlock|) or {YamlDisabled(warp_unlock_items)}"
+    },
+    "Warp 2": {
+        "connects_to": ["Gee Wiz", "Hang'em High", "Hog Ride", "Tomb Time", "Midnight Run", "Dingodile"],
+        "requires": "({YamlEnabled(warp_unlock_items)} and |Warp 2 Unlock|) or ({YamlDisabled(warp_unlock_items)} and |@Crystal Events:5| and |Crystal:5|)"
+    },
+    "Warp 3": {
+        "connects_to": ["Dino Might!", "Deep Trouble", "High Time", "Road Crash", "Double Header", "N. Tropy"],
+        "requires": "({YamlEnabled(warp_unlock_items)} and |Warp 3 Unlock|) or ({YamlDisabled(warp_unlock_items)} and |@Crystal Events:10| and |Crystal:10|)"
+    },
+    "Warp 4": {
+        "connects_to": ["Sphynxinator", "Bye Bye Blimps", "Tell No Tales", "Future Frenzy", "Tomb Wader", "N. Gin"],
+        "requires": "({YamlEnabled(warp_unlock_items)} and |Warp 4 Unlock|) or ({YamlDisabled(warp_unlock_items)} and |@Crystal Events:15| and |Crystal:15|)"
+    },
+    "Warp 5": {
+        "connects_to": ["Gone Tomorrow", "Orange Asphalt", "Flaming Passion", "Mad Bombers", "Bug Lite", "Neo Cortex"],
+        "requires": "({YamlEnabled(warp_unlock_items)} and |Warp 5 Unlock|) or ({YamlDisabled(warp_unlock_items)} and |@Crystal Events:20| and |Crystal:20|)"
+    },
+    "Warp 6": {
+        "connects_to": ["Ski Crazed", "Area 51?", "Rings of Power"],
+        "requires": "{YamlEnabled(sapphire_relics)} and |@Sapphire Relic Events:5| and |Sapphire Relic:5|"
+    },
+    "Toad Village": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Toad Village Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Under Pressure": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Under Pressure Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Orient Express": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Orient Express Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Bone Yard": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Bone Yard Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Makin' Waves": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Makin' Waves Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Tiny Tiger": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Tiny Tiger Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:5| and |Crystal:5|)"
+    },
+    "Gee Wiz": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Gee Wiz Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Hang'em High": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Hang'em High Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Hog Ride": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Hog Ride Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Tomb Time": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Tomb Time Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Midnight Run": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Midnight Run Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Dingodile": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Dingodile Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:10| and |Crystal:10|)"
+    },
+    "Dino Might!": {
+        "connects_to": ["Eggipus Rex"],
+        "requires": "({YamlEnabled(level_unlock_items)} and |Dino Might! Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Eggipus Rex": {
+        "requires": "({YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|) and (({YamlEnabled(level_unlock_items)} and |Eggipus Rex Unlock|) or {YamlDisabled(level_unlock_items)})"
+    },
+    "Deep Trouble": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Deep Trouble Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "High Time": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |High Time Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Road Crash": {
+        "connects_to": ["Hot Coco"],
+        "requires": "({YamlEnabled(level_unlock_items)} and |Road Crash Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Hot Coco": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Hot Coco Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Double Header": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Double Header Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "N. Tropy": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |N. Tropy Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:15| and |Crystal:15|)"
+    },
+    "Sphynxinator": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Sphynxinator Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Bye Bye Blimps": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Bye Bye Blimps Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Tell No Tales": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Tell No Tales Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Future Frenzy": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Future Frenzy Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Tomb Wader": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Tomb Wader Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "N. Gin": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |N. Gin Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:20| and |Crystal:20|)"
+    },
+    "Gone Tomorrow": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Gone Tomorrow Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Orange Asphalt": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Orange Asphalt Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Flaming Passion": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Flaming Passion Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Mad Bombers": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Mad Bombers Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Bug Lite": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Bug Lite Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Neo Cortex": {
+        "requires": "({YamlEnabled(level_unlock_items)} and |Neo Cortex Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:25| and |Crystal:25|)"
+    },
+    "Ski Crazed": {
+        "requires": "|@Sapphire Relic Events:5| and |Sapphire Relic:5| and ({YamlEnabled(level_unlock_items)} and |Ski Crazed Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Area 51?": {
+        "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15| and ({YamlEnabled(level_unlock_items)} and |Area 51? Unlock|) or {YamlDisabled(level_unlock_items)}"
+    },
+    "Rings of Power": {
+        "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25| and ({YamlEnabled(level_unlock_items)} and |Rings of Power Unlock|) or {YamlDisabled(level_unlock_items)}"
+    }
+}

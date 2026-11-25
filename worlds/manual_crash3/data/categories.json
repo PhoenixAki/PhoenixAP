@@ -1,0 +1,197 @@
+{
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.categories.schema.json",
+    "Crystals": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Crystal Events": {
+        "hidden": true,
+        "_comment": "Groups together Crystal checks for logic rules (bosses + warp room access)."
+    },
+    "Clear Gems": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Box Gems": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Path Gems": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Colored Gems (Items)": {
+        "_comment": "Item group."
+    },
+    "Colored Gems (Locations)": {
+        "_comment": "Location group."
+    },
+    "Yellow Gem Category": {
+        "hidden": true,
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Controls whether Yellow Gem is made. Requires warp 6 to be part of the world."
+    },
+    "Colored Gem Events": {
+        "hidden": true,
+        "_comment": "Groups together colored gem checks for the Bug Lite gem path rule."
+    },
+    "Sapphire Relic Events": {
+        "hidden": true,
+        "_comment": "Groups together Sapphire Relic checks for logic rules (warp 6 access)."
+    },
+    "Abilities": {
+        "_comment": "Item group."
+    },
+    "Sapphire Relics": {
+        "hidden": true,
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Location group which also controls whether Sapphire Relic items and and locations are made."
+    },
+    "Gold Relics": {
+        "hidden": true,
+        "yaml_option": ["gold_relic_checks"],
+        "_comment": "Location group which also controls whether Gold Relic locations are made (via overridden before_is_category_enabled in hooks/Helpers.py)."
+    },
+    "Platinum Relics": {
+        "hidden": true,
+        "yaml_option": ["platinum_relic_checks"],
+        "_comment": "Location group which also controls whether Platinum Relic locations are made (via overridden before_is_category_enabled in hooks/Helpers.py)."
+    },
+    "Warp Unlocks": {
+        "yaml_option": ["warp_unlock_items"],
+        "_comment": "Item group which also controls whether warp unlocks are made."
+    },
+    "Warp 1": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Warp 2": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Warp 3": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Warp 4": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Warp 5": {
+        "hidden": true,
+        "_comment": "Location group."
+    },
+    "Warp 6": {
+        "hidden": true,
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Location group which also controls whether warp 6 locations are made."
+    },
+    "Bosses": {
+        "_comment": "Location group."
+    },
+    "Level Unlocks": {
+        "yaml_option": ["level_unlock_items"],
+        "_comment": "Item group."
+    },
+    "Toad Village": {
+        "_comment": "Location group."
+    },
+    "Under Pressure": {
+        "_comment": "Location group."
+    },
+    "Orient Express": {
+        "_comment": "Location group."
+    },
+    "Bone Yard": {
+        "_comment": "Location group."
+    },
+    "Makin' Waves": {
+        "_comment": "Location group."
+    },
+    "Gee Wiz": {
+        "_comment": "Location group."
+    },
+    "Hang'em High": {
+        "_comment": "Location group."
+    },
+    "Hog Ride": {
+        "_comment": "Location group."
+    },
+    "Tomb Time": {
+        "_comment": "Location group."
+    },
+    "Midnight Run": {
+        "_comment": "Location group."
+    },
+    "Dino Might!": {
+        "_comment": "Location group."
+    },
+    "Dino Might! Clear Gems": {
+        "hidden": true,
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Controls whether the Dino Might! Clear Gem locations are made. They require the Yellow Gem, which is not guaranteed to exist."
+    },
+    "Eggipus Rex": {
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Location group which also controls whether Eggipus Rex locations are made."
+    },
+    "Deep Trouble": {
+        "_comment": "Location group."
+    },
+    "High Time": {
+        "_comment": "Location group."
+    },
+    "Road Crash": {
+        "_comment": "Location group."
+    },
+    "Hot Coco": {
+        "_comment": "Location group."
+    },
+    "Double Header": {
+        "_comment": "Location group."
+    },
+    "Sphynxinator": {
+        "_comment": "Location group."
+    },
+    "Bye Bye Blimps": {
+        "_comment": "Location group."
+    },
+    "Tell No Tales": {
+        "_comment": "Location group."
+    },
+    "Future Frenzy": {
+        "_comment": "Location group."
+    },
+    "Tomb Wader": {
+        "_comment": "Location group."
+    },
+    "Gone Tomorrow": {
+        "_comment": "Location group."
+    },
+    "Orange Asphalt": {
+        "_comment": "Location group."
+    },
+    "Flaming Passion": {
+        "_comment": "Location group."
+    },
+    "Mad Bombers": {
+        "_comment": "Location group."
+    },
+    "Bug Lite": {
+        "_comment": "Location group."
+    },
+    "Bug Lite Path": {
+        "hidden": true,
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Controls whether the Colored Gem path location is made. It requires all 5 Colored Gems, but Yellow Gem isn't guaranteed to exist."
+    },
+    "Ski Crazed": {
+        "_comment": "Location group."
+    },
+    "Area 51?": {
+        "_comment": "Location group."
+    },
+    "Rings of Power": {
+        "_comment": "Location group."
+    }
+}

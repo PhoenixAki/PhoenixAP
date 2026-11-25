@@ -1,0 +1,301 @@
+# Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
+from typing import Any
+
+from Options import OptionError
+from worlds.AutoWorld import World
+from BaseClasses import MultiWorld, CollectionState, Item, ItemClassification
+
+# Object classes from Manual -- extending AP core -- representing items and locations that are used in generation
+from ..Items import ManualItem
+from ..Locations import ManualLocation
+
+# Raw JSON data from the Manual apworld, respectively:
+#          data/game.json, data/items.json, data/locations.json, data/regions.json
+#
+from ..Data import game_table, item_table, location_table, region_table
+
+# These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
+from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item
+
+# calling logging.info("message") anywhere below in this file will output the message to both console and log file
+import logging
+
+########################################################################################
+## Order of method calls when the world generates:
+##    1. create_regions - Creates regions and locations
+##    2. create_items - Creates the item pool
+##    3. set_rules - Creates rules for accessing regions and locations
+##    4. generate_basic - Runs any post item pool options, like place item/category
+##    5. pre_fill - Creates the victory location
+##
+## The create_item method is used by plando and start_inventory settings to create an item from an item name.
+## The fill_slot_data method will be used to send data to the Manual client for later use, like deathlink.
+########################################################################################
+
+
+
+# Use this function to change the valid filler items to be created to replace item links or starting items.
+# Default value is the `filler_item_name` from game.json
+def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> list[str] | str | bool:
+    return False
+
+def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> None:
+    """
+    This is the earliest hook called during generation, before anything else is done.
+    Use it to check or modify incompatible options, or to set up variables for later use.
+    """
+    # 2 different types of issues can lead to too many items and not enough locations for them. Flagging them here.
+    # First, copying the option values. Only doing it to make the conditions a bit more readable and less cluttered with get_option_value calls.
+    auto_corrections = get_option_value(multiworld, player, "auto_corrections")
+    clear_gem_option = get_option_value(multiworld, player, "clear_gem_checks")
+    sapphire_option = get_option_value(multiworld, player, "sapphire_relics")
+    gold_option = get_option_value(multiworld, player, "gold_relic_checks")  
+    if gold_option == 2: gold_option = 1  # later comparisons are based on each option being 1 for on, but gold and platinum relic options could be 2.
+    platinum_option = get_option_value(multiworld, player, "platinum_relic_checks")
+    if platinum_option == 2: platinum_option = 1  # later comparisons are based on each option being 1 for on, but gold and platinum relic options could be 2.
+    warp_option = get_option_value(multiworld, player, "warp_unlock_items")
+    level_option = get_option_value(multiworld, player, "level_unlock_items")
+    
+    # 1) warp_unlock_items requires at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks] to be enabled.
+    if warp_option == 1 and clear_gem_option == 0 and gold_option == 0 and platinum_option == 0:
+        if auto_corrections == 1:  # fix it (by enabling clear_gem_checks)
+            print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use warp_unlock_items. auto_corrections is fixing by it by enabling clear_gem_checks.")
+            setattr(multiworld.worlds[player].options, "clear_gem_checks", 1)
+            clear_gem_option = 1
+        else:  # OptionError
+            raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use warp_unlock_items. Please enable at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks], or disable warp_unlock_items.")
+    
+    # 2) level_unlock_items requires at least 2 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks] to be enabled.
+    # First, deal with a special subcase where sapphire_relics is enabled and warp_unlocks is disabled. In that case, only clear_gem_checks is required, just barely. 
+    if level_option == 1 and sapphire_option == 1 and warp_option == 0:
+        if auto_corrections == 1:  # fix it (by enabling clear_gem-checks)
+            print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. auto_corrections is fixing it by enabling clear_gem_checks.")
+            setattr(multiworld.worlds[player].options, "clear_gem_checks", 1)
+            clear_gem_option = 1
+        else:  # OptionError
+            raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. Please enable at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks].")
+    
+    # Now, the more general and common case. This is very awkward to do in a clean, Pythonic way, but this is the best I could come up with for now.
+    # If none of the 3 are enabled, then both clear_gem_checks and gold_relic_checks should be enabled if not already.
+    # If 1 already is enabled, then start by enabling clear_gem_checks, and check again if enough are enabled then. If still not, enable gold_relic_checks then.
+    # This approach would scale terribly linearly, but it's fine here because there's only 2 things being changed in the worst case. Just feels icky.
+    enabled_count = sum([clear_gem_option, gold_option, platinum_option]) # type: ignore
+    if level_option == 1 and enabled_count < 2:
+        if auto_corrections == 1:  # fix it
+            print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. auto_corrections is fixing it by enabling clear_gem_checks, and if needed, gold_relic_checks.")
+            setattr(multiworld.worlds[player].options, "clear_gem_checks", 1)
+            clear_gem_option = 1
+            enabled_count = sum([clear_gem_option, gold_option, platinum_option]) # type: ignore
+            if enabled_count < 2:  # if still < 2, also need to enable gold_relic_checks
+                setattr(multiworld.worlds[player].options, "gold_relic_checks", 1)
+                gold_option = 1
+        else:  # OptionError
+            raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. Please enable at least 2 of [clear_gem-checks, gold_relic_checks, platinum_relic_checks].")
+        
+    # Next, check for 2 types of issues with customizable goals.
+    # This approach is a bit awkward, but it allows me to do this iteratively instead of sequentially, repetitively.
+    customizable_options = {"crystal_goal_count": [0, 25], "colored_gem_goal_count": [1, 4], "sapphire_relic_goal_count": [2, 30], "gold_relic_goal_count": [3, 26], "platinum_relic_goal_count": [4, 26]}
+    for goal_count_name, goal_data in customizable_options.items():
+        # goal_data[0] is goal option value, goal_data[1] is soft maximum value (some have the normal maximum)
+        goal_count_value = get_option_value(multiworld, player, goal_count_name)
+        goal_option_value = get_option_value(multiworld, player, "goal")
+        clean_name = f"{goal_count_name.rsplit("_", 1)[0].replace("_", " ").title()}s"  # e.g. crystal_goal_count -> Crystal Goal
+
+        # 1) Goal counts which are set to 0 while their associated goal is selected. Doesn't lead to errors, but results in the seed finishing immediately in sphere 1.
+        if goal_option_value == goal_data[0] and goal_count_value == 0:
+            if auto_corrections == 1:  # fix it (by adjusting goal count to its midpoint value)
+                max_value = getattr(multiworld.worlds[player].options, goal_count_name).range_end
+                print(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to 0. auto_corrections is fixing it by setting {goal_count_name} to its midpoint value of {max_value // 2}.")
+                setattr(multiworld.worlds[player].options, goal_count_name, max_value // 2)
+            else:  # OptionError
+                raise OptionError(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to 0. Please set {goal_count_name} to a nonzero value, or choose a different goal.")
+
+        # 2) Goal counts which have conditionally a lower maximum than the default. For example, colored gem goal having a maximum of 4 if Yellow Gem doesn't exist, instead of the default maximum of 5.
+        if goal_option_value == goal_data[0] and sapphire_option == 0 and goal_count_value > goal_data[1]:
+            if auto_corrections == 1:  # fix it (by lowering the goal to its lower maximum)
+                print(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to {goal_count_value}, which is too high due to sapphire_relics being disabled. auto_corrections is fixing it by lowering {goal_count_name} to {goal_data[1]}.")
+                setattr(multiworld.worlds[player].options, goal_count_name, goal_data[1])
+            else:  # OptionError
+                raise OptionError(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to {goal_count_value}, which is too high due to sapphire_relics being disabled. Please lower {goal_count_name} to {goal_data[1]} or choose a different goal.")
+    
+def before_create_regions(world: World, multiworld: MultiWorld, player: int):
+    """
+    Called before regions and locations are created. Not clear why you'd want this, but it's here.
+    Victory location is included, but Victory event is not placed yet.
+    """
+    pass
+
+def after_create_regions(world: World, multiworld: MultiWorld, player: int):
+    """
+    Called after regions and locations are created, in case you want to see or modify that information.
+    Victory location is included.
+
+    Use this hook to modify locations from the world
+    If you wish to remove them entirely, use Helpers.before_is_location_enabled instead.
+    """
+
+    # Add your code here to calculate which locations to exclude
+    for region in multiworld.regions:
+        if region.player == player:
+            for location in region.locations:
+                # If you have other things you want to modify, you can do it here as well.
+                # The fields you might care about are: item_rule, always_allow, progress_type, and show_in_spoiler.
+                pass
+
+# This hook allows you to access the item names & counts before the items are created. Use this to increase/decrease the amount of a specific item in the pool
+# Valid item_config key/values:
+# {"Item Name": 5} <- This will create qty 5 items using all the default settings
+# {"Item Name": {"useful": 7}} <- This will create qty 7 items and force them to be classified as useful
+# {"Item Name": {"progression": 2, "useful": 1}} <- This will create 3 items, with 2 classified as progression and 1 as useful
+# {"Item Name": {0b0110: 5}} <- If you know the special flag for the item classes, you can also define non-standard options. This setup
+#       will create 5 items that are the "useful trap" class
+# {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
+def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
+    # Running Shoes defaults to being progression, but is safe to downgrade to useful (like the other abilities) if no relic checks require it.
+    if get_option_value(multiworld, player, "gold_relic_checks") != 2 and get_option_value(multiworld, player, "platinum_relic_checks") != 2:
+        item_config["Running Shoes"] = {"useful": 1}
+            
+    return item_config
+
+# The item pool before place_item(_category) are processed, in case you want to see the raw item pool at that stage
+def before_create_items_place_items(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
+    return item_pool
+
+# The item pool before starting items are processed, in case you want to see the raw item pool at that stage
+def before_create_items_starting(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
+    return item_pool
+
+# The item pool after starting items are processed but before filler is added, in case you want to see the raw item pool at that stage
+def before_create_items_filler(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
+    # Use this hook to remove items from the item pool
+    itemNamesToRemove: list[str] = [] # List of item names
+
+    # Add your code here to calculate which items to remove.
+    #
+    # Because multiple copies of an item can exist, you need to add an item name
+    # to the list multiple times if you want to remove multiple copies of it.
+
+    for itemName in itemNamesToRemove:
+        item = next(i for i in item_pool if i.name == itemName)
+        remove_specific_item(item_pool, item)
+
+    return item_pool
+
+    # Some other useful hook options:
+
+    ## Place an item at a specific location
+    # location = next(l for l in multiworld.get_unfilled_locations(player=player) if l.name == "Location Name")
+    # item_to_place = next(i for i in item_pool if i.name == "Item Name")
+    # location.place_locked_item(item_to_place)
+    # remove_specific_item(item_pool, item_to_place)
+
+# The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
+def after_create_items(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
+    # Clear Gem items are by default not in the item pool, even if Clear Gem checks are added.
+    # This was done because accounting for that proved to be more headaches than it was worth, for item vs location counts.
+    # So, instead, to still emulate the idea of randomizing Clear Gem items (despite being filler), this code replaces Wumpa Fruit filler with Clear Gems.
+    # Upside of this approach is it's easier to ensure Clear Gems will never take the place of a progression item, and will never replace too many Wumpa Fruit fillers.
+    clear_gem_count = 0  # slightly less code to assume 0 initially
+    if get_option_value(multiworld, player, "clear_gem_checks") == 1:
+        if get_option_value(multiworld, player, "sapphire_relics") == 0: clear_gem_count = 28
+        else: clear_gem_count = 39
+    
+    for _ in range(clear_gem_count):
+        wumpa_to_remove = next((item for item in item_pool if item.name == "Wumpa Fruit"), "")  # default of "" to avoid exception
+        if wumpa_to_remove == "": break  # there are no more Wumpa Fruit to replace, so we're done
+        item_pool.remove(wumpa_to_remove)
+        item_pool.append(Item("Clear Gem", ItemClassification.filler, 100, player))
+        clear_gem_count -= 1
+    
+    return item_pool
+
+# Called before rules for accessing regions and locations are created. Not clear why you'd want this, but it's here.
+def before_set_rules(world: World, multiworld: MultiWorld, player: int):
+    pass
+
+# Called after rules for accessing regions and locations are created, in case you want to see or modify that information.
+def after_set_rules(world: World, multiworld: MultiWorld, player: int):
+    # Use this hook to modify the access rules for a given location
+
+    def Example_Rule(state: CollectionState) -> bool:
+        # Calculated rules take a CollectionState object and return a boolean
+        # True if the player can access the location
+        # CollectionState is defined in BaseClasses
+        return True
+
+    ## Common functions:
+    # location = world.get_location(location_name, player)
+    # location.access_rule = Example_Rule
+
+    ## Combine rules:
+    # old_rule = location.access_rule
+    # location.access_rule = lambda state: old_rule(state) and Example_Rule(state)
+    # OR
+    # location.access_rule = lambda state: old_rule(state) or Example_Rule(state)
+
+# The item name to create is provided before the item is created, in case you want to make changes to it
+def before_create_item(item_name: str, world: World, multiworld: MultiWorld, player: int) -> str:
+    return item_name
+
+# The item that was created is provided after creation, in case you want to modify the item
+def after_create_item(item: ManualItem, world: World, multiworld: MultiWorld, player: int) -> ManualItem:
+    return item
+
+# This method is run towards the end of pre-generation, before the place_item options have been handled and before AP generation occurs
+def before_generate_basic(world: World, multiworld: MultiWorld, player: int):
+    pass
+
+# This method is run every time an item is added to the state, can be used to modify the value of an item.
+# IMPORTANT! Any changes made in this hook must be cancelled/undone in after_remove_item
+def after_collect_item(world: World, state: CollectionState, Changed: bool, item: Item):
+    # the following let you add to the Potato Item Value count
+    # if item.name == "Cooked Potato":
+    #     state.prog_items[item.player][format_state_prog_items_key(ProgItemsCat.VALUE, "Potato")] += 1
+    pass
+
+# This method is run every time an item is removed from the state, can be used to modify the value of an item.
+# IMPORTANT! Any changes made in this hook must be first done in after_collect_item
+def after_remove_item(world: World, state: CollectionState, Changed: bool, item: Item):
+    # the following let you undo the addition to the Potato Item Value count
+    # if item.name == "Cooked Potato":
+    #     state.prog_items[item.player][format_state_prog_items_key(ProgItemsCat.VALUE, "Potato")] -= 1
+    pass
+
+
+# This is called before slot data is set and provides an empty dict ({}), in case you want to modify it before Manual does
+def before_fill_slot_data(slot_data: dict, world: World, multiworld: MultiWorld, player: int) -> dict:
+    return slot_data
+
+# This is called after slot data is set and provides the slot data at the time, in case you want to check and modify it after Manual is done with it
+def after_fill_slot_data(slot_data: dict, world: World, multiworld: MultiWorld, player: int) -> dict:
+    return slot_data
+
+# This is called right at the end, in case you want to write stuff to the spoiler log
+def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -> None:
+    pass
+
+# This is called when you want to add information to the hint text
+def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
+
+    ### Example way to use this hook:
+    # if player not in hint_data:
+    #     hint_data.update({player: {}})
+    # for location in multiworld.get_locations(player):
+    #     if not location.address:
+    #         continue
+    #
+    #     use this section to calculate the hint string
+    #
+    #     hint_data[player][location.address] = hint_string
+
+    pass
+
+def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
+    pass
+
+def hook_interpret_slot_data(world: World, player: int, slot_data: dict[str, Any]) -> dict[str, Any]:
+    """
+        Called when Universal Tracker wants to perform a fake generation
+        Use this if you want to use or modify the slot_data for passed into re_gen_passthrough
+    """
+    return slot_data

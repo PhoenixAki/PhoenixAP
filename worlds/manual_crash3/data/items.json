@@ -1,0 +1,318 @@
+{
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.items.schema.json",
+    "data": [
+        {
+            "name": "Crystal",
+            "progression": true,
+            "count": 25
+        },
+        {
+            "name": "Blue Gem",
+            "category": ["Colored Gems (Items)"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Yellow Gem",
+            "category": ["Colored Gems (Items)", "Yellow Gem Category"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Red Gem",
+            "category": ["Colored Gems (Items)"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Green Gem",
+            "category": ["Colored Gems (Items)"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Purple Gem",
+            "category": ["Colored Gems (Items)"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Sapphire Relic",
+            "category": ["Sapphire Relics"],
+            "progression": true,
+            "count": 30,
+            "_comment": "Only sapphire relics exist since other relics are never relevant for progression."
+        },
+        {
+            "name": "Super Body Slam",
+            "category": ["Abilities"],
+            "useful": true,
+            "count": 1
+        },
+        {
+            "name": "Double Jump",
+            "category": ["Abilities"],
+            "useful": true,
+            "count": 1
+        },
+        {
+            "name": "Tornado Spin",
+            "category": ["Abilities"],
+            "useful": true,
+            "count": 1
+        },
+        {
+            "name": "Fruit Bazooka",
+            "category": ["Abilities"],
+            "useful": true,
+            "count": 1
+        },
+        {
+            "name": "Running Shoes",
+            "category": ["Abilities"],
+            "progression": true,
+            "count": 1,
+            "_comment": "Will become progression if gold_relic_checks or platinum_relic_checks are set to on_running."
+        },
+        {
+            "name": "Warp 1 Unlock",
+            "category": ["Warp Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Warp 2 Unlock",
+            "category": ["Warp Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Warp 3 Unlock",
+            "category": ["Warp Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Warp 4 Unlock",
+            "category": ["Warp Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Warp 5 Unlock",
+            "category": ["Warp Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Toad Village Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Under Pressure Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Orient Express Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Bone Yard Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Makin' Waves Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Tiny Tiger Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Gee Wiz Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Hang'em High Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Hog Ride Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Tomb Time Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Midnight Run Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Dingodile Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Dino Might! Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Eggipus Rex Unlock",
+            "category": ["Level Unlocks", "Eggipus Rex"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Deep Trouble Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "High Time Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Road Crash Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Hot Coco Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Double Header Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "N. Tropy Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Sphynxinator Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Bye Bye Blimps Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Tell No Tales Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Future Frenzy Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Tomb Wader Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "N. Gin Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Gone Tomorrow Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Orange Asphalt Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Flaming Passion Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Mad Bombers Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Bug Lite Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Neo Cortex Unlock",
+            "category": ["Level Unlocks"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Ski Crazed Unlock",
+            "category": ["Level Unlocks", "Ski Crazed"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Area 51? Unlock",
+            "category": ["Level Unlocks", "Area 51?"],
+            "progression": true,
+            "count": 1
+        },
+        {
+            "name": "Rings of Power Unlock",
+            "category": ["Level Unlocks", "Rings of Power"],
+            "progression": true,
+            "count": 1
+        }
+    ]
+}

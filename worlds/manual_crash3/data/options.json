@@ -1,0 +1,155 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.options.schema.json",
+    "user": {
+        "auto_corrections": {
+            "description": [
+                "Automatically fixes known issues stemming from YAML choices, instead of halting generation with an OptionError.",
+                "See https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual for a full list of corrections that will be made.",
+                "",
+                "If disabled, your choices will remain, even if it results in halting generation with an OptionError."
+            ],
+            "type": "Toggle",
+            "default": false
+        },
+        "clear_gem_checks": {
+            "description": [
+                "Adds 28 or 39 Clear Gem checks, depending on sapphire_relics (as some require warp 6 access).",
+                "Clear Gem items are only created as-needed as filler items, as they aren't useful logically."
+            ],
+            "type": "Choice",
+            "values": {
+                "off": 0,
+                "on_checks": 1,
+                "on_items": 2,
+                "on_both": 3
+            },
+            "default": false
+        },
+        "warp_unlock_items": {
+            "description": [
+                "Adds 5 warp room unlock items (e.g. Warp 1 Unlock) for warp rooms 1-5. You will start with 1 random one.",
+                "This features requires using debug mode (see https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual).",
+                "",
+                "If disabled, vanilla game logic is used (warp rooms unlock in multiples of 5 Crystal checks + 5 Crystal items received)."
+            ],
+            "type": "Toggle",
+            "default": false
+        },
+        "level_unlock_items": {
+            "description": [
+                "Adds 31 or 35 level unlock items (e.g. Toad Village Unlock), depending on sapphire_relics (as some require warp 6 access).",
+                "You will start with 2 random ones (1 will be guaranteed to be in your starting warp room).",
+                "Enabling this requires having enough optional checks enabled to place all the level unlock items. Generally speaking, this is doable by enabling",
+                "  at least 2 of clear_gem_checks, gold_relic_checks, and platinum_relic_checks, but some combinations of options can allow for only 1 being needed.",
+                "",
+                "If disabled, levels are logically accessible immediately upon having warp room access."
+            ],
+            "type": "Toggle",
+            "default": false
+        },
+        "sapphire_relics": {
+            "description": [
+                "Adds 30 Sapphire Relic checks and items. This option is required to logically add warp 6. Doing so has the following effects:",
+                "  - Adds the Yellow Gem item and its associated check via Hang'em High's warp 6 entrance.",
+                "  - Adds 11 Clear Gem checks which require warp 6 access, if clear_gem_checks is enabled.",
+                "  - Adds level unlock items for Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex, if level_unlock_items is enabled.",
+                "Sapphire Relic checks have no logical requirements besides level access, due to being trivial to do without Running Shoes.",
+                "",
+                "If disabled, warp 6 and anything requiring it will not be added, and no Sapphire Relic checks and items will be added."
+            ],
+            "type": "Toggle",
+            "default": false
+        },
+        "gold_relic_checks": {
+            "description": [
+                "Adds Gold Relic checks (no items), with 2 choices for their logic.",
+                "All 30 will be added if sapphire_relics is enabled, otherwise only 26 (leaving out Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex) will be added.",
+                "",
+                "off: No Gold Relic checks will be added.",
+                "on_running: Gold Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
+                "  - Running Shoes will be marked as progression, instead of useful, if this is chosen.",
+                "  - See https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual for info on how to enable Running Shoes once received.",
+                "on_hard: All Gold Relic checks will have no logical requirements. Broadly speaking, this is not hard for most levels, but speedrun tech (such as neutral slide jumps) can trivialize these."
+            ],
+            "type": "Choice",
+            "values": {
+                "off": 0,
+                "on_running": 1,
+                "on_hard": 2
+            },
+            "default": false
+        },
+        "platinum_relic_checks": {
+            "description": [
+                "Adds Platinum Relic checks (no items), with 2 choices for their logic.",
+                "All 30 will be added if sapphire_relics is enabled, otherwise only 26 (leaving out Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex) will be added.",
+                "",
+                "off: No Platinum Relic checks will be added.",
+                "on_running: Platinum Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
+                "  - Running Shoes will be marked as progression, instead of useful, if this is chosen.",
+                "  - See https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual for info on how to enable Running Shoes once received.",
+                "on_hard: All Platinum Relic checks will have no logical requirements. This is much harder to do than Gold Relic checks without Running Shoes, but still possible, especially with speedrun tech (such as neutral slide jumps)."
+            ],
+            "type": "Choice",
+            "values": {
+                "off": 0,
+                "on_running": 1,
+                "on_hard": 2
+            },
+            "default": false
+        },
+        "crystal_goal_count": {
+            "description": [
+                "Controls how many Crystal items you must receive to goal, if \"Crystal Goal\" is selected."
+            ],
+            "type": "Range",
+            "range_start": 0,
+            "range_end": 25,
+            "default": 0,
+            "group": "Goal Customization"
+        },
+        "colored_gem_goal_count": {
+            "description": [
+                "Decides how many colored (Blue, Green, Purple, Red, Yellow) Gem items  you must receive to goal, if \"Colored Gem Goal\" is selected.",
+                "Maximum is 4 if sapphire_relics is disabled, due to Yellow Gem requiring warp 6 access."
+            ],
+            "type": "Range",
+            "range_start": 0,
+            "range_end": 5,
+            "default": 0,
+            "group": "Goal Customization"
+        },
+        "sapphire_relic_goal_count": {
+            "description": [
+                "Decides how many Sapphire Relic checks you must complete to goal, if \"Sapphire Relic Goal\" is selected."
+            ],
+            "type": "Range",
+            "range_start": 0,
+            "range_end": 30,
+            "default": 0,
+            "group": "Goal Customization"
+        },
+        "gold_relic_goal_count": {
+            "description": [
+                "Decides how many Gold Relic checks you must complete to goal, if \"Gold Relic Goal\" is selected.",
+                "Maximum is 26 if sapphire_relics is disabled, due to Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex requiring warp 6 access."
+            ],
+            "type": "Range",
+            "range_start": 0,
+            "range_end": 30,
+            "default": 0,
+            "group": "Goal Customization"
+        },
+        "platinum_relic_goal_count": {
+            "description": [
+                "Controls how many Platinum Relic checks you must complete to goal, if \"Platinum Relic Goal\" is selected.",
+                "Maximum is 26 if sapphire_relics is disabled, due to Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex requiring warp 6 access."
+            ],
+            "type": "Range",
+            "range_start": 0,
+            "range_end": 30,
+            "default": 0,
+            "group": "Goal Customization"
+        }
+    }
+}

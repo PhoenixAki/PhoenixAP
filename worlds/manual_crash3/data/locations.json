@@ -1,0 +1,926 @@
+{
+	"$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.locations.schema.json",
+    "data": [
+        {
+            "region": "Goals",
+            "name": "Crystal Goal",
+            "victory": true,
+            "requires": "{OptionCount(Crystal, crystal_goal)}"
+        },
+        {
+            "region": "Goals",
+            "name": "Colored Gem Goal",
+            "victory": true,
+            "requires": "{OptionCount(@Colored Gems (Items), colored_gem_goal)}"
+        },
+        {
+            "region": "Goals",
+            "name": "Sapphire Relic Goal",
+            "victory": true,
+            "requires": "{OptionCount(@Sapphire Relic Events, sapphire_relic_goal)}"
+        },
+        {
+            "region": "Goals",
+            "name": "Gold Relic Goal",
+            "victory": true,
+            "requires": "{OptionCount(@Gold Relic Events, gold_relic_goal)}"
+        },
+        {
+            "region": "Goals",
+            "name": "Platinum Relic Goal",
+            "victory": true,
+            "requires": "{OptionCount(@Platinum Relic Events, platinum_relic_goal)}"
+        },
+        {
+            "region": "Toad Village",
+            "name": "Toad Village: Crystal",
+            "category": ["Warp 1", "Toad Village", "Crystals"]
+        },
+        {
+            "region": "Toad Village",
+            "name": "Toad Village: Clear Gem (Box)",
+            "category": ["Warp 1", "Toad Village", "Clear Gems"]
+        },
+        {
+            "region": "Toad Village",
+            "name": "Toad Village: Sapphire Relic",
+            "category": ["Warp 1", "Toad Village", "Sapphire Relics"]
+        },
+        {
+            "region": "Toad Village",
+            "name": "Toad Village: Gold Relic",
+            "category": ["Warp 1", "Toad Village", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Toad Village",
+            "name": "Toad Village: Platinum Relic",
+            "category": ["Warp 1", "Toad Village", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Under Pressure",
+            "name": "Under Pressure: Crystal",
+            "category": ["Warp 1", "Under Pressure", "Crystals"]
+        },
+        {
+            "region": "Under Pressure",
+            "name": "Under Pressure: Clear Gem (Box)",
+            "category": ["Warp 1", "Under Pressure", "Clear Gems"]
+        },
+        {
+            "region": "Under Pressure",
+            "name": "Under Pressure: Sapphire Relic",
+            "category": ["Warp 1", "Under Pressure", "Sapphire Relics"]
+        },
+        {
+            "region": "Under Pressure",
+            "name": "Under Pressure: Gold Relic",
+            "category": ["Warp 1", "Under Pressure", "Gold Relics"]
+        },
+        {
+            "region": "Under Pressure",
+            "name": "Under Pressure: Platinum Relic",
+            "category": ["Warp 1", "Under Pressure", "Platinum Relics"]
+        },
+        {
+            "region": "Orient Express",
+            "name": "Orient Express: Crystal",
+            "category": ["Warp 1", "Orient Express", "Crystals"]
+        },
+        {
+            "region": "Orient Express",
+            "name": "Orient Express: Clear Gem (Box)",
+            "category": ["Warp 1", "Orient Express", "Clear Gems"]
+        },
+        {
+            "region": "Orient Express",
+            "name": "Orient Express: Sapphire Relic",
+            "category": ["Warp 1", "Orient Express", "Sapphire Relics"]
+        },
+        {
+            "region": "Orient Express",
+            "name": "Orient Express: Gold Relic",
+            "category": ["Warp 1", "Orient Express", "Gold Relics"]
+        },
+        {
+            "region": "Orient Express",
+            "name": "Orient Express: Platinum Relic",
+            "category": ["Warp 1", "Orient Express", "Platinum Relics"]
+        },
+        {
+            "region": "Bone Yard",
+            "name": "Bone Yard: Crystal",
+            "category": ["Warp 1", "Bone Yard", "Crystals"]
+        },
+        {
+            "region": "Bone Yard",
+            "name": "Bone Yard: Clear Gem (Box)",
+            "category": ["Warp 1", "Bone Yard", "Clear Gems"]
+        },
+        {
+            "region": "Bone Yard",
+            "name": "Bone Yard: Clear Gem (Red Gem Path)",
+            "category": ["Warp 1", "Bone Yard", "Clear Gems"],
+            "requires": "|Red Gem Event:1| and |Red Gem:1|"
+        },
+        {
+            "region": "Bone Yard",
+            "name": "Bone Yard: Sapphire Relic",
+            "category": ["Warp 1", "Bone Yard", "Sapphire Relics"]
+        },
+        {
+            "region": "Bone Yard",
+            "name": "Bone Yard: Gold Relic",
+            "category": ["Warp 1", "Bone Yard", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Bone Yard",
+            "name": "Bone Yard: Platinum Relic",
+            "category": ["Warp 1", "Bone Yard", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Makin' Waves",
+            "name": "Makin' Waves: Crystal",
+            "category": ["Warp 1", "Makin' Waves", "Crystals"]
+        },
+        {
+            "region": "Makin' Waves",
+            "name": "Makin' Waves: Clear Gem (Box)",
+            "category": ["Warp 1", "Makin' Waves", "Clear Gems"]
+        },
+        {
+            "region": "Makin' Waves",
+            "name": "Makin' Waves: Sapphire Relic",
+            "category": ["Warp 1", "Makin' Waves", "Sapphire Relics"]
+        },
+        {
+            "region": "Makin' Waves",
+            "name": "Makin' Waves: Gold Relic",
+            "category": ["Warp 1", "Makin' Waves", "Gold Relics"]
+        },
+        {
+            "region": "Makin' Waves",
+            "name": "Makin' Waves: Platinum Relic",
+            "category": ["Warp 1", "Makin' Waves", "Platinum Relics"]
+        },
+        {
+            "region": "Tiny Tiger",
+            "name": "Tiny Tiger Defeated",
+            "category": ["Warp 1", "Bosses"]
+        },
+        {
+            "region": "Tiny Tiger",
+            "name": "Tiny Tiger",
+            "category": ["Warp 1", "Bosses"],
+            "victory": true
+        },
+        {
+            "region": "Gee Wiz",
+            "name": "Gee Wiz: Crystal",
+            "category": ["Warp 2", "Gee Wiz", "Crystals"]
+        },
+        {
+            "region": "Gee Wiz",
+            "name": "Gee Wiz: Clear Gem (Box)",
+            "category": ["Warp 2", "Gee Wiz", "Clear Gems"]
+        },
+        {
+            "region": "Gee Wiz",
+            "name": "Gee Wiz: Sapphire Relic",
+            "category": ["Warp 2", "Gee Wiz", "Sapphire Relics"]
+        },
+        {
+            "region": "Gee Wiz",
+            "name": "Gee Wiz: Gold Relic",
+            "category": ["Warp 2", "Gee Wiz", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Gee Wiz",
+            "name": "Gee Wiz: Platinum Relic",
+            "category": ["Warp 2", "Gee Wiz", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Hang'em High",
+            "name": "Hang'em High: Crystal",
+            "category": ["Warp 2", "Hang'em High", "Crystals"]
+        },
+        {
+            "region": "Hang'em High",
+            "name": "Hang'em High: Clear Gem (Box)",
+            "category": ["Warp 2", "Hang'em High", "Clear Gems"]
+        },
+        {
+            "region": "Warp 6",
+            "name": "Hang'em High: Yellow Gem",
+            "category": ["Warp 2", "Warp 6", "Hang'em High", "Colored Gems (Locations)"],
+            "requires": "|@Sapphire Relic Events:10| and |Sapphire Relic:10|",
+            "_comment": "Don't need to check for whether Sapphire Relic checks/items exist, as the Warp 6 region won't exist at all if not."
+        },
+        {
+            "region": "Hang'em High",
+            "name": "Hang'em High: Sapphire Relic",
+            "category": ["Warp 2", "Hang'em High", "Sapphire Relics"]
+        },
+        {
+            "region": "Hang'em High",
+            "name": "Hang'em High: Gold Relic",
+            "category": ["Warp 2", "Hang'em High", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Hang'em High",
+            "name": "Hang'em High: Platinum Relic",
+            "category": ["Warp 2", "Hang'em High", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Hog Ride",
+            "name": "Hog Ride: Crystal",
+            "category": ["Warp 2", "Hog Ride", "Crystals"]
+        },
+        {
+            "region": "Hog Ride",
+            "name": "Hog Ride: Clear Gem (Box)",
+            "category": ["Warp 2", "Hog Ride", "Clear Gems"]
+        },
+        {
+            "region": "Hog Ride",
+            "name": "Hog Ride: Sapphire Relic",
+            "category": ["Warp 2", "Hog Ride", "Sapphire Relics"]
+        },
+        {
+            "region": "Hog Ride",
+            "name": "Hog Ride: Gold Relic",
+            "category": ["Warp 2", "Hog Ride", "Gold Relics"]
+        },
+        {
+            "region": "Hog Ride",
+            "name": "Hog Ride: Platinum Relic",
+            "category": ["Warp 2", "Hog Ride", "Platinum Relics"]
+        },
+        {
+            "region": "Tomb Time",
+            "name": "Tomb Time: Crystal",
+            "category": ["Warp 2", "Tomb Time", "Crystals"]
+        },
+        {
+            "region": "Tomb Time",
+            "name": "Tomb Time: Clear Gem (Box)",
+            "category": ["Warp 2", "Tomb Time", "Clear Gems"],
+            "requires": "|Purple Gem Event:1| and |Purple Gem:1|"
+        },
+        {
+            "region": "Tomb Time",
+            "name": "Tomb Time: Clear Gem (Purple Gem Path)",
+            "category": ["Warp 2", "Tomb Time", "Clear Gems"],
+            "requires": "|Purple Gem Event:1| and |Purple Gem:1|"
+        },
+        {
+            "region": "Tomb Time",
+            "name": "Tomb Time: Sapphire Relic",
+            "category": ["Warp 2", "Tomb Time", "Sapphire Relics"]
+        },
+        {
+            "region": "Tomb Time",
+            "name": "Tomb Time: Gold Relic",
+            "category": ["Warp 2", "Tomb Time", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Tomb Time",
+            "name": "Tomb Time: Platinum Relic",
+            "category": ["Warp 2", "Tomb Time", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Midnight Run",
+            "name": "Midnight Run: Crystal",
+            "category": ["Warp 2", "Midnight Run", "Crystals"]
+        },
+        {
+            "region": "Midnight Run",
+            "name": "Midnight Run: Clear Gem (Box)",
+            "category": ["Warp 2", "Midnight Run", "Clear Gems"]
+        },
+        {
+            "region": "Midnight Run",
+            "name": "Midnight Run: Sapphire Relic",
+            "category": ["Warp 2", "Midnight Run", "Sapphire Relics"]
+        },
+        {
+            "region": "Midnight Run",
+            "name": "Midnight Run: Gold Relic",
+            "category": ["Warp 2", "Midnight Run", "Gold Relics"]
+        },
+        {
+            "region": "Midnight Run",
+            "name": "Midnight Run: Platinum Relic",
+            "category": ["Warp 2", "Midnight Run", "Platinum Relics"]
+        },
+        {
+            "region": "Dingodile",
+            "name": "Dingodile Defeated",
+            "category": ["Warp 2", "Bosses"]
+        },
+        {
+            "region": "Dingodile",
+            "name": "Dingodile",
+            "category": ["Warp 2", "Bosses"],
+            "victory": true
+        },
+        {
+            "region": "Dino Might!",
+            "name": "Dino Might!: Crystal",
+            "category": ["Warp 3", "Dino Might!", "Crystals"]
+        },
+        {
+            "region": "Dino Might!",
+            "name": "Dino Might!: Clear Gem (Box)",
+            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems"],
+            "requires": "|Yellow Gem Event:1| and |Yellow Gem:1|"
+        },
+        {
+            "region": "Dino Might!",
+            "name": "Dino Might!: Clear Gem (Yellow Gem Path)",
+            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems"],
+            "requires": "|Yellow Gem Event:1| and |Yellow Gem:1|"
+        },
+        {
+            "region": "Dino Might!",
+            "name": "Dino Might!: Sapphire Relic",
+            "category": ["Warp 3", "Dino Might!", "Sapphire Relics"]
+        },
+        {
+            "region": "Dino Might!",
+            "name": "Dino Might!: Gold Relic",
+            "category": ["Warp 3", "Dino Might!", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Dino Might!",
+            "name": "Dino Might!: Platinum Relic",
+            "category": ["Warp 3", "Dino Might!", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Eggipus Rex",
+            "name": "Eggipus Rex: Clear Gem",
+            "category": ["Warp 3", "Eggipus Rex", "Clear Gems"]
+        },
+        {
+            "region": "Eggipus Rex",
+            "name": "Eggipus Rex: Sapphire Relic",
+            "category": ["Warp 3", "Eggipus Rex", "Sapphire Relics"]
+        },
+        {
+            "region": "Eggipus Rex",
+            "name": "Eggipus Rex: Gold Relic",
+            "category": ["Warp 3", "Eggipus Rex", "Gold Relics"]
+        },
+        {
+            "region": "Eggipus Rex",
+            "name": "Eggipus Rex: Platinum Relic",
+            "category": ["Warp 3", "Eggipus Rex", "Platinum Relics"]
+        },
+        {
+            "region": "Deep Trouble",
+            "name": "Deep Trouble: Crystal",
+            "category": ["Warp 3", "Deep Trouble", "Crystals"]
+        },
+        {
+            "region": "Deep Trouble",
+            "name": "Deep Trouble: Clear Gem (Box)",
+            "category": ["Warp 3", "Deep Trouble", "Clear Gems"]
+        },
+        {
+            "region": "Deep Trouble",
+            "name": "Deep Trouble: Red Gem",
+            "category": ["Warp 3", "Deep Trouble", "Colored Gems (Locations)"]
+        },
+        {
+            "region": "Deep Trouble",
+            "name": "Deep Trouble: Sapphire Relic",
+            "category": ["Warp 3", "Deep Trouble", "Sapphire Relics"]
+        },
+        {
+            "region": "Deep Trouble",
+            "name": "Deep Trouble: Gold Relic",
+            "category": ["Warp 3", "Deep Trouble", "Gold Relics"]
+        },
+        {
+            "region": "Deep Trouble",
+            "name": "Deep Trouble: Platinum Relic",
+            "category": ["Warp 3", "Deep Trouble", "Platinum Relics"]
+        },
+        {
+            "region": "High Time",
+            "name": "High Time: Crystal",
+            "category": ["Warp 3", "High Time", "Crystals"]
+        },
+        {
+            "region": "High Time",
+            "name": "High Time: Clear Gem (Box)",
+            "category": ["Warp 3", "High Time", "Clear Gems"]
+        },
+        {
+            "region": "High Time",
+            "name": "High Time: Purple Gem",
+            "category": ["Warp 3", "High Time", "Colored Gems (Locations)"]
+        },
+        {
+            "region": "High Time",
+            "name": "High Time: Sapphire Relic",
+            "category": ["Warp 3", "High Time", "Sapphire Relics"]
+        },
+        {
+            "region": "High Time",
+            "name": "High Time: Gold Relic",
+            "category": ["Warp 3", "High Time", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "High Time",
+            "name": "High Time: Platinum Relic",
+            "category": ["Warp 3", "High Time", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Road Crash",
+            "name": "Road Crash: Crystal",
+            "category": ["Warp 3", "Road Crash", "Crystals"]
+        },
+        {
+            "region": "Road Crash",
+            "name": "Road Crash: Clear Gem (Box)",
+            "category": ["Warp 3", "Road Crash", "Clear Gems"]
+        },
+        {
+            "region": "Road Crash",
+            "name": "Road Crash: Sapphire Relic",
+            "category": ["Warp 3", "Road Crash", "Sapphire Relics"]
+        },
+        {
+            "region": "Road Crash",
+            "name": "Road Crash: Gold Relic",
+            "category": ["Warp 3", "Road Crash", "Gold Relics"]
+        },
+        {
+            "region": "Road Crash",
+            "name": "Road Crash: Platinum Relic",
+            "category": ["Warp 3", "Road Crash", "Platinum Relics"]
+        },
+        {
+            "region": "Hot Coco",
+            "name": "Hot Coco: Clear Gem (Box)",
+            "category": ["Warp 3", "Hot Coco", "Clear Gems"]
+        },
+        {
+            "region": "Hot Coco",
+            "name": "Hot Coco: Sapphire Relic",
+            "category": ["Warp 3", "Hot Coco", "Sapphire Relics"]
+        },
+        {
+            "region": "Hot Coco",
+            "name": "Hot Coco: Gold Relic",
+            "category": ["Warp 3", "Hot Coco", "Gold Relics"]
+        },
+        {
+            "region": "Hot Coco",
+            "name": "Hot Coco: Platinum Relic",
+            "category": ["Warp 3", "Hot Coco", "Platinum Relics"]
+        },
+        {
+            "region": "Double Header",
+            "name": "Double Header: Crystal",
+            "category": ["Warp 3", "Double Header", "Crystals"]
+        },
+        {
+            "region": "Double Header",
+            "name": "Double Header: Clear Gem (Box)",
+            "category": ["Warp 3", "Double Header", "Clear Gems"]
+        },
+        {
+            "region": "Double Header",
+            "name": "Double Header: Sapphire Relic",
+            "category": ["Warp 3", "Double Header", "Sapphire Relics"]
+        },
+        {
+            "region": "Double Header",
+            "name": "Double Header: Gold Relic",
+            "category": ["Warp 3", "Double Header", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Double Header",
+            "name": "Double Header: Platinum Relic",
+            "category": ["Warp 3", "Double Header", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "N. Tropy",
+            "name": "N. Tropy Defeated",
+            "category": ["Warp 3", "Bosses"]
+        },
+        {
+            "region": "N. Tropy",
+            "name": "N. Tropy",
+            "category": ["Warp 3", "Bosses"],
+            "victory": true
+        },
+        {
+            "region": "Sphynxinator",
+            "name": "Sphynxinator: Crystal",
+            "category": ["Warp 4", "Sphynxinator", "Crystals"]
+        },
+        {
+            "region": "Sphynxinator",
+            "name": "Sphynxinator: Clear Gem (Box)",
+            "category": ["Warp 4", "Sphynxinator", "Clear Gems"]
+        },
+        {
+            "region": "Sphynxinator",
+            "name": "Sphynxinator: Clear Gem (Blue Gem Path)",
+            "category": ["Warp 4", "Sphynxinator", "Clear Gems"],
+            "requires": "|Blue Gem Event:1| and |Blue Gem:1|"
+        },
+        {
+            "region": "Sphynxinator",
+            "name": "Sphynxinator: Sapphire Relic",
+            "category": ["Warp 4", "Sphynxinator", "Sapphire Relics"]
+        },
+        {
+            "region": "Sphynxinator",
+            "name": "Sphynxinator: Gold Relic",
+            "category": ["Warp 4", "Sphynxinator", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Sphynxinator",
+            "name": "Sphynxinator: Platinum Relic",
+            "category": ["Warp 4", "Sphynxinator", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Bye Bye Blimps",
+            "name": "Bye Bye Blimps: Crystal",
+            "category": ["Warp 4", "Bye Bye Blimps", "Crystals"]
+        },
+        {
+            "region": "Bye Bye Blimps",
+            "name": "Bye Bye Blimps: Clear Gem (Box)",
+            "category": ["Warp 4", "Bye Bye Blimps", "Clear Gems"]
+        },
+        {
+            "region": "Bye Bye Blimps",
+            "name": "Bye Bye Blimps: Sapphire Relic",
+            "category": ["Warp 4", "Bye Bye Blimps", "Sapphire Relics"]
+        },
+        {
+            "region": "Bye Bye Blimps",
+            "name": "Bye Bye Blimps: Gold Relic",
+            "category": ["Warp 4", "Bye Bye Blimps", "Gold Relics"]
+        },
+        {
+            "region": "Bye Bye Blimps",
+            "name": "Bye Bye Blimps: Platinum Relic",
+            "category": ["Warp 4", "Bye Bye Blimps", "Platinum Relics"]
+        },
+        {
+            "region": "Tell No Tales",
+            "name": "Tell No Tales: Crystal",
+            "category": ["Warp 4", "Tell No Tales", "Crystals"]
+        },
+        {
+            "region": "Tell No Tales",
+            "name": "Tell No Tales: Clear Gem (Box)",
+            "category": ["Warp 4", "Tell No Tales", "Clear Gems"]
+        },
+        {
+            "region": "Tell No Tales",
+            "name": "Tell No Tales: Sapphire Relic",
+            "category": ["Warp 4", "Tell No Tales", "Sapphire Relics"]
+        },
+        {
+            "region": "Tell No Tales",
+            "name": "Tell No Tales: Gold Relic",
+            "category": ["Warp 4", "Tell No Tales", "Gold Relics"]
+        },
+        {
+            "region": "Tell No Tales",
+            "name": "Tell No Tales: Platinum Relic",
+            "category": ["Warp 4", "Tell No Tales", "Platinum Relics"]
+        },
+        {
+            "region": "Future Frenzy",
+            "name": "Future Frenzy: Crystal",
+            "category": ["Warp 4", "Future Frenzy", "Crystals"]
+        },
+        {
+            "region": "Warp 6",
+            "name": "Future Frenzy: Clear Gem (Box)",
+            "category": ["Warp 4", "Warp 6", "Future Frenzy", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:20| and |Sapphire Relic:20|"
+        },
+        {
+            "region": "Warp 6",
+            "name": "Future Frenzy: Clear Gem (Secret Entrance)",
+            "category": ["Warp 4", "Warp 6", "Future Frenzy", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:20| and |Sapphire Relic:20|"
+        },
+        {
+            "region": "Future Frenzy",
+            "name": "Future Frenzy: Sapphire Relic",
+            "category": ["Warp 4", "Future Frenzy", "Sapphire Relics"]
+        },
+        {
+            "region": "Future Frenzy",
+            "name": "Future Frenzy: Gold Relic",
+            "category": ["Warp 4", "Future Frenzy", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Future Frenzy",
+            "name": "Future Frenzy: Platinum Relic",
+            "category": ["Warp 4", "Future Frenzy", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Tomb Wader",
+            "name": "Tomb Wader: Crystal",
+            "category": ["Warp 4", "Tomb Wader", "Crystals"]
+        },
+        {
+            "region": "Tomb Wader",
+            "name": "Tomb Wader: Clear Gem (Box)",
+            "category": ["Warp 4", "Tomb Wader", "Clear Gems"]
+        },
+        {
+            "region": "Tomb Wader",
+            "name": "Tomb Wader: Blue Gem",
+            "category": ["Warp 4", "Tomb Wader", "Colored Gems (Locations)"]
+        },
+        {
+            "region": "Tomb Wader",
+            "name": "Tomb Wader: Sapphire Relic",
+            "category": ["Warp 4", "Tomb Wader", "Sapphire Relics"]
+        },
+        {
+            "region": "Tomb Wader",
+            "name": "Tomb Wader: Gold Relic",
+            "category": ["Warp 4", "Tomb Wader", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Tomb Wader",
+            "name": "Tomb Wader: Platinum Relic",
+            "category": ["Warp 4", "Tomb Wader", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "N. Gin",
+            "name": "N. Gin Defeated",
+            "category": ["Warp 4", "Bosses"]
+        },
+        {
+            "region": "N. Gin",
+            "name": "N. Gin",
+            "category": ["Warp 4", "Bosses"],
+            "victory": true
+        },
+        {
+            "region": "Gone Tomorrow",
+            "name": "Gone Tomorrow: Crystal",
+            "category": ["Warp 5", "Gone Tomorrow", "Crystals"]
+        },
+        {
+            "region": "Gone Tomorrow",
+            "name": "Gone Tomorrow: Clear Gem (Box)",
+            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems"],
+            "requires": "|Green Gem Event:1| and |Green Gem:1|"
+        },
+        {
+            "region": "Gone Tomorrow",
+            "name": "Gone Tomorrow: Clear Gem (Green Gem Path)",
+            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems"],
+            "requires": "|Green Gem Event:1| and |Green Gem:1|"
+        },
+        {
+            "region": "Gone Tomorrow",
+            "name": "Gone Tomorrow: Sapphire Relic",
+            "category": ["Warp 5", "Gone Tomorrow", "Sapphire Relics"]
+        },
+        {
+            "region": "Gone Tomorrow",
+            "name": "Gone Tomorrow: Gold Relic",
+            "category": ["Warp 5", "Gone Tomorrow", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Gone Tomorrow",
+            "name": "Gone Tomorrow: Platinum Relic",
+            "category": ["Warp 5", "Gone Tomorrow", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Orange Asphalt",
+            "name": "Orange Asphalt: Crystal",
+            "category": ["Warp 5", "Orange Asphalt", "Crystals"]
+        },
+        {
+            "region": "Orange Asphalt",
+            "name": "Orange Asphalt: Clear Gem (Box)",
+            "category": ["Warp 5", "Orange Asphalt", "Clear Gems"]
+        },
+        {
+            "region": "Orange Asphalt",
+            "name": "Orange Asphalt: Sapphire Relic",
+            "category": ["Warp 5", "Orange Asphalt", "Sapphire Relics"]
+        },
+        {
+            "region": "Orange Asphalt",
+            "name": "Orange Asphalt: Gold Relic",
+            "category": ["Warp 5", "Orange Asphalt", "Gold Relics"]
+        },
+        {
+            "region": "Orange Asphalt",
+            "name": "Orange Asphalt: Platinum Relic",
+            "category": ["Warp 5", "Orange Asphalt", "Platinum Relics"]
+        },
+        {
+            "region": "Flaming Passion",
+            "name": "Flaming Passion: Crystal",
+            "category": ["Warp 5", "Flaming Passion", "Crystals"]
+        },
+        {
+            "region": "Flaming Passion",
+            "name": "Flaming Passion: Clear Gem (Box)",
+            "category": ["Warp 5", "Flaming Passion", "Clear Gems"]
+        },
+        {
+            "region": "Flaming Passion",
+            "name": "Flaming Passion: Green Gem",
+            "category": ["Warp 5", "Flaming Passion", "Colored Gems (Locations)"]
+        },
+        {
+            "region": "Flaming Passion",
+            "name": "Flaming Passion: Sapphire Relic",
+            "category": ["Warp 5", "Flaming Passion", "Sapphire Relics"]
+        },
+        {
+            "region": "Flaming Passion",
+            "name": "Flaming Passion: Gold Relic",
+            "category": ["Warp 5", "Flaming Passion", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Flaming Passion",
+            "name": "Flaming Passion: Platinum Relic",
+            "category": ["Warp 5", "Flaming Passion", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Mad Bombers",
+            "name": "Mad Bombers: Crystal",
+            "category": ["Warp 5", "Mad Bombers", "Crystals"]
+        },
+        {
+            "region": "Mad Bombers",
+            "name": "Mad Bombers: Clear Gem (Box)",
+            "category": ["Warp 5", "Mad Bombers", "Clear Gems"]
+        },
+        {
+            "region": "Mad Bombers",
+            "name": "Mad Bombers: Sapphire Relic",
+            "category": ["Warp 5", "Mad Bombers", "Sapphire Relics"]
+        },
+        {
+            "region": "Mad Bombers",
+            "name": "Mad Bombers: Gold Relic",
+            "category": ["Warp 5", "Mad Bombers", "Gold Relics"]
+        },
+        {
+            "region": "Mad Bombers",
+            "name": "Mad Bombers: Platinum Relic",
+            "category": ["Warp 5", "Mad Bombers", "Platinum Relics"]
+        },
+        {
+            "region": "Bug Lite",
+            "name": "Bug Lite: Crystal",
+            "category": ["Warp 5", "Bug Lite", "Crystals"]
+        },
+        {
+            "region": "Bug Lite",
+            "name": "Bug Lite: Clear Gem (Box)",
+            "category": ["Warp 5", "Bug Lite", "Clear Gems"]
+        },
+        {
+            "region": "Bug Lite",
+            "name": "Bug Lite: Clear Gem (Colored Gem Path)",
+            "category": ["Warp 5", "Bug Lite", "Clear Gems", "Bug Lite Path"],
+            "requires": "|@Colored Gem Events:5| and |@Colored Gems:5|"
+        },
+        {
+            "region": "Bug Lite",
+            "name": "Bug Lite: Sapphire Relic",
+            "category": ["Warp 5", "Bug Lite", "Sapphire Relics"]
+        },
+        {
+            "region": "Bug Lite",
+            "name": "Bug Lite: Gold Relic",
+            "category": ["Warp 5", "Bug Lite", "Gold Relics"],
+            "requires": "({YamlCompare(gold_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(gold_relic_checks == 2)}"
+        },
+        {
+            "region": "Bug Lite",
+            "name": "Bug Lite: Platinum Relic",
+            "category": ["Warp 5", "Bug Lite", "Platinum Relics"],
+            "requires": "({YamlCompare(platinum_relic_checks == 1)} and |Running Shoes|) or {YamlCompare(platinum_relic_checks == 2)}"
+        },
+        {
+            "region": "Neo Cortex",
+            "name": "Neo Cortex Defeated",
+            "category": ["Warp 5", "Bosses"]
+        },
+        {
+            "region": "Neo Cortex",
+            "name": "Neo Cortex",
+            "category": ["Warp 5", "Bosses"],
+            "victory": true
+        },
+        {
+            "region": "Ski Crazed",
+            "name": "Ski Crazed: Clear Gem (Box)",
+            "category": ["Warp 6", "Ski Crazed", "Clear Gems"]
+        },
+        {
+            "region": "Ski Crazed",
+            "name": "Ski Crazed: Sapphire Relic",
+            "category": ["Warp 6", "Ski Crazed", "Sapphire Relics"]
+        },
+        {
+            "region": "Ski Crazed",
+            "name": "Ski Crazed: Gold Relic",
+            "category": ["Warp 6", "Ski Crazed", "Gold Relics"]
+        },
+        {
+            "region": "Ski Crazed",
+            "name": "Ski Crazed: Platinum Relic",
+            "category": ["Warp 6", "Ski Crazed", "Platinum Relics"]
+        },
+        {
+            "region": "Area 51?",
+            "name": "Area 51?: Clear Gem (Win)",
+            "category": ["Warp 6", "Area 51?", "Clear Gems"]
+        },
+        {
+            "region": "Area 51?",
+            "name": "Area 51?: Clear Gem (Box)",
+            "category": ["Warp 6", "Area 51?", "Clear Gems"]
+        },
+        {
+            "region": "Area 51?",
+            "name": "Area 51?: Sapphire Relic",
+            "category": ["Warp 6", "Area 51?", "Sapphire Relics"]
+        },
+        {
+            "region": "Area 51?",
+            "name": "Area 51?: Gold Relic",
+            "category": ["Warp 6", "Area 51?", "Gold Relics"]
+        },
+        {
+            "region": "Area 51?",
+            "name": "Area 51?: Platinum Relic",
+            "category": ["Warp 6", "Area 51?", "Platinum Relics"]
+        },
+        {
+            "region": "Rings of Power",
+            "name": "Rings of Power: Clear Gem (Win)",
+            "category": ["Warp 6", "Rings of Power", "Clear Gems"]
+        },
+        {
+            "region": "Rings of Power",
+            "name": "Rings of Power: Clear Gem (Box)",
+            "category": ["Warp 6", "Rings of Power", "Clear Gems"]
+        },
+        {
+            "region": "Rings of Power",
+            "name": "Rings of Power: Sapphire Relic",
+            "category": ["Warp 6", "Rings of Power", "Sapphire Relics"]
+        },
+        {
+            "region": "Rings of Power",
+            "name": "Rings of Power: Gold Relic",
+            "category": ["Warp 6", "Rings of Power", "Gold Relics"]
+        },
+        {
+            "region": "Rings of Power",
+            "name": "Rings of Power: Platinum Relic",
+            "category": ["Warp 6", "Rings of Power", "Platinum Relics"]
+        }
+    ]
+}
