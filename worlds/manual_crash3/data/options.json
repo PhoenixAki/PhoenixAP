@@ -4,7 +4,7 @@
         "auto_corrections": {
             "description": [
                 "Automatically fixes known issues stemming from YAML choices, instead of halting generation with an OptionError.",
-                "See https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual for a full list of corrections that will be made.",
+                "See https://github.com/PhoenixAki/PhoenixAP/wiki/Crash-3-Manual-3-%E2%80%90-List-of-auto_corrections-Fixes for a full list of corrections that will be made.",
                 "",
                 "If disabled, your choices will remain, even if it results in halting generation with an OptionError."
             ],
@@ -28,7 +28,7 @@
         "warp_unlock_items": {
             "description": [
                 "Adds 5 warp room unlock items (e.g. Warp 1 Unlock) for warp rooms 1-5. You will start with 1 random one.",
-                "This features requires using debug mode (see https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual).",
+                "This features requires using emulator cheats (see https://github.com/PhoenixAki/PhoenixAP/wiki/Crash-3-Manual-2-%E2%80%90-Setup-Guide-&-FAQ).",
                 "",
                 "If disabled, vanilla game logic is used (warp rooms unlock in multiples of 5 Crystal checks + 5 Crystal items received)."
             ],
@@ -68,7 +68,7 @@
                 "off: No Gold Relic checks will be added.",
                 "on_running: Gold Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
                 "  - Running Shoes will be marked as progression, instead of useful, if this is chosen.",
-                "  - See https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual for info on how to enable Running Shoes once received.",
+                "  - See https://github.com/PhoenixAki/PhoenixAP/wiki/Crash-3-Manual-2-%E2%80%90-Setup-Guide-&-FAQ for info on how to enable all abilities early.",
                 "on_hard: All Gold Relic checks will have no logical requirements. Broadly speaking, this is not hard for most levels, but speedrun tech (such as neutral slide jumps) can trivialize these."
             ],
             "type": "Choice",
@@ -87,7 +87,7 @@
                 "off: No Platinum Relic checks will be added.",
                 "on_running: Platinum Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
                 "  - Running Shoes will be marked as progression, instead of useful, if this is chosen.",
-                "  - See https://github.com/PhoenixAki/PhoenixAPManual/wiki/Crash-3-Manual for info on how to enable Running Shoes once received.",
+                "  - See https://github.com/PhoenixAki/PhoenixAP/wiki/Crash-3-Manual-2-%E2%80%90-Setup-Guide-&-FAQ for info on how to enable all abilities early.",
                 "on_hard: All Platinum Relic checks will have no logical requirements. This is much harder to do than Gold Relic checks without Running Shoes, but still possible, especially with speedrun tech (such as neutral slide jumps)."
             ],
             "type": "Choice",
