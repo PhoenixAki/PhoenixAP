@@ -39,6 +39,14 @@
         "hidden": true,
         "_comment": "Groups together Sapphire Relic checks for logic rules (warp 6 access)."
     },
+    "Gold Relic Events": {
+        "hidden": true,
+        "_comment": "Groups together Gold Relic checks for logic rules (Gold Relic Goal)."
+    },
+    "Platinum Relic Events": {
+        "hidden": true,
+        "_comment": "Groups together Platinum Relic checks for logic rules (Platinum Relic Goal)."
+    },
     "Abilities": {
         "_comment": "Item group."
     },

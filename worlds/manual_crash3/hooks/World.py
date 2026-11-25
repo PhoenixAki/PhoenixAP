@@ -106,7 +106,7 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
             if auto_corrections == 1:  # fix it (by adjusting goal count to its midpoint value)
                 max_value = getattr(multiworld.worlds[player].options, goal_count_name).range_end
                 print(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to 0. auto_corrections is fixing it by setting {goal_count_name} to its midpoint value of {max_value // 2}.")
-                setattr(multiworld.worlds[player].options, goal_count_name, max_value // 2)
+                getattr(multiworld.worlds[player].options, goal_count_name).value = max_value // 2
             else:  # OptionError
                 raise OptionError(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to 0. Please set {goal_count_name} to a nonzero value, or choose a different goal.")
 
@@ -114,7 +114,7 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
         if goal_option_value == goal_data[0] and sapphire_option == 0 and goal_count_value > goal_data[1]:
             if auto_corrections == 1:  # fix it (by lowering the goal to its lower maximum)
                 print(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to {goal_count_value}, which is too high due to sapphire_relics being disabled. auto_corrections is fixing it by lowering {goal_count_name} to {goal_data[1]}.")
-                setattr(multiworld.worlds[player].options, goal_count_name, goal_data[1])
+                getattr(multiworld.worlds[player].options, goal_count_name).value = goal_data[1]
             else:  # OptionError
                 raise OptionError(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to {goal_count_value}, which is too high due to sapphire_relics being disabled. Please lower {goal_count_name} to {goal_data[1]} or choose a different goal.")
     

@@ -17,19 +17,19 @@
             "region": "Goals",
             "name": "Sapphire Relic Goal",
             "victory": true,
-            "requires": "{OptionCount(@Sapphire Relic Events, sapphire_relic_goal)}"
+            "requires": "{OptionCount(@Sapphire Relic Events, sapphire_relic_goal_count)}"
         },
         {
             "region": "Goals",
             "name": "Gold Relic Goal",
             "victory": true,
-            "requires": "{OptionCount(@Gold Relic Events, gold_relic_goal)}"
+            "requires": "{OptionCount(@Gold Relic Events, gold_relic_goal_count)}"
         },
         {
             "region": "Goals",
             "name": "Platinum Relic Goal",
             "victory": true,
-            "requires": "{OptionCount(@Platinum Relic Events, platinum_relic_goal)}"
+            "requires": "{OptionCount(@Platinum Relic Events, platinum_relic_goal_count)}"
         },
         {
             "region": "Toad Village",

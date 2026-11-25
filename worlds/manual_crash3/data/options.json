@@ -21,13 +21,7 @@
                 "Adds 28 or 39 Clear Gem checks, depending on sapphire_relics (as some require warp 6 access).",
                 "Clear Gem items are only created as-needed as filler items, as they aren't useful logically."
             ],
-            "type": "Choice",
-            "values": {
-                "off": 0,
-                "on_checks": 1,
-                "on_items": 2,
-                "on_both": 3
-            },
+            "type": "Toggle",
             "default": false
         },
         "warp_unlock_items": {
@@ -71,16 +65,16 @@
                 "All 30 will be added if sapphire_relics is enabled, otherwise only 26 (leaving out Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex) will be added.",
                 "",
                 "off: No Gold Relic checks will be added.",
-                "on_running: Gold Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
+                "on_casual: Gold Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
                 "  - Running Shoes will be marked as progression, instead of useful, if this is chosen.",
                 "  - See https://github.com/PhoenixAki/PhoenixAP/wiki/Crash-3-Manual-2-%E2%80%90-Setup-Guide-&-FAQ for info on how to enable all abilities early.",
-                "on_hard: All Gold Relic checks will have no logical requirements. Broadly speaking, this is not hard for most levels, but speedrun tech (such as neutral slide jumps) can trivialize these."
+                "on_speedrun: All Gold Relic checks will have no logical requirements. Broadly speaking, this is not hard for most levels, but speedrun tech (such as neutral slide jumps) can trivialize these."
             ],
             "type": "Choice",
             "values": {
                 "off": 0,
-                "on_running": 1,
-                "on_hard": 2
+                "on_casual": 1,
+                "on_speedrun": 2
             },
             "default": false
         },
@@ -90,16 +84,16 @@
                 "All 30 will be added if sapphire_relics is enabled, otherwise only 26 (leaving out Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex) will be added.",
                 "",
                 "off: No Platinum Relic checks will be added.",
-                "on_running: Platinum Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
+                "on_casual: Platinum Relic checks in Crash platforming levels will logically require Running Shoes. All others (i.e. in Coco and vehicle levels) have no logical requirements.",
                 "  - Running Shoes will be marked as progression, instead of useful, if this is chosen.",
                 "  - See https://github.com/PhoenixAki/PhoenixAP/wiki/Crash-3-Manual-2-%E2%80%90-Setup-Guide-&-FAQ for info on how to enable all abilities early.",
-                "on_hard: All Platinum Relic checks will have no logical requirements. This is much harder to do than Gold Relic checks without Running Shoes, but still possible, especially with speedrun tech (such as neutral slide jumps)."
+                "on_speedrun: All Platinum Relic checks will have no logical requirements. This is much harder to do than Gold Relic checks without Running Shoes, but still possible, especially with speedrun tech (such as neutral slide jumps)."
             ],
             "type": "Choice",
             "values": {
                 "off": 0,
-                "on_running": 1,
-                "on_hard": 2
+                "on_casual": 1,
+                "on_speedrun": 2
             },
             "default": false
         },

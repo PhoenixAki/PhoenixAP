@@ -9,9 +9,9 @@ def before_is_category_enabled(multiworld: MultiWorld, player: int, category_nam
     # Categories normally look for Toggle options to enable them naturally, so this hook extends that behavior for them.
     from ..Helpers import get_option_value
     if category_name == "Gold Relics":
-        return get_option_value(multiworld, player, "gold_relic_checks") in [1, 2]  # 1 = on_running, 2 = on_hard
+        return get_option_value(multiworld, player, "gold_relic_checks") in [1, 2]  # 1 = on_casual, 2 = on_speedrun
     elif category_name == "Platinum Relics":
-        return get_option_value(multiworld, player, "platinum_relic_checks") in [1, 2]  # 1 = on_running, 2 = on_hard
+        return get_option_value(multiworld, player, "platinum_relic_checks") in [1, 2]  # 1 = on_casual, 2 = on_speedrun
     else:
         return None
 

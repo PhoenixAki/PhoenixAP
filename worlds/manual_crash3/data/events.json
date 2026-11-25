@@ -12,6 +12,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Toad Village Relic",
+            "copy_location": "Toad Village: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Toad Village Relic",
+            "copy_location": "Toad Village: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Under Pressure Crystal",
             "copy_location": "Under Pressure: Crystal",
             "category": ["Crystal Events"]
@@ -20,6 +30,16 @@
             "name": "Under Pressure Relic",
             "copy_location": "Under Pressure: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Under Pressure Relic",
+            "copy_location": "Under Pressure: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Under Pressure Relic",
+            "copy_location": "Under Pressure: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Orient Express Crystal",
@@ -32,6 +52,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Orient Express Relic",
+            "copy_location": "Orient Express: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Orient Express Relic",
+            "copy_location": "Orient Express: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Bone Yard Crystal",
             "copy_location": "Bone Yard: Crystal",
             "category": ["Crystal Events"]
@@ -40,6 +70,16 @@
             "name": "Bone Yard Relic",
             "copy_location": "Bone Yard: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Bone Yard Relic",
+            "copy_location": "Bone Yard: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Bone Yard Relic",
+            "copy_location": "Bone Yard: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Makin 'Waves Crystal",
@@ -52,6 +92,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Makin' Waves Relic",
+            "copy_location": "Makin' Waves: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Makin' Waves Relic",
+            "copy_location": "Makin' Waves: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Gee Wiz Crystal",
             "copy_location": "Gee Wiz: Crystal",
             "category": ["Crystal Events"]
@@ -60,6 +110,16 @@
             "name": "Gee Wiz Relic",
             "copy_location": "Gee Wiz: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Gee Wiz Relic",
+            "copy_location": "Gee Wiz: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Gee Wiz Relic",
+            "copy_location": "Gee Wiz: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Hang'em High Crystal",
@@ -77,6 +137,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Hang'em High Relic",
+            "copy_location": "Hang'em High: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Hang'em High Relic",
+            "copy_location": "Hang'em High: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Hog Ride Crystal",
             "copy_location": "Hog Ride: Crystal",
             "category": ["Crystal Events"]
@@ -85,6 +155,16 @@
             "name": "Hog Ride Relic",
             "copy_location": "Hog Ride: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Hog Ride Relic",
+            "copy_location": "Hog Ride: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Hog Ride Relic",
+            "copy_location": "Hog Ride: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Tomb Time Crystal",
@@ -97,6 +177,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Tomb Time Relic",
+            "copy_location": "Tomb Time: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Tomb Time Relic",
+            "copy_location": "Tomb Time: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Midnight Run Crystal",
             "copy_location": "Midnight Run: Crystal",
             "category": ["Crystal Events"]
@@ -105,6 +195,16 @@
             "name": "Midnight Run Relic",
             "copy_location": "Midnight Run: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Midnight Run Relic",
+            "copy_location": "Midnight Run: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Midnight Run Relic",
+            "copy_location": "Midnight Run: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Dino Might! Crystal",
@@ -117,9 +217,29 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Dino Might! Relic",
+            "copy_location": "Dino Might!: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Dino Might! Relic",
+            "copy_location": "Dino Might!: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Eggipus Rex Relic",
             "copy_location": "Eggipus Rex: Sapphire Relic",
-            "category": ["Warp 3", "Eggipus Rex", "Sapphire Relics", "Sapphire Relic Events"]
+            "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Eggipus Rex Relic",
+            "copy_location": "Eggipus Rex: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Eggipus Rex Relic",
+            "copy_location": "Eggipus Rex: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Deep Trouble Crystal",
@@ -137,6 +257,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Deep Trouble Relic",
+            "copy_location": "Deep Trouble: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Deep Trouble Relic",
+            "copy_location": "Deep Trouble: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "High Time Crystal",
             "copy_location": "High Time: Crystal",
             "category": ["Crystal Events"]
@@ -149,7 +279,17 @@
         {
             "name": "High Time Relic",
             "copy_location": "High Time: Sapphire Relic",
-            "category": ["Sapphire Relic Events"]
+            "category": ["Platinum Relic Events"]
+        },
+        {
+            "name": "High Time Relic",
+            "copy_location": "High Time: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "High Time Relic",
+            "copy_location": "High Time: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Road Crash Crystal",
@@ -162,9 +302,29 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Road Crash Relic",
+            "copy_location": "Road Crash: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Road Crash Relic",
+            "copy_location": "Road Crash: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Hot Coco Relic",
             "copy_location": "Hot Coco: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Hot Coco Relic",
+            "copy_location": "Hot Coco: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Hot Coco Relic",
+            "copy_location": "Hot Coco: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Double Header Crystal",
@@ -177,6 +337,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Double Header Relic",
+            "copy_location": "Double Header: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Double Header Relic",
+            "copy_location": "Double Header: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Sphynxinator Crystal",
             "copy_location": "Sphynxinator: Crystal",
             "category": ["Crystal Events"]
@@ -185,6 +355,16 @@
             "name": "Sphynxinator Relic",
             "copy_location": "Sphynxinator: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Sphynxinator Relic",
+            "copy_location": "Sphynxinator: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Sphynxinator Relic",
+            "copy_location": "Sphynxinator: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Bye Bye Blimps Crystal",
@@ -197,6 +377,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Bye Bye Blimps Relic",
+            "copy_location": "Bye Bye Blimps: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Bye Bye Blimps Relic",
+            "copy_location": "Bye Bye Blimps: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Tell No Tales Crystal",
             "copy_location": "Tell No Tales: Crystal",
             "category": ["Crystal Events"]
@@ -207,6 +397,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Tell No Tales Relic",
+            "copy_location": "Tell No Tales: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Tell No Tales Relic",
+            "copy_location": "Tell No Tales: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Future Frenzy Crystal",
             "copy_location": "Future Frenzy: Crystal",
             "category": ["Crystal Events"]
@@ -215,6 +415,16 @@
             "name": "Future Frenzy Relic",
             "copy_location": "Future Frenzy: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Future Frenzy Relic",
+            "copy_location": "Future Frenzy: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Future Frenzy Relic",
+            "copy_location": "Future Frenzy: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Tomb Wader Crystal",
@@ -232,6 +442,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Tomb Wader Relic",
+            "copy_location": "Tomb Wader: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Tomb Wader Relic",
+            "copy_location": "Tomb Wader: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Gone Tomorrow Crystal",
             "copy_location": "Gone Tomorrow: Crystal",
             "category": ["Crystal Events"]
@@ -242,6 +462,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Gone Tomorrow Relic",
+            "copy_location": "Gone Tomorrow: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Gone Tomorrow Relic",
+            "copy_location": "Gone Tomorrow: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Orange Asphalt Crystal",
             "copy_location": "Orange Asphalt: Crystal",
             "category": ["Crystal Events"]
@@ -250,6 +480,16 @@
             "name": "Orange Asphalt Relic",
             "copy_location": "Orange Asphalt: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Orange Asphalt Relic",
+            "copy_location": "Orange Asphalt: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Orange Asphalt Relic",
+            "copy_location": "Orange Asphalt: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Flaming Passion Crystal",
@@ -267,6 +507,16 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Flaming Passion Relic",
+            "copy_location": "Flaming Passion: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Flaming Passion Relic",
+            "copy_location": "Flaming Passion: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Mad Bombers Crystal",
             "copy_location": "Mad Bombers: Crystal",
             "category": ["Crystal Events"]
@@ -275,6 +525,16 @@
             "name": "Mad Bombers Relic",
             "copy_location": "Mad Bombers: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Mad Bombers Relic",
+            "copy_location": "Mad Bombers: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Mad Bombers Relic",
+            "copy_location": "Mad Bombers: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Bug Lite Crystal",
@@ -287,19 +547,59 @@
             "category": ["Sapphire Relic Events"]
         },
         {
+            "name": "Bug Lite Relic",
+            "copy_location": "Bug Lite: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Bug Lite Relic",
+            "copy_location": "Bug Lite: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Ski Crazed Relic",
             "copy_location": "Ski Crazed: Sapphire Relic",
             "category": ["Warp 6", "Ski Crazed", "Sapphire Relics", "Sapphire Relic Events"]
         },
         {
+            "name": "Ski Crazed Relic",
+            "copy_location": "Ski Crazed: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Ski Crazed Relic",
+            "copy_location": "Ski Crazed: Platinum Relic",
+            "category": ["Platinum Relic Events"]
+        },
+        {
             "name": "Area 51? Relic",
             "copy_location": "Area 51?: Sapphire Relic",
-            "category": ["Warp 6", "Area 51?", "Sapphire Relics", "Sapphire Relic Events"]
+            "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Area 51? Relic",
+            "copy_location": "Area 51?: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Area 51? Relic",
+            "copy_location": "Area 51?: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         },
         {
             "name": "Rings of Power Relic",
             "copy_location": "Rings of Power: Sapphire Relic",
-            "category": ["Warp 6", "Rings of Power", "Sapphire Relics", "Sapphire Relic Events"]
+            "category": ["Sapphire Relic Events"]
+        },
+        {
+            "name": "Rings of Power Relic",
+            "copy_location": "Rings of Power: Gold Relic",
+            "category": ["Gold Relic Events"]
+        },
+        {
+            "name": "Rings of Power Relic",
+            "copy_location": "Rings of Power: Platinum Relic",
+            "category": ["Platinum Relic Events"]
         }
     ]
 }
