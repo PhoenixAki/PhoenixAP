@@ -311,8 +311,9 @@ def generate_yamls(*args):
 
     target = user_path("Players", "Templates")
     generate_yaml_templates(target, False)
-    if not args.skip_open_folder:
-        open_folder(target)
+    # TODO from me: skip open folder pls
+    # if not args.skip_open_folder:
+    #     open_folder(target)
 
 
 def browse_files():
@@ -416,13 +417,16 @@ if not is_frozen():
             games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
         else:
             games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
-                     if not worldtype.zip_path]
+                     if worldname == "Manual_Crash 3_PhoenixAki"]  # TODO from me: only builds C3APM
+                     # if not worldtype.zip_path]
 
         global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))
         if not global_apignores:
             raise RuntimeError("Could not read global apignore file for build component")
 
-        apworlds_folder = os.path.join("build", "apworlds")
+        # TODO from me: edit which folder the .apworld goes into
+        # apworlds_folder = os.path.join("build", "apworlds")
+        apworlds_folder = os.path.join("custom_worlds")
         os.makedirs(apworlds_folder, exist_ok=True)
         for worldname, worldtype in games:
             if not worldtype:
@@ -459,9 +463,10 @@ if not is_frozen():
                     zf.write(pathlib.Path(world_directory, file), pathlib.Path(file_name, file))
 
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
-
-        if not args.skip_open_folder:
-            open_folder(apworlds_folder)
+        
+        # TODO from me: skip open folder pls
+        # if not args.skip_open_folder:
+        #     open_folder(apworlds_folder)
 
     components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))
