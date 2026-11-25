@@ -1,5 +1,10 @@
 {
     "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.options.schema.json",
+    "core": {
+        "goal": {
+            "default": 9
+        }
+    },
     "user": {
         "auto_corrections": {
             "description": [
