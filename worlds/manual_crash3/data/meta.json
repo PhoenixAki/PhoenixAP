@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.meta.schema.json",
+    "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.meta.schema.json",
     "docs": {
         "apworld_description": ["Crash 3 is the third game in the original Crash Bandicoot trilogy, released in 1998. Get the Crystals, break all the boxes, and defeat Neo Cortex!"],
         "web": {

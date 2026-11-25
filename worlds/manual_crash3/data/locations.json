@@ -1,5 +1,5 @@
 {
-	"$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.locations.schema.json",
+	"$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.locations.schema.json",
     "data": [
         {
             "region": "Goals",

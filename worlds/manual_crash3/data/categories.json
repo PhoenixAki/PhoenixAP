@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.categories.schema.json",
+    "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.categories.schema.json",
     "Crystals": {
         "hidden": true,
         "_comment": "Location group."
@@ -37,14 +37,17 @@
     },
     "Sapphire Relic Events": {
         "hidden": true,
+        "yaml_option": ["sapphire_relics"],
         "_comment": "Groups together Sapphire Relic checks for logic rules (warp 6 access)."
     },
     "Gold Relic Events": {
         "hidden": true,
+        "yaml_option": ["gold_relic_checks"],
         "_comment": "Groups together Gold Relic checks for logic rules (Gold Relic Goal)."
     },
     "Platinum Relic Events": {
         "hidden": true,
+        "yaml_option": ["platinum_relic_checks"],
         "_comment": "Groups together Platinum Relic checks for logic rules (Platinum Relic Goal)."
     },
     "Abilities": {
@@ -194,12 +197,15 @@
         "_comment": "Controls whether the Colored Gem path location is made. It requires all 5 Colored Gems, but Yellow Gem isn't guaranteed to exist."
     },
     "Ski Crazed": {
-        "_comment": "Location group."
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Location group which also controls whether Ski Crazed locations are made."
     },
     "Area 51?": {
-        "_comment": "Location group."
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Location group which also controls whether Area 51? locations are made."
     },
     "Rings of Power": {
-        "_comment": "Location group."
+        "yaml_option": ["sapphire_relics"],
+        "_comment": "Location group which also controls whether Rings of Power locations are made."
     }
 }

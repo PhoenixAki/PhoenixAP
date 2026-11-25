@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.regions.schema.json",
+    "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.regions.schema.json",
     "START": {
         "connects_to": ["Goals", "Warp 1", "Warp 2", "Warp 3", "Warp 4", "Warp 5", "Warp 6"],
         "starting": true
