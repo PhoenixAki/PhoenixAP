@@ -5,13 +5,13 @@
             "region": "Goals",
             "name": "Crystal Goal",
             "victory": true,
-            "requires": "{OptionCount(Crystal, crystal_goal)}"
+            "requires": "{OptionCount(Crystal, crystal_goal_count)}"
         },
         {
             "region": "Goals",
             "name": "Colored Gem Goal",
             "victory": true,
-            "requires": "{OptionCount(@Colored Gems (Items), colored_gem_goal)}"
+            "requires": "{OptionCount(@Colored Gems (Items), colored_gem_goal_count)}"
         },
         {
             "region": "Goals",
