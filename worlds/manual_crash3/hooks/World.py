@@ -191,22 +191,6 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
-    # Clear Gem items are by default not in the item pool, even if Clear Gem checks are added.
-    # This was done because accounting for that proved to be more headaches than it was worth, for item vs location counts.
-    # So, instead, to still emulate the idea of randomizing Clear Gem items (despite being filler), this code replaces Wumpa Fruit filler with Clear Gems.
-    # Upside of this approach is it's easier to ensure Clear Gems will never take the place of a progression item, and will never replace too many Wumpa Fruit fillers.
-    clear_gem_count = 0  # slightly less code to assume 0 initially
-    if get_option_value(multiworld, player, "clear_gem_checks") == 1:
-        if get_option_value(multiworld, player, "sapphire_relics") == 0: clear_gem_count = 28
-        else: clear_gem_count = 39
-    
-    for _ in range(clear_gem_count):
-        wumpa_to_remove = next((item for item in item_pool if item.name == "Wumpa Fruit"), "")  # default of "" to avoid exception
-        if wumpa_to_remove == "": break  # there are no more Wumpa Fruit to replace, so we're done
-        item_pool.remove(wumpa_to_remove)
-        item_pool.append(Item("Clear Gem", ItemClassification.filler, 100, player))
-        clear_gem_count -= 1
-    
     return item_pool
 
 # Called before rules for accessing regions and locations are created. Not clear why you'd want this, but it's here.
