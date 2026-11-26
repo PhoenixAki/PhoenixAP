@@ -121,7 +121,7 @@
         {
             "region": "Bone Yard",
             "name": "Bone Yard: Clear Gem (Red Gem Path)",
-            "category": ["Warp 1", "Bone Yard", "Clear Gems"],
+            "category": ["Warp 1", "Bone Yard", "Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Red Gem Event:1| and |Red Gem:1|"
         },
         {
@@ -218,8 +218,7 @@
             "region": "Warp 6",
             "name": "Hang'em High: Yellow Gem",
             "category": ["Warp 2", "Warp 6", "Hang'em High", "Colored Gems (Locations)"],
-            "requires": "|@Sapphire Relic Events:10| and |Sapphire Relic:10|",
-            "_comment": "Don't need to check for whether Sapphire Relic checks/items exist, as the Warp 6 region won't exist at all if not."
+            "requires": "|@Sapphire Relic Events:10| and |Sapphire Relic:10|"
         },
         {
             "region": "Hang'em High",
@@ -271,13 +270,13 @@
         {
             "region": "Tomb Time",
             "name": "Tomb Time: Clear Gem (Box)",
-            "category": ["Warp 2", "Tomb Time", "Clear Gems"],
+            "category": ["Warp 2", "Tomb Time", "Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Purple Gem Event:1| and |Purple Gem:1|"
         },
         {
             "region": "Tomb Time",
             "name": "Tomb Time: Clear Gem (Purple Gem Path)",
-            "category": ["Warp 2", "Tomb Time", "Clear Gems"],
+            "category": ["Warp 2", "Tomb Time", "Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Purple Gem Event:1| and |Purple Gem:1|"
         },
         {
@@ -341,13 +340,13 @@
         {
             "region": "Dino Might!",
             "name": "Dino Might!: Clear Gem (Box)",
-            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems"],
+            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Yellow Gem Event:1| and |Yellow Gem:1|"
         },
         {
             "region": "Dino Might!",
             "name": "Dino Might!: Clear Gem (Yellow Gem Path)",
-            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems"],
+            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Yellow Gem Event:1| and |Yellow Gem:1|"
         },
         {
@@ -545,7 +544,7 @@
         {
             "region": "Sphynxinator",
             "name": "Sphynxinator: Clear Gem (Blue Gem Path)",
-            "category": ["Warp 4", "Sphynxinator", "Clear Gems"],
+            "category": ["Warp 4", "Sphynxinator", "Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Blue Gem Event:1| and |Blue Gem:1|"
         },
         {
@@ -700,13 +699,13 @@
         {
             "region": "Gone Tomorrow",
             "name": "Gone Tomorrow: Clear Gem (Box)",
-            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems"],
+            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Green Gem Event:1| and |Green Gem:1|"
         },
         {
             "region": "Gone Tomorrow",
             "name": "Gone Tomorrow: Clear Gem (Green Gem Path)",
-            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems"],
+            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems", "Colored Gems (Locations)"],
             "requires": "|Green Gem Event:1| and |Green Gem:1|"
         },
         {
@@ -821,7 +820,7 @@
         {
             "region": "Bug Lite",
             "name": "Bug Lite: Clear Gem (Colored Gem Path)",
-            "category": ["Warp 5", "Bug Lite", "Clear Gems", "Bug Lite Path"],
+            "category": ["Warp 5", "Bug Lite", "Clear Gems", "Bug Lite Path", "Colored Gems (Locations)"],
             "requires": "|@Colored Gem Events:5| and |@Colored Gems:5|"
         },
         {

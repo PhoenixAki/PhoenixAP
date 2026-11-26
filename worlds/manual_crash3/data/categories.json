@@ -10,7 +10,8 @@
     },
     "Clear Gems": {
         "hidden": true,
-        "_comment": "Location group."
+        "yaml_option": ["clear_gem_checks"],
+        "_comment": "Location group which also controls whether Clear Gem checks are made."
     },
     "Box Gems": {
         "hidden": true,
@@ -21,10 +22,12 @@
         "_comment": "Location group."
     },
     "Colored Gems (Items)": {
-        "_comment": "Item group."
+        "yaml_option": ["colored_gems"],
+        "_comment": "Item group which also controls whether Clear Gem items are made."
     },
     "Colored Gems (Locations)": {
-        "_comment": "Location group."
+        "yaml_option": ["colored_gems"],
+        "_comment": "Location group which also controls whether Colored Gem checks are made."
     },
     "Yellow Gem Category": {
         "hidden": true,

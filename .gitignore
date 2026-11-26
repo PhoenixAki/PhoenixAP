@@ -1,6 +1,7 @@
 # my stuff
 fuzz_output
-worlds/manual_crash3_phoenixaki.apworld
+worlds/manual_crash3.apworld
+worlds/manual_crash3/test.py
 manual_client.ini
 
 .idea

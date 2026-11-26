@@ -24,6 +24,13 @@
             "type": "Toggle",
             "default": false
         },
+        "colored_gems": {
+            "description": [
+                "Adds 4 or 5 Colored Gem items and 10 or 14 Colored Gem checks, depending on sapphire_relics (as Yellow Gem require warp 6 access)."
+            ],
+            "type": "Toggle",
+            "default": false
+        },
         "warp_unlock_items": {
             "description": [
                 "Adds 5 warp room unlock items (e.g. Warp 1 Unlock) for warp rooms 1-5. You will start with 1 random one.",
