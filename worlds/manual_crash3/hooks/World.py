@@ -44,34 +44,20 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
     This is the earliest hook called during generation, before anything else is done.
     Use it to check or modify incompatible options, or to set up variables for later use.
     """
-    # 2 different types of issues can lead to too many items and not enough locations for them. Flagging them here.
-    # First, copying the option values. Only doing it to make the conditions a bit more readable and less cluttered with get_option_value calls.
-    auto_corrections = get_option_value(multiworld, player, "auto_corrections")
-    clear_gem_option = get_option_value(multiworld, player, "clear_gem_checks")
-    sapphire_option = get_option_value(multiworld, player, "sapphire_relics")
-    gold_option = get_option_value(multiworld, player, "gold_relic_checks")  
-    if gold_option == 2: gold_option = 1  # later comparisons are based on each option being 1 for on, but gold and platinum relic options could be 2.
-    platinum_option = get_option_value(multiworld, player, "platinum_relic_checks")
-    if platinum_option == 2: platinum_option = 1  # later comparisons are based on each option being 1 for on, but gold and platinum relic options could be 2.
-    warp_option = get_option_value(multiworld, player, "warp_unlock_items")
-    level_option = get_option_value(multiworld, player, "level_unlock_items")
-    
     # 1) warp_unlock_items requires at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks] to be enabled.
-    if warp_option == 1 and clear_gem_option == 0 and gold_option == 0 and platinum_option == 0:
-        if auto_corrections == 1:  # fix it (by enabling clear_gem_checks)
+    if world.options.warp_unlock_items.value == 1 and world.options.clear_gem_checks.value == 0 and world.options.gold_relic_checks.value == 0 and world.options.platinum_relic_checks.value == 0:
+        if world.options.auto_corrections.value == 1:  # fix it (by enabling clear_gem_checks)
             print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use warp_unlock_items. auto_corrections is fixing by it by enabling clear_gem_checks.")
-            setattr(multiworld.worlds[player].options, "clear_gem_checks", 1)
-            clear_gem_option = 1
+            world.options.clear_gem_checks.value = 1
         else:  # OptionError
             raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use warp_unlock_items. Please enable at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks], or disable warp_unlock_items.")
     
     # 2) level_unlock_items requires at least 2 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks] to be enabled.
-    # First, deal with a special subcase where sapphire_relics is enabled and warp_unlocks is disabled. In that case, only clear_gem_checks is required, just barely. 
-    if level_option == 1 and sapphire_option == 1 and warp_option == 0:
-        if auto_corrections == 1:  # fix it (by enabling clear_gem-checks)
+    # First, deal with a special subcase where sapphire_relics is enabled and warp_unlock_items is disabled. In that case, only clear_gem_checks is required, just barely. 
+    if world.options.level_unlock_items.value == 1 and world.options.sapphire_relics.value == 1 and world.options.warp_unlock_items.value == 0:
+        if world.options.auto_corrections.value == 1:  # fix it (by enabling clear_gem-checks)
             print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. auto_corrections is fixing it by enabling clear_gem_checks.")
-            setattr(multiworld.worlds[player].options, "clear_gem_checks", 1)
-            clear_gem_option = 1
+            world.options.clear_gem_checks.value = 1
         else:  # OptionError
             raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. Please enable at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks].")
     
@@ -79,44 +65,52 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
     # If none of the 3 are enabled, then both clear_gem_checks and gold_relic_checks should be enabled if not already.
     # If 1 already is enabled, then start by enabling clear_gem_checks, and check again if enough are enabled then. If still not, enable gold_relic_checks then.
     # This approach would scale terribly linearly, but it's fine here because there's only 2 things being changed in the worst case. Just feels icky.
-    enabled_count = sum([clear_gem_option, gold_option, platinum_option]) # type: ignore
-    if level_option == 1 and enabled_count < 2:
-        if auto_corrections == 1:  # fix it
-            print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. auto_corrections is fixing it by enabling clear_gem_checks, and if needed, gold_relic_checks.")
-            setattr(multiworld.worlds[player].options, "clear_gem_checks", 1)
-            clear_gem_option = 1
-            enabled_count = sum([clear_gem_option, gold_option, platinum_option]) # type: ignore
+    enabled_count = world.options.clear_gem_checks.value + world.options.gold_relic_checks.value > 0 + world.options.platinum_relic_checks.value > 0
+    if world.options.level_unlock_items.value == 1 and enabled_count < 2:
+        if world.options.auto_corrections.value == 1:  # fix it
+            print(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. auto_corrections is fixing it by enabling clear_gem_checks.")
+            world.options.clear_gem_checks.value = 1
+            enabled_count = world.options.clear_gem_checks.value + world.options.gold_relic_checks.value > 0 + world.options.platinum_relic_checks.value > 0
             if enabled_count < 2:  # if still < 2, also need to enable gold_relic_checks
-                setattr(multiworld.worlds[player].options, "gold_relic_checks", 1)
-                gold_option = 1
+                print(f"Crash 3 Manual player {player} still doesn't have enough checks enabled to use level_unlock_items. auto_corrections is fixing it by also enabling gold_relic_checks.")
+                world.options.gold_relic_checks.value = 1
         else:  # OptionError
-            raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. Please enable at least 2 of [clear_gem-checks, gold_relic_checks, platinum_relic_checks].")
+            raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. Please enable at least 2 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks].")
         
     # Next, check for 2 types of issues with customizable goals.
     # This approach is a bit awkward, but it allows me to do this iteratively instead of sequentially, repetitively.
-    customizable_options = {"crystal_goal_count": [0, 25], "colored_gem_goal_count": [1, 4], "sapphire_relic_goal_count": [2, 30], "gold_relic_goal_count": [3, 26], "platinum_relic_goal_count": [4, 26]}
-    for goal_count_name, goal_data in customizable_options.items():
+    customizable_options = [(world.options.crystal_goal_count, [0, 25]), (world.options.colored_gem_goal_count, [1, 4]), (world.options.sapphire_relic_goal_count, [2, 30]), (world.options.gold_relic_goal_count, [3, 26]), (world.options.platinum_relic_goal_count, [4, 26])]
+    for goal_count, goal_data in customizable_options:
         # goal_data[0] is goal option value, goal_data[1] is soft maximum value (some have the normal maximum)
-        goal_count_value = get_option_value(multiworld, player, goal_count_name)
-        goal_option_value = get_option_value(multiworld, player, "goal")
-        clean_name = f"{goal_count_name.rsplit("_", 1)[0].replace("_", " ").title()}s"  # e.g. crystal_goal_count -> Crystal Goal
+        goal_name = goal_count.display_name.rsplit("_", 1)[1]
 
         # 1) Goal counts which are set to 0 while their associated goal is selected. Doesn't lead to errors, but results in the seed finishing immediately in sphere 1.
-        if goal_option_value == goal_data[0] and goal_count_value == 0:
-            if auto_corrections == 1:  # fix it (by adjusting goal count to its midpoint value)
-                max_value = getattr(multiworld.worlds[player].options, goal_count_name).range_end
-                print(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to 0. auto_corrections is fixing it by setting {goal_count_name} to its midpoint value of {max_value // 2}.")
-                getattr(multiworld.worlds[player].options, goal_count_name).value = max_value // 2
+        if world.options.goal.value == goal_data[0] and goal_count.value == 0:
+            if world.options.auto_corrections.value == 1:  # fix it (by adjusting goal count to its midpoint value)
+                max_value = goal_count.range_end
+                print(f"Crash 3 Manual player {player} chose {goal_name} as their goal, but set {goal_count.display_name} to 0. auto_corrections is fixing it by setting {goal_count.display_name} to its midpoint value of {max_value // 2}.")
+                goal_count.value = max_value // 2
             else:  # OptionError
-                raise OptionError(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to 0. Please set {goal_count_name} to a nonzero value, or choose a different goal.")
+                raise OptionError(f"Crash 3 Manual player {player} chose {goal_name} as their goal, but set {goal_count.display_name} to 0. Please set {goal_count.display_name} to a nonzero value, or choose a different goal.")
 
         # 2) Goal counts which have conditionally a lower maximum than the default. For example, colored gem goal having a maximum of 4 if Yellow Gem doesn't exist, instead of the default maximum of 5.
-        if goal_option_value == goal_data[0] and sapphire_option == 0 and goal_count_value > goal_data[1]:
-            if auto_corrections == 1:  # fix it (by lowering the goal to its lower maximum)
-                print(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to {goal_count_value}, which is too high due to sapphire_relics being disabled. auto_corrections is fixing it by lowering {goal_count_name} to {goal_data[1]}.")
-                getattr(multiworld.worlds[player].options, goal_count_name).value = goal_data[1]
+        if world.options.goal.value == goal_data[0] and world.options.sapphire_relics.value == 0 and goal_count.value > goal_data[1]:
+            if world.options.auto_corrections.value == 1:  # fix it (by lowering the goal to its lower maximum)
+                print(f"Crash 3 Manual player {player} chose {goal_name} as their goal, but set {goal_count.display_name} to {goal_count.value}, which is too high due to sapphire_relics being disabled. auto_corrections is fixing it by lowering {goal_count.display_name} to {goal_data[1]}.")
+                getattr(multiworld.worlds[player].options, goal_count.display_name).value = goal_data[1]
             else:  # OptionError
-                raise OptionError(f"Crash 3 Manual player {player} chose {clean_name} as their goal, but set {goal_count_name} to {goal_count_value}, which is too high due to sapphire_relics being disabled. Please lower {goal_count_name} to {goal_data[1]} or choose a different goal.")
+                raise OptionError(f"Crash 3 Manual player {player} chose {goal_name} as their goal, but set {goal_count.display_name} to {goal_count.value}, which is too high due to sapphire_relics being disabled. Please lower {goal_count.display_name} to {goal_data[1]} or choose a different goal.")
+
+    # Next, check for goals that are selected but have their associated option off.
+    # This is intentionally done after the above block so that goal counts are guaranteed to only be positive if their associated goal is selected, skipping needing to check that here.
+    option_pairs = [(world.options.colored_gem_goal_count, world.options.colored_gems), (world.options.sapphire_relic_goal_count, world.options.sapphire_relics), (world.options.gold_relic_goal_count, world.options.gold_relic_checks), (world.options.platinum_relic_goal_count, world.options.platinum_relic_checks)]
+    for goal_count, associated_option in option_pairs:
+        if goal_count.value > 0 and associated_option.value == 0:
+            if world.options.auto_corrections.value == 1:  # fix it (by enabling the associated option)
+                print(f"Crash 3 Manual player {player} set {goal_count.display_name} to a nonzero value, but its associated option {associated_option.display_name} is disabled. auto_corrections is fixing it by enabling {associated_option.display_name}.")
+                associated_option.value = 1
+            else:  # OptionError
+                raise OptionError(f"Crash 3 Manual player {player} set {goal_count.display_name} to a nonzero value, but its associated option {associated_option.display_name} is disabled. Please enable it, or choose a different goal.")
     
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
     """
@@ -152,7 +146,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
     # Running Shoes defaults to being progression, but is safe to downgrade to useful (like the other abilities) if no relic checks require it.
-    if get_option_value(multiworld, player, "gold_relic_checks") != 2 and get_option_value(multiworld, player, "platinum_relic_checks") != 2:
+    if world.options.gold_relic_checks.value != 2 and world.options.platinum_relic_checks.value != 2:
         item_config["Running Shoes"] = {"useful": 1}
             
     return item_config
