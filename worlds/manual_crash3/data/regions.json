@@ -72,7 +72,7 @@
         "requires": "({YamlEnabled(level_unlock_items)} and |Dino Might! Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "Eggipus Rex": {
-        "requires": "(({YamlEnabled(level_unlock_items)} and |Eggipus Rex Unlock|) or {YamlDisabled(level_unlock_items)) and {YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Eggipus Rex Unlock|) or {YamlDisabled(level_unlock_items)}) and {YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|"
     },
     "Deep Trouble": {
         "requires": "({YamlEnabled(level_unlock_items)} and |Deep Trouble Unlock|) or {YamlDisabled(level_unlock_items)}"
@@ -130,12 +130,12 @@
         "requires": "(({YamlEnabled(level_unlock_items)} and |Neo Cortex Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Crystal Events:25| and |Crystal:25|"
     },
     "Ski Crazed": {
-        "requires": "(({YamlEnabled(level_unlock_items)} and |Ski Crazed Unlock|) or {YamlDisabled(level_unlock_items)) and |@Sapphire Relic Events:5| and |Sapphire Relic:5|"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Ski Crazed Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Sapphire Relic Events:5| and |Sapphire Relic:5|"
     },
     "Area 51?": {
-        "requires": "(({YamlEnabled(level_unlock_items)} and |Area 51? Unlock|) or {YamlDisabled(level_unlock_items)) and |@Sapphire Relic Events:15| and |Sapphire Relic:15|"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Area 51? Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Sapphire Relic Events:15| and |Sapphire Relic:15|"
     },
     "Rings of Power": {
-        "requires": "(({YamlEnabled(level_unlock_items)} and |Rings of Power Unlock|) or {YamlDisabled(level_unlock_items)) and |@Sapphire Relic Events:25| and |Sapphire Relic:25|"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Rings of Power Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Sapphire Relic Events:25| and |Sapphire Relic:25|"
     }
 }

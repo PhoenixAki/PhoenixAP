@@ -39,45 +39,47 @@ import logging
 def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> list[str] | str | bool:
     return False
 
+# TODO: Crash code here
 def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> None:
     """
     This is the earliest hook called during generation, before anything else is done.
     Use it to check or modify incompatible options, or to set up variables for later use.
     """
-    # First: raise OptionError for problematic permutations. Handling these 2 cases is enough to handle all known bad permutations, as of now.
+    # First: raise OptionError for problematic permutations. Handling these 2 cases is enough to handle all known bad permutations.
     # 1) level_unlock_items requires at least 2 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks] to be enabled.
-    enabled_count = sum([world.options.clear_gem_checks.value, world.options.gold_relic_checks.value, world.options.platinum_relic_checks.value])
+    enabled_count = sum([world.options.clear_gem_checks.value, world.options.gold_relic_checks.value != 0, world.options.platinum_relic_checks.value != 0])
     if world.options.level_unlock_items.value == 1 and enabled_count < 2:
-        raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use level_unlock_items. Please enable more checks, or disable level_unlock_items.")
+        raise OptionError(f"Crash 3 Manual player {multiworld.player_name[player]} doesn't have enough checks enabled to use level_unlock_items. Please enable more checks, or disable level_unlock_items.")
     
     # 2) warp_unlock_items requires at least 1 of [clear_gem_checks, gold_relic_checks, platinum_relic_checks] to be enabled.
     if world.options.warp_unlock_items.value == 1 and world.options.clear_gem_checks.value == 0 and world.options.gold_relic_checks.value == 0 and world.options.platinum_relic_checks.value == 0:
-        raise OptionError(f"Crash 3 Manual player {player} doesn't have enough checks enabled to use warp_unlock_items. Please enable more checks, or disable warp_unlock_items.")
+        raise OptionError(f"Crash 3 Manual player {multiworld.player_name[player]} doesn't have enough checks enabled to use warp_unlock_items. Please enable more checks, or disable warp_unlock_items.")
     ####################################################################################################################
     # Next, check for 2 types of issues with customizable goals (counts being set to 0 while goal enabled, and counts being above a soft maximum).
-    customizable_options = [(world.options.crystal_goal_count, 25), (world.options.colored_gem_goal_count, 4), (world.options.sapphire_relic_goal_count, 30), 
+    goal_counts_with_max = [(world.options.crystal_goal_count, 25), (world.options.colored_gem_goal_count, 4), (world.options.sapphire_relic_goal_count, 30), 
                             (world.options.gold_relic_goal_count, 26), (world.options.platinum_relic_goal_count, 26)]
     
-    for goal_count_option, soft_max in customizable_options:
-        # goal_data[0] is goal option value, goal_data[1] is soft maximum value (some have their normal maximum)
-        goal_name = goal_count_option.display_name.rsplit("_", 1)[1]  # for example: "crystal_goal_count" -> "Crystal Goal"
+    for goal_index, (goal_count_option, soft_max) in enumerate(goal_counts_with_max):
+        goal_name = goal_count_option.display_name.rsplit("_", 1)[0]  # for example: "crystal_goal_count" -> "crystal goal"
 
         # 1) Goal counts which are set to 0 while their associated goal is selected. Doesn't lead to errors, but results in the seed finishing immediately in sphere 1.
-        if world.options.goal.value == customizable_options.index((goal_count_option, soft_max)) and goal_count_option.value == 0:
-            raise OptionError(f"Crash 3 Manual player {player} chose {goal_name} as their goal, but set {goal_count_option.display_name} to 0. Please set {goal_count_option.display_name} to a nonzero value, or choose a different goal.")
+        # For example, crystal_goal_count being set to 0 but having "crystal goal" as the goal.
+        if world.options.goal.value == goal_index and goal_count_option.value == 0:
+            raise OptionError(f"Crash 3 Manual player {multiworld.player_name[player]} chose \"{goal_name}\" as their goal, but set {goal_count_option.display_name} to 0. Please set {goal_count_option.display_name} to a nonzero value, or choose a different goal.")
 
-        # 2) Goal counts which have conditionally a lower maximum than the default. For example, colored gem goal having a maximum of 4 if Yellow Gem doesn't exist, instead of the default maximum of 5.
-        if world.options.goal.value == customizable_options.index((goal_count_option, soft_max)) and world.options.sapphire_relics.value == 0 and goal_count_option.value > soft_max:
-            raise OptionError(f"Crash 3 Manual player {player} chose {goal_name} as their goal, but set {goal_count_option.display_name} to {goal_count_option.value}, which is too high due to sapphire_relics being disabled. Please lower {goal_count_option.display_name} or choose a different goal.")
+        # 2) Goal counts which have conditionally a lower maximum than the default.
+        # For example, colored_gem_goal_count normally has a maximum value of 5, but if sapphire_relics is disabled, the maximum is instead 4 due to Yellow Gem not existing.
+        if world.options.goal.value == goal_index and world.options.sapphire_relics.value == 0 and goal_count_option.value > soft_max:
+            raise OptionError(f"Crash 3 Manual player {multiworld.player_name[player]} chose \"{goal_name}\" as their goal, but set {goal_count_option.display_name} to {goal_count_option.value}, which is too high due to sapphire_relics being disabled. Please lower {goal_count_option.display_name} or choose a different goal.")
     ####################################################################################################################
     # Next, check for goals that are selected but have their associated option off.
-    # This is intentionally done after the above block so that goal counts are guaranteed to only be positive if their associated goal is selected, skipping needing to check that here.
-    option_pairs = [(world.options.colored_gem_goal_count, world.options.colored_gems), (world.options.sapphire_relic_goal_count, world.options.sapphire_relics), 
-                    (world.options.gold_relic_goal_count, world.options.gold_relic_checks), (world.options.platinum_relic_goal_count, world.options.platinum_relic_checks)]
+    # For example, goal being set to "gold relic goal" but having gold_relic_checks off.
+    # This list stores (goal option value, associated option)
+    goals_with_associated_options = [(1, world.options.colored_gems), (2, world.options.sapphire_relics), (3, world.options.gold_relic_checks), (4, world.options.platinum_relic_checks)]
     
-    for goal_count_option, associated_option in option_pairs:
-        if goal_count_option.value > 0 and associated_option.value == 0:
-            raise OptionError(f"Crash 3 Manual player {player} set {goal_count_option.display_name} to {goal_count_option.value}, but its associated option {associated_option.display_name} is disabled. Please enable {associated_option.display_name}, or choose a different goal.")
+    for goal_index, associated_option in goals_with_associated_options:
+        if world.options.goal.value == goal_index and associated_option.value == 0:
+            raise OptionError(f"Crash 3 Manual player {multiworld.player_name[player]} chose \"{world.options.goal.name_lookup[world.options.goal.value]}\" as their goal, but has {associated_option.display_name} disabled. Please enable {associated_option.display_name}, or choose a different goal.")
     
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
     """

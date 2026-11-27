@@ -441,6 +441,10 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
             extra_entrance_rules[exit.name] = area
 
     for region in regionMap.keys():
+        # TODO: Crash code here (temporary debugging code)
+        test = regionMap
+        if region == "Tiny Tiger":
+            pass
         used_location_names.extend([l.name for l in multiworld.get_region(region, player).locations])
         for exitRegion in multiworld.get_region(region, player).entrances:
             extra = extra_entrance_rules.get(exitRegion.name, {})
