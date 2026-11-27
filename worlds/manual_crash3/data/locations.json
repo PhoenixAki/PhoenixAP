@@ -11,7 +11,7 @@
             "region": "Goals",
             "name": "Colored Gem Goal",
             "victory": true,
-            "requires": "{OptionCount(@Colored Gems (Items), colored_gem_goal_count)}"
+            "requires": "{OptionCount(@Colored Gems, colored_gem_goal_count)}"
         },
         {
             "region": "Goals",
@@ -121,7 +121,7 @@
         {
             "region": "Bone Yard",
             "name": "Bone Yard: Clear Gem (Red Gem Path)",
-            "category": ["Warp 1", "Bone Yard", "Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 1", "Bone Yard", "Clear Gems", "Colored Gems"],
             "requires": "|Red Gem Event:1| and |Red Gem:1|"
         },
         {
@@ -215,9 +215,9 @@
             "category": ["Warp 2", "Hang'em High", "Clear Gems"]
         },
         {
-            "region": "Warp 6",
+            "region": "Hang'em High",
             "name": "Hang'em High: Yellow Gem",
-            "category": ["Warp 2", "Warp 6", "Hang'em High", "Colored Gems (Locations)"],
+            "category": ["Warp 2", "Hang'em High", "Colored Gems", "Warp 6"],
             "requires": "|@Sapphire Relic Events:10| and |Sapphire Relic:10|"
         },
         {
@@ -270,13 +270,13 @@
         {
             "region": "Tomb Time",
             "name": "Tomb Time: Clear Gem (Box)",
-            "category": ["Warp 2", "Tomb Time", "Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 2", "Tomb Time", "Clear Gems", "Colored Gems"],
             "requires": "|Purple Gem Event:1| and |Purple Gem:1|"
         },
         {
             "region": "Tomb Time",
             "name": "Tomb Time: Clear Gem (Purple Gem Path)",
-            "category": ["Warp 2", "Tomb Time", "Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 2", "Tomb Time", "Clear Gems", "Colored Gems"],
             "requires": "|Purple Gem Event:1| and |Purple Gem:1|"
         },
         {
@@ -340,13 +340,13 @@
         {
             "region": "Dino Might!",
             "name": "Dino Might!: Clear Gem (Box)",
-            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Colored Gems", "Warp 6"],
             "requires": "|Yellow Gem Event:1| and |Yellow Gem:1|"
         },
         {
             "region": "Dino Might!",
             "name": "Dino Might!: Clear Gem (Yellow Gem Path)",
-            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Dino Might! Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 3", "Dino Might!", "Clear Gems", "Colored Gems", "Warp 6"],
             "requires": "|Yellow Gem Event:1| and |Yellow Gem:1|"
         },
         {
@@ -399,7 +399,7 @@
         {
             "region": "Deep Trouble",
             "name": "Deep Trouble: Red Gem",
-            "category": ["Warp 3", "Deep Trouble", "Colored Gems (Locations)"]
+            "category": ["Warp 3", "Deep Trouble", "Colored Gems"]
         },
         {
             "region": "Deep Trouble",
@@ -429,7 +429,7 @@
         {
             "region": "High Time",
             "name": "High Time: Purple Gem",
-            "category": ["Warp 3", "High Time", "Colored Gems (Locations)"]
+            "category": ["Warp 3", "High Time", "Colored Gems"]
         },
         {
             "region": "High Time",
@@ -544,7 +544,7 @@
         {
             "region": "Sphynxinator",
             "name": "Sphynxinator: Clear Gem (Blue Gem Path)",
-            "category": ["Warp 4", "Sphynxinator", "Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 4", "Sphynxinator", "Clear Gems", "Colored Gems"],
             "requires": "|Blue Gem Event:1| and |Blue Gem:1|"
         },
         {
@@ -620,15 +620,15 @@
             "category": ["Warp 4", "Future Frenzy", "Crystals"]
         },
         {
-            "region": "Warp 6",
+            "region": "Future Frenzy",
             "name": "Future Frenzy: Clear Gem (Box)",
-            "category": ["Warp 4", "Warp 6", "Future Frenzy", "Clear Gems"],
+            "category": ["Warp 4", "Future Frenzy", "Clear Gems", "Warp 6"],
             "requires": "|@Sapphire Relic Events:20| and |Sapphire Relic:20|"
         },
         {
-            "region": "Warp 6",
+            "region": "Future Frenzy",
             "name": "Future Frenzy: Clear Gem (Secret Entrance)",
-            "category": ["Warp 4", "Warp 6", "Future Frenzy", "Clear Gems"],
+            "category": ["Warp 4", "Future Frenzy", "Clear Gems", "Warp 6"],
             "requires": "|@Sapphire Relic Events:20| and |Sapphire Relic:20|"
         },
         {
@@ -661,7 +661,7 @@
         {
             "region": "Tomb Wader",
             "name": "Tomb Wader: Blue Gem",
-            "category": ["Warp 4", "Tomb Wader", "Colored Gems (Locations)"]
+            "category": ["Warp 4", "Tomb Wader", "Colored Gems"]
         },
         {
             "region": "Tomb Wader",
@@ -699,13 +699,13 @@
         {
             "region": "Gone Tomorrow",
             "name": "Gone Tomorrow: Clear Gem (Box)",
-            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems", "Colored Gems"],
             "requires": "|Green Gem Event:1| and |Green Gem:1|"
         },
         {
             "region": "Gone Tomorrow",
             "name": "Gone Tomorrow: Clear Gem (Green Gem Path)",
-            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems", "Colored Gems (Locations)"],
+            "category": ["Warp 5", "Gone Tomorrow", "Clear Gems", "Colored Gems"],
             "requires": "|Green Gem Event:1| and |Green Gem:1|"
         },
         {
@@ -763,7 +763,7 @@
         {
             "region": "Flaming Passion",
             "name": "Flaming Passion: Green Gem",
-            "category": ["Warp 5", "Flaming Passion", "Colored Gems (Locations)"]
+            "category": ["Warp 5", "Flaming Passion", "Colored Gems"]
         },
         {
             "region": "Flaming Passion",
@@ -820,7 +820,7 @@
         {
             "region": "Bug Lite",
             "name": "Bug Lite: Clear Gem (Colored Gem Path)",
-            "category": ["Warp 5", "Bug Lite", "Clear Gems", "Bug Lite Path", "Colored Gems (Locations)"],
+            "category": ["Warp 5", "Bug Lite", "Clear Gems", "Colored Gems", "Warp 6"],
             "requires": "|@Colored Gem Events:5| and |@Colored Gems:5|"
         },
         {

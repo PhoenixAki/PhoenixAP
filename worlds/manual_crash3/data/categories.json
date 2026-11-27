@@ -13,26 +13,9 @@
         "yaml_option": ["clear_gem_checks"],
         "_comment": "Location group which also controls whether Clear Gem checks are made."
     },
-    "Box Gems": {
-        "hidden": true,
-        "_comment": "Location group."
-    },
-    "Path Gems": {
-        "hidden": true,
-        "_comment": "Location group."
-    },
-    "Colored Gems (Items)": {
-        "yaml_option": ["colored_gems"],
-        "_comment": "Item group which also controls whether Clear Gem items are made."
-    },
-    "Colored Gems (Locations)": {
+    "Colored Gems": {
         "yaml_option": ["colored_gems"],
         "_comment": "Location group which also controls whether Colored Gem checks are made."
-    },
-    "Yellow Gem Category": {
-        "hidden": true,
-        "yaml_option": ["sapphire_relics"],
-        "_comment": "Controls whether Yellow Gem is made. Requires warp 6 to be part of the world."
     },
     "Colored Gem Events": {
         "hidden": true,
@@ -41,7 +24,7 @@
     "Sapphire Relic Events": {
         "hidden": true,
         "yaml_option": ["sapphire_relics"],
-        "_comment": "Groups together Sapphire Relic checks for logic rules (warp 6 access)."
+        "_comment": "Groups together Sapphire Relic checks for logic rules (warp 6 access and Sapphire Relic Goal)."
     },
     "Gold Relic Events": {
         "hidden": true,
@@ -140,11 +123,6 @@
     "Dino Might!": {
         "_comment": "Location group."
     },
-    "Dino Might! Clear Gems": {
-        "hidden": true,
-        "yaml_option": ["sapphire_relics"],
-        "_comment": "Controls whether the Dino Might! Clear Gem locations are made. They require the Yellow Gem, which is not guaranteed to exist."
-    },
     "Eggipus Rex": {
         "yaml_option": ["sapphire_relics"],
         "_comment": "Location group which also controls whether Eggipus Rex locations are made."
@@ -193,11 +171,6 @@
     },
     "Bug Lite": {
         "_comment": "Location group."
-    },
-    "Bug Lite Path": {
-        "hidden": true,
-        "yaml_option": ["sapphire_relics"],
-        "_comment": "Controls whether the Colored Gem path location is made. It requires all 5 Colored Gems, but Yellow Gem isn't guaranteed to exist."
     },
     "Ski Crazed": {
         "yaml_option": ["sapphire_relics"],

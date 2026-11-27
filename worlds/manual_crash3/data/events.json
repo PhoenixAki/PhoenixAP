@@ -2,127 +2,127 @@
     "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.events.schema.json",
     "data": [
         {
-            "name": "Toad Village Crystal",
+            "name": "Toad Village Crystal Event",
             "copy_location": "Toad Village: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Toad Village Sapphire Relic",
+            "name": "Toad Village Sapphire Relic Event",
             "copy_location": "Toad Village: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Toad Village Gold Relic",
+            "name": "Toad Village Gold Relic Event",
             "copy_location": "Toad Village: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Toad Village Platinum Relic",
+            "name": "Toad Village Platinum Relic Event",
             "copy_location": "Toad Village: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Under Pressure Crystal",
+            "name": "Under Pressure Crystal Event",
             "copy_location": "Under Pressure: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Under Pressure Sapphire Relic",
+            "name": "Under Pressure Sapphire Relic Event",
             "copy_location": "Under Pressure: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Under Pressure Gold Relic",
+            "name": "Under Pressure Gold Relic Event",
             "copy_location": "Under Pressure: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Under Pressure Platinum Relic",
+            "name": "Under Pressure Platinum Relic Event",
             "copy_location": "Under Pressure: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Orient Express Crystal",
+            "name": "Orient Express Crystal Event",
             "copy_location": "Orient Express: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Orient Express Sapphire Relic",
+            "name": "Orient Express Sapphire Relic Event",
             "copy_location": "Orient Express: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Orient Express Gold Relic",
+            "name": "Orient Express Gold Relic Event",
             "copy_location": "Orient Express: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Orient Express Platinum Relic",
+            "name": "Orient Express Platinum Relic Event",
             "copy_location": "Orient Express: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Bone Yard Crystal",
+            "name": "Bone Yard Crystal Event",
             "copy_location": "Bone Yard: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Bone Yard Sapphire Relic",
+            "name": "Bone Yard Sapphire Relic Event",
             "copy_location": "Bone Yard: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Bone Yard Gold Relic",
+            "name": "Bone Yard Gold Relic Event",
             "copy_location": "Bone Yard: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Bone Yard Platinum Relic",
+            "name": "Bone Yard Platinum Relic Event",
             "copy_location": "Bone Yard: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Makin 'Waves Crystal",
+            "name": "Makin 'Waves Crystal Event",
             "copy_location": "Makin' Waves: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Makin' Waves Sapphire Relic",
+            "name": "Makin' Waves Sapphire Relic Event",
             "copy_location": "Makin' Waves: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Makin' Waves Gold Relic",
+            "name": "Makin' Waves Gold Relic Event",
             "copy_location": "Makin' Waves: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Makin' Waves Platinum Relic",
+            "name": "Makin' Waves Platinum Relic Event",
             "copy_location": "Makin' Waves: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Gee Wiz Crystal",
+            "name": "Gee Wiz Crystal Event",
             "copy_location": "Gee Wiz: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Gee Wiz Sapphire Relic",
+            "name": "Gee Wiz Sapphire Relic Event",
             "copy_location": "Gee Wiz: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Gee Wiz Gold Relic",
+            "name": "Gee Wiz Gold Relic Event",
             "copy_location": "Gee Wiz: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Gee Wiz Platinum Relic",
+            "name": "Gee Wiz Platinum Relic Event",
             "copy_location": "Gee Wiz: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Hang'em High Crystal",
+            "name": "Hang'em High Crystal Event",
             "copy_location": "Hang'em High: Crystal",
             "category": ["Crystal Events"]
         },
@@ -132,120 +132,120 @@
             "category": ["Warp 2", "Warp 6", "Hang'em High", "Colored Gems", "Colored Gem Events"]
         },
         {
-            "name": "Hang'em High Sapphire Relic",
+            "name": "Hang'em High Sapphire Relic Event",
             "copy_location": "Hang'em High: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Hang'em High Gold Relic",
+            "name": "Hang'em High Gold Relic Event",
             "copy_location": "Hang'em High: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Hang'em High Platinum Relic",
+            "name": "Hang'em High Platinum Relic Event",
             "copy_location": "Hang'em High: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Hog Ride Crystal",
+            "name": "Hog Ride Crystal Event",
             "copy_location": "Hog Ride: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Hog Ride Sapphire Relic",
+            "name": "Hog Ride Sapphire Relic Event",
             "copy_location": "Hog Ride: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Hog Ride Gold Relic",
+            "name": "Hog Ride Gold Relic Event",
             "copy_location": "Hog Ride: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Hog Ride Platinum Relic",
+            "name": "Hog Ride Platinum Relic Event",
             "copy_location": "Hog Ride: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Tomb Time Crystal",
+            "name": "Tomb Time Crystal Event",
             "copy_location": "Tomb Time: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Tomb Time Sapphire Relic",
+            "name": "Tomb Time Sapphire Relic Event",
             "copy_location": "Tomb Time: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Tomb Time Gold Relic",
+            "name": "Tomb Time Gold Relic Event",
             "copy_location": "Tomb Time: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Tomb Time Platinum Relic",
+            "name": "Tomb Time Platinum Relic Event",
             "copy_location": "Tomb Time: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Midnight Run Crystal",
+            "name": "Midnight Run Crystal Event",
             "copy_location": "Midnight Run: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Midnight Run Sapphire Relic",
+            "name": "Midnight Run Sapphire Relic Event",
             "copy_location": "Midnight Run: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Midnight Run Gold Relic",
+            "name": "Midnight Run Gold Relic Event",
             "copy_location": "Midnight Run: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Midnight Run Platinum Relic",
+            "name": "Midnight Run Platinum Relic Event",
             "copy_location": "Midnight Run: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Dino Might! Crystal",
+            "name": "Dino Might! Crystal Event",
             "copy_location": "Dino Might!: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Dino Might! Sapphire Relic",
+            "name": "Dino Might! Sapphire Relic Event",
             "copy_location": "Dino Might!: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Dino Might! Gold Relic",
+            "name": "Dino Might! Gold Relic Event",
             "copy_location": "Dino Might!: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Dino Might! Platinum Relic",
+            "name": "Dino Might! Platinum Relic Event",
             "copy_location": "Dino Might!: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Eggipus Rex Sapphire Relic",
+            "name": "Eggipus Rex Sapphire Relic Event",
             "copy_location": "Eggipus Rex: Sapphire Relic",
             "category": ["Sapphire Relic Events", "Eggipus Rex"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Eggipus Rex Gold Relic",
+            "name": "Eggipus Rex Gold Relic Event",
             "copy_location": "Eggipus Rex: Gold Relic",
             "category": ["Gold Relic Events", "Eggipus Rex"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Eggipus Rex Platinum Relic",
+            "name": "Eggipus Rex Platinum Relic Event",
             "copy_location": "Eggipus Rex: Platinum Relic",
             "category": ["Platinum Relic Events", "Eggipus Rex"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Deep Trouble Crystal",
+            "name": "Deep Trouble Crystal Event",
             "copy_location": "Deep Trouble: Crystal",
             "category": ["Crystal Events"]
         },
@@ -255,22 +255,22 @@
             "category": ["Colored Gem Events"]
         },
         {
-            "name": "Deep Trouble Sapphire Relic",
+            "name": "Deep Trouble Sapphire Relic Event",
             "copy_location": "Deep Trouble: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Deep Trouble Gold Relic",
+            "name": "Deep Trouble Gold Relic Event",
             "copy_location": "Deep Trouble: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Deep Trouble Platinum Relic",
+            "name": "Deep Trouble Platinum Relic Event",
             "copy_location": "Deep Trouble: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "High Time Crystal",
+            "name": "High Time Crystal Event",
             "copy_location": "High Time: Crystal",
             "category": ["Crystal Events"]
         },
@@ -280,157 +280,157 @@
             "category": ["Colored Gem Events"]
         },
         {
-            "name": "High Time Sapphire Relic",
+            "name": "High Time Sapphire Relic Event",
             "copy_location": "High Time: Sapphire Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "High Time Gold Relic",
+            "name": "High Time Gold Relic Event",
             "copy_location": "High Time: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "High Time Platinum Relic",
+            "name": "High Time Platinum Relic Event",
             "copy_location": "High Time: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Road Crash Crystal",
+            "name": "Road Crash Crystal Event",
             "copy_location": "Road Crash: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Road Crash Sapphire Relic",
+            "name": "Road Crash Sapphire Relic Event",
             "copy_location": "Road Crash: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Road Crash Gold Relic",
+            "name": "Road Crash Gold Relic Event",
             "copy_location": "Road Crash: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Road Crash Platinum Relic",
+            "name": "Road Crash Platinum Relic Event",
             "copy_location": "Road Crash: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Hot Coco Sapphire Relic",
+            "name": "Hot Coco Sapphire Relic Event",
             "copy_location": "Hot Coco: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Hot Coco Gold Relic",
+            "name": "Hot Coco Gold Relic Event",
             "copy_location": "Hot Coco: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Hot Coco Platinum Relic",
+            "name": "Hot Coco Platinum Relic Event",
             "copy_location": "Hot Coco: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Double Header Crystal",
+            "name": "Double Header Crystal Event",
             "copy_location": "Double Header: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Double Header Sapphire Relic",
+            "name": "Double Header Sapphire Relic Event",
             "copy_location": "Double Header: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Double Header Gold Relic",
+            "name": "Double Header Gold Relic Event",
             "copy_location": "Double Header: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Double Header Platinum Relic",
+            "name": "Double Header Platinum Relic Event",
             "copy_location": "Double Header: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Sphynxinator Crystal",
+            "name": "Sphynxinator Crystal Event",
             "copy_location": "Sphynxinator: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Sphynxinator Sapphire Relic",
+            "name": "Sphynxinator Sapphire Relic Event",
             "copy_location": "Sphynxinator: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Sphynxinator Gold Relic",
+            "name": "Sphynxinator Gold Relic Event",
             "copy_location": "Sphynxinator: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Sphynxinator Platinum Relic",
+            "name": "Sphynxinator Platinum Relic Event",
             "copy_location": "Sphynxinator: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Bye Bye Blimps Crystal",
+            "name": "Bye Bye Blimps Crystal Event",
             "copy_location": "Bye Bye Blimps: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Bye Bye Blimps Sapphire Relic",
+            "name": "Bye Bye Blimps Sapphire Relic Event",
             "copy_location": "Bye Bye Blimps: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Bye Bye Blimps Gold Relic",
+            "name": "Bye Bye Blimps Gold Relic Event",
             "copy_location": "Bye Bye Blimps: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Bye Bye Blimps Platinum Relic",
+            "name": "Bye Bye Blimps Platinum Relic Event",
             "copy_location": "Bye Bye Blimps: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Tell No Tales Crystal",
+            "name": "Tell No Tales Crystal Event",
             "copy_location": "Tell No Tales: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Tell No Tales Sapphire Relic",
+            "name": "Tell No Tales Sapphire Relic Event",
             "copy_location": "Tell No Tales: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Tell No Tales Gold Relic",
+            "name": "Tell No Tales Gold Relic Event",
             "copy_location": "Tell No Tales: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Tell No Tales Platinum Relic",
+            "name": "Tell No Tales Platinum Relic Event",
             "copy_location": "Tell No Tales: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Future Frenzy Crystal",
+            "name": "Future Frenzy Crystal Event",
             "copy_location": "Future Frenzy: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Future Frenzy Sapphire Relic",
+            "name": "Future Frenzy Sapphire Relic Event",
             "copy_location": "Future Frenzy: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Future Frenzy Gold Relic",
+            "name": "Future Frenzy Gold Relic Event",
             "copy_location": "Future Frenzy: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Future Frenzy Platinum Relic",
+            "name": "Future Frenzy Platinum Relic Event",
             "copy_location": "Future Frenzy: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Tomb Wader Crystal",
+            "name": "Tomb Wader Crystal Event",
             "copy_location": "Tomb Wader: Crystal",
             "category": ["Crystal Events"]
         },
@@ -440,62 +440,62 @@
             "category": ["Colored Gem Events"]
         },
         {
-            "name": "Tomb Wader Sapphire Relic",
+            "name": "Tomb Wader Sapphire Relic Event",
             "copy_location": "Tomb Wader: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Tomb Wader Gold Relic",
+            "name": "Tomb Wader Gold Relic Event",
             "copy_location": "Tomb Wader: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Tomb Wader Platinum Relic",
+            "name": "Tomb Wader Platinum Relic Event",
             "copy_location": "Tomb Wader: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Gone Tomorrow Crystal",
+            "name": "Gone Tomorrow Crystal Event",
             "copy_location": "Gone Tomorrow: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Gone Tomorrow Sapphire Relic",
+            "name": "Gone Tomorrow Sapphire Relic Event",
             "copy_location": "Gone Tomorrow: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Gone Tomorrow Gold Relic",
+            "name": "Gone Tomorrow Gold Relic Event",
             "copy_location": "Gone Tomorrow: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Gone Tomorrow Platinum Relic",
+            "name": "Gone Tomorrow Platinum Relic Event",
             "copy_location": "Gone Tomorrow: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Orange Asphalt Crystal",
+            "name": "Orange Asphalt Crystal Event",
             "copy_location": "Orange Asphalt: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Orange Asphalt Sapphire Relic",
+            "name": "Orange Asphalt Sapphire Relic Event",
             "copy_location": "Orange Asphalt: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Orange Asphalt Gold Relic",
+            "name": "Orange Asphalt Gold Relic Event",
             "copy_location": "Orange Asphalt: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Orange Asphalt Platinum Relic",
+            "name": "Orange Asphalt Platinum Relic Event",
             "copy_location": "Orange Asphalt: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Flaming Passion Crystal",
+            "name": "Flaming Passion Crystal Event",
             "copy_location": "Flaming Passion: Crystal",
             "category": ["Crystal Events"]
         },
@@ -505,110 +505,110 @@
             "category": ["Colored Gem Events"]
         },
         {
-            "name": "Flaming Passion Sapphire Relic",
+            "name": "Flaming Passion Sapphire Relic Event",
             "copy_location": "Flaming Passion: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Flaming Passion Gold Relic",
+            "name": "Flaming Passion Gold Relic Event",
             "copy_location": "Flaming Passion: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Flaming Passion Platinum Relic",
+            "name": "Flaming Passion Platinum Relic Event",
             "copy_location": "Flaming Passion: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Mad Bombers Crystal",
+            "name": "Mad Bombers Crystal Event",
             "copy_location": "Mad Bombers: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Mad Bombers Sapphire Relic",
+            "name": "Mad Bombers Sapphire Relic Event",
             "copy_location": "Mad Bombers: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Mad Bombers Gold Relic",
+            "name": "Mad Bombers Gold Relic Event",
             "copy_location": "Mad Bombers: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Mad Bombers Platinum Relic",
+            "name": "Mad Bombers Platinum Relic Event",
             "copy_location": "Mad Bombers: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Bug Lite Crystal",
+            "name": "Bug Lite Crystal Event",
             "copy_location": "Bug Lite: Crystal",
             "category": ["Crystal Events"]
         },
         {
-            "name": "Bug Lite Sapphire Relic",
+            "name": "Bug Lite Sapphire Relic Event",
             "copy_location": "Bug Lite: Sapphire Relic",
             "category": ["Sapphire Relic Events"]
         },
         {
-            "name": "Bug Lite Gold Relic",
+            "name": "Bug Lite Gold Relic Event",
             "copy_location": "Bug Lite: Gold Relic",
             "category": ["Gold Relic Events"]
         },
         {
-            "name": "Bug Lite Platinum Relic",
+            "name": "Bug Lite Platinum Relic Event",
             "copy_location": "Bug Lite: Platinum Relic",
             "category": ["Platinum Relic Events"]
         },
         {
-            "name": "Ski Crazed Sapphire Relic",
+            "name": "Ski Crazed Sapphire Relic Event",
             "copy_location": "Ski Crazed: Sapphire Relic",
             "category": ["Sapphire Relic Events", "Ski Crazed"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Ski Crazed Gold Relic",
+            "name": "Ski Crazed Gold Relic Event",
             "copy_location": "Ski Crazed: Gold Relic",
             "category": ["Gold Relic Events", "Ski Crazed"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Ski Crazed Platinum Relic",
+            "name": "Ski Crazed Platinum Relic Event",
             "copy_location": "Ski Crazed: Platinum Relic",
             "category": ["Platinum Relic Events", "Ski Crazed"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Area 51? Sapphire Relic",
+            "name": "Area 51? Sapphire Relic Event",
             "copy_location": "Area 51?: Sapphire Relic",
             "category": ["Sapphire Relic Events", "Area 51?"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Area 51? Gold Relic",
+            "name": "Area 51? Gold Relic Event",
             "copy_location": "Area 51?: Gold Relic",
             "category": ["Gold Relic Events", "Area 51?"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Area 51? Platinum Relic",
+            "name": "Area 51? Platinum Relic Event",
             "copy_location": "Area 51?: Platinum Relic",
             "category": ["Platinum Relic Events", "Area 51?"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Rings of Power Sapphire Relic",
+            "name": "Rings of Power Sapphire Relic Event",
             "copy_location": "Rings of Power: Sapphire Relic",
             "category": ["Sapphire Relic Events", "Rings of Power"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Rings of Power Gold Relic",
+            "name": "Rings of Power Gold Relic Event",
             "copy_location": "Rings of Power: Gold Relic",
             "category": ["Gold Relic Events", "Rings of Power"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."
         },
         {
-            "name": "Rings of Power Platinum Relic",
+            "name": "Rings of Power Platinum Relic Event",
             "copy_location": "Rings of Power: Platinum Relic",
             "category": ["Platinum Relic Events", "Rings of Power"],
             "_comment": "This (and the other warp 6-related events) additionally have their level category, which handles warp 6 access."

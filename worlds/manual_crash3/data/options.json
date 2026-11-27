@@ -35,8 +35,7 @@
             "description": [
                 "Adds 31 or 35 level unlock items (e.g. Toad Village Unlock), depending on sapphire_relics (as some require warp 6 access).",
                 "You will start with 2 random ones (1 will be guaranteed to be in your starting warp room).",
-                "Enabling this requires having enough optional checks enabled to place all the level unlock items. Generally speaking, this is doable by enabling",
-                "  at least 2 of clear_gem_checks, gold_relic_checks, and platinum_relic_checks, but some combinations of options can allow for only 1 being needed.",
+                "Levels which have a secret or second entrance (such as Hang'em High's warp 6 entrance) only have 1 level unlock item which allows for both.",
                 "",
                 "If disabled, levels are logically accessible immediately upon having warp room access."
             ],

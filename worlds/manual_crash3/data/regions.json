@@ -47,7 +47,7 @@
         "requires": "({YamlEnabled(level_unlock_items)} and |Makin' Waves Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "Tiny Tiger": {
-        "requires": "({YamlEnabled(level_unlock_items)} and |Tiny Tiger Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:5| and |Crystal:5|)"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Tiny Tiger Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Crystal Events:5| and |Crystal:5|"
     },
     "Gee Wiz": {
         "requires": "({YamlEnabled(level_unlock_items)} and |Gee Wiz Unlock|) or {YamlDisabled(level_unlock_items)}"
@@ -65,14 +65,14 @@
         "requires": "({YamlEnabled(level_unlock_items)} and |Midnight Run Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "Dingodile": {
-        "requires": "({YamlEnabled(level_unlock_items)} and |Dingodile Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:10| and |Crystal:10|)"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Dingodile Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Crystal Events:10| and |Crystal:10|"
     },
     "Dino Might!": {
         "connects_to": ["Eggipus Rex"],
         "requires": "({YamlEnabled(level_unlock_items)} and |Dino Might! Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "Eggipus Rex": {
-        "requires": "({YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|) and (({YamlEnabled(level_unlock_items)} and |Eggipus Rex Unlock|) or {YamlDisabled(level_unlock_items)})"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Eggipus Rex Unlock|) or {YamlDisabled(level_unlock_items)) and {YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|"
     },
     "Deep Trouble": {
         "requires": "({YamlEnabled(level_unlock_items)} and |Deep Trouble Unlock|) or {YamlDisabled(level_unlock_items)}"
@@ -91,7 +91,7 @@
         "requires": "({YamlEnabled(level_unlock_items)} and |Double Header Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "N. Tropy": {
-        "requires": "({YamlEnabled(level_unlock_items)} and |N. Tropy Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:15| and |Crystal:15|)"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |N. Tropy Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Crystal Events:15| and |Crystal:15|"
     },
     "Sphynxinator": {
         "requires": "({YamlEnabled(level_unlock_items)} and |Sphynxinator Unlock|) or {YamlDisabled(level_unlock_items)}"
@@ -109,7 +109,7 @@
         "requires": "({YamlEnabled(level_unlock_items)} and |Tomb Wader Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "N. Gin": {
-        "requires": "({YamlEnabled(level_unlock_items)} and |N. Gin Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:20| and |Crystal:20|)"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |N. Gin Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Crystal Events:20| and |Crystal:20|"
     },
     "Gone Tomorrow": {
         "requires": "({YamlEnabled(level_unlock_items)} and |Gone Tomorrow Unlock|) or {YamlDisabled(level_unlock_items)}"
@@ -127,15 +127,15 @@
         "requires": "({YamlEnabled(level_unlock_items)} and |Bug Lite Unlock|) or {YamlDisabled(level_unlock_items)}"
     },
     "Neo Cortex": {
-        "requires": "({YamlEnabled(level_unlock_items)} and |Neo Cortex Unlock|) or ({YamlDisabled(level_unlock_items)} and |@Crystal Events:25| and |Crystal:25|)"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Neo Cortex Unlock|) or {YamlDisabled(level_unlock_items)}) and |@Crystal Events:25| and |Crystal:25|"
     },
     "Ski Crazed": {
-        "requires": "|@Sapphire Relic Events:5| and |Sapphire Relic:5| and ({YamlEnabled(level_unlock_items)} and |Ski Crazed Unlock|) or {YamlDisabled(level_unlock_items)}"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Ski Crazed Unlock|) or {YamlDisabled(level_unlock_items)) and |@Sapphire Relic Events:5| and |Sapphire Relic:5|"
     },
     "Area 51?": {
-        "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15| and ({YamlEnabled(level_unlock_items)} and |Area 51? Unlock|) or {YamlDisabled(level_unlock_items)}"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Area 51? Unlock|) or {YamlDisabled(level_unlock_items)) and |@Sapphire Relic Events:15| and |Sapphire Relic:15|"
     },
     "Rings of Power": {
-        "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25| and ({YamlEnabled(level_unlock_items)} and |Rings of Power Unlock|) or {YamlDisabled(level_unlock_items)}"
+        "requires": "(({YamlEnabled(level_unlock_items)} and |Rings of Power Unlock|) or {YamlDisabled(level_unlock_items)) and |@Sapphire Relic Events:25| and |Sapphire Relic:25|"
     }
 }

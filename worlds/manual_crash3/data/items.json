@@ -8,31 +8,31 @@
         },
         {
             "name": "Blue Gem",
-            "category": ["Colored Gems (Items)"],
+            "category": ["Colored Gems"],
             "progression": true,
             "count": 1
         },
         {
             "name": "Yellow Gem",
-            "category": ["Colored Gems (Items)", "Yellow Gem Category"],
+            "category": ["Colored Gems", "Sapphire Relics"],
             "progression": true,
             "count": 1
         },
         {
             "name": "Red Gem",
-            "category": ["Colored Gems (Items)"],
+            "category": ["Colored Gems"],
             "progression": true,
             "count": 1
         },
         {
             "name": "Green Gem",
-            "category": ["Colored Gems (Items)"],
+            "category": ["Colored Gems"],
             "progression": true,
             "count": 1
         },
         {
             "name": "Purple Gem",
-            "category": ["Colored Gems (Items)"],
+            "category": ["Colored Gems"],
             "progression": true,
             "count": 1
         },

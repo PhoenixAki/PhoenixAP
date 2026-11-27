@@ -4,10 +4,7 @@
         "apworld_description": ["Crash 3 is the third game in the original Crash Bandicoot trilogy, released in 1998. Get the Crystals, break all the boxes, and defeat Neo Cortex!"],
         "web": {
             "options_presets": {
-                "Crystal Goal (all 25)": {
-                    "goal": 0,
-                    "crystal_goal_count": 25
-                }
+                
             }
         }
     }
