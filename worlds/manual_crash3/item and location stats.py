@@ -31,6 +31,8 @@ def get_amounts() -> tuple[list[list], list]:
             counts.append([30, 0] if sapphire_enabled else [26, 0])  # Ski Crazed, Area 51?, Rings of Power, and Eggipus Rex require warp 6 access via sapphire_relics.
     
     row_total = [sum([count[0] for count in counts]), sum([count[1] for count in counts])]
+    row_total[0] += 30
+    row_total[1] += 30
     return counts, row_total
 
 def find_problem() -> tuple[bool, int]:
