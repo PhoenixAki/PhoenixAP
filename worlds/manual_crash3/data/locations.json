@@ -866,7 +866,7 @@
             "region": "Neo Cortex",
             "name": "Neo Cortex Defeated",
             "category": ["Warp 5", "Bosses"],
-            "requires": "|@Crystal Events:25| and |Crystal:2|",
+            "requires": "|@Crystal Events:25| and |Crystal:25|",
             "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
