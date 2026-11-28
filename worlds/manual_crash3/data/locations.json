@@ -169,12 +169,16 @@
         {
             "region": "Tiny Tiger",
             "name": "Tiny Tiger Defeated",
-            "category": ["Warp 1", "Bosses"]
+            "category": ["Warp 1", "Bosses"],
+            "requires": "|@Crystal Events:5| and |Crystal:5|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Tiny Tiger",
             "name": "Tiny Tiger",
             "category": ["Warp 1", "Bosses"],
+            "requires": "|@Crystal Events:5| and |Crystal:5|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic.",
             "victory": true
         },
         {
@@ -324,12 +328,16 @@
         {
             "region": "Dingodile",
             "name": "Dingodile Defeated",
-            "category": ["Warp 2", "Bosses"]
+            "category": ["Warp 2", "Bosses"],
+            "requires": "|@Crystal Events:10| and |Crystal:10|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Dingodile",
             "name": "Dingodile",
             "category": ["Warp 2", "Bosses"],
+            "requires": "|@Crystal Events:10| and |Crystal:10|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic.",
             "victory": true
         },
         {
@@ -369,17 +377,23 @@
         {
             "region": "Eggipus Rex",
             "name": "Eggipus Rex: Clear Gem",
-            "category": ["Warp 3", "Eggipus Rex", "Clear Gems"]
+            "category": ["Warp 3", "Eggipus Rex", "Clear Gems"],
+            "requires": "{YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|",
+            "_comment": "Yellow Gem requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Eggipus Rex",
             "name": "Eggipus Rex: Sapphire Relic",
-            "category": ["Warp 3", "Eggipus Rex", "Sapphire Relics"]
+            "category": ["Warp 3", "Eggipus Rex", "Sapphire Relics"],
+            "requires": "{YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|",
+            "_comment": "Yellow Gem requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Eggipus Rex",
             "name": "Eggipus Rex: Gold Relic",
-            "category": ["Warp 3", "Eggipus Rex", "Gold Relics"]
+            "category": ["Warp 3", "Eggipus Rex", "Gold Relics"],
+            "requires": "{YamlEnabled(sapphire_relics)} and |Yellow Gem Event:1| and |Yellow Gem:1|",
+            "_comment": "Yellow Gem requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Eggipus Rex",
@@ -523,12 +537,16 @@
         {
             "region": "N. Tropy",
             "name": "N. Tropy Defeated",
-            "category": ["Warp 3", "Bosses"]
+            "category": ["Warp 3", "Bosses"],
+            "requires": "|@Crystal Events:15| and |Crystal:15|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "N. Tropy",
             "name": "N. Tropy",
             "category": ["Warp 3", "Bosses"],
+            "requires": "|@Crystal Events:15| and |Crystal:15|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic.",
             "victory": true
         },
         {
@@ -683,12 +701,16 @@
         {
             "region": "N. Gin",
             "name": "N. Gin Defeated",
-            "category": ["Warp 4", "Bosses"]
+            "category": ["Warp 4", "Bosses"],
+            "requires": "|@Crystal Events:20| and |Crystal:20|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "N. Gin",
             "name": "N. Gin",
             "category": ["Warp 4", "Bosses"],
+            "requires": "|@Crystal Events:20| and |Crystal:20|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic.",
             "victory": true
         },
         {
@@ -843,83 +865,115 @@
         {
             "region": "Neo Cortex",
             "name": "Neo Cortex Defeated",
-            "category": ["Warp 5", "Bosses"]
+            "category": ["Warp 5", "Bosses"],
+            "requires": "|@Crystal Events:25| and |Crystal:2|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Neo Cortex",
             "name": "Neo Cortex",
             "category": ["Warp 5", "Bosses"],
+            "requires": "|@Crystal Events:25| and |Crystal:25|",
+            "_comment": "Crystal requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic.",
             "victory": true
         },
         {
             "region": "Ski Crazed",
             "name": "Ski Crazed: Clear Gem (Box)",
-            "category": ["Warp 6", "Ski Crazed", "Clear Gems"]
+            "category": ["Warp 6", "Ski Crazed", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:5| and |Sapphire Relic:5|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Ski Crazed",
             "name": "Ski Crazed: Sapphire Relic",
-            "category": ["Warp 6", "Ski Crazed", "Sapphire Relics"]
+            "category": ["Warp 6", "Ski Crazed", "Sapphire Relics"],
+            "requires": "|@Sapphire Relic Events:5| and |Sapphire Relic:5|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Ski Crazed",
             "name": "Ski Crazed: Gold Relic",
-            "category": ["Warp 6", "Ski Crazed", "Gold Relics"]
+            "category": ["Warp 6", "Ski Crazed", "Gold Relics"],
+            "requires": "|@Sapphire Relic Events:5| and |Sapphire Relic:5|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Ski Crazed",
             "name": "Ski Crazed: Platinum Relic",
-            "category": ["Warp 6", "Ski Crazed", "Platinum Relics"]
+            "category": ["Warp 6", "Ski Crazed", "Platinum Relics"],
+            "requires": "|@Sapphire Relic Events:5| and |Sapphire Relic:5|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Area 51?",
             "name": "Area 51?: Clear Gem (Win)",
-            "category": ["Warp 6", "Area 51?", "Clear Gems"]
+            "category": ["Warp 6", "Area 51?", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Area 51?",
             "name": "Area 51?: Clear Gem (Box)",
-            "category": ["Warp 6", "Area 51?", "Clear Gems"]
+            "category": ["Warp 6", "Area 51?", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Area 51?",
             "name": "Area 51?: Sapphire Relic",
-            "category": ["Warp 6", "Area 51?", "Sapphire Relics"]
+            "category": ["Warp 6", "Area 51?", "Sapphire Relics"],
+            "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Area 51?",
             "name": "Area 51?: Gold Relic",
-            "category": ["Warp 6", "Area 51?", "Gold Relics"]
+            "category": ["Warp 6", "Area 51?", "Gold Relics"],
+            "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Area 51?",
             "name": "Area 51?: Platinum Relic",
-            "category": ["Warp 6", "Area 51?", "Platinum Relics"]
+            "category": ["Warp 6", "Area 51?", "Platinum Relics"],
+            "requires": "|@Sapphire Relic Events:15| and |Sapphire Relic:15|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Rings of Power",
             "name": "Rings of Power: Clear Gem (Win)",
-            "category": ["Warp 6", "Rings of Power", "Clear Gems"]
+            "category": ["Warp 6", "Rings of Power", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Rings of Power",
             "name": "Rings of Power: Clear Gem (Box)",
-            "category": ["Warp 6", "Rings of Power", "Clear Gems"]
+            "category": ["Warp 6", "Rings of Power", "Clear Gems"],
+            "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Rings of Power",
             "name": "Rings of Power: Sapphire Relic",
-            "category": ["Warp 6", "Rings of Power", "Sapphire Relics"]
+            "category": ["Warp 6", "Rings of Power", "Sapphire Relics"],
+            "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Rings of Power",
             "name": "Rings of Power: Gold Relic",
-            "category": ["Warp 6", "Rings of Power", "Gold Relics"]
+            "category": ["Warp 6", "Rings of Power", "Gold Relics"],
+            "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         },
         {
             "region": "Rings of Power",
             "name": "Rings of Power: Platinum Relic",
-            "category": ["Warp 6", "Rings of Power", "Platinum Relics"]
+            "category": ["Warp 6", "Rings of Power", "Platinum Relics"],
+            "requires": "|@Sapphire Relic Events:25| and |Sapphire Relic:25|",
+            "_comment": "Relic requirements are here, due to a bug in manual requirement parsing which necessitates splitting up the logic."
         }
     ]
 }
