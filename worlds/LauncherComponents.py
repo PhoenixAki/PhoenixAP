@@ -7,6 +7,7 @@ import webbrowser
 from enum import Enum
 from typing import Optional, Callable, Iterable, Sequence
 
+from Launcher import launch as launch_exe
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore, \
     is_windows
 
@@ -189,7 +190,9 @@ def _install_apworld(apworld_src: str = "") -> Optional[tuple[pathlib.Path, path
                         "so a Launcher restart is required to use the new installation.")
     world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
     bisect.insort(worlds.world_sources, world_source)
-    world_source.load()
+    worlds.add_apworld_spec(world_source, worlds.APWorldContainer(world_source.resolved_path))
+    if not world_source.load():
+        raise Exception(f"World was installed, but failed to load. See the Launcher log for details.")
 
     return apworld_path, target
 
@@ -242,7 +245,7 @@ def open_patch():
             if exe is None or not isfile(exe[-1]):
                 exe = get_exe("Launcher")
 
-            launch([*exe, file], component.cli)
+            launch_exe([*exe, file], component.cli)
 
 
 def get_exe(component: str | Component) -> Sequence[str] | None:
@@ -311,9 +314,8 @@ def generate_yamls(*args):
 
     target = user_path("Players", "Templates")
     generate_yaml_templates(target, False)
-    # TODO from me: undo this later
-    # if not args.skip_open_folder:
-    #     open_folder(target)
+    if not args.skip_open_folder:
+        open_folder(target)
 
 
 def browse_files():
@@ -417,15 +419,13 @@ if not is_frozen():
             games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
         else:
             games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
-                     if worldname == "Spyro: A Hero's Tail"]  # TODO from me: just speeds up the build process to only AHT
+                     if not worldtype.zip_path]
 
         global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))
         if not global_apignores:
             raise RuntimeError("Could not read global apignore file for build component")
 
-        # TODO from me: undo this later
-        # apworlds_folder = os.path.join("build", "apworlds")
-        apworlds_folder = os.path.join("custom_worlds")
+        apworlds_folder = os.path.join("build", "apworlds")
         os.makedirs(apworlds_folder, exist_ok=True)
         for worldname, worldtype in games:
             if not worldtype:
@@ -462,10 +462,9 @@ if not is_frozen():
                     zf.write(pathlib.Path(world_directory, file), pathlib.Path(file_name, file))
 
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
-        
-        # TODO from me: undo this later
-        # if not args.skip_open_folder:
-        #     open_folder(apworlds_folder)
+
+        if not args.skip_open_folder:
+            open_folder(apworlds_folder)
 
     components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))
