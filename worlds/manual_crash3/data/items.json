@@ -72,7 +72,7 @@
             "category": ["Abilities"],
             "progression": true,
             "count": 1,
-            "_comment": "Will become progression if gold_relic_checks or platinum_relic_checks are set to on_casual."
+            "_comment": "Becomes \"useful\" instead if gold_relic_checks and platinum_relic_checks are both not set to on_casual."
         },
         {
             "name": "Warp 1 Unlock",

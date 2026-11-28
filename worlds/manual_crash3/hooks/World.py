@@ -60,7 +60,7 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
                             (world.options.gold_relic_goal_count, 26), (world.options.platinum_relic_goal_count, 26)]
     
     for goal_index, (goal_count_option, soft_max) in enumerate(goal_counts_with_max):
-        goal_name = goal_count_option.display_name.rsplit("_", 1)[0]  # for example: "crystal_goal_count" -> "crystal goal"
+        goal_name = goal_count_option.display_name.rsplit("_", 1)[0].replace("_", " ")  # for example: "crystal_goal_count" -> "crystal goal"
 
         # 1) Goal counts which are set to 0 while their associated goal is selected. Doesn't lead to errors, but results in the seed finishing immediately in sphere 1.
         # For example, crystal_goal_count being set to 0 but having "crystal goal" as the goal.
@@ -115,7 +115,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
     # Running Shoes defaults to being progression, but is safe to downgrade to useful (like the other abilities) if no relic checks require it.
-    if world.options.gold_relic_checks.value != 2 and world.options.platinum_relic_checks.value != 2:
+    if world.options.gold_relic_checks.value != 1 and world.options.platinum_relic_checks.value != 1:
         item_config["Running Shoes"] = {"useful": 1}
             
     return item_config
