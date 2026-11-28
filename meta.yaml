@@ -1,0 +1,8 @@
+﻿'Spyro: A Hero''s Tail':
+  auto_corrections: fix
+  logging_level: Info, Warning, Debug
+  shop_randomization: true
+  gem_logic: true
+  blink_gems: 0
+  non_blink_enemies: 0
+  other_gems: 0

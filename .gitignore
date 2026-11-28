@@ -1,5 +1,7 @@
 .idea
 .vscode
+fuzz.py
+meta.yaml
 
 # my stuff
 worlds/spyro_aht/setup/test.py
@@ -34,6 +36,8 @@ worlds/spyro_aht/setup/4 - gem events.txt
 *.gb
 *.gbc
 *.gba
+*.nds
+*.iso
 *.wixobj
 *.lck
 *.db3
@@ -74,6 +78,7 @@ Output Logs/
 /setup.ini
 /installdelete.iss
 /data/user.kv
+/data/jak1/
 /datapackage
 /datapackage_export.json
 /custom_worlds
@@ -200,9 +205,6 @@ _speedups.html
 
 # pyenv
 .python-version
-
-#undertale stuff
-/Undertale/
 
 # OS General Files
 .DS_Store
